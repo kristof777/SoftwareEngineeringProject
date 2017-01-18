@@ -1,8 +1,6 @@
 notifications:
   email: false
   slack: cmpt371group1:XWjax65wyp2NgY8kz6DLDe4q
-    on_fail: always
-    on_success: always
 
 language: php
 php:
