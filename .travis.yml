@@ -2,10 +2,6 @@ notifications:
   email: false
   slack: cmpt371group1:XWjax65wyp2NgY8kz6DLDe4q
 
-
-travis encrypt "cmpt371group1:XWjax65wyp2NgY8kz6DLDe4q" --add notifications.slack
-
-
 language: php
 php:
 - 5.5
