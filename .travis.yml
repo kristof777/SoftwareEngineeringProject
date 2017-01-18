@@ -1,3 +1,9 @@
+notifications:
+  email: false
+  slack:
+    on_fail: always
+    on_success: always
+
 language: php
 php:
 - 5.5
