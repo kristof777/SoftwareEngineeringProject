@@ -22,7 +22,7 @@ node_js:
 jdk:
   - oraclejdk8
 
-
+sudo: false
 addons:
   apt:
     sources:
