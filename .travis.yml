@@ -4,6 +4,17 @@ notifications:
     secure: eJICeB2vgmD0n18MKS725pSaCXJgB3dCzh7Nd/1fPh67Hs+n8UzzeurpkKbenrwlZLJPEGBTPy1N2yJGwL4wD4xA/MJVrxXAop351LEa8eRZiGt4za6LLZBraXCSUy/CGAUja+x72yEBq6Ua3b5F9q+d5xJ+cYnSAK2Hw2M2HswW7lhVil9i/HfJAfC4CqC63ByYB0N+mNQ/vdoWv4z7TJds30wVw49Fk0WKNyMfzyhd0whS3FtmKW4JYAfjz5eOjBC7dOuYZNAd7zDXrgn/w8Dff9pU5KhfOHRPwMYW1ThIgKH/qey3MbUBFMvizXSvvqcHZKxahTDDxTg66SHtzaY/uFjiIb6CbFXY18HneLxqzIdU2DPBHfx96+mkQNxX2QCrH4n11VWiyMnh0JVYh4/muGiA+z2lj7Hx1iz6vALuCObWV/ZBTnqv7ysAXK8WDv++9Hn0Vk5vhac86lLsPsXIG8LiwziYWFuFgTB+HfVbVN/8opYDw2GoeurjYE3raJZFpiBYD+ATh+JdnrAcX2hoLuQ++SR8za+QvHmrqyzS9GURmAZYMGZYXT/gcGZTwwKVbBBLxVgCpc6nFsQnnCkgpvsIJhToazqdZJreueyhUu8y6oKYDQBmgqBqw2Hpuh6UmVgU7sYBcMtlBHMug8BTWcbHcJfM9EBSqnUlAOE=
 
 
+# build only when these branches are pushed to
+branches:
+  only:
+    - master
+    - develop
+    
+os:
+  - andriod
+  - ios
+
+
 language: node_js
 node_js:
   # version we are using
