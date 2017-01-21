@@ -22,7 +22,7 @@ node_js:
 jdk:
   - oraclejdk8
 
-sudo: false
+sudo: true
 addons:
   apt:
     sources:
@@ -42,6 +42,7 @@ install:
   - bower update
 
 before_script:
+  - sudo apt-get install oracle-java8-set-default
   - wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
   - echo $JAVA_HOME
   - tar -xvf android-sdk_r24.4-linux.tgz
