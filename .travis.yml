@@ -19,6 +19,9 @@ language: node_js
 node_js:
   # version we are using
   - "6.9.4"
+jdk:
+  - oraclejdk8
+
 
 addons:
   apt:
@@ -26,7 +29,6 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
-    - openjdk-8-jdk
     - lib32stdc++6
     - lib32z1
 env:
