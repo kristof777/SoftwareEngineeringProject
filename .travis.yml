@@ -6,6 +6,7 @@ notifications:
 
 language: node_js
 node_js:
+  # version we are using
   - "6.9.4"
 
 addons:
@@ -22,6 +23,7 @@ env:
 
 install:
   - npm install -g gulp bower cordova ionic
+  # installs packages specified in the ionic json
   - npm install
   - bower update
 
@@ -38,9 +40,12 @@ before_script:
   - export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
 
 script:
+  # this is voodoo to me
   - ionic platform remove android
+  # this isn't
   - ionic platform add android 
   - ionic platform add ios
   - ionic platform add browser
   - ionic build
+  # commented out since our project doesn't have these files, keeping it around in case we do need it later
   # - ls ionic info
