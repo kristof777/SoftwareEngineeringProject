@@ -36,6 +36,11 @@ env:
   CXX=g++-4.8
   JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
+licenses:
+  - 'android-sdk-preview-license-.+'
+  - 'android-sdk-license-.+'
+  - 'google-gdk-license-.+'
+    
 install:
   - npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
