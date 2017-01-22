@@ -12,7 +12,7 @@ branches:
     
 os:
   #- andriod
-  - ios
+  #- ios
 
 
 language: node_js
@@ -34,6 +34,7 @@ addons:
     - lib32z1
 env:
   CXX=g++-4.8
+  JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 install:
   - npm install -g gulp bower cordova ionic
