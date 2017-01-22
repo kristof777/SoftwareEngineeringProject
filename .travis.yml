@@ -50,7 +50,7 @@ before_script:
   - echo $JAVA_HOME
   - tar -xvf android-sdk_r16-linux.tgz
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter platform-tools
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter build-tools-16
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter build-tools-21.1.1
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter android-16
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter extra-android-support
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter extra-android-m2repository
