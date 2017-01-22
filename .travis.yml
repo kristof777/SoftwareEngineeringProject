@@ -12,7 +12,7 @@ branches:
     
 os:
   #- andriod
-  #- ios
+  - ios
 
 
 language: node_js
@@ -66,8 +66,8 @@ script:
   - ionic platform remove android
   # this isn't
   - ionic platform add android --verbose
-  # - ionic platform add ios --verbose 
-  # - ionic platform add browser --verbose
+  - ionic platform add ios --verbose 
+  - ionic platform add browser --verbose
   - ionic build
   # commented out since our project doesn't have these files, keeping it around in case we do need it later
   # - ls ionic info
