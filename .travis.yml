@@ -46,15 +46,15 @@ install:
 
 before_script:
   - sudo apt-get install oracle-java8-set-default
-  - wget http://dl.google.com/android/android-sdk_r16-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r21.1-linux.tgz
   - echo $JAVA_HOME
-  - tar -xvf android-sdk_r16-linux.tgz
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter platform-tools
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter build-tools-21.1.1
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter android-16
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter extra-android-support
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter extra-android-m2repository
-  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter extra-google-m2repository
+  - tar -xvf android-sdk_r21.1-linux.tgz
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all platform-tools
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all build-tools-21.1.1
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all android-21
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all extra-android-support
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all extra-android-m2repository
+  - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --filter --all extra-google-m2repository
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - mkdir www
   - java -version
