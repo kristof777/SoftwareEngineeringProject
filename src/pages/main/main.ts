@@ -13,4 +13,14 @@ export class MainPage {
 
     }
 
+    goToFavourites(){
+        console.log("Favourites was clicked");
+        //this.navCtrl.push(FavouritesPage);
+    }
+
+    goToFilters(){
+        console.log("Filters was clicked");
+        //this.navCtrl.push(FilterPage)
+    }
+
 }

@@ -1,11 +1,16 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Main
+            Home
         </ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <h2>Main</h2>
+    <ion-list inset>
+        <ion-item>
+            <button item-left ion-button clear (click)="goToFavourites()">Favourites</button>
+            <button item-right ion-button clear (click)="goToFilters()">Filter Search</button>
+        </ion-item>
+    </ion-list>
 </ion-content>
