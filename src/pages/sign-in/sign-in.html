@@ -22,8 +22,8 @@
         </ion-item>
 
         <ion-item>
-            <button item-left ion-button clear>Register</button>
-            <button item-right ion-button clear>Sign In</button>
+            <button item-left ion-button clear (click)="pushRegister()">Register</button>
+            <button item-right ion-button clear (click)="doSignIn()">Sign In</button>
         </ion-item>
     </ion-list>
 </ion-content>
