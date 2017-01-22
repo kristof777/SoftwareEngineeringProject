@@ -1,16 +1,26 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar
         <ion-title>
             Home
         </ion-title>
+        <ion-buttons start>
+            <button ion-button icon-only (click)="openModal()">
+                <ion-icon name="heart"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="goToFilters()">
+                <ion-icon name="options"></ion-icon>
+            </button>
+        </ion-buttons>
+
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list inset>
         <ion-item>
-            <button item-left ion-button clear (click)="goToFavourites()">Favourites</button>
-            <button item-right ion-button clear (click)="goToFilters()">Filter Search</button>
+
         </ion-item>
     </ion-list>
 </ion-content>
