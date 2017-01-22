@@ -1,3 +1,4 @@
+let assert = require('assert-plus');
 import {Component} from '@angular/core';
 
 import {NavController} from 'ionic-angular';
@@ -15,11 +16,11 @@ export class SignInPage {
     }
 
     pushRegister(){
-        console.log("Register was clicked")
+        console.log("Register was clicked");
         this.navCtrl.push(SignUpPage);
     }
 
     doSignIn(){
-        console.log("Sign In was clicked")
+        console.log("Sign In was clicked");
     }
 }
