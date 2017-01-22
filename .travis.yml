@@ -48,7 +48,7 @@ before_script:
   - sudo apt-get install oracle-java8-set-default
   - wget http://dl.google.com/android/android-sdk_r16-linux.tgz
   - echo $JAVA_HOME
-  - tar -xvf android-sdk_r21.1.0-linux.tgz
+  - tar -xvf android-sdk_r16-linux.tgz
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-16
   - echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-16
