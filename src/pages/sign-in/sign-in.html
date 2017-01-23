@@ -3,12 +3,13 @@
     <ion-list inset>
         <ion-item>
             <!--<ion-label stacked>Username</ion-label>-->
-            <ion-input type="text" placeholder="E-mail"></ion-input>
+            <ion-input [(ngModel)]="email" type="text" placeholder="E-mail"></ion-input>
+
         </ion-item>
 
         <ion-item>
             <!--<ion-label>Password</ion-label>-->
-            <ion-input type="password" placeholder="Password"></ion-input>
+            <ion-input [(ngModel)]="password" type="password" placeholder="Password"></ion-input>
         </ion-item>
 
         <ion-item>
