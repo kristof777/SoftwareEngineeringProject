@@ -16,8 +16,8 @@ matrix:
     dist: 6.0.0
   - os: osx
     os_image: xCode7
- # will this work ???
- exclude:
+  # will this work ???
+  exclude:
   - os: linux
 
 language: node_js
