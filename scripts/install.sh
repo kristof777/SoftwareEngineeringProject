@@ -8,6 +8,8 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo $JAVA_HOME
   npm install -g grunt-cli cordova ionic
   npm install
+elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
+  echo "linux"
 else
   echo "got to install android"
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
