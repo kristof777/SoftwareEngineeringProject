@@ -7,6 +7,7 @@ import {SignUpPage} from '../pages/sign-up/sign-up';
 import {MainPage} from '../pages/main/main';
 import {MyListingsPage} from "../pages/my-listings/my-listings";
 import {SettingsPage} from "../pages/settings/settings";
+import {FilterPage} from "../pages/filter/filter";
 import {TabsPage} from "../pages/tabs/tabs";
 
 @NgModule({
@@ -17,6 +18,7 @@ import {TabsPage} from "../pages/tabs/tabs";
         MainPage,
         MyListingsPage,
         SettingsPage,
+        FilterPage,
         TabsPage
     ],
     imports: [
@@ -30,6 +32,7 @@ import {TabsPage} from "../pages/tabs/tabs";
         MainPage,
         MyListingsPage,
         SettingsPage,
+        FilterPage,
         TabsPage
     ],
     providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]

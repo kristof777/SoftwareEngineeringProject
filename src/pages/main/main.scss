@@ -1,47 +1,11 @@
 page-main {
-    ion-list{
-        .scroll{
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height:100% !important
-        }
-
-        ion-item {
-            margin-right: auto !important;
-            margin-left: auto !important;
-        }
-    }
 
     ion-slides {
-        max-height:90%;
-        img{
-            object-fit: contain;
-        }
-        button {
-            margin-left: 10pt;
-            margin-right: 10pt;
-        }
-        ion-item {
-            margin-right: auto !important;
-            margin-left: auto !important;
-            height: 20px;
-        }
-
+        height: 60%;
     }
 
-    ion-item {
-        margin-right: 0px;
-        margin-left: 0px;
+    #description{
+        text-indent: 20px;
+        text-align: justify;
     }
-    div.item{
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-
-
-
-
 }

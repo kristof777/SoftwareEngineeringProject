@@ -1,7 +1,7 @@
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 
-import {NavController} from 'ionic-angular';
+import {NavParams} from 'ionic-angular';
 
 @Component({
     selector: 'page-filter',
@@ -9,8 +9,8 @@ import {NavController} from 'ionic-angular';
 })
 export class FilterPage {
 
-    constructor(public navCtrl: NavController) {
-
+    constructor(params: NavParams) {
+        console.log("Filter created");
     }
 
 }
