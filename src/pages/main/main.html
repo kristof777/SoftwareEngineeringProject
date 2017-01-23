@@ -1,10 +1,10 @@
 <ion-header>
-    <ion-navbar
+    <ion-navbar>
         <ion-title>
             Home
         </ion-title>
         <ion-buttons start>
-            <button ion-button icon-only (click)="openModal()">
+            <button ion-button icon-only (click)="goToFavourites()">
                 <ion-icon name="heart"></ion-icon>
             </button>
         </ion-buttons>
@@ -24,3 +24,20 @@
         </ion-item>
     </ion-list>
 </ion-content>
+
+<!--<ion-tabs>-->
+    <!--<ion-tab [root]="MainPage" tabTitle="Home" tabIcon="home"></ion-tab>-->
+<!--</ion-tabs>-->
+
+<!--<ion-tabs>-->
+    <!--<ion-tab [root]="Settings"></ion-tab>-->
+    <!--<ion-tab [root]="Home"></ion-tab>-->
+    <!--<ion-tab [root]="My Listings"></ion-tab>-->
+<!--</ion-tabs>-->
+
+<ion-tabs>
+    <ion-tab [root]="tab1Root"></ion-tab>
+    <ion-tab [root]="tab2Root"></ion-tab>
+    <ion-tab [root]="tab3Root"></ion-tab>
+</ion-tabs>
+
