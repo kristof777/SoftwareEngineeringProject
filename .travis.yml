@@ -10,11 +10,12 @@ branches:
     - master
     - develop
     
-os:
-  #- andriod
-  - osx
-
-osx_image: xcode7
+matrix:
+  include:
+  - os: andriod
+    dist: 6.0.0
+  - os: osx
+    os_image: xCode7
 
 language: node_js
 node_js:
@@ -40,13 +41,9 @@ env:
 
     
 install:
-  - npm install -g gulp bower cordova ionic
-  # installs packages specified in the ionic json
-  - npm install
-  - bower update
+  - ./scripts/install.sh
 
 before_script:
-  - sudo apt-get install oracle-java8-set-default
   - wget http://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
   - echo $JAVA_HOME
   - tar -xvf android-sdk_r24.3.4-linux.tgz
