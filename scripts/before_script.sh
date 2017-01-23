@@ -19,7 +19,7 @@ else
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
   #ls $PWD
-  export ANDROID_HOME=$PWD/android-sdk-linux
+  #export ANDROID_HOME=$PWD/android-sdk-linux
   echo $ANDROID_HOME
   mkdir www
   java -version
