@@ -16,7 +16,7 @@ page-main {
     }
 
     ion-slides {
-        max-height:80%;
+        max-height:90%;
         img{
             object-fit: contain;
         }
@@ -29,5 +29,15 @@ page-main {
             margin-left: auto !important;
             height: 20px;
         }
+
     }
+
+    div.item{
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+
+
+
 }
