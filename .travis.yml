@@ -16,9 +16,6 @@ matrix:
     dist: 6.0.0
   - os: osx
     os_image: xCode7
-  # will this work ???
-  exclude:
-  - os: linux
 
 language: node_js
 node_js:
@@ -42,6 +39,7 @@ env:
   
 install:
   - ./scripts/install.sh
+  - echo $TRAVIS_OS_NAME
 
 before_script:
   - ./scripts/before_script.sh
