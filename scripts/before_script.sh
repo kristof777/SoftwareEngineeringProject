@@ -19,3 +19,4 @@ else
   java -version
   ls /usr/lib/jvm/
   export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/23.0.2
+fi
