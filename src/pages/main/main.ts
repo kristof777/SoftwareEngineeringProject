@@ -14,18 +14,19 @@ export class MainPage {
     // Fake listing data using. This structure will change
     data: ListingModel[] = [
         new ListingModel(
-            1,
-            1,
-            "Saskatoon, SK",
-            "XXX Sask Place",
-            3,
-            4,
-            1800,
-            288000,
+            1, // Listing ID
+            1, // Lister ID
+            "Saskatoon, SK", // Location
+            "XXX Sask Place", // Address
+            3, // Bedrooms
+            4, // Bathrooms
+            1800, // Square Feet
+            288000, // Price
+            // Description
             "Curabitur nec lacus diam. Maecenas placerat metus egestas sollicitudin malesuada. Mauris semper vehicula metus. Quisque faucibus nisl nec eros mollis, sit amet vulputate metus vehicula. Suspendisse non suscipit lorem. Ut metus magna, sollicitudin vitae facilisis vel, facilisis vel tellus. Donec bibendum pretium mauris. Praesent facilisis risus ut est accumsan imperdiet.",
-            false,
-            "2017-01-01",
-            "2017-01-20",
+            false, // isHidden
+            "2017-01-01", // Date Created
+            "2017-01-20", // Date Modified
             ["http://placehold.it/1920x1080", "http://placehold.it/1920x1081","http://placehold.it/1920x1082","http://placehold.it/1920x1082","http://placehold.it/1920x1082"]
         ),
         new ListingModel(
@@ -61,6 +62,11 @@ export class MainPage {
     goToFilters(){
         console.log("Filters was clicked");
         let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
+
+        filterModal.onDidDismiss(data => {
+            console.log(data);
+        });
+
         filterModal.present();
     }
 
