@@ -23,4 +23,19 @@ export class MainPage {
         //this.navCtrl.push(FilterPage)
     }
 
+    unlike(){
+        console.log("Unlike was clicked");
+    }
+
+    like(){
+       console.log("Like was clicked.");
+    }
+
+    nextProperty(){
+        console.log("Next Property was clicked");
+    }
+
+    previousProperty(){
+       console.log("Previous Property was clicked");
+    }
 }
