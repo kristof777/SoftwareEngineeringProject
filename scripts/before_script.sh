@@ -18,7 +18,8 @@ else
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
-  export ANDROID_HOME=$PWD/android-sdk_r24.3.4-linux
+  ls $PWD
+  echo | export ANDROID_HOME=$PWD/android-sdk_r24.3.4-linux
   mkdir www
   java -version
   ls /usr/lib/jvm/
