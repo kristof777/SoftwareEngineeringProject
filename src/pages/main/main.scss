@@ -7,6 +7,18 @@ page-main {
     }
 
     ion-slides {
-        max-height: 70%;
+        max-height:80%;
+        img{
+            object-fit: contain;
+        }
+        button {
+            margin-left: 10pt;
+            margin-right: 10pt;
+        }
+        ion-item {
+            margin-right: auto !important;
+            margin-left: auto !important;
+            height: 20px;
+        }
     }
 }
