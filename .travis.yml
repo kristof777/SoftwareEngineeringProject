@@ -36,7 +36,7 @@ addons:
     - lib32z1
 env:
   CXX=g++-4.8
-  JAVA_HOME=/usr/lib/jvm/java-8-oracle
+  
 
 
     
