@@ -12,8 +12,7 @@ import {FilterPage} from '../pages/filter/filter';
 import {MainPage} from '../pages/main/main';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {SettingsPage} from '../pages/settings/settings';
-
-
+import {BrowsePage} from '../pages/browse/browse';
 
 @NgModule({
     declarations: [
@@ -27,8 +26,8 @@ import {SettingsPage} from '../pages/settings/settings';
         FilterPage,
         MainPage,
         MyListingsPage,
-        SettingsPage
-
+        SettingsPage,
+        BrowsePage
     ],
     imports: [
         IonicModule.forRoot(MyApp)
@@ -45,8 +44,8 @@ import {SettingsPage} from '../pages/settings/settings';
         FilterPage,
         MainPage,
         MyListingsPage,
-        SettingsPage
-
+        SettingsPage,
+        BrowsePage
     ],
     providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
