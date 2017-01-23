@@ -37,7 +37,7 @@ addons:
 env:
   CXX=g++-4.8
   # not perfect but this var probably doesn't get used in ios or browser so setting it for all should be OK
-  ANDROID_HOME=$PWD/android-sdk-linu
+  ANDROID_HOME=$PWD/android-sdk-linux
   
 install:
   - ./scripts/install.sh
