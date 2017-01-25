@@ -1,0 +1,17 @@
+page-sign-in {
+
+    .logo{
+        margin-right: auto;
+        max-height: 300px;
+        margin-left: auto;
+        display: block;
+    }
+
+    ion-list{
+        ion-item {
+            margin-right: auto !important;
+            margin-left: auto !important;
+            max-width: 500px;
+        }
+    }
+}

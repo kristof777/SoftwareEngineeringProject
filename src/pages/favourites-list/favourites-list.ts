@@ -1,12 +1,13 @@
+let assert = require('assert-plus');
 import {Component} from '@angular/core';
 
 import {NavController} from 'ionic-angular';
 
 @Component({
-    selector: 'page-home',
-    templateUrl: 'home.html'
+    selector: 'page-favourites-list',
+    templateUrl: 'favourites-list.html'
 })
-export class HomePage {
+export class FavouritesListPage {
 
     constructor(public navCtrl: NavController) {
 

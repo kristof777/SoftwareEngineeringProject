@@ -1,0 +1,106 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Home
+        </ion-title>
+        <!--<ion-buttons start>-->
+            <!--<button ion-button icon-only (click)="goToFavourites()">-->
+                <!--<ion-icon name="heart"></ion-icon>-->
+            <!--</button>-->
+        <!--</ion-buttons>-->
+        <ion-buttons end>
+            <button ion-button icon-only (click)="goToFilters()">
+                <ion-icon name="options"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-toolbar>
+        <ion-item no-lines>
+            <button ion-button item-left clear icon-only (click)="unlike()">
+                <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
+            </button>
+            <button ion-button item-right clear icon-only (click)="like()">
+                <ion-icon ios="ios-heart-outline" md="md-heart-outline"></ion-icon>
+            </button>
+        </ion-item>
+    </ion-toolbar>
+
+    <ion-slides pager>
+        <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
+            <img src="{{ image }}" />
+        </ion-slide>
+    </ion-slides>
+
+    <ion-item>
+        <button ion-button item-left clear icon-only large (click)="previousProperty()">
+            <ion-icon ios="ios-arrow-dropleft-circle" md="md-arrow-dropleft-circle"></ion-icon>
+        </button>
+        <button ion-button item-right clear icon-only large (click)="nextProperty()">
+            <ion-icon ios="ios-arrow-dropright-circle" md="md-arrow-dropright-circle"></ion-icon>
+        </button>
+    </ion-item>
+
+    <ion-list>
+        <ion-item>
+            <span item-left>
+                Location
+            </span>
+            <span item-right>
+                {{ data[cursor].location }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Address
+            </span>
+            <span item-right>
+                {{ data[cursor].address }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Square Feet
+            </span>
+            <span item-right>
+                {{ data[cursor].squarefeet }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Price
+            </span>
+            <span item-right>
+                {{ data[cursor].price }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Bedroom
+            </span>
+            <span item-right>
+                {{ data[cursor].bedrooms }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Bathroom
+            </span>
+            <span item-right>
+                {{ data[cursor].bathrooms }}
+            </span>
+        </ion-item>
+        <ion-item>
+            <span item-left>
+                Description
+                <p id="description">{{ data[cursor].description }}</p>
+            </span>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+
+
+

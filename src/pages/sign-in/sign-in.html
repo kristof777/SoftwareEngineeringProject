@@ -1,0 +1,20 @@
+<ion-content padding>
+    <img class="logo" src="http://placehold.it/300x300" />
+    <ion-list inset>
+        <ion-item>
+            <!--<ion-label stacked>Username</ion-label>-->
+            <ion-input [(ngModel)]="email" type="text" placeholder="E-mail"></ion-input>
+
+        </ion-item>
+
+        <ion-item>
+            <!--<ion-label>Password</ion-label>-->
+            <ion-input [(ngModel)]="password" type="password" placeholder="Password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <button item-left ion-button clear (click)="pushRegister()">Register</button>
+            <button item-right ion-button clear (click)="doSignIn()">Sign In</button>
+        </ion-item>
+    </ion-list>
+</ion-content>
