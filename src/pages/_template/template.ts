@@ -1,5 +1,6 @@
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
+import {Logger} from "angular2-logger/core";
 
 import {NavController} from 'ionic-angular';
 
@@ -9,8 +10,8 @@ import {NavController} from 'ionic-angular';
 })
 export class TemplatePage {
 
-    constructor(public navCtrl: NavController) {
+    constructor(public navCtrl: NavController,
+                private _logger: Logger) {
 
     }
-
 }

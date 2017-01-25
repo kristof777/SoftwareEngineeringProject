@@ -11,6 +11,7 @@ import {TabsPage} from "../pages/tabs/tabs";
     templateUrl: 'app.html'
 })
 export class MyApp {
+    //TODO: Change rootPage back to SignInPage
     //rootPage = SignInPage;
     rootPage=TabsPage;
 
