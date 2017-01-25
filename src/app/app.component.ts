@@ -3,17 +3,12 @@ import {Platform} from 'ionic-angular';
 import {StatusBar, Splashscreen} from 'ionic-native';
 
 import {SignInPage} from '../pages/sign-in/sign-in';
-import {MainPage} from "../pages/main/main";
-import {TabsPage} from "../pages/tabs/tabs";
-
 
 @Component({
     templateUrl: 'app.html'
 })
 export class MyApp {
-    //TODO: Change rootPage back to SignInPage
-    //rootPage = SignInPage;
-    rootPage=TabsPage;
+    rootPage = SignInPage;
 
     constructor(platform: Platform) {
         platform.ready().then(() => {
