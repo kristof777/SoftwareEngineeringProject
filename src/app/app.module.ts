@@ -1,5 +1,7 @@
 import {NgModule, ErrorHandler} from '@angular/core';
 import {IonicApp, IonicModule, IonicErrorHandler} from 'ionic-angular';
+import {Logger} from 'angular2-logger';
+import {LOG_LOGGER_PROVIDERS} from "angular2-logger/core";
 import {MyApp} from './app.component';
 
 import {SignInPage} from '../pages/sign-in/sign-in'
@@ -47,7 +49,7 @@ import {BrowsePage} from '../pages/browse/browse';
         SettingsPage,
         BrowsePage
     ],
-    providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+    providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, Logger, LOG_LOGGER_PROVIDERS]
 })
 export class AppModule {
 }
