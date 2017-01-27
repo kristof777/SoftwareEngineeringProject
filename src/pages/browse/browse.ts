@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
 
 import {NavController, ToastController, ModalController, NavParams} from 'ionic-angular';
 
-import {ListingModel} from '../../app/models/listing';
+import {Listing} from '../../app/models/listing';
 import {FilterPage} from '../filter/filter';
 import {Logger} from "angular2-logger/core";
 
@@ -14,7 +14,7 @@ import {Logger} from "angular2-logger/core";
     providers: [ListingProvider]
 })
 export class BrowsePage {
-    data: ListingModel[];
+    data: Listing[];
     // The index of the page currently being displayed
     cursor: number = 0;
 

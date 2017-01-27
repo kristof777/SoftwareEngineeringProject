@@ -1,12 +1,9 @@
-export class TemplateModel{
-    constructor(public field1: string,
-                public field2: number
-                // ...
-                ){
+export class Template{
+    public field1: string;
+    public field2: number;
 
-    }
-
-    setField1(value: string){
-        this.field1 = value;
+    constructor(field1: string, field2: number){
+        this.field1 = field1;
+        this.field2 = field2;
     }
 }

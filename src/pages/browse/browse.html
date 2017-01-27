@@ -49,7 +49,7 @@
                 Location
             </span>
             <span item-right>
-                {{ data[cursor].location }}
+                {{ data[cursor].location.city }}, {{ data[cursor].location.province }}
             </span>
         </ion-item>
         <ion-item>
@@ -57,7 +57,7 @@
                 Address
             </span>
             <span item-right>
-                {{ data[cursor].address }}
+                {{ data[cursor].location.address }}
             </span>
         </ion-item>
         <ion-item>
