@@ -49,6 +49,7 @@ before_script:
   - ./scripts/before_script.sh
 
 script:
+  - jdk_switcher use oraclejdk8
   - ./scripts/build_script.sh
   # commented out since our project doesn't have these files, keeping it around in case we do need it later
   # - ls ionic info
