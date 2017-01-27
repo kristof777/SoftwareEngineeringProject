@@ -9,8 +9,7 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   xcodebuild -showsdks
   echo "npm version:"
   npm -v
-  echo "node version:"
-  node -v
+  nvm ls
   ionic info
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "the open source penguin"
@@ -21,8 +20,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   java -version
   echo "npm version:"
   npm -v
-  echo "node version:"
-  node -v
+  nvm ls
   ionic info
 else
   echo "got to build android"
@@ -35,7 +33,6 @@ else
   andriod list target
   echo "npm version:"
   npm -v
-  echo "node version:"
-  node -v
+  nvm ls
   ionic info
 fi
