@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-  #echo "got to install osx"
+  echo "got to install osx"
   #brew update
   #brew cask install java
   #java -version
@@ -9,7 +9,7 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   #npm install -g grunt-cli cordova ionic
   #npm install
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
-  echo "linux"
+  echo "got to linux install"
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
@@ -17,7 +17,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   bower update
   sudo apt-get install oracle-java8-set-default
 else
-  #echo "got to install android"
+  echo "got to install android"
   #export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   #npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
