@@ -2,7 +2,7 @@
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "got to install osx"
-  brew update
+  #brew update
   #brew cask install java
   java -version
   echo $JAVA_HOME
