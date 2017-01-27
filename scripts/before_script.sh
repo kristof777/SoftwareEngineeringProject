@@ -13,10 +13,10 @@ else
   echo "should be andriod"
   wget http://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
   echo $JAVA_HOME
-  tar -xvf android-sdk_r24.3.4-linux.tgz
+  tar -xvf android-sdk_r25.2.5-linux.tgz
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
-  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-23.0.3
-  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-24
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-24.0.3
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
