@@ -18,10 +18,9 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   sudo apt-get install oracle-java8-set-default
 else
   echo "got to install android"
-  export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   npm install -g gulp bower cordova ionic
   installs packages specified in the ionic json
   npm install
   bower update
-  sudo apt-get install oracle-java8-set-default
+  jdk_switcher use oraclejdk8
 fi
