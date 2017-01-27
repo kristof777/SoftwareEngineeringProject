@@ -2,7 +2,7 @@
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   # encrypting and decrypting keys goes here
-  #echo "should be osx"
+  echo "should be osx"
   #mkdir www
   #java -version
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
@@ -10,7 +10,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   mkdir www
   java -version
 else
-  #echo "should be andriod"
+  echo "should be andriod"
   #wget http://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
   #echo $JAVA_HOME
   #tar -xvf android-sdk_r24.3.4-linux.tgz
