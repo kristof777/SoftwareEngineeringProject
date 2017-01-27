@@ -22,5 +22,4 @@ else
   installs packages specified in the ionic json
   npm install
   bower update
-  jdk_switcher use oraclejdk8
 fi
