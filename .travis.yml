@@ -16,9 +16,6 @@ matrix:
     dist: 6.0.0
   - os: osx
     os_image: xCode7
-  # will this work ???
-  exclude:
-  - os: linux
 
 language: node_js
 node_js:
@@ -37,11 +34,16 @@ addons:
     - oracle-java8-installer
     - lib32stdc++6
     - lib32z1
+
 env:
   CXX=g++-4.8
+  ANDROID_HOME=$PWD/android-sdk-linux 
+  # not perfect but this var probably doesn't get used in ios or browser so setting it for all should be OK
+  
   
 install:
   - ./scripts/install.sh
+  - echo $TRAVIS_OS_NAME
 
 before_script:
   - ./scripts/before_script.sh
