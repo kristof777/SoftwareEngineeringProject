@@ -20,7 +20,7 @@ else
   echo y | ./tools/android update sdk --no-ui --all --filter extra-android-support
   echo y | ./tools/android update sdk --no-ui --all --filter extra-android-m2repository
   echo y | ./tools/android update sdk --no-ui --all --filter extra-google-m2repository
-  #ls $PWD
+  ls 
   echo $ANDROID_HOME
   mkdir www
   #java -version
