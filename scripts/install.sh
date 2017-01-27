@@ -3,7 +3,7 @@
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "got to install osx"
   brew update
-  brew cask install java
+  #brew cask install java
   java -version
   echo $JAVA_HOME
   npm install -g grunt-cli cordova ionic
