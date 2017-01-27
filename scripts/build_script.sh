@@ -2,8 +2,8 @@
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "got to build OSX"
-  #ionic platform add ios
-  #ionic build
+  ionic platform add ios
+  ionic build
   echo "************************System info************************"
   xcodebuild -version
   xcodebuild -showsdks
