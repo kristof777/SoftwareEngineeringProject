@@ -10,12 +10,10 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   npm install
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "got to linux install"
-  export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
   npm install
   bower update
-  sudo apt-get install oracle-java8-set-default
 else
   echo "got to install android"
   npm install -g gulp bower cordova ionic
