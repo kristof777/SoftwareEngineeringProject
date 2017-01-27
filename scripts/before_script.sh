@@ -11,9 +11,10 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   #java -version
 else
   echo "should be andriod"
-  wget http://dl.google.com/android/android-sdk_r25.2.5-linux.tgz
+  wget http://dl.google.com/android/android-sdk_r25.2.5-linux.zip
   echo $JAVA_HOME
-  tar -xvf android-sdk_r25.2.5-linux.tgz
+  sudo apt-get install unzip
+  unzip android-sdk_r25.2.5-linux.zip
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-24.0.3
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25
