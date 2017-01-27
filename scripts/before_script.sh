@@ -11,7 +11,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   #java -version
 else
   echo "should be andriod"
-  wget http://dl.google.com/android/android-sdk_r24.3.4-linux.tgz
+  wget http://dl.google.com/android/android-sdk_r25.2.5-linux.tgz
   echo $JAVA_HOME
   tar -xvf android-sdk_r25.2.5-linux.tgz
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
