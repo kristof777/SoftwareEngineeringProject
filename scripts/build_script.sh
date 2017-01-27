@@ -7,8 +7,11 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "************************System info************************"
   xcodebuild -version
   xcodebuild -showsdks
+  echo "npm version:"
   npm -v
-  npm ls
+  echo "node version:"
+  node -v
+  ionic info
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "the open source penguin"
   ionic platform add browser
@@ -16,8 +19,11 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "************************System info************************"
   echo $TRAVIS_OS_NAME
   java -version
+  echo "npm version:"
   npm -v
-  npm ls
+  echo "node version:"
+  node -v
+  ionic info
 else
   echo "got to build android"
   ionic platform remove android
@@ -27,6 +33,9 @@ else
   echo $TRAVIS_OS_NAME
   java -version
   andriod list target
+  echo "npm version:"
   npm -v
-  npm ls
+  echo "node version:"
+  node -v
+  ionic info
 fi
