@@ -17,7 +17,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   bower update
 else
   echo "got to install android"
-  npm install -g gulp bower cordova@5.1.0  ionic
+  npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
   npm install
   bower update
