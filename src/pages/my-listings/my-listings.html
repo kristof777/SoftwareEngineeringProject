@@ -1,11 +1,18 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            My Listings
+            Favourites List
         </ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <h2>My Listings</h2>
+    <ion-list>
+        <ion-item *ngFor="let d of storedData" (click)="haveFun(d.listingId)">
+            <ion-thumbnail item-left>
+                <img src="{{d['thumbnail']}}">
+            </ion-thumbnail>
+            <p>{{d['description']}}</p>
+            <!--<button ion-button clear item-right>View</button>-->
+        </ion-item></ion-list>
 </ion-content>
