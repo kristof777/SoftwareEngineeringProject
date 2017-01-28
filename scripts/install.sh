@@ -21,4 +21,5 @@ else
   # installs packages specified in the ionic json
   npm install
   bower update
+  # this comment
 fi
