@@ -13,13 +13,14 @@ else
   echo "should be andriod"
   wget http://dl.google.com/android/repository/tools_r25.2.3-linux.zip
   echo $JAVA_HOME
-  unzip tools_r25.2.3-linux.zip
+  unzip -qq tools_r25.2.3-linux.zip
   echo y | ./tools/android update sdk --no-ui --all --filter platform-tools
   echo y | ./tools/android update sdk --no-ui --all --filter build-tools-24.0.3
   echo y | ./tools/android update sdk --no-ui --all --filter android-25
   echo y | ./tools/android update sdk --no-ui --all --filter extra-android-support
   echo y | ./tools/android update sdk --no-ui --all --filter extra-android-m2repository
   echo y | ./tools/android update sdk --no-ui --all --filter extra-google-m2repository
+  cd tools
   ls 
   echo $ANDROID_HOME
   mkdir www
