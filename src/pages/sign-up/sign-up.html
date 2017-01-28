@@ -6,6 +6,10 @@
         </ion-item>
 
         <ion-item>
+            <ion-input [(ngModel)]="confirm_email" type="text" placeholder="Confirm E-mail"></ion-input>
+        </ion-item>
+
+        <ion-item>
             <ion-input [(ngModel)]="password" type="password" placeholder="Password"></ion-input>
         </ion-item>
 
@@ -34,6 +38,7 @@
 
     <ion-footer>
         <ion-item no-lines>
+            <button item-left ion-button clear (click)="doRegister()">Register</button>
             <button item-right ion-button clear (click)="pushSignIn()">Sign In</button>
         </ion-item>
     </ion-footer>
