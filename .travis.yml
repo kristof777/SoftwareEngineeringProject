@@ -14,6 +14,13 @@ matrix:
   include:
   - os: android
     dist: 6.0.0
+    android:
+      components:
+      - tools
+      - platform-tools
+      - tools
+      - build-tools-25.0.0
+      - android-25
   - os: osx
     os_image: xCode7
 
