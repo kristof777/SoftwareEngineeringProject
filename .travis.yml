@@ -40,6 +40,10 @@ addons:
 env:
   CXX=g++-4.8
   
+licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'  
   
 install:
   - ./scripts/install.sh
