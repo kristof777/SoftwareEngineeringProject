@@ -12,7 +12,7 @@ branches:
 # builds andriod and osx versions 
 matrix:
   include:
-  - os: andriod
+  - os: android
     dist: 6.0.0
   - os: osx
     os_image: xCode7
