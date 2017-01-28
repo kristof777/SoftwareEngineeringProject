@@ -23,7 +23,6 @@ node_js:
   - "6.9.4"
 jdk:
   - oraclejdk8
-
 android:
   components:
     - tools
