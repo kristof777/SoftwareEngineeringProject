@@ -1,3 +1,35 @@
 page-filter {
 
+    // Square Feet Label and Range Slider
+    #sqftLabel{
+        color:#8c8c8c;
+        font-size:100%;
+        padding-right: 600px;
+    }
+    #sqftRange {
+        padding-top: 0;
+    }
+
+    // Bedrooms Label and Range Slider
+    #bedLabel{
+        color:#8c8c8c;
+        font-size:100%;
+        padding-right: 600px;
+        padding-bottom: 0;
+    }
+    #bedRange {
+        padding-top: 0;
+    }
+
+    // Bathrooms Label and Range Slider
+    #bathLabel{
+        color:#8c8c8c;
+        font-size:100%;
+        padding-right: 600px;
+        padding-bottom: 0;
+    }
+    #bathRange {
+        padding-top: 0;
+    }
+
 }
