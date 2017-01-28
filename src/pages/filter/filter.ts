@@ -1,3 +1,4 @@
+import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 
@@ -9,8 +10,9 @@ import {NavParams} from 'ionic-angular';
 })
 export class FilterPage {
 
-    constructor(params: NavParams) {
-        console.log("Filter created");
+    constructor(params: NavParams,
+                private _logger: Logger) {
+        this._logger.debug("Filter created");
     }
 
 }
