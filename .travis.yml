@@ -17,7 +17,9 @@ matrix:
   - os: osx
     os_image: xCode7
 
-language: node_js
+language:  
+  - node_js
+  - android
 node_js:
   # version we are using
   - "6.9.4"
