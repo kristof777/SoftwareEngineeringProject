@@ -7,5 +7,47 @@
 </ion-header>
 
 <ion-content padding>
-    <h2>Filter</h2>
+
+    <!--Everything-->
+    <ion-list>
+
+        <!--List of Provinces-->
+        <ion-item>
+            <ion-label>Province</ion-label>
+            <ion-select [(ngModel)]="province">
+                <ion-option value="AB">Alberta</ion-option>
+                <ion-option value="BC">British Columbia</ion-option>
+                <ion-option value="MB">Manitoba</ion-option>
+                <ion-option value="NB">New Brunswick</ion-option>
+                <ion-option value="NL">Newfoundland and Labrador</ion-option>
+                <ion-option value="NS">Nova Scotia</ion-option>
+                <ion-option value="NU">Nunavut</ion-option>
+                <ion-option value="NW">North West Territories</ion-option>
+                <ion-option value="ON">Ontario</ion-option>
+                <ion-option value="PE">Prince Edward Island</ion-option>
+                <ion-option value="QC">Quebec</ion-option>
+                <ion-option value="SK">Saskatchewan</ion-option>
+                <ion-option value="YT">Yukon</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <!--Price Range Text Inputs-->
+        <ion-item>
+            <ion-label>Price Range:</ion-label>
+            <ion-input placeholder="Min"></ion-input>
+            <ion-input placeholder="Max"></ion-input>
+        </ion-item>
+
+        <!--Square Feet Range-->
+        <ion-item>
+            <ion-label id>Square Feet:</ion-label>
+            <ion-range id="sqftRange" dualKnobs="true" min="500" max="10000" pin="true">
+
+            </ion-range>
+        </ion-item>
+
+
+    </ion-list>
+
+
 </ion-content>

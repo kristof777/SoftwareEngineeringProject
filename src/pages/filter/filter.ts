@@ -10,6 +10,14 @@ import {NavParams} from 'ionic-angular';
 })
 export class FilterPage {
 
+    // ngModel binds the value of the html element to variable "province"
+    // to access use this.province
+    province: string;
+
+
+
+
+    // Creates the logger object (needed in all constructors
     constructor(params: NavParams,
                 private _logger: Logger) {
         this._logger.debug("Filter created");
