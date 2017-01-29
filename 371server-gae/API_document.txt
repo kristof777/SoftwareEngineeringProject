@@ -11,4 +11,3 @@ Kasper API:
 	POST: return message about if the list is created or not
 /showlisting
 	GET: all listings of user (should pass in user email as parameter)
-	POST: none

@@ -78,8 +78,7 @@ class SignIn(webapp2.RequestHandler):
         user_email = self.request.get('email')
         password = self.request.get('password')
         user = User.query(User.key == User.build_key(user_email), User.password == password).get()
-        listings = []
-        listings = Listing.query(Listing.lister_email == user_email).get()
+        listings = Listing.query(Listing.lister_email == user_email).fetch()
         # should return user info and listings back
         self.response.out.write('<h1>Signed in!</h1>')
 
@@ -100,10 +99,10 @@ class CreateListing(webapp2.RequestHandler):
        #TODO: Remove testing account
         user = User.query(User.key == User.build_key('test@gmail.com')).get()
         lister_email = user.email
-        bedrooms = self.request.get('bedrooms')
-        sqft = self.request.get('sqft')
-        bathrooms = self.request.get('bathrooms')
-        price = self.request.get('price')
+        bedrooms = int(self.request.get('bedrooms'))
+        sqft = int(self.request.get('sqft'))
+        bathrooms = int(self.request.get('bathrooms'))
+        price = int(self.request.get('price'))
         description = self.request.get('description')
         isPublished = self.request.get('isPublished') != ''
         province = user.province
