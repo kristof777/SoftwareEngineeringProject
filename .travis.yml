@@ -13,7 +13,6 @@ branches:
 matrix:
   include:
   - os: android
-    dist: 6.0.0
   - os: osx
     os_image: xCode7
 
