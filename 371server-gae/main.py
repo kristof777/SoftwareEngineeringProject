@@ -119,10 +119,32 @@ class CreateListing(webapp2.RequestHandler):
 
         self.response.out.write('<h1>New listing created!</h1>')
 
+class ShowListings(webapp2.RequestHandler):
+    def get(self):
+        #TODO: Remove testing account, should pass in user email as parameter
+        user = User.query(User.key == User.build_key('test@gmail.com')).get()
+        listings = Listing.query(Listing.lister_email == user.email).fetch()
+        path = os.path.join(os.path.dirname(__file__), 'show_listings.html')
+        for listing in listings:
+            template_values = {
+                'lister_email': listing.lister_email,
+                'bedrooms': listing.bedrooms,
+                'sqft': listing.sqft,
+                'bathrooms': listing.bathrooms,
+                'price': listing.price,
+                'description': listing.description,
+                'isPublished': listing.isPublished,
+                'province': listing.province,
+                'city': listing.city,
+                'images': listing.images #TODO: Images need to be stored at blobstore, and then store image URLs from blobstore in a list
+            }
+            self.response.out.write(template.render(path, template_values))
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/createuser', CreateUser),
     ('/signin', SignIn),
-    ('/createlisting', CreateListing)
+    ('/createlisting', CreateListing),
+    ('/showlistings', ShowListings)
 ], debug=True)
