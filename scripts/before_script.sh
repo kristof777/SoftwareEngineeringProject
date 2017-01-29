@@ -15,15 +15,15 @@ else
   echo $JAVA_HOME
   tar -xf android-sdk_r24.4-linux.tgz
   
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools-25.2.5
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools-25.2.5
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools
  
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.1
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25 
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support 
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository 
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter build-tools-25.0.1
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter android-25 
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-support 
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository 
+  echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
   ls 
   echo $ANDROID_HOME
   mkdir www
