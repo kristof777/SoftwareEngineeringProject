@@ -15,5 +15,5 @@ class Listing(ndb.Model):
     images = ndb.BlobProperty()
 
     @classmethod
-    def build_key(cls, email):
-        return ndb.Key(cls, email)
+    def build_key(cls, lister_email, bedrooms, sqft, bathrooms, price, description, province, city):
+        return ndb.Key(cls, lister_email+bedrooms+sqft+bathrooms+price+description+province+city)

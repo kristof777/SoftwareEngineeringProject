@@ -6,6 +6,9 @@
 </head>
 <body>
     <form method="post" action="/createlisting", enctype="multipart/form-data">
+        <label>Lister Email</label>
+        <input name="lister_email" type="email">
+        <br>
         <label>Bedrooms</label>
         <input name="bedrooms" type="number">
         <br>
@@ -18,6 +21,12 @@
         <label>price</label>
         <input name="price" type="number">
         <br>
+        <label>province</label>
+        <input name="province" type="text">
+        <br>
+        <label>city</label>
+        <input name="city" type="text">
+        <br>
         <label>description</label>
         <input name="description" type="text">
         <br>
@@ -25,7 +34,7 @@
         <input name="isPublished" type="checkbox">
         <br>
         <label>images</label>
-        <input type="file" name="image">
+        <input type="file" name="image" multiple>
         <input type="submit" value="Submit">
     </form>
 </body>

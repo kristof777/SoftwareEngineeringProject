@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 #############################################################################################
 # Download google app engine: https://cloud.google.com/appengine/docs/python/download
 # choose the option "Or, you can download the original App Engine SDK for Python."
@@ -45,9 +46,6 @@ class CreateUser(webapp2.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
-        template_values = {
-
-        }
         first_name = self.request.get('firstName')
         last_name = self.request.get('lastName')
         email = self.request.get('email')
@@ -63,10 +61,7 @@ class CreateUser(webapp2.RequestHandler):
         key = User.build_key(email)
         user.key = key
         user.put()
-
-        path = os.path.join(os.path.dirname(__file__), 'sign_in.html')
         self.response.out.write('<h1>Registered!</h1>')
-        self.response.out.write(template.render(path, template_values))
 
 
 class SignIn(webapp2.RequestHandler):
@@ -80,20 +75,18 @@ class SignIn(webapp2.RequestHandler):
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
-        template_values = {
-
-        }
-        #TODO: Remove testing account
-        user = User.query(User.key == User.build_key('test@gmail.com')).get()
-        listings = Listing.query(Listing.key == Listing.build_key(user.email))
-        path = os.path.join(os.path.dirname(__file__), 'show_listings.html')
+        user_email = self.request.get('email')
+        password = self.request.get('password')
+        user = User.query(User.key == User.build_key(user_email), User.password == password).get()
+        listings = []
+        listings = Listing.query(Listing.lister_email == user_email).get()
+        # should return user info and listings back
         self.response.out.write('<h1>Signed in!</h1>')
-        self.response.out.write(template.render(path, listings))
 
 
 class CreateListing(webapp2.RequestHandler):
     def get(self):
-
+        #TODO: Should pass in user email as parameter
         template_values = {
             # 'first_name': user2.first_name,
             # 'last_name': user2.last_name
@@ -120,7 +113,7 @@ class CreateListing(webapp2.RequestHandler):
         listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                           price=price, description=description, isPublished=isPublished, province=province,
                           city=city, images=images)
-        key = Listing.build_key(lister_email)
+        key = Listing.build_key(lister_email, bedrooms, sqft, bathrooms, price, description, province, city)
         listing.key = key
         listing.put()
 
