@@ -13,7 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+#############################################################################################
+# Download google app engine: https://cloud.google.com/appengine/docs/python/download
+# choose the option "Or, you can download the original App Engine SDK for Python."
+# local host: 127.0.0.1:8080
+#############################################################################################
+
 import os
 
 from google.appengine.ext.webapp import template
