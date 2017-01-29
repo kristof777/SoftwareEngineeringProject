@@ -15,7 +15,7 @@ else
   echo $JAVA_HOME
   tar -xf android-sdk_r24.4-linux.tgz
   
-  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools
+  ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools-25.2.5
   ./android-sdk-linux/tools/android update sdk --no-ui --all --filter platform-tools
   ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools
  
