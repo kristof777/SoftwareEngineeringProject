@@ -135,7 +135,7 @@ class ShowListings(webapp2.RequestHandler):
                 'isPublished': listing.isPublished,
                 'province': listing.province,
                 'city': listing.city,
-                'images': listing.images #TODO: Images need to be stored at blobstore, and then store image URLs from blobstore in a list
+                'images': listing.images #TODO: store image URLs from blobstore to a list
             }
             self.response.out.write(template.render(path, template_values))
 
