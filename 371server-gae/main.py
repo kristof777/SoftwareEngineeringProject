@@ -165,23 +165,9 @@ class CreateUser(BaseHandler):
         self.display_message(msg.format(url=verification_url))
 
 
-        # user = User(first_name=first_name, last_name=last_name, email=email, password=password,
-        #             phone1=phone1, phone2=phone2, phone3=phone3, province=province, city=city)
-        # key = User.build_key(email)
-        # user.key = key
-        # user.put()
-        # self.response.out.write('<h1>Registered!</h1>')
-
-
 class SignIn(BaseHandler):
 
     def get(self):
-        # template_values = {
-        #
-        # }
-        # # test = json.dumps(template_values)
-        # path = os.path.join(os.path.dirname(__file__), 'sign_in.html')
-        # self.response.out.write(template.render(path, template_values))
         self._serve_page()
 
     def post(self):
