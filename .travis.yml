@@ -38,7 +38,8 @@ addons:
 
 env:
   CXX=g++-4.8
-  PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/24.0.3
+  ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
+  PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1
   
 licenses:
     - 'android-sdk-preview-license-.+'
