@@ -25,6 +25,7 @@ else
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository 
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
   ls 
+  ls /usr/lib/jvm/
   echo $PWD
   echo $ANDROID_HOME
   mkdir www
