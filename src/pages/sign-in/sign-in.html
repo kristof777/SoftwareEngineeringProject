@@ -13,17 +13,10 @@
         </ion-item>
     </ion-list>
 
-    <button ion-button block color="primary">Sign In</button>
+    <button ion-button block color="primary" (click)="doSignIn()">Sign In</button>
 
     <div class="register">
         <p>Need an account?</p>
         <p><a href="#" (click)="pushRegister()">Register Here</a></p>
     </div>
-
-    <!--<ion-footer>-->
-        <!--<ion-item no-lines>-->
-            <!--<button item-left ion-button clear (click)="pushRegister()">Register</button>-->
-            <!--<button item-right ion-button clear (click)="doSignIn()">Sign In</button>-->
-        <!--</ion-item>-->
-    <!--</ion-footer>-->
 </ion-content>
