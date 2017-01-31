@@ -21,9 +21,6 @@ language: node_js
 node_js:
   # version we are using
   - "6.9.4"
-jdk:
-  - oraclejdk8
-
 
 sudo: true
 addons:
@@ -40,6 +37,7 @@ env:
   CXX=g++-4.8
   ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
   PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1
+  JAVA_HOME=/usr/lib/jvm/java-8-oracle
   
 licenses:
     - 'android-sdk-preview-license-.+'
