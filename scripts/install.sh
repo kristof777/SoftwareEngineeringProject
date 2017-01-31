@@ -17,6 +17,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   bower update
 else
   echo "got to install android"
+  sudo apt-get install oracle-java8-set-default
   npm install -g gulp bower cordova ionic
   # installs packages specified in the ionic json
   npm install
