@@ -1,5 +1,14 @@
 page-sign-in {
 
+    ion-label{
+        padding: 0 !important;
+        margin: 0 !important;
+        ion-icon{
+            font-size: 23pt;
+            color: #DDD;
+        }
+    }
+
     .logo{
         margin-right: auto;
         max-height: 300px;
@@ -12,6 +21,16 @@ page-sign-in {
             margin-right: auto !important;
             margin-left: auto !important;
             max-width: 500px;
+        }
+    }
+
+    .register{
+        margin-top: 15px;
+
+        p{
+            text-align: center;
+            padding: 0;
+            margin: 0;
         }
     }
 }
