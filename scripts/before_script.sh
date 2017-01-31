@@ -25,9 +25,9 @@ else
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-android-m2repository 
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
   ls 
+  echo $PWD
   echo $ANDROID_HOME
   mkdir www
   #java -version
   #ls /usr/lib/jvm/
-  export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/24.0.3
 fi
