@@ -1,5 +1,10 @@
-<ion-content padding>
 
+<ion-header>
+    <ion-navbar>
+        <ion-title>Register</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
     <ion-list inset>
         <ion-item>
             <ion-input [(ngModel)]="email" type="text" placeholder="E-mail"></ion-input>
@@ -38,8 +43,7 @@
 
     <ion-footer>
         <ion-item no-lines>
-            <button item-left ion-button clear (click)="doRegister()">Register</button>
-            <button item-right ion-button clear (click)="pushSignIn()">Sign In</button>
+            <button item-right ion-button clear (click)="doRegister()">Register</button>
         </ion-item>
     </ion-footer>
 </ion-content>
