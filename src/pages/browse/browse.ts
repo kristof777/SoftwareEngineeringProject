@@ -1,8 +1,8 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
 let assert = require('assert-plus');
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 
-import {NavController, ToastController, ModalController, NavParams} from 'ionic-angular';
+import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
 
 import {Listing} from '../../app/models/listing';
 import {FilterPage} from '../filter/filter';
@@ -14,6 +14,7 @@ import {Logger} from "angular2-logger/core";
     providers: [ListingProvider]
 })
 export class BrowsePage {
+    @ViewChild(Slides) slides: Slides;
     data: Listing[];
     // The index of the page currently being displayed
     cursor: number = 0;
@@ -49,13 +50,19 @@ export class BrowsePage {
         this._logger.debug("Like was clicked.");
     }
 
+    goToFirstSlide(){
+        this.slides.slideTo(0, 0);
+    }
+
     nextProperty(){
+        this.goToFirstSlide();
         this._logger.debug("Next Property was clicked");
         if(this.cursor < (this.data.length - 1))
             this.cursor += 1;
     }
 
     previousProperty(){
+        this.goToFirstSlide();
         this._logger.debug("Previous Property was clicked");
         if(this.cursor > 0)
             this.cursor -= 1;
