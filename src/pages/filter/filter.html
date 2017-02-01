@@ -7,13 +7,11 @@
 </ion-header>
 
 <ion-content padding>
-
     <!--Everything-->
     <ion-list>
-
         <!--List of Provinces-->
         <ion-item>
-            <ion-label>Province</ion-label>
+            <ion-label stacked>Province</ion-label>
             <ion-select [(ngModel)]="province">
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
@@ -33,37 +31,46 @@
 
         <!--Price Range Text Inputs-->
         <ion-item>
-            <ion-label>Price Range:</ion-label>
-            <ion-input placeholder="Min"></ion-input>
-            <ion-input placeholder="Max"></ion-input>
+            <ion-label stacked>Min. Price</ion-label>
+            <ion-input type="number" step="1000" [(ngModel)]="minPrice"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label stacked>Max. Price</ion-label>
+            <ion-input type="number" step="1000" [(ngModel)]="maxPrice"></ion-input>
         </ion-item>
 
         <!--Square Feet Range-->
         <ion-item>
-            <ion-label id="sqftLabel">Square Feet:</ion-label>
-            <ion-range id="sqftRange" dualKnobs="true" min="500" max="10000" pin="true">
-
+            <ion-label stacked>Square Feet</ion-label>
+            <ion-range [(ngModel)]="squareFeet" id="sqftRange" dualKnobs="true" min="100" max="10000" pin="true">
+                <ion-label range-left>100</ion-label>
+                <ion-label range-right>10000</ion-label>
             </ion-range>
         </ion-item>
 
         <!--Bedrooms Range-->
         <ion-item>
-            <ion-label id="bedLabel">Bedrooms:</ion-label>
-            <ion-range id="bedRange" dualKnobs="true" min="500" max="10000" pin="true">
-
+            <ion-label stacked>Bedrooms</ion-label>
+            <ion-range [(ngModel)]="bedrooms" lower="1" upper="4" id="bedRange" dualKnobs="true" step="1" snaps="true" min="1" max="10" pin="true">
+                <ion-label range-left>1</ion-label>
+                <ion-label range-right>10</ion-label>
             </ion-range>
         </ion-item>
 
         <!--Bathrooms Range-->
         <ion-item>
-            <ion-label id="bathLabel">Bathrooms:</ion-label>
-            <ion-range id="bathRange" dualKnobs="true" min="500" max="10000" pin="true">
-
+            <ion-label stacked>Bathrooms</ion-label>
+            <ion-range [(ngModel)]="bathrooms" id="bathRange" dualKnobs="true" step="0.5" snaps="true" min="1" max="10" pin="true">
+                <ion-label range-left>1</ion-label>
+                <ion-label range-right>10</ion-label>
             </ion-range>
         </ion-item>
 
+        <!--Apply the Filter-->
+        <ion-item>
+            <button ion-button block (click)="applyFilter()">Apply Filter</button>
+            <button ion-button block (click)="cancel()">Cancel</button>
+        </ion-item>
 
     </ion-list>
-
-
 </ion-content>
