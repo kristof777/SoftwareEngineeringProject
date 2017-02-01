@@ -18,7 +18,7 @@
 
 <ion-content>
     <ion-toolbar>
-        <ion-item no-lines>
+        <ion-item no-lines id="voteBar">
             <button ion-button item-left clear icon-only (click)="unlike()">
                 <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
             </button>
@@ -26,13 +26,13 @@
                 <ion-icon ios="ios-heart-outline" md="md-heart-outline"></ion-icon>
             </button>
         </ion-item>
-    </ion-toolbar>
 
-    <ion-slides pager>
-        <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
-            <img src="{{ image }}" />
-        </ion-slide>
-    </ion-slides>
+        <ion-slides pager id="listingImages">
+            <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
+                <img src="{{ image }}" />
+            </ion-slide>
+        </ion-slides>
+    </ion-toolbar>
 
     <ion-item>
         <button ion-button item-left clear icon-only large (click)="previousProperty()">
