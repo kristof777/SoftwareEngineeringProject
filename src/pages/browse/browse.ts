@@ -35,7 +35,7 @@ export class BrowsePage {
         let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
 
         filterModal.onDidDismiss(data => {
-            this._logger.debug("Filter Modal Data: " + data);
+            this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
         });
 
         filterModal.present();
