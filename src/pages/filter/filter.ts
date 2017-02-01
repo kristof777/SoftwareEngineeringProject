@@ -35,7 +35,8 @@ export class FilterPage {
             maxBedrooms: this.bedrooms.upper,
             minBathrooms: this.bathrooms.lower,
             maxBathrooms: this.bathrooms.upper
-        }
+        };
+
         this.viewCtrl.dismiss(data);
     }
 
