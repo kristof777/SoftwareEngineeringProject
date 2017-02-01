@@ -12,6 +12,13 @@ import {MainPage} from "../main/main";
 export class SignUpPage {
     email: string;
     password: string;
+    confirmEmail: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    city: string;
+
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController) {
@@ -21,14 +28,30 @@ export class SignUpPage {
     doRegister(){
         this._logger.debug("Sign In was clicked.")
 
-        if(this.email == "test")
-            this.navCtrl.setRoot(MainPage);
-        else
+        if(!this.confirmTwo(this.email, this.confirmEmail)){
             this.toastCtrl.create({
                 message: 'To continue, set e-mail to "test"',
                 duration: 3000,
                 position: 'top'
             }).present();
+        }else {
+            this.navCtrl.setRoot(MainPage);
+        }
+
     }
+
+    checkPass(password: string){
+
+
+    }
+
+    confirmTwo(firstField: string, secondField: string){
+        return (firstField == secondField)
+    }
+
+    checkEmail(email: string){
+
+    }
+
 
 }
