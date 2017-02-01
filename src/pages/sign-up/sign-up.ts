@@ -1,6 +1,3 @@
-/**
- * Created by Kristof Mercier on 1/21/2017.
- */
 import { Component } from '@angular/core';
 import {Logger} from "angular2-logger/core";
 
@@ -19,11 +16,6 @@ export class SignUpPage {
                 private _logger: Logger,
                 public toastCtrl: ToastController) {
 
-    }
-
-    pushSignIn(){
-        this._logger.debug("Sign In was clicked.");
-        this.navCtrl.push(SignInPage);
     }
 
     doRegister(){
