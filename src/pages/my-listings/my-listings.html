@@ -1,7 +1,14 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Favourites List
+            <ion-segment >
+                <ion-segment-button value="listings" (ionSelect)="selectListings()">
+                    My Listings
+                </ion-segment-button>
+                <ion-segment-button value="favourites" (ionSelect)="selectFavourites()">
+                    Favourites
+                </ion-segment-button>
+            </ion-segment>
         </ion-title>
     </ion-navbar>
 </ion-header>
