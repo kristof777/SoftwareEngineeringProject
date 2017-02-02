@@ -27,13 +27,19 @@ export class SignUpPage {
     }
 
     doRegister() {
-        this._logger.debug("Sign Up was clicked.")
-        var message
-        var passwordStrength = this.checkPass(this.password)
-        assert(passwordStrength >= 0 && passwordStrength <= 4)
-        if (!this.checkEmail(this.email)) {
+        this._logger.debug("Register was clicked.")
+        var message = null
+        var passwordStrength = null
+        if (this.email == null || !(this.checkEmail(this.email))) {
             message = "Please enter a valid E-mail address"
-        } else if (passwordStrength < 4) {
+        } else if (this.password == null){
+            message = "Please enter a password"
+        }
+        else {
+            passwordStrength = this.checkPass(this.password)
+        }
+
+        if (passwordStrength != null && passwordStrength < 4) {
 
             if (passwordStrength == 0) {
                 message = "must include at least one lower case letter"
@@ -53,15 +59,17 @@ export class SignUpPage {
             message = "Passwords do not match"
         }
 
-        else {
-            this.navCtrl.setRoot(MainPage);
-        }
+
         if (message != null) {
             this.toastCtrl.create({
                 message: message,
                 duration: 3000,
                 position: 'top'
             }).present();
+        }
+        else{
+            //TODO Sign in stuff
+            this.navCtrl.setRoot(MainPage);
         }
     }
 
@@ -95,13 +103,11 @@ export class SignUpPage {
     }
 
     checkEmail(email: string){
-        assert (email != null)
-        var regExp = new RegExp("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`" +
-            "{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])" +
-            "*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4]" +
-            "[0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:" +
-            "[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])")
-        return regExp.test(email)
+        if (email == null){
+            return false
+        }
+        var regExp = new RegExp("/\S+@\S+\.\S+/")
+        return (regExp.test(email))
     }
 
 
