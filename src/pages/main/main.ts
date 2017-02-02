@@ -13,6 +13,5 @@ export class MainPage {
     tab3Root: any = SettingsPage;
 
     constructor() {
-
     }
 }

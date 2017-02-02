@@ -26,32 +26,65 @@ export class SignUpPage {
 
     }
 
-    doRegister(){
-        this._logger.debug("Sign Up was clicked.")
-
-        var passwordStrength = this.checkPass(this.password)
-        if(!this.checkEmail(this.email)){
-            this.toastCtrl.create({
-                message: 'Invalid Email address',
-                duration: 3000,
-                position: 'top'
-            }).present();
-        }else if(passwordStrength < 4){
-            //add messages for each case
-
-        }
-        else if(!this.confirmTwo(this.email, this.confirmEmail)){
-            this.toastCtrl.create({
-                message: 'To continue, set e-mail to "test"',
-                duration: 3000,
-                position: 'top'
-            }).present();
+    doRegister() {
+        this._logger.debug("Register was clicked.")
+        var message = null
+        var passwordStrength = null
+        if (this.email == null || !(this.checkEmail(this.email))) {
+            message = "Please enter a valid E-mail address"
+        } else if (!this.confirmTwo(this.email, this.confirmEmail)) {
+            message = "E-mails do not match"
+        } else
+            if (this.password == null){
+            message = "Please enter a password"
         }
         else {
+            passwordStrength = this.checkPass(this.password)
+            if (passwordStrength != null && passwordStrength < 4) {
+
+                if (passwordStrength == 0) {
+                    message = "must include at least one lower case letter"
+                }
+                else if (passwordStrength == 1) {
+                    message = "must include at least one upper case letter"
+                }
+                else if (passwordStrength == 2) {
+                    message = "must include at least one number"
+                }
+                else if (passwordStrength == 3) {
+                    message = "must be longer than 7 characters"
+                }
+            } else if (!this.confirmTwo(this.password, this.confirmPassword)) {
+                message = "Passwords do not match"
+            } else if (this.firstName == null){
+                message = "Please enter your first name"
+
+            }else if (this.lastName == null){
+                message = "Please enter your last name"
+
+            }else if (this.phoneNumber == null){
+                message = "Please enter your phone-number"
+
+            }else if (this.city == null){
+                message = "Please enter the name of your city"
+
+            }
+
+        }
+        if (message != null) {
+            this.toastCtrl.create({
+                message: message,
+                duration: 3000,
+                position: 'top'
+            }).present();
+        }
+        else{
+            //TODO Sign in stuff
             this.navCtrl.setRoot(MainPage);
         }
-
     }
+
+
 
     //password must contain at leas one lower case, upper case, and numeric character,
     // and must be at least 7 characters long
@@ -81,9 +114,11 @@ export class SignUpPage {
     }
 
     checkEmail(email: string){
-        assert (email != null)
-        var regExp = new RegExp("^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+.[a-zA-Z0–9-.]+$")
-        return regExp.test(email)
+        if (email == null){
+            return false
+        }
+        var regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
+        return (regExp.test(email))
     }
 
 
