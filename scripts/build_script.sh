@@ -22,6 +22,7 @@ elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   ionic info
 else
   echo "got to build android"
+  export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   ionic platform remove android
   ionic platform add android
   ionic build android
