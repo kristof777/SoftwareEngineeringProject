@@ -36,7 +36,6 @@ else
   echo "Google Repository, revision 42"
   echo "Android Support Repository, revision 42"
   java -version
-  andriod list target
   echo "npm version:"
   npm -v
   ionic info
