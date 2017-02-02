@@ -56,6 +56,18 @@ export class SignUpPage {
                 }
             } else if (!this.confirmTwo(this.password, this.confirmPassword)) {
                 message = "Passwords do not match"
+            } else if (this.firstName == null){
+                message = "Please enter your first name"
+
+            }else if (this.lastName == null){
+                message = "Please enter your last name"
+
+            }else if (this.phoneNumber == null){
+                message = "Please enter your phone-number"
+
+            }else if (this.city == null){
+                message = "Please enter the name of your city"
+
             }
 
         }
