@@ -3,7 +3,6 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
-import {SignInPage} from "../sign-in/sign-in";
 import {MainPage} from "../main/main";
 
 @Component({
@@ -26,6 +25,9 @@ export class SignUpPage {
 
     }
 
+    /**Function which is called when the user clicks the register button.
+     * This will check the fields and either complain or accept the registration.
+     */
     doRegister() {
         this._logger.debug("Register was clicked.");
         var message = null;
@@ -75,10 +77,14 @@ export class SignUpPage {
         }
     }
 
-    //password must contain at leas one lower case, upper case, and numeric character,
-    // and must be at least 7 characters long
-    //:Precond string must be a valid, non null string.
-    //:Returns 0 if success, 1 if no lower case letter, 2 if no upper case, 3 if no numeric, 4 if the password is below 7 characters.
+
+    /** Checks a password for validity.
+     *
+     * @param password String password
+     * @precond passwrd is not null
+     * @returns {number} which represents the password strength: 0 if success, 1 if no lower case letter,
+     * 2 if no upper case, 3 if no numeric, 4 if the password is below 7 characters.
+     */
     checkPass(password: string){
         assert (password != null);
         var lowerCase = new RegExp("^(?=.*[a-z])");
@@ -101,10 +107,21 @@ export class SignUpPage {
         return 4;
     }
 
+    /**Checks if two parameters are equal.
+     *
+     * @param firstField first string to compare
+     * @param secondField second string to compare
+     * @returns {boolean} true if they match, false otherwise.
+     */
     confirmTwo(firstField: string, secondField: string){
         return (firstField == secondField)
     }
 
+    /**Checks the input with an e-mail regex
+     *
+     * @param email the email to check
+     * @returns {boolean} true if it was accepted by the regex, false otherwise
+     */
     checkEmail(email: string){
         if (!email){
             return false
