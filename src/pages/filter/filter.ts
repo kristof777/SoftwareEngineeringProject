@@ -27,7 +27,7 @@ export class FilterPage {
     /**
      * Close this modal and pass the filter data back
      */
-    applyFilter(){
+    applyFilter(): void{
         let data = {
             province: this.province,
             minPrice: this.minPrice,
@@ -46,7 +46,7 @@ export class FilterPage {
     /**
      * Close this modal and don't pass data back
      */
-    cancel(){
+    cancel(): void{
         this.viewCtrl.dismiss();
     }
 }

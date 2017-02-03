@@ -37,7 +37,7 @@ export class SignInPage {
     /**
      * Switch the user to the navigation screen.
      */
-    pushRegister(){
+    pushRegister(): void{
         this._logger.debug("Register was clicked.");
         // This variable is injected through the constructor.
         this.navCtrl.push(SignUpPage);
@@ -46,7 +46,7 @@ export class SignInPage {
     /**
      * Attempt to log the user in with the provided information
      */
-    doSignIn(){
+    doSignIn(): void{
         this._logger.debug("Sign In was clicked.")
 
         // "log in" if the email is set to "test"
