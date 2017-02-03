@@ -226,7 +226,6 @@ class ForgotPasswordHandler(BaseHandler):
 
 class CreateListing(webapp2.RequestHandler):
     def get(self):
-        #TODO: Should pass in user email as parameter
         template_values = {
             # 'first_name': user2.first_name,
             # 'last_name': user2.last_name
@@ -238,16 +237,16 @@ class CreateListing(webapp2.RequestHandler):
     def post(self):
 
        #TODO: Remove testing account
-        user = User.query(User.key == User.build_key('test@gmail.com')).get()
-        lister_email = user.email
+        user = User.query().get()
+        lister_email = user.email_address
         bedrooms = int(self.request.get('bedrooms'))
         sqft = int(self.request.get('sqft'))
         bathrooms = int(self.request.get('bathrooms'))
         price = int(self.request.get('price'))
         description = self.request.get('description')
         isPublished = self.request.get('isPublished') != ''
-        province = user.province
-        city = user.city
+        province = self.request.get('province')
+        city = self.request.get('city')
         images = self.request.get('images')
 
         listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
@@ -262,8 +261,8 @@ class CreateListing(webapp2.RequestHandler):
 class ShowListings(webapp2.RequestHandler):
     def get(self):
         #TODO: Remove testing account, should pass in user email as parameter
-        user = User.query(User.key == User.build_key('test@gmail.com')).get()
-        listings = Listing.query(Listing.lister_email == user.email).fetch()
+        user = User.query().get()
+        listings = Listing.query(Listing.lister_email == user.email_address).fetch()
         path = os.path.join(os.path.dirname(__file__), 'show_listings.html')
         for listing in listings:
             template_values = {
