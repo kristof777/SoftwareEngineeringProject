@@ -27,10 +27,16 @@ export class BrowsePage {
         this.data = listings.data;
     }
 
+    /**
+     * Navigate to the My Listings page.
+     */
     goToFavourites(){
         this._logger.debug("Favourites was clicked");
     }
 
+    /**
+     * Display the filters screen
+     */
     goToFilters(){
         this._logger.debug("Filters was clicked");
         let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
@@ -42,18 +48,30 @@ export class BrowsePage {
         filterModal.present();
     }
 
+    /**
+     * Add the house to the users dislike list
+     */
     unlike(){
         this._logger.debug("Unlike was clicked");
     }
 
+    /**
+     * Add the house to the users favourites list
+     */
     like(){
         this._logger.debug("Like was clicked.");
     }
 
+    /**
+     * Return to the first image in the slides
+     */
     goToFirstSlide(){
         this.slides.slideTo(0, 0);
     }
 
+    /**
+     * Display the next property
+     */
     nextProperty(){
         this.goToFirstSlide();
         this._logger.debug("Next Property was clicked");
@@ -61,6 +79,9 @@ export class BrowsePage {
             this.cursor += 1;
     }
 
+    /**
+     * Display the previous property
+     */
     previousProperty(){
         this.goToFirstSlide();
         this._logger.debug("Previous Property was clicked");

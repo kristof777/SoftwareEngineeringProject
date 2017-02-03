@@ -24,6 +24,9 @@ export class FilterPage {
                 private _logger: Logger) {
     }
 
+    /**
+     * Close this modal and pass the filter data back
+     */
     applyFilter(){
         let data = {
             province: this.province,
@@ -40,6 +43,9 @@ export class FilterPage {
         this.viewCtrl.dismiss(data);
     }
 
+    /**
+     * Close this modal and don't pass data back
+     */
     cancel(){
         this.viewCtrl.dismiss();
     }

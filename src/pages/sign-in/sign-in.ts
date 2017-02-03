@@ -49,13 +49,15 @@ export class SignInPage {
     doSignIn(){
         this._logger.debug("Sign In was clicked.")
 
-        if(this.email == "test")
+        // "log in" if the email is set to "test"
+        if(this.email == "test") {
             this.navCtrl.setRoot(MainPage);
-        else
+        } else {
             this.toastCtrl.create({
                 message: 'To continue, set e-mail to "test"',
                 duration: 3000,
                 position: 'top'
             }).present();
+        }
     }
 }
