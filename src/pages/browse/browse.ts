@@ -1,9 +1,7 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
 let assert = require('assert-plus');
 import {Component, ViewChild} from '@angular/core';
-
 import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
-
 import {Listing} from '../../app/models/listing';
 import {FilterPage} from '../filter/filter';
 import {Logger} from "angular2-logger/core";
@@ -23,9 +21,17 @@ export class BrowsePage {
                 public toastCtrl: ToastController,
                 public modalCtrl: ModalController,
                 public listings: ListingProvider,
-                private _logger: Logger) {
-        this.data = listings.data;
+                private _logger: Logger,
+                public navParams: NavParams) {
+        if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
+            this.data = listings.data;
+        }
+        else {
+            this.data = navParams.get('data');
+            this.cursor = navParams.get('cursor');
+        }
     }
+
 
     /**
      * Navigate to the My Listings page.

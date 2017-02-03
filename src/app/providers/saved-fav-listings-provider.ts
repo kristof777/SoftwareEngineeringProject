@@ -6,7 +6,7 @@ import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 
 @Injectable()
-export class SavedFavListingProvider {
+export class SavedListingProvider {
 
     data: any;
     constructor(public http: Http,

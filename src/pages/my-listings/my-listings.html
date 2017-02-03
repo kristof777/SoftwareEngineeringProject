@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            <ion-segment >
+            <ion-segment [(ngModel)] = "listModel">
                 <ion-segment-button value="listings" (ionSelect)="selectListings()">
                     My Listings
                 </ion-segment-button>
@@ -14,12 +14,22 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-list>
-        <ion-item *ngFor="let d of storedData" (click)="haveFun(d.listingId)">
+    <div [ngSwitch]="listModel">
+    <ion-list *ngSwitchCase="'listings'">
+        <ion-item *ngFor="let d of mineSavedData" (click)="clickMineListing(d)">
             <ion-thumbnail item-left>
                 <img src="{{d['thumbnail']}}">
             </ion-thumbnail>
             <p>{{d['description']}}</p>
             <!--<button ion-button clear item-right>View</button>-->
         </ion-item></ion-list>
+    <ion-list *ngSwitchCase="'favourites'">
+        <ion-item *ngFor="let d of favSavedData" (click)="clickFavListing(d)">
+            <ion-thumbnail item-left>
+                <img src="{{d['thumbnail']}}">
+            </ion-thumbnail>
+            <p>{{d['description']}}</p>
+            <!--<button ion-button clear item-right>View</button>-->
+        </ion-item></ion-list>
+    </div>
 </ion-content>
