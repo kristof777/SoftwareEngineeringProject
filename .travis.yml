@@ -45,7 +45,7 @@ script:
 - "./scripts/build_script.sh"
 
 before_deploy:
-  - echo $TRAVIS_BUILD_DIR
+  - "./scripts/before_deploy.sh"
   
 deploy:
   provider: releases
