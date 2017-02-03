@@ -5,6 +5,7 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   ionic platform add ios
   ionic build ios
   ionic emulate ios
+  cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
   echo "************************System info************************"
   xcodebuild -version
   xcodebuild -showsdks
@@ -26,6 +27,7 @@ else
   ionic platform remove android
   ionic platform add android
   ionic build android
+  ./home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd
   ionic emulate android
   echo "************************System info************************"
   echo $TRAVIS_OS_NAME
