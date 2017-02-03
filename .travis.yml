@@ -40,4 +40,4 @@ deploy:
   file: test.txt
   skip_cleanup: true
   on:
-    repo: CMPT371Team1/Project/releases
+    repo: CMPT371Team1/Project
