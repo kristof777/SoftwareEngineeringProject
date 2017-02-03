@@ -27,7 +27,6 @@ else
   ionic platform remove android
   ionic platform add android
   ionic build android
-  ./android-sdk-linux/tools/android avd
   ionic emulate android
   echo "************************System info************************"
   echo $TRAVIS_OS_NAME
