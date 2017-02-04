@@ -1,22 +1,15 @@
 <ion-header>
-    <style>
-        .textStyle{
-            color: #8e9093;
-        }
-    </style>
     <ion-navbar>
         <ion-title>
             Add Listing
         </ion-title>
-
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list inset>
-
         <ion-item>
-            <ion-label>Province</ion-label>
+            <ion-label stacked>Province</ion-label>
             <ion-select [(ngModel)]="province">
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
@@ -35,37 +28,37 @@
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">City/Town </ion-label>
+            <ion-label stacked>City/Town </ion-label>
             <ion-input [(ngModel)]="city" type = "text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">Address </ion-label>
+            <ion-label stacked>Address </ion-label>
             <ion-input [(ngModel)]="address" type = "text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">Price </ion-label>
+            <ion-label stacked>Price </ion-label>
             <ion-input [(ngModel)]="price" type = "text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">Square Feet </ion-label>
+            <ion-label stacked>Square Feet </ion-label>
             <ion-input [(ngModel)]="squarefeet" type = "text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">Bed Rooms </ion-label>
+            <ion-label stacked>Bed Rooms </ion-label>
             <ion-input [(ngModel)]="bedrooms" type = "text" ></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label class="textStyle">Bath Rooms </ion-label>
+            <ion-label stacked>Bath Rooms </ion-label>
             <ion-input [(ngModel)]="bathrooms" type="text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label floating class="textStyle">Description </ion-label>
+            <ion-label floating stacked>Description </ion-label>
             <ion-textarea [(ngModel)]="description" text-wrap></ion-textarea>
         </ion-item>
 
@@ -75,7 +68,7 @@
         </ion-item>
 
         <ion-item>
-            <button item-right ion-button block (click)="publish()">Publish</button>
+            <button ion-button block (click)="publish()">Publish</button>
         </ion-item>
     </ion-list>
 </ion-content>
