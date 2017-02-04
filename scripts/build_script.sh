@@ -3,7 +3,7 @@
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
 # if we are deploying we only want to build the app 
   ionic platform add ios
-  if[ "$BUILD_TYPE" = "deployment" ]; then
+  if [ "$BUILD_TYPE" = "deployment" ]; then
     ionic build ios
   else
     echo "got to build OSX"
