@@ -28,10 +28,10 @@ export class SignUpPage {
     /**Function which is called when the user clicks the register button.
      * This will check the fields and either complain or accept the registration.
      */
-    doRegister() {
+    doRegister(): void{
         this._logger.debug("Register was clicked.");
-        var message = null;
-        var passwordStrength = null;
+        let message = null;
+        let passwordCheck = null;
 
         if (!this.email || !(this.checkEmail(this.email))) {
             message = "Please enter a valid E-mail address";
@@ -40,18 +40,10 @@ export class SignUpPage {
         } else if (!this.password){
             message = "Please enter a password";
         } else {
-            passwordStrength = this.checkPass(this.password);
+            passwordCheck = this.checkPass(this.password);
 
-            if (passwordStrength != null && passwordStrength < 4) {
-                if (passwordStrength == 0) {
-                    message = "Password must include at least one lower case letter";
-                } else if (passwordStrength == 1) {
-                    message = "Password must include at least one upper case letter";
-                } else if (passwordStrength == 2) {
-                    message = "Password must include at least one number";
-                } else if (passwordStrength == 3) {
-                    message = "Password must be longer than 7 characters";
-                }
+            if (passwordCheck.strength < 4) {
+                message = passwordCheck.message;
             } else if (!this.confirmTwo(this.password, this.confirmPassword)) {
                 message = "Passwords do not match";
             } else if (!this.firstName){
@@ -77,34 +69,48 @@ export class SignUpPage {
         }
     }
 
-
     /** Checks a password for validity.
      *
-     * @param password String password
-     * @precond passwrd is not null
-     * @returns {number} which represents the password strength: 0 if success, 1 if no lower case letter,
-     * 2 if no upper case, 3 if no numeric, 4 if the password is below 7 characters.
+     * @param password  the password to check
+     * @precond         the password is not null
+     * @returns an object with the following attributes
+     *          strength    the strength of the password [0 to 4]
+     *          message     a message depicting how to raise the strength
      */
-    checkPass(password: string){
+    checkPass(password: string): any{
         assert (password != null);
-        var lowerCase = new RegExp("^(?=.*[a-z])");
-        var upperCase = new RegExp("^(?=.*[A-Z])");
-        var numeric = new RegExp("^(?=.*[0-9])");
-        var length = new RegExp("^(?=.{7,})");
+        let lowerCase = new RegExp("^(?=.*[a-z])");
+        let upperCase = new RegExp("^(?=.*[A-Z])");
+        let numeric = new RegExp("^(?=.*[0-9])");
+        let length = new RegExp("^(?=.{7,})");
 
         if(!lowerCase.test(password)){
-            return 0;
+            return {
+                strength: 0,
+                message: "Password must include at least one lower case letter"
+            };
         }
         if(!upperCase.test(password)){
-            return 1;
+            return {
+                strength: 1,
+                message: "Password must include at least one upper case letter"
+            };
         }
         if(!numeric.test(password)){
-            return 2;
+            return {
+                strength: 2,
+                message: "Password must include at least one number"
+            };
         }
         if(!length.test(password)){
-            return 3;
+            return {
+                strength: 3,
+                message: "Password must include at least 7 characters long"
+            };
         }
-        return 4;
+        return {
+            strength: 4
+        };
     }
 
     /**Checks if two parameters are equal.
@@ -113,7 +119,7 @@ export class SignUpPage {
      * @param secondField second string to compare
      * @returns {boolean} true if they match, false otherwise.
      */
-    confirmTwo(firstField: string, secondField: string){
+    confirmTwo(firstField: string, secondField: string): boolean{
         return (firstField == secondField)
     }
 
@@ -122,11 +128,11 @@ export class SignUpPage {
      * @param email the email to check
      * @returns {boolean} true if it was accepted by the regex, false otherwise
      */
-    checkEmail(email: string){
+    checkEmail(email: string): boolean{
         if (!email){
             return false
         }
-        var regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
+        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
         return (regExp.test(email))
     }
 

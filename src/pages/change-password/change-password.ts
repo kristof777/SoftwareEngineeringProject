@@ -109,7 +109,7 @@ export class ChangePasswordPage {
      * @param title     the title for the alert
      * @param message   the message for the alert
      */
-    alert(title: string, message: string){
+    alert(title: string, message: string): void{
         this.alertCtrl.create({
             title: title,
             subTitle: message,

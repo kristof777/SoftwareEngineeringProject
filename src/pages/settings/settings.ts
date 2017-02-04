@@ -42,7 +42,7 @@ export class SettingsPage {
     /**
      * Display the dialog for the user to update their password.
      */
-    showChangePassword(){
+    showChangePassword(): void{
         let changePasswordModal = this.modalCtrl.create(ChangePasswordPage);
 
         changePasswordModal.onDidDismiss(data => {
@@ -59,7 +59,7 @@ export class SettingsPage {
      * @param currentPassword   users input for their current password
      * @param newPassword       the new password
      */
-    updatePassword(currentPassword: string, newPassword: string){
+    updatePassword(currentPassword: string, newPassword: string): void{
         // Need to verify currentPassword is correct
         // newPassword has already been checked for strength.
         this._logger.debug("Verifying and changing password");
