@@ -15,6 +15,16 @@ export class SettingsPage {
     private provinces: Province[];
     currentUser: User;
 
+    email: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    province: string;
+    city: string;
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+
     constructor(public navCtrl: NavController,
                 private _logger: Logger) {
         this.provinces = Province.asArray;
@@ -29,12 +39,11 @@ export class SettingsPage {
         this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, null, location);
     }
 
-    saveChanges() {
+    saveChanges(): void {
         this._logger.debug("Save button was clicked.");
     }
 
-    signOut(){
+    signOut(): void{
         this._logger.debug("Sign-out was clicked.");
     }
-
 }

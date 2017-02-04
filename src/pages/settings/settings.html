@@ -12,22 +12,22 @@
 
     <ion-list inset>
         <ion-item>
-            <ion-label>Email</ion-label>
+            <ion-label stacked>Email</ion-label>
             <ion-input [(ngModel)]="email" type="text" placeholder="{{ currentUser.email }}"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label>First Name</ion-label>
+            <ion-label stacked>First Name</ion-label>
             <ion-input [(ngModel)]="firstName" type="text" placeholder="{{ currentUser.firstName }}"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label>Last Name</ion-label>
+            <ion-label stacked>Last Name</ion-label>
             <ion-input [(ngModel)]="lastName" type="text" placeholder="{{ currentUser.lastName }}"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label>Phone Number</ion-label>
+            <ion-label stacked>Phone Number</ion-label>
             <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone1 }}"></ion-input>
         </ion-item>
 
@@ -49,8 +49,23 @@
         </ion-item>
 
         <ion-item>
-            <ion-label>City</ion-label>
+            <ion-label stacked>City</ion-label>
             <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Current Password</ion-label>
+            <ion-input [(ngModel)]="currentPassword" type="password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>New Password</ion-label>
+            <ion-input [(ngModel)]="newPassword" type="password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Confirm Password</ion-label>
+            <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
         </ion-item>
 
     </ion-list>
