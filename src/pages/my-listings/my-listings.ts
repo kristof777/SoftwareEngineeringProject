@@ -7,6 +7,7 @@ import {MineListingProvider} from "../../app/providers/saved-mine-listings-provi
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {BrowsePage} from "../browse/browse.ts"
+import {EditListingsPage} from "../edit-listings/edit-listings.ts"
 
 
 
@@ -21,7 +22,10 @@ export class MyListingsPage {
     mineSavedData: Listing[];
     favSavedData: Listing[];
     listModel : string;
-    constructor(public navCtrl: NavController, public sListings: SavedListingProvider,public mListings: MineListingProvider ,private _logger: Logger) {
+    constructor(public navCtrl: NavController,
+                public sListings: SavedListingProvider,
+                public mListings: MineListingProvider,
+                private _logger: Logger) {
         this.favSavedData = sListings.data;
         this.mineSavedData = mListings.data;
         this.listModel="listings"
@@ -56,6 +60,33 @@ export class MyListingsPage {
     }
 
     /**
+     *
+     * @param listing: listing to be edited
+     */
+    deleteFavListing(listing:Listing) {
+        this.favSavedData.splice(this.favSavedData.indexOf(listing),1);
+    }
+
+    /**
+     *
+     * @param listing: listing to be edited
+     */
+    editMineListing(listing:Listing){
+        this.navCtrl.push(EditListingsPage,{
+            data:listing
+        });
+        this._logger.debug("Trying to edit...")
+
+    }
+
+    /**
+     *
+     * @param listing: listing to be deleted
+     */
+    deleteMineListing(listing:Listing){
+        this.mineSavedData.splice(this.mineSavedData.indexOf(listing),1);
+    }
+    /**
      * called when segment is changed to Listings
      */
     selectListings(){
@@ -68,5 +99,7 @@ export class MyListingsPage {
     selectFavourites(){
         this._logger.debug("Favourites menu selected");
     }
+
+
 
 }
