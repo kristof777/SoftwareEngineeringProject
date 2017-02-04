@@ -28,9 +28,9 @@ export class MyListingsPage {
                 public mListings: MineListingProvider,
                 private _logger: Logger) {
 
-        let addMoreListing = new Listing(0, 0, null, 0, 0, 0, 0, "Add More Listing", false, "","", "http://placehold.it/50x50", null);
-        this.mineSavedData = [addMoreListing];
-        this.mineSavedData = this.mineSavedData.concat(mListings.data);
+//        let addMoreListing = new Listing(0, 0, null, 0, 0, 0, 0, "Add More Listing", false, "","", "http://placehold.it/50x50", null);
+  //      this.mineSavedData = [addMoreListing];
+        this.mineSavedData = mListings.data;
         this.favSavedData = sListings.data;
         this.listModel="listings"
     }
@@ -55,19 +55,12 @@ export class MyListingsPage {
      * Shows up the information about listing, in browse mode
      */
     clickMineListing(listing:Listing){
-        if(listing['listingId'] == 0){
-            this.navCtrl.push(AddListingPage, {
-                data: this.mineSavedData,
-                cursor: this.mineSavedData.indexOf(listing)
-            });
-        }else {
-
             this.navCtrl.push(BrowsePage, {
                 data: this.mineSavedData,
                 cursor: this.mineSavedData.indexOf(listing)
             });
             this._logger.debug("Listing  " + listing + " was clicked")
-        }
+
     }
 
     /**
@@ -97,6 +90,14 @@ export class MyListingsPage {
     deleteMineListing(listing:Listing){
         this.mineSavedData.splice(this.mineSavedData.indexOf(listing),1);
     }
+
+    /**
+     *  Takes you to listing page
+     */
+    addListing(){
+        this.navCtrl.push(AddListingPage);
+    }
+
     /**
      * called when segment is changed to Listings
      */
