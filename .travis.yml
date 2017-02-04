@@ -51,7 +51,7 @@ deploy:
   provider: releases
   api_key:
     secure: D2XfSOh5lr2uucgVkgFvLHNCmALctT9LTLVijaFpSrQs96Q+l+Qs3Ynm1ipUCA+4Wj3IexjaWjH2avXOZp1MAiNYGlqM4oa5C/wo1080HLZ/nvdYslmswBUYQeIqgynKF6InqtESmr522HuYZP3OY+NPKWKoGfcItjdXo0qtJcGLerMwZNefxWY2PZ3KL9WWg3thumEibKEE8MBJiX93cUFclA9pY9vraykGpT0yuAtH10y+cSNdr54baHFDDT2kmfYa5vx2PXmR7cNPiOq2iIjrHTtmpRNv930y5HmZYe/9UopZ7c4M78zdnaTptk9hlNuD1xZCt1xylvPIykwvkfDH+jA5qFAERGWdEMxxnmERZvsjPAqpkGotApkiy1E58Wflqe6Ng9ZlMSRxVshwysaHro4ZPfrr87p1YIpgqtNzvpZ6AYRkxvI7ItOn3DhE3XZlXUbtmyExbkUUboiYax+1o9dYbZWbSJcUaG8NxZswyQ+FnVC/VMKOmP5TvxCoHKw0+zItyPbOoHWwDzGL13wxyO+VLzKrFTTvWQFd2USy+C/kLVzyVJIE7a+yJVa/oczLMvM8QvymHP6kLC9WbSnLHnBYIzmugaAuDI22aY4CqEvO8uRciwyqah76uyG2NUaMcF551hhJ8saEucTkKSp+XWlZwK7ICdZBP2lgtKw=
-  file: test.txt
+  file: platforms/android/build/outputs/apk/android-debug.apk
   skip_cleanup: true
   on:
     repo: CMPT371Team1/Project
