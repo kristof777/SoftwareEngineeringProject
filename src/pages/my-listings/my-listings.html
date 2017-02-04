@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            <ion-segment [(ngModel)] = "listModel">
+            <ion-segment [(ngModel)]="listModel">
                 <ion-segment-button value="listings" (ionSelect)="selectListings()">
                     My Listings
                 </ion-segment-button>
@@ -15,21 +15,44 @@
 
 <ion-content padding>
     <div [ngSwitch]="listModel">
-    <ion-list *ngSwitchCase="'listings'">
-        <ion-item *ngFor="let d of mineSavedData" (click)="clickMineListing(d)">
-            <ion-thumbnail item-left>
-                <img src="{{d['thumbnail']}}">
-            </ion-thumbnail>
-            <p>{{d['description']}}</p>
-            <!--<button ion-button clear item-right>View</button>-->
-        </ion-item></ion-list>
-    <ion-list *ngSwitchCase="'favourites'">
-        <ion-item *ngFor="let d of favSavedData" (click)="clickFavListing(d)">
-            <ion-thumbnail item-left>
-                <img src="{{d['thumbnail']}}">
-            </ion-thumbnail>
-            <p>{{d['description']}}</p>
-            <!--<button ion-button clear item-right>View</button>-->
-        </ion-item></ion-list>
+        <ion-list *ngSwitchCase="'listings'">
+            <ion-item-sliding *ngFor="let d of mineSavedData">
+
+                <ion-item (click)="clickMineListing(d)">
+                    <ion-thumbnail item-left>
+                        <img src="{{d['thumbnail']}}">
+                    </ion-thumbnail>
+                    <p>{{d['description']}}</p>
+                </ion-item>
+                <ion-item-options slide="left">
+                    <button ion-button color="blue" (click)="editMineListing(d)">
+                        Edit
+                    </button>
+                    <button ion-button color="danger" (click)="deleteMineListing(d)">
+                        <ion-icon name="trash"></ion-icon>
+                        Delete
+                    </button>
+                </ion-item-options>
+
+            </ion-item-sliding>
+        </ion-list>
+        <ion-list *ngSwitchCase="'favourites'">
+            <ion-item-sliding *ngFor="let d of favSavedData">
+
+            <ion-item (click)="clickFavListing(d)">
+                <ion-thumbnail item-left>
+                    <img src="{{d['thumbnail']}}">
+                </ion-thumbnail>
+                <p>{{d['description']}}</p>
+            </ion-item>
+                <ion-item-options slide="left">
+                    <button ion-button color="danger" (click)="deleteFavListing(d)">
+                        <ion-icon name="trash"></ion-icon>
+                        Delete
+                    </button>
+                </ion-item-options>
+            </ion-item-sliding>
+
+        </ion-list>
     </div>
 </ion-content>
