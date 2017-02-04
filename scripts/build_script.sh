@@ -19,7 +19,7 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   ionic info
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "the open source penguin"
-  if [ "$BUILD_TYPE" = "deployment" ] then;
+  if [ "$BUILD_TYPE" = "deployment" ]; then
     ionic build
   else
     ionic serve
@@ -35,7 +35,7 @@ else
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   ionic platform remove android
   ionic platform add android
-  if [ "$BUILD_TYPE" = "deployment" ] then;
+  if [ "$BUILD_TYPE" = "deployment" ]; then
     ionic build android
     ls /home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs/
   else
