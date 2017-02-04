@@ -13,4 +13,20 @@ export class Province{
     static QC = { abbr: "QC", name: "Quebec"};
     static SK = { abbr: "SK", name: "Saskatchewan"};
     static YT = { abbr: "YT", name: "Yukon"};
+
+    static asArray: Province[] = [
+        Province.AB,
+        Province.BC,
+        Province.MB,
+        Province.NB,
+        Province.NL,
+        Province.NS,
+        Province.NU,
+        Province.NW,
+        Province.ON,
+        Province.PE,
+        Province.QC,
+        Province.SK,
+        Province.YT,
+    ];
 }
