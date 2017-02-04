@@ -7,5 +7,68 @@
 </ion-header>
 
 <ion-content padding>
-    <h2>Add Listing</h2>
+    <ion-list inset>
+        <ion-item>
+            <ion-label stacked>Province</ion-label>
+            <ion-select [(ngModel)]="province">
+                <ion-option value="AB">Alberta</ion-option>
+                <ion-option value="BC">British Columbia</ion-option>
+                <ion-option value="MB">Manitoba</ion-option>
+                <ion-option value="NB">New Brunswick</ion-option>
+                <ion-option value="NL">Newfoundland and Labrador</ion-option>
+                <ion-option value="NS">Nova Scotia</ion-option>
+                <ion-option value="NU">Nunavut</ion-option>
+                <ion-option value="NW">North West Territories</ion-option>
+                <ion-option value="ON">Ontario</ion-option>
+                <ion-option value="PE">Prince Edward Island</ion-option>
+                <ion-option value="QC">Quebec</ion-option>
+                <ion-option value="SK">Saskatchewan</ion-option>
+                <ion-option value="YT">Yukon</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>City/Town </ion-label>
+            <ion-input [(ngModel)]="city" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Address </ion-label>
+            <ion-input [(ngModel)]="address" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Price </ion-label>
+            <ion-input [(ngModel)]="price" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Square Feet </ion-label>
+            <ion-input [(ngModel)]="squarefeet" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Bed Rooms </ion-label>
+            <ion-input [(ngModel)]="bedrooms" type = "text" ></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Bath Rooms </ion-label>
+            <ion-input [(ngModel)]="bathrooms" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label floating stacked>Description </ion-label>
+            <ion-textarea [(ngModel)]="description" text-wrap></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+            <button item-left ion-button small (click)="uploadImage()">Upload Image</button>
+            <button item-right ion-button small (click)="save()">Save</button>
+        </ion-item>
+
+        <ion-item>
+            <button ion-button block (click)="publish()">Publish</button>
+        </ion-item>
+    </ion-list>
 </ion-content>

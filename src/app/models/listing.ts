@@ -2,7 +2,7 @@ import {Location} from "./location";
 
 export class Listing {
     public listingId: number;
-    public lister: number;
+    public listerId: number;
     public location: Location;
     public bedrooms: number;
     public bathrooms: number;
@@ -18,7 +18,7 @@ export class Listing {
     /**
      * Create a listing
      * @param listingId     id of the listing
-     * @param lister        id of the user who listed this listing
+     * @param listerId      id of the user who listed this listing
      * @param location      the province and city
      * @param bedrooms      the amount of bedrooms
      * @param bathrooms     the amount of bathrooms
@@ -31,12 +31,12 @@ export class Listing {
      * @param thumbnail     a thumbnail in byte64
      * @param images        an array of images in byte64
      */
-    constructor(listingId: number, lister: number, location: Location, bedrooms: number,
+    constructor(listingId: number, listerId: number, location: Location, bedrooms: number,
                 bathrooms: number, squarefeet: number, price: number, description: string,
                 isPublished: boolean, createDate: string, modifiedDate: string,
                 thumbnail: string, images: string[]) {
         this.listingId = listingId;
-        this.lister = lister;
+        this.listerId = listerId;
         this.location = location;
         this.bedrooms = bedrooms;
         this.bathrooms = bathrooms;

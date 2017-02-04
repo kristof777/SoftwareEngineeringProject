@@ -1,3 +1,16 @@
 page-sign-up {
+    .logo{
+        margin-right: auto;
+        max-height: 50px;
+        margin-left: auto;
+        display: block;
+    }
 
+    ion-list{
+        ion-item {
+            margin-right: auto !important;
+            margin-left: auto !important;
+            max-width: 500px;
+        }
+    }
 }

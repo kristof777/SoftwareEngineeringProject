@@ -1,11 +1,32 @@
 page-browse {
 
-  ion-slides {
-    height: 60%;
-  }
+    ion-toolbar {
+        padding: 0 !important;
+        height: 60%;
 
-  #description{
-    text-indent: 20px;
-    text-align: justify;
-  }
+        #voteBar{
+            background-color: transparent !important;
+            position: absolute !important;
+            top: 0 !important;
+            bottom: initial;
+            z-index: 1;
+        }
+
+        #listingImages{
+            position: absolute !important;
+            top: 0 !important;
+            height: 100%;
+            z-index: 0;
+        }
+    }
+
+    #description{
+        text-indent: 20px;
+        text-align: justify;
+    }
+
+    #likeButton, #unlikeButton{
+        font-size: 15pt;
+        height: 100%;
+    }
 }
