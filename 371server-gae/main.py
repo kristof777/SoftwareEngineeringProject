@@ -171,13 +171,15 @@ class SignIn(BaseHandler):
         self._serve_page()
 
     def post(self):
-        user_email = self.request.get('email')
-        password = self.request.get('password')
-        # user = User.query(User.key == User.build_key(user_email), User.password == password).get()
+        d = json.loads(self.request.body)
+        # print d['email']
+        user_email = d['email']
+        password = d['password']
         try:
             u = self.auth.get_user_by_password(user_email, password, remember=True,
                                                save_session=True)
-            self.redirect(self.uri_for('home'))
+            # self.redirect(self.uri_for('home'))
+            self.response.out.write(d)
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s', user_email, type(e))
             self._serve_page(True)

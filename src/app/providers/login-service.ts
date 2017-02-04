@@ -10,21 +10,20 @@ export class LoginService {
         this.data = null;
     }
 
-    login(email: string, password: string): void{
-        /*
-         * POST
-         * this.http.post(URL, data, ResponseContentType.Json).subscribe(...)
-         *
-         * GET
-         * this.http.get(URL, ResponseContentType.Json).subscribe(...)
-         *
-         * Ours might look something like this?
-         *
-         * this.http.post("https://kasperhomeapp.com/api/login/",
-         *     { email: email, password: password }, ResponseContentType.Json)
-         *     .subscribe(data => {
-         *         this.data = data;
-         *     });
-         */
+    login(email: string, password: string, responseFun): void{
+
+         //POST
+        // this.http.post(URL, data, ResponseContentType.Json).subscribe(...)
+
+        //GET
+        // this.http.get(URL, ResponseContentType.Json).subscribe(...)
+
+         this.http.post("http://127.0.0.1:8080/signin",
+            { email: email, password: password }, ResponseContentType.Json)
+             .subscribe(data => {
+                this.data = data;
+                 responseFun(this.data);
+             });
+
     }
 }
