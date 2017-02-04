@@ -70,10 +70,17 @@
 
     </ion-list>
 
-    <ion-footer>
-        <ion-item no-lines>
-            <button item-left ion-button clear (click)="signOut()">Sign Out</button>
-            <button item-right ion-button clear (click)="saveChanges()">Save</button>
-        </ion-item>
-    </ion-footer>
+    <ion-item no-lines>
+        <button item-left ion-button clear (click)="signOut()">Sign Out</button>
+        <button item-right ion-button clear (click)="saveChanges()">Save</button>
+    </ion-item>
+
+    <!-- Removing footer because it's having issues -->
+    <!-- It's staying in one place as you scroll, above the content of the page -->
+    <!--<ion-footer>-->
+        <!--<ion-toolbar>-->
+            <!--<button item-left ion-button clear (click)="signOut()">Sign Out</button>-->
+            <!--<button item-right ion-button clear (click)="saveChanges()">Save</button>-->
+        <!--</ion-toolbar>-->
+    <!--</ion-footer>-->
 </ion-content>
