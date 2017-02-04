@@ -1,11 +1,16 @@
 #!/bin/bash
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-  echo "got to build OSX"
+# if we are deploying we only want to build the app 
   ionic platform add ios
-  ionic build ios
-  ionic emulate ios
-  cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
+  if[ "$BUILD_TYPE" = "deployment" ]; then
+    ionic build ios
+  else
+    echo "got to build OSX"
+    ionic build ios
+    ionic emulate ios
+    cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
+  fi
   echo "************************System info************************"
   xcodebuild -version
   xcodebuild -showsdks
@@ -14,7 +19,11 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   ionic info
 elif [ "$TRAVIS_OS_NAME" = "linux" ]; then
   echo "the open source penguin"
-  ionic serve
+  if [ "$BUILD_TYPE" = "deployment" ] then;
+    ionic build
+  else
+    ionic serve
+  fi
   echo "************************System info************************"
   echo $TRAVIS_OS_NAME
   java -version
@@ -26,8 +35,13 @@ else
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   ionic platform remove android
   ionic platform add android
-  ionic build android
-  ionic emulate android
+  if [ "$BUILD_TYPE" = "deployment" ] then;
+    ionic build android
+    ls /home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs/
+  else
+    ionic build android
+    ionic emulate android
+  fi
   echo "************************System info************************"
   echo $TRAVIS_OS_NAME
   echo "SDK Platform Android 7.1.1, API 25, revision 3"
