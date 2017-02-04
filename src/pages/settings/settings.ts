@@ -14,6 +14,7 @@ import {NavController, ModalController} from 'ionic-angular';
 })
 export class SettingsPage {
     private provinces: Province[];
+    /** the user currently logged in to this device */
     currentUser: User;
 
     email: string;
@@ -22,9 +23,6 @@ export class SettingsPage {
     phoneNumber: string;
     province: string;
     city: string;
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
 
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
@@ -41,20 +39,42 @@ export class SettingsPage {
         this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, null, location);
     }
 
+    /**
+     * Display the dialog for the user to update their password.
+     */
     showChangePassword(){
         let changePasswordModal = this.modalCtrl.create(ChangePasswordPage);
 
         changePasswordModal.onDidDismiss(data => {
-            this._logger.debug("Password change was submitted:" + data);
+            this._logger.debug("Password change was submitted");
+            this.updatePassword(data.oldPassword, data.newPassword);
         });
 
         changePasswordModal.present();
     }
 
+    /**
+     * Attempt to update the users password in the database.
+     *
+     * @param currentPassword   users input for their current password
+     * @param newPassword       the new password
+     */
+    updatePassword(currentPassword: string, newPassword: string){
+        // Need to verify currentPassword is correct
+        // newPassword has already been checked for strength.
+        this._logger.debug("Verifying and changing password");
+    }
+
+    /**
+     * Update the users information according to their input
+     */
     saveChanges(): void {
         this._logger.debug("Save button was clicked.");
     }
 
+    /**
+     * Sign the user out of this device.
+     */
     signOut(): void{
         this._logger.debug("Sign-out was clicked.");
     }
