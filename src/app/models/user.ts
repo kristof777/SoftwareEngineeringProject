@@ -1,3 +1,5 @@
+import {Location} from './location';
+
 export class User{
     public id: number
     public email: string;

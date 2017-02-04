@@ -12,23 +12,9 @@ import {MainPage} from "../main/main";
     templateUrl: 'sign-in.html'
 })
 export class SignInPage {
-    /* from sign-in.html
-     * <ion-item>
-     *     <ion-label><ion-icon name="contact"></ion-icon></ion-label>
-     *     <ion-input [(ngModel)]="email" type="text" placeholder="E-mail"></ion-input>
-     * </ion-item>
-     *
-     * By adding [(ngModel)]="email" to the ion-input tag we bind that field
-     * to the variable created below. The names must be the same and be unique.
-     *
-     * Updating the below variable will automatically update the text in the
-     * input field above.
-     */
     email: string;
     password: string;
 
-    // Any @Injectable modules can be added to the constructor and
-    // become accessible through out this component using "this.myVar"
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
                 private _logger: Logger) {
