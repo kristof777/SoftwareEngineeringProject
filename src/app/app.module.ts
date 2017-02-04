@@ -12,9 +12,7 @@ import {BrowsePage} from '../pages/browse/browse';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {SettingsPage} from '../pages/settings/settings';
 
-import {FavouritesPage} from '../pages/favourites/favourites';
 import {EditListingsPage} from '../pages/edit-listings/edit-listings';
-import {FavouritesListPage} from '../pages/favourites-list/favourites-list';
 import {AddListingPage} from '../pages/add-listing/add-listing';
 
 import {FilterPage} from '../pages/filter/filter';
@@ -27,8 +25,6 @@ import {ChangePasswordPage} from '../pages/change-password/change-password';
         SignUpPage,
         AddListingPage,
         EditListingsPage,
-        FavouritesPage,
-        FavouritesListPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,
@@ -46,8 +42,6 @@ import {ChangePasswordPage} from '../pages/change-password/change-password';
         SignUpPage,
         AddListingPage,
         EditListingsPage,
-        FavouritesPage,
-        FavouritesListPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,
