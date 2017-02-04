@@ -16,6 +16,7 @@
 <ion-content padding>
     <div [ngSwitch]="listModel">
         <ion-list *ngSwitchCase="'listings'">
+            <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
             <ion-item-sliding *ngFor="let d of mineSavedData">
 
                 <ion-item (click)="clickMineListing(d)">
