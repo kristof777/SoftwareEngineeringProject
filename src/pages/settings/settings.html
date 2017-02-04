@@ -31,9 +31,26 @@
             <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone1 }}"></ion-input>
         </ion-item>
 
+        <!--<ion-item>-->
+            <!--<ion-label>Phone Number 2</ion-label>-->
+            <!--<ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone2 }}"></ion-input>-->
+        <!--</ion-item>-->
+
+        <!--<ion-item>-->
+            <!--<ion-label>Phone Number 3</ion-label>-->
+            <!--<ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone3 }}"></ion-input>-->
+        <!--</ion-item>-->
+
+        <ion-item>
+            <ion-label stacked>Province</ion-label>
+            <ion-select [(ngModel)]="province">
+                <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
+            </ion-select>
+        </ion-item>
+
         <ion-item>
             <ion-label>City</ion-label>
-            <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
+            <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}"></ion-input>
         </ion-item>
 
     </ion-list>
