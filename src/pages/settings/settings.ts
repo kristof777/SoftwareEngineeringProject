@@ -47,7 +47,10 @@ export class SettingsPage {
 
         changePasswordModal.onDidDismiss(data => {
             this._logger.debug("Password change was submitted");
-            this.updatePassword(data.oldPassword, data.newPassword);
+            // If the user saves the change
+            if(data) {
+                this.updatePassword(data.oldPassword, data.newPassword);
+            }
         });
 
         changePasswordModal.present();

@@ -10,44 +10,53 @@
 
     <ion-list inset>
         <ion-item>
-            <ion-input [(ngModel)]="email" type="text" placeholder="E-mail"></ion-input>
+            <ion-label stacked>E-mail</ion-label>
+            <ion-input [(ngModel)]="email" type="text"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-input [(ngModel)]="confirmEmail" type="text" placeholder="Confirm E-mail"></ion-input>
-        </ion-item>
-
-
-        <ion-item>
-            <ion-input [(ngModel)]="password" clearOnEdit="false" type="password" placeholder="Password"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-input [(ngModel)]="confirmPassword" clearOnEdit="false"  type="password" placeholder="Confirm Password"></ion-input>
+            <ion-label stacked>Confirm E-mail</ion-label>
+            <ion-input [(ngModel)]="confirmEmail" type="text"></ion-input>
         </ion-item>
 
 
         <ion-item>
+            <ion-label stacked>Password</ion-label>
+            <ion-input [(ngModel)]="password" clearOnEdit="false" type="password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Confirm Password</ion-label>
+            <ion-input [(ngModel)]="confirmPassword" clearOnEdit="false"  type="password"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+            <ion-label stacked>First Name</ion-label>
             <ion-input [(ngModel)]="firstName" type="text" placeholder="First Name"></ion-input>
         </ion-item>
 
         <ion-item>
+            <ion-label stacked>Last Name</ion-label>
             <ion-input [(ngModel)]="lastName" type="text" placeholder="Last Name"></ion-input>
         </ion-item>
 
         <ion-item>
+            <ion-label stacked>Phone Number</ion-label>
             <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="Phone Number"></ion-input>
         </ion-item>
 
         <ion-item>
+            <ion-label stacked>City</ion-label>
             <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
         </ion-item>
 
     </ion-list>
-
-    <ion-footer>
-        <ion-item no-lines>
-            <button item-right ion-button clear (click)="doRegister()">Register</button>
-        </ion-item>
-    </ion-footer>
 </ion-content>
+
+
+<ion-footer>
+    <ion-item>
+        <button item-right ion-button clear (click)="doRegister()">Register</button>
+    </ion-item>
+</ion-footer>
