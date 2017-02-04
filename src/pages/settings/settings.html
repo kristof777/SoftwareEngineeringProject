@@ -43,7 +43,7 @@
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province">
+            <ion-select [(ngModel)]="province" placeholder="{{ currentUser.location.province.name }}">
                 <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
             </ion-select>
         </ion-item>
