@@ -32,6 +32,6 @@ ls
 # push it to git!
 git checkout master
 git add $TRAVIS_BUILD_ID
-git commit -m "Deploy build from $TRAVIS_BUILD_ID"
+git commit -m "Deploy build from $TRAVIS_BUILD_ID [ci skip]"
 git push
 
