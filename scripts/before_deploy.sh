@@ -4,6 +4,7 @@
 openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
 # making sure the file we created has proper access rights
 chmod 600 github_deploy_key
+eval "$(ssh-agent -s)"
 ssh-add github_deploy_key
 # probably need to prep some files here
 ls
