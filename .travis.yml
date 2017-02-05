@@ -35,16 +35,14 @@ env:
   BUILD_TYPE=deployment
   
 install:
-- "./scripts/install.sh"
-- echo $TRAVIS_OS_NAME
+  - "./scripts/install.sh"
+  - echo $TRAVIS_OS_NAME
 
 before_script:
-- "./scripts/before_script.sh"
+  - "./scripts/before_script.sh"
 
 script:
-- "./scripts/build_script.sh"
-
-before_deploy:
+  - "./scripts/build_script.sh"
   - "./scripts/before_deploy.sh"
   
 #deploy:
