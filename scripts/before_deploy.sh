@@ -1,5 +1,18 @@
 #!/bin/sh
 
 # probably need to prep some files here
-echo $PWD
-ls
+export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases
+export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
+
+# Create folder to deploy to
+cd $PUSH_FOLDER
+mkdir $TRAVIS_BUILD_ID
+cd $TRAVIS_BUILD_ID
+
+# move deployment files to the folder we are going to push
+cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUiLD_ID
+
+# push it to git!
+git add .
+git commit -m "Deploy build from $TRAVIS_BUILD_ID"
+git push
