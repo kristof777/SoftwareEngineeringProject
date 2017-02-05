@@ -4,8 +4,10 @@
 export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases
 export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
 
-openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv
-$encrypted_fed185e319aa_iv -in github_deploy_key.enc -out github_deploy_key -d
+# decrypts the key into github_deploy_key (maybe should but this in a more secure place)
+openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
+# making sure the file we created has proper access rights
+chmod 600 github_deploy_key
 
 # Create folder to deploy to
 cd $PUSH_FOLDER
@@ -19,7 +21,7 @@ cd ..
 ls
 
 # push it to git!
-git config --global push.default matching
+# username and email should maybe should also be encrypted or at least stored in env vars
 git config --global user.email "clm972@mail.usask.ca"
 git config --global user.name "ChrisMykotaReid"
 
