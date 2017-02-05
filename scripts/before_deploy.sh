@@ -12,7 +12,6 @@ ls
 # username and email should maybe should also be encrypted or at least stored in env vars
 git config --global user.email "clm972@mail.usask.ca"
 git config --global user.name "ChrisMykotaReid"
-git clone git@github.com:CMPT371Team1/Project.git
 
 export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases/CMPT371Team1/Project/releases
 export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
