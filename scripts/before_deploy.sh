@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # probably need to prep some files here
+ls
 export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases
 export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
 
