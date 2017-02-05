@@ -10,7 +10,7 @@ mkdir $TRAVIS_BUILD_ID
 cd $TRAVIS_BUILD_ID
 
 # move deployment files to the folder we are going to push
-cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUiLD_ID
+cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUILD_ID
 ls
 cd ..
 ls
