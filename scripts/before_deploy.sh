@@ -11,6 +11,8 @@ cd $TRAVIS_BUILD_ID
 
 # move deployment files to the folder we are going to push
 cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUiLD_ID
+ls
+cd ..
 
 # push it to git!
 git config --global push.default matching
@@ -18,6 +20,6 @@ git config --global user.email "clm972@mail.usask.ca"
 git config --global user.name "ChrisMykotaReid"
 
 git checkout master
-git add .
+git add $TRAVIS_BUILD_ID
 git commit -m "Deploy build from $TRAVIS_BUILD_ID"
 git push
