@@ -13,6 +13,7 @@ cd $TRAVIS_BUILD_ID
 cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUiLD_ID
 ls
 cd ..
+ls
 
 # push it to git!
 git config --global push.default matching
