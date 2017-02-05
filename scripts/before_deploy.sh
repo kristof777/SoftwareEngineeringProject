@@ -13,10 +13,11 @@ cd $TRAVIS_BUILD_ID
 cp -r $BUILD_FOLDER $PUSH_FOLDER/$TRAVIS_BUiLD_ID
 
 # push it to git!
-git config --global push.defualt matching
+git config --global push.default matching
 git config --global user.email "clm972@mail.usask.ca"
 git config --global user.name "ChrisMykotaReid"
 
+git checkout master
 git add .
 git commit -m "Deploy build from $TRAVIS_BUILD_ID"
 git push
