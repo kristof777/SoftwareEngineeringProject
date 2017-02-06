@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   # encrypting and decrypting keys goes here
