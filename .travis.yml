@@ -11,8 +11,8 @@ branches:
 matrix:
   include:
   - os: android
-  #- os: osx
-  #  os_image: xCode7
+  - os: osx
+    os_image: xCode7
     
 language: node_js
 node_js:
