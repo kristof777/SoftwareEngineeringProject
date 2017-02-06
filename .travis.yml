@@ -3,30 +3,20 @@ notifications:
   slack:
     secure: eJICeB2vgmD0n18MKS725pSaCXJgB3dCzh7Nd/1fPh67Hs+n8UzzeurpkKbenrwlZLJPEGBTPy1N2yJGwL4wD4xA/MJVrxXAop351LEa8eRZiGt4za6LLZBraXCSUy/CGAUja+x72yEBq6Ua3b5F9q+d5xJ+cYnSAK2Hw2M2HswW7lhVil9i/HfJAfC4CqC63ByYB0N+mNQ/vdoWv4z7TJds30wVw49Fk0WKNyMfzyhd0whS3FtmKW4JYAfjz5eOjBC7dOuYZNAd7zDXrgn/w8Dff9pU5KhfOHRPwMYW1ThIgKH/qey3MbUBFMvizXSvvqcHZKxahTDDxTg66SHtzaY/uFjiIb6CbFXY18HneLxqzIdU2DPBHfx96+mkQNxX2QCrH4n11VWiyMnh0JVYh4/muGiA+z2lj7Hx1iz6vALuCObWV/ZBTnqv7ysAXK8WDv++9Hn0Vk5vhac86lLsPsXIG8LiwziYWFuFgTB+HfVbVN/8opYDw2GoeurjYE3raJZFpiBYD+ATh+JdnrAcX2hoLuQ++SR8za+QvHmrqyzS9GURmAZYMGZYXT/gcGZTwwKVbBBLxVgCpc6nFsQnnCkgpvsIJhToazqdZJreueyhUu8y6oKYDQBmgqBqw2Hpuh6UmVgU7sYBcMtlBHMug8BTWcbHcJfM9EBSqnUlAOE=
 
-
-# build only when these branches are pushed to
 branches:
   only:
-    - master
-    - develop
-# builds andriod and osx versions 
+  - master
+  - develop
+  
 matrix:
   include:
-  - os: andriod
-    dist: 6.0.0
-  - os: osx
-    os_image: xCode7
-  # will this work ???
-  exclude:
-  - os: linux
-
+  - os: android
+  #- os: osx
+  #  os_image: xCode7
+    
 language: node_js
 node_js:
-  # version we are using
-  - "6.9.4"
-jdk:
-  - oraclejdk8
-
+- 6.9.4
 sudo: true
 addons:
   apt:
@@ -37,16 +27,31 @@ addons:
     - oracle-java8-installer
     - lib32stdc++6
     - lib32z1
-env:
-  CXX=g++-4.8
+    
+env: 
+  CXX=g++-4.8 
+  ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
+  PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1
+  BUILD_TYPE=deployment
   
 install:
-  - ./scripts/install.sh
+  - "./scripts/install.sh"
+  - echo $TRAVIS_OS_NAME
 
 before_script:
-  - ./scripts/before_script.sh
+  - "./scripts/before_script.sh"
 
 script:
-  - ./scripts/build_script.sh
-  # commented out since our project doesn't have these files, keeping it around in case we do need it later
-  # - ls ionic info
+  - "./scripts/build_script.sh"
+  - "./scripts/before_deploy.sh"
+  
+# deploy:
+# skip_cleanup: true
+#  provider: releases
+#  api_key:
+#    secure: D2XfSOh5lr2uucgVkgFvLHNCmALctT9LTLVijaFpSrQs96Q+l+Qs3Ynm1ipUCA+4Wj3IexjaWjH2avXOZp1MAiNYGlqM4oa5C/wo1080HLZ/nvdYslmswBUYQeIqgynKF6InqtESmr522HuYZP3OY+NPKWKoGfcItjdXo0qtJcGLerMwZNefxWY2PZ3KL9WWg3thumEibKEE8MBJiX93cUFclA9pY9vraykGpT0yuAtH10y+cSNdr54baHFDDT2kmfYa5vx2PXmR7cNPiOq2iIjrHTtmpRNv930y5HmZYe/9UopZ7c4M78zdnaTptk9hlNuD1xZCt1xylvPIykwvkfDH+jA5qFAERGWdEMxxnmERZvsjPAqpkGotApkiy1E58Wflqe6Ng9ZlMSRxVshwysaHro4ZPfrr87p1YIpgqtNzvpZ6AYRkxvI7ItOn3DhE3XZlXUbtmyExbkUUboiYax+1o9dYbZWbSJcUaG8NxZswyQ+FnVC/VMKOmP5TvxCoHKw0+zItyPbOoHWwDzGL13wxyO+VLzKrFTTvWQFd2USy+C/kLVzyVJIE7a+yJVa/oczLMvM8QvymHP6kLC9WbSnLHnBYIzmugaAuDI22aY4CqEvO8uRciwyqah76uyG2NUaMcF551hhJ8saEucTkKSp+XWlZwK7ICdZBP2lgtKw=
+#  file: platforms/android/build/outputs/apk/android-debug.apk
+# 
+#  on:
+#    repo: CMPT371Team1/Project
+#a
