@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# this should really be renamed or split up into multiple scripts
 # decrypts the key into github_deploy_key (maybe should but this in a more secure place)
 openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
 # making sure the file we created has proper access rights
@@ -30,7 +31,7 @@ cd ..
 ls
 
 # push it to git!
-git checkout master
+git checkout develop
 git add $TRAVIS_BUILD_ID
 git commit -m "Deploy build from $TRAVIS_BUILD_ID [ci skip]"
 git push
