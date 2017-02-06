@@ -36,7 +36,7 @@ else
   ionic platform remove android
   ionic platform add android
   if [ "$BUILD_TYPE" = "deployment" ]; then
-    ionic build --release android
+    ionic build android --release
     ls /home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs/
   else
     ionic build android
