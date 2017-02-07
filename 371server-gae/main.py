@@ -17,8 +17,11 @@
 #############################################################################################
 # Download google app engine: https://cloud.google.com/appengine/docs/python/download
 # choose the option "Or, you can download the original App Engine SDK for Python."
-# local host: 127.0.0.1:8080
+# local host: http://127.0.0.1:8080
+# admin server page: http://localhost:8000
 #############################################################################################
+
+
 import logging
 import os
 
@@ -35,6 +38,9 @@ from models.listing import Listing
 from models.user import User
 
 
+#
+# We need to decide whether uses are allowed to
+# access certain resources depending on if they’re logged in or not.
 def user_required(handler):
     """
     Decorator that checks if there's a user associated with the current session.
@@ -50,6 +56,14 @@ def user_required(handler):
     return check_signin
 
 
+# Before writing the actual handlers that will implement the business
+# logic sign up and authentication users, we will group some utility
+# functions in a base handler class, which will be extended by all the
+# following handler classes.
+#
+# This will ensure that all handlers will inherit a set of useful utility
+# functions and properties to access user data and infrastructure classes,
+# but also ensures that all session data is properly saved on each request.
 class BaseHandler(webapp2.RequestHandler):
     @webapp2.cached_property
     def auth(self):
@@ -121,12 +135,16 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 
-
+# home page ( for browser testing only )
 class MainHandler(BaseHandler):
     def get(self):
         self.render_template('home.html')
 
 
+# create_user is more of type POST, because we want to send all the
+# info about this new user and create a new record in the database.
+# The GET method here is pretty much just get the html page to show
+# the login screen ( in the browser).
 class CreateUser(BaseHandler):
     def get(self):
         self.render_template('create_user.html')
@@ -165,21 +183,27 @@ class CreateUser(BaseHandler):
         self.display_message(msg.format(url=verification_url))
 
 
+
+# The implementation above renders the login page when the request
+# comes via GET and processes the credentials upon POST. When authentication
+# fails it renders the login page and passes the username to the template so
+# that the corresponding field can be pre-filled.
 class SignIn(BaseHandler):
 
     def get(self):
         self._serve_page()
 
     def post(self):
-        d = json.loads(self.request.body)
-        # print d['email']
-        user_email = d['email']
-        password = d['password']
+        # d = json.loads(self.request.body)
+        # user_email = d['email']
+        # password = d['password']
+        user_email = self.request.get('email')
+        password = self.request.get('password')
         try:
             u = self.auth.get_user_by_password(user_email, password, remember=True,
                                                save_session=True)
             # self.redirect(self.uri_for('home'))
-            self.response.out.write(d)
+            # self.response.out.write(d)
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s', user_email, type(e))
             self._serve_page(True)
@@ -226,6 +250,11 @@ class ForgotPasswordHandler(BaseHandler):
         }
         self.render_template('forgot.html', params)
 
+
+# The GET method is simply get the html page ( in the browser for back-end testing)
+# for user inputs. The POST method is similar to create_user, what it does is to get
+# all the information from what the user typed, and generate a new listing that belongs
+# to the current user (with email as the key).
 class CreateListing(webapp2.RequestHandler):
     def get(self):
         template_values = {
@@ -260,6 +289,10 @@ class CreateListing(webapp2.RequestHandler):
 
         self.response.out.write('<h1>New listing created!</h1>')
 
+
+# All the listings that belongs to a specific user would bound with the user email.
+# (More fields in listing should be added later on.). The GET method currently get
+# all the listings of the user.
 class ShowListings(webapp2.RequestHandler):
     def get(self):
         #TODO: Remove testing account, should pass in user email as parameter
@@ -282,6 +315,8 @@ class ShowListings(webapp2.RequestHandler):
             self.response.out.write(template.render(path, template_values))
 
 
+# when websites send us an activation link after a registration,
+# the url usually contain their equivalent of signup tokens.
 class VerificationHandler(BaseHandler):
     def get(self, *args, **kwargs):
         user = None
@@ -340,7 +375,7 @@ class SetPasswordHandler(BaseHandler):
         self.display_message('Password updated.')
 
 
-
+# @user_required need to be there to make sure that the user is logged in
 class AuthenticatedHandler(BaseHandler):
   @user_required
   def get(self):
@@ -352,6 +387,7 @@ class LogoutHandler(BaseHandler):
     self.auth.unset_session()
     self.redirect(self.uri_for('home'))
 
+# configuration
 config = {
     'webapp2_extras.auth': {
         'user_model': User,
@@ -362,6 +398,8 @@ config = {
     }
 }
 
+
+# All API endpoints we are currently using
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name='home'),
     webapp2.Route('/createuser', CreateUser),
