@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Author: Chris Mykota-Reid
+# Does everything related to the deployment of a release.  Sets up ssh keys
+# , gets us checked out onto the right branch and security type for git,
+# gets files prepped for deployment, and lastly deploys them
+
+
+
 # un-encrypts the ssh key, starts up adds it to the list of keys
 setup_ssh(){
   openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
@@ -35,6 +42,7 @@ deploy(){
   git commit -m "Deploy build from $TRAVIS_BUILD_ID [ci skip]"
   git push
 }
+
 
 if [[ "${BUILD_TYPE}" == "deployment" ]]; then
   setup_ssh()
