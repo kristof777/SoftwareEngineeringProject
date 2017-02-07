@@ -43,7 +43,7 @@ before_script:
 
 script:
   - "./scripts/build_script.sh"
-  #- "./scripts/before_deploy.sh"
+  - "./scripts/deploy_script.sh"
   
 # deploy:
 # skip_cleanup: true
