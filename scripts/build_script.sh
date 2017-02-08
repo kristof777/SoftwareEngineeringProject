@@ -56,18 +56,18 @@ system_info(){
   fi
   
   java -version
-  echo "npm version:"
+  echo 'npm version:'
   npm -v
   ionic info
 }
 
 
 
-if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
   echo 'got to build: osx'
   ios_build
   system_info
-elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+elif [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then
   echo 'got to build: linux'
   browser_build
   system_info
