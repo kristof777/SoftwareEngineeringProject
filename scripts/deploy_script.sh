@@ -45,14 +45,14 @@ deploy(){
 
 
 if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-  setup_ssh()
-  setup_git()
+  setup_ssh
+  setup_git
 
   export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases
   export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
 
-  setup_deploy()
-  deploy()
+  setup_deploy
+  deploy
 else
   echo "Not deploying because this isn't a deployment build"
 fi
