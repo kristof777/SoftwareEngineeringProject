@@ -12,7 +12,6 @@ ios_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
     ionic build ios
   else
-    echo "got to build OSX"
     ionic build ios
     ionic emulate ios
     cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
@@ -65,11 +64,11 @@ system_info(){
 
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-  echo "got to build: osx"
+  echo 'got to build: osx'
   ios_build
   system_info
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-  echo "got to build: linux"
+  echo 'got to build: linux'
   browser_build
   system_info
 else
