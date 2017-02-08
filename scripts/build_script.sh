@@ -46,7 +46,7 @@ android_build(){
 system_info(){
   echo "System info:"
   echo $TRAVIS_OS_NAME
-  if [[ "${TRAVIS_OS_NAME} == "android" ]]; then
+  if [[ "${TRAVIS_OS_NAME}" == "android" ]]; then
     echo 'SDK Platform Android 7.1.1, API 25, revision 3'
     echo 'Android SDK Tools, revision 25.2.5'
     echo 'Android SDK Build-tools, revision 25.0.1'
