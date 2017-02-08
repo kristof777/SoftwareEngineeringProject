@@ -48,15 +48,15 @@ android_install(){
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
-  ios_install()
+  ios_install
   mkdir www
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux install"
-  lindroid_install()
+  lindroid_install
   mkdir www
 else
   echo "got to install android"
-  lindroid_install()
-  android_install()
+  lindroid_install
+  android_install
   mkdir www
 fi
