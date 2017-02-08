@@ -2,7 +2,7 @@
 
 # Authress: Chris Mykota-Reid :[
 # Does things not related to installing files but still needed to be setup 
-# before running the build.  
+# before running the build.   
 
 
 if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
