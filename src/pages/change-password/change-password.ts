@@ -1,12 +1,13 @@
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
-import {ListingProvider} from "../../app/providers/listing-provider"
 import {NavParams, NavController, ViewController, AlertController} from 'ionic-angular';
+import {LoginService} from "../../app/providers/login-service"
 
 @Component({
     selector: 'page-change-password',
-    templateUrl: 'change-password.html'
+    templateUrl: 'change-password.html',
+    providers: [LoginService]
 })
 export class ChangePasswordPage {
     currentPassword: string;
@@ -17,7 +18,7 @@ export class ChangePasswordPage {
                 params: NavParams,
                 private alertCtrl: AlertController,
                 private _logger: Logger,
-                private listingProvider: ListingProvider) {
+                private loginService: LoginService) {
     }
 
     /**
@@ -39,7 +40,7 @@ export class ChangePasswordPage {
         }
 
         // Verify the new password is strong enough
-        let passwordCheck: any = this.listingProvider.checkPass(this.newPassword);
+        let passwordCheck: any = this.loginService.checkPass(this.newPassword);
         if(passwordCheck.strength != 4){
             this.alert("Stronger Password Required", passwordCheck.message);
             return;

@@ -4,11 +4,12 @@ let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
 import {MainPage} from "../main/main";
-import {ListingProvider} from "../../app/providers/listing-provider"
+import {LoginService} from "../../app/providers/login-service"
 
 @Component({
     selector: 'page-sign-up',
-    templateUrl: 'sign-up.html'
+    templateUrl: 'sign-up.html',
+    providers: [LoginService]
 })
 export class SignUpPage {
     email: string;
@@ -23,7 +24,7 @@ export class SignUpPage {
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController,
-                public listingProvider: ListingProvider) {
+                private loginService: LoginService) {
 
     }
 
@@ -42,7 +43,7 @@ export class SignUpPage {
         } else if (!this.password){
             message = "Please enter a password";
         } else {
-            passwordCheck = this.listingProvider.checkPass(this.password);
+            passwordCheck = this.loginService.checkPass(this.password);
 
             if (passwordCheck.strength < 4) {
                 message = passwordCheck.message;
