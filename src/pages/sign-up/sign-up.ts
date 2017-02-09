@@ -23,7 +23,7 @@ export class SignUpPage {
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController,
-                private listingProvider: ListingProvider) {
+                public listingProvider: ListingProvider) {
 
     }
 
@@ -42,7 +42,7 @@ export class SignUpPage {
         } else if (!this.password){
             message = "Please enter a password";
         } else {
-            passwordCheck = ListingProvider.checkPass(this.password);
+            passwordCheck = this.listingProvider.checkPass(this.password);
 
             if (passwordCheck.strength < 4) {
                 message = passwordCheck.message;

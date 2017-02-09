@@ -317,7 +317,7 @@ export class ListingProvider {
      *          strength    the strength of the password [0 to 4]
      *          message     a message depicting how to raise the strength
      */
-    static checkPass(password: string): any{
+    checkPass(password: string): any{
         assert (password != null);
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
