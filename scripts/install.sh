@@ -1,4 +1,5 @@
 #!/bin/bash
+set -v
 
 # Author: Chris Mykota-Reid ~.u 
 # Installs all the packages required for whatever build is being done
@@ -49,7 +50,7 @@ android_install(){
 gae_install(){
   pip list
   curl https://sdk.cloud.google.com | bash
-  gcloud components install app-engine-python
+  echo "" | gcloud components install app-engine-python
   echo "" | gcloud components install app-engine-python-extras
 }
 
