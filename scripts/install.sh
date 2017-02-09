@@ -65,8 +65,8 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   mkdir www
 else
   echo "got to install android"
-  lindroid_install
-  android_install
+  #lindroid_install
+  #android_install
   gae_install
   mkdir www
 fi
