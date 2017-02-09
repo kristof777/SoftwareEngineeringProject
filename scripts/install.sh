@@ -45,6 +45,15 @@ android_install(){
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
 }
 
+# downloads and installs google app engine for our server build
+gae_install(){
+  pip list
+  python -v
+  curl https://sdk.cloud.google.com | bash
+  gcloud components install app-engine-python
+  gcloud components install app-engine-python-extras
+}
+
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
@@ -53,10 +62,12 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux install"
   lindroid_install
+  gae_install
   mkdir www
 else
   echo "got to install android"
   lindroid_install
   android_install
+  gae_install
   mkdir www
 fi
