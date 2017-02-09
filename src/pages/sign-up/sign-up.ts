@@ -4,6 +4,7 @@ let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
 import {MainPage} from "../main/main";
+import {ListingProvider} from "../../app/providers/listing-provider"
 
 @Component({
     selector: 'page-sign-up',
@@ -21,7 +22,8 @@ export class SignUpPage {
 
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
-                public toastCtrl: ToastController) {
+                public toastCtrl: ToastController,
+                private listingProvider: ListingProvider) {
 
     }
 
@@ -40,7 +42,7 @@ export class SignUpPage {
         } else if (!this.password){
             message = "Please enter a password";
         } else {
-            passwordCheck = this.checkPass(this.password);
+            passwordCheck = ListingProvider.checkPass(this.password);
 
             if (passwordCheck.strength < 4) {
                 message = passwordCheck.message;
@@ -69,49 +71,6 @@ export class SignUpPage {
         }
     }
 
-    /** Checks a password for validity.
-     *
-     * @param password  the password to check
-     * @precond         the password is not null
-     * @returns an object with the following attributes
-     *          strength    the strength of the password [0 to 4]
-     *          message     a message depicting how to raise the strength
-     */
-    checkPass(password: string): any{
-        assert (password != null);
-        let lowerCase = new RegExp("^(?=.*[a-z])");
-        let upperCase = new RegExp("^(?=.*[A-Z])");
-        let numeric = new RegExp("^(?=.*[0-9])");
-        let length = new RegExp("^(?=.{7,})");
-
-        if(!lowerCase.test(password)){
-            return {
-                strength: 0,
-                message: "Password must include at least one lower case letter"
-            };
-        }
-        if(!upperCase.test(password)){
-            return {
-                strength: 1,
-                message: "Password must include at least one upper case letter"
-            };
-        }
-        if(!numeric.test(password)){
-            return {
-                strength: 2,
-                message: "Password must include at least one number"
-            };
-        }
-        if(!length.test(password)){
-            return {
-                strength: 3,
-                message: "Password must include at least 7 characters long"
-            };
-        }
-        return {
-            strength: 4
-        };
-    }
 
     /**Checks if two parameters are equal.
      *
@@ -120,7 +79,7 @@ export class SignUpPage {
      * @returns {boolean} true if they match, false otherwise.
      */
     confirmTwo(firstField: string, secondField: string): boolean{
-        return (firstField == secondField)
+        return (firstField == secondField);
     }
 
     /**Checks the input with an e-mail regex
@@ -130,10 +89,10 @@ export class SignUpPage {
      */
     checkEmail(email: string): boolean{
         if (!email){
-            return false
+            return false;
         }
-        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
-        return (regExp.test(email))
+        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}");
+        return (regExp.test(email));
     }
 
 
