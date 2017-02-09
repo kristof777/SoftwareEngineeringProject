@@ -10,7 +10,7 @@ export class LoginService {
         this.data = null;
     }
 
-    login(email: string, password: string, responseFun): void{
+    login(email: string, password: string): void{
 
          //POST
         // this.http.post(URL, data, ResponseContentType.Json).subscribe(...)
@@ -18,11 +18,12 @@ export class LoginService {
         //GET
         // this.http.get(URL, ResponseContentType.Json).subscribe(...)
 
-         this.http.post("http://127.0.0.1:8080/signin",
+         this.http.post("http://127.0.0.1:8912/signin",
             { email: email, password: password }, ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
-                 responseFun(this.data);
+             }, error => {
+                 console.log("Oooops, sign in failed!");
              });
 
     }

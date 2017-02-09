@@ -33,11 +33,6 @@ export class SignInPage {
         this.navCtrl.push(SignUpPage);
     }
 
-    responseBack(a): void{
-        this.email = null;
-
-    }
-
     /**
      * Attempt to log the user in with the provided information
      */
@@ -48,7 +43,7 @@ export class SignInPage {
         if(this.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else {
-            this.loginService.login(this.email, this.password, this.responseBack);
+            this.loginService.login(this.email, this.password);
         }
     }
 

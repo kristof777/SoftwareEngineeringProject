@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 #
 # Copyright 2007 Google Inc.
 #
@@ -17,8 +18,8 @@
 #############################################################################################
 # Download google app engine: https://cloud.google.com/appengine/docs/python/download
 # choose the option "Or, you can download the original App Engine SDK for Python."
-# local host: http://127.0.0.1:8080
-# admin server page: http://localhost:8000
+# local host: http://127.0.0.1:8912
+# admin server page: http://localhost:9000
 #############################################################################################
 
 
@@ -40,7 +41,7 @@ from models.user import User
 
 #
 # We need to decide whether uses are allowed to
-# access certain resources depending on if they’re logged in or not.
+# access certain resources depending on if they are logged in or not.
 def user_required(handler):
     """
     Decorator that checks if there's a user associated with the current session.
@@ -65,6 +66,11 @@ def user_required(handler):
 # functions and properties to access user data and infrastructure classes,
 # but also ensures that all session data is properly saved on each request.
 class BaseHandler(webapp2.RequestHandler):
+    def options(self, *args, **kwargs):
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+
     @webapp2.cached_property
     def auth(self):
         """Shortcut to access the auth instance as a property"""
@@ -194,16 +200,17 @@ class SignIn(BaseHandler):
         self._serve_page()
 
     def post(self):
-        # d = json.loads(self.request.body)
-        # user_email = d['email']
-        # password = d['password']
-        user_email = self.request.get('email')
-        password = self.request.get('password')
+        d = json.loads(self.request.body)
+        user_email = d['email']
+        password = d['password']
+
+        # user_email = self.request.get('email')
+        # password = self.request.get('password')
         try:
             u = self.auth.get_user_by_password(user_email, password, remember=True,
                                                save_session=True)
             # self.redirect(self.uri_for('home'))
-            # self.response.out.write(d)
+            self.response.out.write(d)
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s', user_email, type(e))
             self._serve_page(True)
