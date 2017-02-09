@@ -9,7 +9,7 @@
         <!--</button>-->
         <!--</ion-buttons>-->
         <ion-buttons end>
-            <button ion-button icon-only (click)="goToFilters()">
+            <button ion-button icon-only (click)="goToFilters()" id="goToFilters">
                 <ion-icon name="options"></ion-icon>
             </button>
         </ion-buttons>
@@ -35,10 +35,10 @@
     </ion-toolbar>
 
     <ion-item>
-        <button ion-button item-left clear icon-only large (click)="previousProperty()">
+        <button ion-button item-left clear icon-only large (click)="previousProperty()" id="previousProperty">
             <ion-icon ios="ios-arrow-dropleft-circle" md="md-arrow-dropleft-circle"></ion-icon>
         </button>
-        <button ion-button item-right clear icon-only large (click)="nextProperty()">
+        <button ion-button item-right clear icon-only large (click)="nextProperty()" id="nextProperty">
             <ion-icon ios="ios-arrow-dropright-circle" md="md-arrow-dropright-circle"></ion-icon>
         </button>
     </ion-item>
