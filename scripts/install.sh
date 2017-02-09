@@ -50,7 +50,7 @@ gae_install(){
   pip list
   curl https://sdk.cloud.google.com | bash
   gcloud components install app-engine-python
-  gcloud components install app-engine-python-extras
+  echo | gcloud components install app-engine-python-extras
 }
 
 
@@ -59,8 +59,8 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   ios_install
   mkdir www
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-  echo "got to linux install"
-  lindroid_install
+  #echo "got to linux install"
+  #lindroid_install
   gae_install
   mkdir www
 else
