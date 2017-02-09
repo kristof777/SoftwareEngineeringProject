@@ -49,7 +49,7 @@ android_install(){
 # downloads and installs google app engine for our server build
 gae_install(){
   pip list
-  curl https://sdk.cloud.google.com | bash
+  curl https://sdk.cloud.google.com | bash  
   echo "" | gcloud components install app-engine-python
   echo "" | gcloud components install app-engine-python-extras
 }
@@ -66,6 +66,8 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   mkdir www
 else
   echo "got to install android"
+  export CLOUDSDK_INSTALL_DIR=/$HOME
+  export CLOUDSDK_CORE_DISABLE_PROMPTS=1
   #lindroid_install
   #android_install
   gae_install
