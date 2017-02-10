@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #################################################
 # Enable remote ssh access to travisci build for debugging
 #################################################
@@ -38,4 +40,4 @@ at -f screenshot.sh now+1min
 #################################################
 # Enable Apple Remote mgmt of system (can be tunneled using same mechanism as ssh tunnel -R)
 #################################################
-sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -off -restart -agent -privs -all -allowAccessFor -allUsers
+#sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -off -restart -agent -privs -all -allowAccessFor -allUsers
