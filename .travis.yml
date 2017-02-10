@@ -36,7 +36,6 @@ env:
   BUILD_TYPE=test
   
 install:
-  - "./scripts/screenshot_script.sh"
   - "./scripts/install.sh"
   - echo $TRAVIS_OS_NAME
 
