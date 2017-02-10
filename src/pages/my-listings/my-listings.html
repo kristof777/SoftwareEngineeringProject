@@ -17,20 +17,20 @@
     <div [ngSwitch]="listModel">
         <ion-list *ngSwitchCase="'listings'">
             <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
-            <ion-item-sliding *ngFor="let d of mineSavedData">
+            <ion-item-sliding *ngFor="let cur of myListings">
 
-                <ion-item (click)="clickMineListing(d)">
+                <ion-item (click)="clickMyListing(cur)">
                     <ion-thumbnail item-left>
-                        <img src="{{d['thumbnail']}}">
+                        <img src="{{ cur['thumbnail'] }}">
                     </ion-thumbnail>
-                    <p>{{d['description']}}</p>
+                    <p>{{ cur['description'] }}</p>
                 </ion-item>
                 <ion-item-options slide="left">
-                    <button ion-button color="blue" (click)="editMineListing(d)">
+                    <button ion-button color="blue" (click)="editMyListing(cur)">
                         <ion-icon name="create"></ion-icon>
                         Edit
                     </button>
-                    <button ion-button color="danger" (click)="deleteMineListing(d)">
+                    <button ion-button color="danger" (click)="deleteMyListing(cur)">
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
@@ -39,16 +39,16 @@
             </ion-item-sliding>
         </ion-list>
         <ion-list *ngSwitchCase="'favourites'">
-            <ion-item-sliding *ngFor="let d of favSavedData">
+            <ion-item-sliding *ngFor="let cur of favListings">
 
-            <ion-item (click)="clickFavListing(d)">
+            <ion-item (click)="clickFavListing(cur)">
                 <ion-thumbnail item-left>
-                    <img src="{{d['thumbnail']}}">
+                    <img src="{{ cur['thumbnail'] }}">
                 </ion-thumbnail>
-                <p>{{d['description']}}</p>
+                <p>{{ cur['description']}}</p>
             </ion-item>
                 <ion-item-options slide="left">
-                    <button ion-button color="danger" (click)="deleteFavListing(d)">
+                    <button ion-button color="danger" (click)="deleteFavListing(cur)">
                         <ion-icon name="trash"></ion-icon>
                         Delete
                     </button>
