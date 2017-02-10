@@ -3,13 +3,11 @@
         <ion-title>
             Edit Listing
         </ion-title>
-
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list inset>
-
         <ion-item>
             <ion-label stacked>Province</ion-label>
             <ion-select [(ngModel)]="province">
@@ -37,6 +35,11 @@
         <ion-item>
             <ion-label stacked>Address </ion-label>
             <ion-input [(ngModel)]="address" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Postal Code </ion-label>
+            <ion-input [(ngModel)]="postalCode" type = "text"></ion-input>
         </ion-item>
 
         <ion-item>
