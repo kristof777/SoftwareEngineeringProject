@@ -48,8 +48,9 @@ android_install(){
 
 # downloads and installs google app engine for our server build
 gae_install(){
-  pip list
-  curl https://sdk.cloud.google.com | bash  
+  #pip list
+  #curl https://sdk.cloud.google.com | bash  
+  gcloud -v
   echo "" | gcloud components install app-engine-python
   echo "" | gcloud components install app-engine-python-extras
 }
