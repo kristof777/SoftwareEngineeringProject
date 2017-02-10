@@ -51,8 +51,9 @@ gae_install(){
   #pip list
   #curl https://sdk.cloud.google.com | bash  
   gcloud -v
-  echo "" | gcloud components install app-engine-python
-  echo "" | gcloud components install app-engine-python-extras
+  gcloud components update
+  sudo echo "" | gcloud components install app-engine-python
+  sudo echo "" | gcloud components install app-engine-python-extras
 }
 
 
