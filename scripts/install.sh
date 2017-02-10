@@ -58,7 +58,7 @@ gae_install(){
   sudo pip install webapp2
   sudo pip install WebOb
   # sudo du / | grep "google-cloud"
-  dev_appserver.py ./371server-gae/app.yaml
+  echo Y | dev_appserver.py ./371server-gae/app.yaml
 }
 
 
