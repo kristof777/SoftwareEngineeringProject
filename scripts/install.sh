@@ -57,8 +57,9 @@ gae_install(){
   sudo pip install PyYAML
   sudo pip install webapp2
   sudo pip install WebOb
-  echo $PWD
-  echo $HOME
+  ls
+  ls /usr
+  ls /usr/bin
   dev_appserver.py ./371server-gae/app.yaml
 }
 
