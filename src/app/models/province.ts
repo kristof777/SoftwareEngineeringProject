@@ -1,4 +1,6 @@
 export class Province{
+    abbr: string;
+    name: string;
 
     static AB = { abbr: "AB", name: "Alberta"};
     static BC = { abbr: "BC", name: "British Columbia"};
@@ -29,4 +31,15 @@ export class Province{
         Province.SK,
         Province.YT,
     ];
+
+    static fromAbbr(abbr: string): Province{
+        let provinces: Province[] = Province.asArray;
+
+        for(let i=0; i<provinces.length; i++){
+            if(provinces[i].abbr.toLowerCase() === abbr.toLowerCase()){
+                return provinces[i];
+            }
+        }
+        return null;
+    }
 }
