@@ -2,11 +2,17 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {Camera} from 'ionic-native';
+import {Camera, NativeStorage} from 'ionic-native';
+import {Listing} from "../../app/models/listing";
+import {ListingProvider} from "../../app/providers/listing-provider";
+import {SavedListingProvider} from "../../app/providers/saved-listing-provider";
+import {Location} from "../../app/models/location";
+import {Province} from "../../app/models/province";
 
 @Component({
     selector: 'page-add-listing',
-    templateUrl: 'add-listing.html'
+    templateUrl: 'add-listing.html',
+    providers: [ListingProvider, SavedListingProvider]
 })
 export class AddListingPage {
     bathrooms: number;
@@ -16,16 +22,33 @@ export class AddListingPage {
     squarefeet: number;
     price: number;
     address: string;
+    postalCode: string;
     description: string;
     images: string[];
 
     constructor(public navCtrl: NavController,
+                public listingProvider: ListingProvider,
+                public savedListings: SavedListingProvider,
                 private _logger: Logger) {
 
     }
 
-    save(){
+    /**
+     * Returns true if all of the required fields are present
+     */
+    verifyFields(): boolean{
+        return false;
+    }
 
+    save(){
+        let newLocation: Location = new Location(Province.fromAbbr(this.province), this.city, this.address,
+            this.postalCode, 0.0, 0.0);
+
+        let newListing: Listing = new Listing(-1, -1, newLocation, this.bedrooms, this.bathrooms, this.squarefeet,
+            this.price, this.description, false, "0000-00-00", "0000-00-00", "", []);
+
+        // TODO save to device
+        // TODO save to server
     }
 
     /**
