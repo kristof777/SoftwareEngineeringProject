@@ -54,6 +54,10 @@ gae_install(){
   sudo gcloud components update
   echo "" | sudo gcloud components install app-engine-python
   echo "" | sudo gcloud components install app-engine-python-extras
+  sudo pip install PyYAML
+  sudo pip install webapp2
+  sudo pip install WebOb
+  dev_appserver.py ./371server-gae/app.yaml
 }
 
 
