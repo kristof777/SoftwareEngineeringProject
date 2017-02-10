@@ -2,11 +2,11 @@
   "name": "Kasper Home App",
   "app_id": "",
   "v2": true,
-  "typescript": true
-   "proxies": [
-        {
-            "path": "/api",
-            "proxyUrl": "http://127.0.0.1:8912"
-        }
-   ]
+  "typescript": true,
+  "proxies": [
+      {
+          "path": "/api",
+          "proxyUrl": "http://127.0.0.1:8912"
+      }
+  ]
 }
