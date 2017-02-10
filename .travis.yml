@@ -7,12 +7,13 @@ branches:
   only:
   - master
   - develop
+  - build_dev
   
 matrix:
   include:
   - os: android
-  #- os: osx
-  #  os_image: xCode7
+  - os: osx
+    os_image: xCode7
     
 language: node_js
 node_js:
@@ -32,7 +33,7 @@ env:
   CXX=g++-4.8 
   ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
   PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1
-  BUILD_TYPE=deployment
+  BUILD_TYPE=test
   
 install:
   - "./scripts/install.sh"
@@ -43,7 +44,7 @@ before_script:
 
 script:
   - "./scripts/build_script.sh"
-  - "./scripts/before_deploy.sh"
+  - "./scripts/deploy_script.sh"
   
 # deploy:
 # skip_cleanup: true
@@ -54,4 +55,3 @@ script:
 # 
 #  on:
 #    repo: CMPT371Team1/Project
-#a
