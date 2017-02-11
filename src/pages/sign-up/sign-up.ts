@@ -4,6 +4,7 @@ let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
 import {MainPage} from "../main/main";
+import {LoginService} from "../../app/providers/login-service";
 
 @Component({
     selector: 'page-sign-up',
@@ -21,6 +22,7 @@ export class SignUpPage {
 
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
+                public loginSrv: LoginService,
                 public toastCtrl: ToastController) {
 
     }

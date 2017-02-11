@@ -45,7 +45,7 @@ export class AddListingPage {
             this.postalCode, 0.0, 0.0);
 
         let newListing: Listing = new Listing(-1, -1, newLocation, this.bedrooms, this.bathrooms, this.squarefeet,
-            this.price, this.description, false, "0000-00-00", "0000-00-00", "", []);
+            this.price, this.description, false, "0000-00-00", "0000-00-00", []);
 
         // TODO save to device
         // TODO save to server
