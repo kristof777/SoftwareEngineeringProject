@@ -58,7 +58,6 @@ gae_install(){
   sudo pip install webapp2
   sudo pip install WebOb
   # sudo du / | grep "google-cloud"
-  echo Y | dev_appserver.py ./371server-gae/app.yaml
 }
 
 
@@ -69,14 +68,13 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   #echo "got to linux install"
   #lindroid_install
+  export CLOUDSDK_INSTALL_DIR=/$HOME
+  export CLOUDSDK_CORE_DISABLE_PROMPTS=1
   gae_install
   mkdir www
 else
-  echo "got to install android"
-  export CLOUDSDK_INSTALL_DIR=/$HOME
-  export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  echo "got to install: android"
   #lindroid_install
   #android_install
-  gae_install
   mkdir www
 fi
