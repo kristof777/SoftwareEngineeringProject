@@ -1,4 +1,5 @@
 import {Location} from './location';
+import {UserSettings} from "./user-settings";
 
 export class User{
     public id: number
@@ -8,6 +9,7 @@ export class User{
     public phone1: string;
     public phone2: string;
     public location: Location;
+    public settings: UserSettings;
 
     /**
      *
