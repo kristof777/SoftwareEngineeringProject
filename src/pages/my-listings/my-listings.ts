@@ -16,60 +16,35 @@ import {AddListingPage} from "../add-listing/add-listing"
 
 })
 export class MyListingsPage {
-    myListings: Listing[];
-    favListings: Listing[];
+    listings: Listing[];
 
     listModel : string;
     constructor(public navCtrl: NavController,
                 public savedListings: SavedListingProvider,
                 private _logger: Logger) {
-        this.myListings = savedListings.myListings;
-        this.favListings = savedListings.favListings;
+        this.listings = savedListings.myListings;
 
         this.listModel="listings"
     }
 
     /**
+     * Shows up the information about listing, in browse mode
      *
      * @param listing listing clicked by user
-     * Shows up the information about listing, in browse mode
      */
-    clickFavListing(listing:Listing){
-        // open about that listing
-        this.navCtrl.push(BrowsePage,{
-            data:this.favListings,
-            cursor:this.favListings.indexOf(listing)
-        });
-        this._logger.debug("Listing  " + listing +" was clicked");
-    }
-
-    /**
-     *
-     * @param listing listing clicked by user
-     * Shows up the information about listing, in browse mode
-     */
-    clickMyListing(listing:Listing){
+    selectListing(listing:Listing){
             this.navCtrl.push(BrowsePage, {
-                data: this.myListings,
-                cursor: this.myListings.indexOf(listing)
+                data: this.listings,
+                cursor: this.listings.indexOf(listing)
             });
             this._logger.debug("Listing  " + listing + " was clicked")
-
     }
 
     /**
      *
      * @param listing: listing to be edited
      */
-    deleteFavListing(listing:Listing) {
-        this.favListings.splice(this.favListings.indexOf(listing),1);
-    }
-
-    /**
-     *
-     * @param listing: listing to be edited
-     */
-    editMyListing(listing:Listing){
+    editListing(listing:Listing){
         this.navCtrl.push(EditListingsPage,{
             data:listing
         });
@@ -81,8 +56,9 @@ export class MyListingsPage {
      *
      * @param listing: listing to be deleted
      */
-    deleteMyListing(listing:Listing){
-        this.myListings.splice(this.myListings.indexOf(listing),1);
+    deleteListing(listing:Listing){
+        let selectedIndex = this.listings.indexOf(listing);
+        this.listings.splice(selectedIndex, 1);
     }
 
     /**
@@ -91,21 +67,4 @@ export class MyListingsPage {
     addListing(){
         this.navCtrl.push(AddListingPage);
     }
-
-    /**
-     * called when segment is changed to Listings
-     */
-    selectListings(){
-        this._logger.debug("Listing menu selected");
-    }
-
-    /**
-     * called when segment is changed to Favourites
-     */
-    selectFavourites(){
-        this._logger.debug("Favourites menu selected");
-    }
-
-
-
 }
