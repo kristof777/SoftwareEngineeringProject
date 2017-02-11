@@ -9,6 +9,7 @@ export class User{
     public phone1: string;
     public phone2: string;
     public location: Location;
+    public token: string;
     public settings: UserSettings;
 
     /**
