@@ -4,6 +4,7 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+-set v
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
 # builds and emulates the app for testing.
@@ -22,9 +23,11 @@ ios_build(){
 # TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    ionic build
+    # ionic build
+    python /371server-gae/main.py
   else
-    ionic serve
+    # ionic serve
+    python /371server-gae/main.py
   fi
 }
 
