@@ -22,7 +22,7 @@
 # admin server page: http://localhost:9000
 #############################################################################################
 
-
+settings.configure()
 import logging
 import os
 
