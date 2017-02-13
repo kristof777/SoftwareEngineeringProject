@@ -27,6 +27,7 @@ lindroid_install(){
   npm install -g bower cordova ionic
   # installs packages specified in the ionic json
   npm install
+  pip install django
   bower update
 }
 
