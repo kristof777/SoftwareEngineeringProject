@@ -36,7 +36,7 @@ export class SettingsPage {
         let phoneNumber: string = "3065555555";
         let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
 
-        this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, null, location);
+        this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, location);
     }
 
     /**

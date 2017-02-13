@@ -10,6 +10,7 @@ import {SignUpPage} from '../pages/sign-up/sign-up';
 import {MainPage} from '../pages/main/main';
 import {BrowsePage} from '../pages/browse/browse';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
+import {FavouritesPage} from '../pages/favourites/favourites';
 import {SettingsPage} from '../pages/settings/settings';
 
 import {EditListingsPage} from '../pages/edit-listings/edit-listings';
@@ -25,6 +26,7 @@ import {ChangePasswordPage} from '../pages/change-password/change-password';
         SignUpPage,
         AddListingPage,
         EditListingsPage,
+        FavouritesPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,
@@ -42,6 +44,7 @@ import {ChangePasswordPage} from '../pages/change-password/change-password';
         SignUpPage,
         AddListingPage,
         EditListingsPage,
+        FavouritesPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,

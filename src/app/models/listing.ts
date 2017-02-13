@@ -12,7 +12,6 @@ export class Listing {
     public isPublished: boolean;
     public createDate: string;
     public modifiedDate: string;
-    public thumbnail: string;
     public images: string[];
 
     /**
@@ -28,13 +27,12 @@ export class Listing {
      * @param isPublished   whether or not thie listing will appear on the browse page
      * @param createDate    the date this listing was created
      * @param modifiedDate  the last time this listing was modified
-     * @param thumbnail     a thumbnail in byte64
      * @param images        an array of images in byte64
      */
     constructor(listingId: number, listerId: number, location: Location, bedrooms: number,
                 bathrooms: number, squarefeet: number, price: number, description: string,
                 isPublished: boolean, createDate: string, modifiedDate: string,
-                thumbnail: string, images: string[]) {
+                images: string[]) {
         this.listingId = listingId;
         this.listerId = listerId;
         this.location = location;
@@ -46,7 +44,6 @@ export class Listing {
         this.isPublished = isPublished;
         this.createDate = createDate;
         this.modifiedDate = modifiedDate;
-        this.thumbnail = thumbnail;
         this.images = images;
     }
 }
