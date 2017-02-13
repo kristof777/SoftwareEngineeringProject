@@ -26,6 +26,7 @@ browser_build(){
     # ionic build & export IONIC_PID= $!
     # kill -9 $IONIC_PID
     ls
+    echo "${PYTHONPATH}"
     python 371server-gae/main.py
   else
     # ionic serve
