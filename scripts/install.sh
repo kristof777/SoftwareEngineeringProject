@@ -27,7 +27,6 @@ lindroid_install(){
   npm install -g bower cordova ionic
   # installs packages specified in the ionic json
   npm install
-  pip install django
   bower update
 }
 
@@ -58,6 +57,7 @@ gae_install(){
   sudo pip install PyYAML
   sudo pip install webapp2
   sudo pip install WebOb
+  sudo pip install django
   # sudo du / | grep "google-cloud"
 }
 
