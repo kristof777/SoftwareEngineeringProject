@@ -23,13 +23,13 @@ class SignIn(BaseHandler):
         try:
             u = self.auth.get_user_by_password(user_email, password, remember=True,
                                                save_session=True)
-            # self.redirect(self.uri_for('home'))
             self.response.out.write("Succeed")
         except (InvalidAuthIdError, InvalidPasswordError) as e:
-            logging.info('Sign-in failed for user %s because of %s', user_email, type(e))
-            self._serve_page(True)
-       # listings = Listing.query(Listing.lister_email == user_email).fetch()
 
+            logging.info('Sign-in failed for user %s because of %s', user_email, type(e))
+            d = json.dumps('{errorKey: error}')
+            self.response.write(d)
+            self.response.set_status(401)
 
     def _serve_page(self, failed=False):
         user_email = self.request.get('email')
@@ -37,7 +37,7 @@ class SignIn(BaseHandler):
             'user_email': user_email,
             'failed': failed
         }
-        self.response.out.write("Failed")
-        # self.render_template('sign_in.html', params)
+        self.response.write("Failed")
+        self.render_template('sign_in.html', params)
 
 
