@@ -7,12 +7,12 @@ import {NavController, ToastController} from 'ionic-angular';
 import {SignUpPage} from '../sign-up/sign-up';
 import {MainPage} from "../main/main";
 
-import {LoginService} from '../../app/providers/login-service'
+import {UserService} from '../../app/providers/login-service'
 
 @Component({
     selector: 'page-sign-in',
     templateUrl: 'sign-in.html',
-    providers: [LoginService]
+    providers: [UserService]
 })
 export class SignInPage {
     email: string;
@@ -21,7 +21,7 @@ export class SignInPage {
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
                 private _logger: Logger,
-                public loginService: LoginService) {
+                public loginService: UserService) {
     }
 
     /**
@@ -31,6 +31,10 @@ export class SignInPage {
         this._logger.debug("Register was clicked.");
         // This variable is injected through the constructor.
         this.navCtrl.push(SignUpPage);
+    }
+
+    fromServerSignIn(navCont): void{
+        navCont.setRoot(MainPage);
     }
 
     /**
@@ -43,7 +47,7 @@ export class SignInPage {
         if(this.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else {
-            this.loginService.login(this.email, this.password);
+            this.loginService.login(this.email, this.password, this.fromServerSignIn,this.navCtrl);
         }
     }
 

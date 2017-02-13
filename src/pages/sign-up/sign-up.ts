@@ -4,10 +4,13 @@ let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
 import {MainPage} from "../main/main";
+import {UserService} from '../../app/providers/login-service'
+import {User} from "../../app/models/user"
 
 @Component({
     selector: 'page-sign-up',
-    templateUrl: 'sign-up.html'
+    templateUrl: 'sign-up.html',
+    providers: [UserService]
 })
 export class SignUpPage {
     email: string;
@@ -18,10 +21,10 @@ export class SignUpPage {
     lastName: string;
     phoneNumber: string;
     city: string;
-
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
-                public toastCtrl: ToastController) {
+                public toastCtrl: ToastController,
+                public signUpRegister:UserService) {
 
     }
 
@@ -64,7 +67,9 @@ export class SignUpPage {
                 position: 'top'
             }).present();
         } else {
-            //TODO Sign in stuff
+            //TODO Sign up stuff
+
+            this.signUpRegister.signUp(this.email,this.password, this.firstName,this.lastName, this.phoneNumber, this.city);
             this.navCtrl.setRoot(MainPage);
         }
     }
@@ -135,6 +140,9 @@ export class SignUpPage {
         let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
         return (regExp.test(email))
     }
+
+
+
 
 
 }
