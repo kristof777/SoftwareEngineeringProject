@@ -32,6 +32,7 @@ browser_build(){
     echo "${PYTHONPATH}"
     export DJANGO_SETTINGS_MODULE=0.96
     python 371server-gae/main.py
+    ls
   fi
 }
 
