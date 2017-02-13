@@ -49,11 +49,11 @@ export class SavedListingProvider {
         // server is newer than the listing on the device and react accordingly (update information etc.)
     }
 
+
     /**
      * Add a listing to the local database
      */
-    addListing(){
-        this._logger.error("ListingProvider.addListing is not implemented.");
+    addListing(newListing: Listing){
     }
 
     /**

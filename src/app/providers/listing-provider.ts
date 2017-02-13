@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+// import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Listing} from "../models/listing";
 import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
+import {Http, ResponseContentType} from '@angular/http';
 
 @Injectable()
 export class ListingProvider {
@@ -217,11 +218,29 @@ export class ListingProvider {
         ];
     }
 
+
     /**
      * Add a listing to the database
      */
-    addListing(){
-        this._logger.error("ListingProvider.addListing is not implemented.");
+    addListing(newListing: Listing){
+        //POST
+        console.log("here")
+        this.http.post("http://localhost:8912/createlisting",
+            { user_id: newListing.listerId, n_bedroom: newListing.bedrooms,
+                sqft: newListing.squarefeet, n_bathrooms: newListing.bathrooms,
+                price: newListing.price, description: newListing.description,
+                isPublished: newListing.isPublished, province: newListing.location.province,
+                city: newListing.location.city, address: newListing.location.address,
+                images: newListing.images},
+            ResponseContentType.Json)
+            .subscribe(data => {
+                console.log(data)
+                //newListing.listerId = data["_body"]
+            }, error => {
+                console.log(error);
+                console.log("Oooops, listing creation failed!");
+            })
+
     }
 
     /**

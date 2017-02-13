@@ -48,7 +48,10 @@ export class AddListingPage {
             this.price, this.description, false, "0000-00-00", "0000-00-00", []);
 
         // TODO save to device
+
         // TODO save to server
+        console.log("save button clicked")
+        this.addListingToServer(newListing)
     }
 
     /**
@@ -77,5 +80,14 @@ export class AddListingPage {
 
     publish(){
 
+    }
+
+    /**
+     * Call the method to create a new listing in the database
+     * @param newListing
+     */
+    addListingToServer(newListing: Listing): void{
+        console.log("addListingToServer function called.")
+        this.listingProvider.addListing(newListing);
     }
 }
