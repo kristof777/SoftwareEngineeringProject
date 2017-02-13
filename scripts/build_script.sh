@@ -23,7 +23,8 @@ ios_build(){
 # TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    # ionic build
+    # ionic build & export IONIC_PID= $!
+    # kill -9 $IONIC_PID
     ls
     python 371server-gae/main.py
   else
