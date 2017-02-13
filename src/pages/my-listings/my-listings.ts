@@ -23,9 +23,10 @@ export class MyListingsPage {
                 public listingProvider: ListingProvider,
                 private _logger: Logger) {
 
-        this.listings = listingProvider.savedListings.myListings;
+        let data = listingProvider.savedListings.myListings;
+        this.listings = Object.keys(data).map(key => data[key]);
 
-        this.listModel="listings"
+        this.listModel = "listings"
     }
 
     /**

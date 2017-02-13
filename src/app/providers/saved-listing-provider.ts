@@ -38,7 +38,10 @@ export class SavedListingProvider {
 
         // If they do not have favListings or myListings, instantiate it as an empty array
         if(!savedFav){
-            savedFav = "{}";
+            savedFav = JSON.stringify({
+                // Add one listing under myListings by default.
+                "10": new Listing(-1, -1, new Location(Province.fromAbbr("SK"), "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0), 3, 4, 1800, 288000, "Hardcoded favourite.", false, "2017-01-01", "2017-01-20", ["http://placehold.it/1920x1080", "http://placehold.it/1920x1081", "http://placehold.it/1920x1082", "http://placehold.it/1920x1082", "http://placehold.it/1920x1082"])
+            });
             NativeStorage.setItem("favListings", savedFav);
         }
         if(!savedMy){
