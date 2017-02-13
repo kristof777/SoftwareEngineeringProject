@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-// import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Listing} from "../models/listing";
 import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
 import {Http, ResponseContentType} from '@angular/http';
+import {SavedListingProvider} from "./saved-listing-provider";
 
 @Injectable()
 export class ListingProvider {
     data: any;
 
     constructor(public http: Http,
+                public savedListings: SavedListingProvider,
                 private _logger: Logger) {
         this.data = [
             new Listing(0, 31, new Location(Province.PE, "City 575", "2275 Random St.", "A1B8C5", 0, 0), 7, 8, 305, 280500, "ada malesu malesu metus sollic curabitur maecenas lacus ada metus sollic nec curabitur diam egestas metus diam sollic curabitur maecenas lacus nec placerat itudin ada itudin itudin curabitur curabitur placerat maecenas maecenas malesu lacus metus sollic nec metus sollic ada maecenas placerat lacus maecenas sollic nec maecenas egestas maecenas sollic malesu diam maecenas diam diam curabitur placerat egestas ada malesu malesu ada diam itudin curabitur nec placerat egestas sollic diam sollic sollic egestas curabitur itudin sollic maecenas maecenas egestas metus egestas diam curabitur malesu diam lacus curabitur nec placerat placerat placerat diam egestas curabitur ada ada egestas maecenas nec placerat ", true, "2017-5-30", "2011-12-18", ["http://placehold.it/720x1280", "http://placehold.it/720x1280", "http://placehold.it/720x1280"]),
@@ -239,8 +240,7 @@ export class ListingProvider {
             }, error => {
                 console.log(error);
                 console.log("Oooops, listing creation failed!");
-            })
-
+            });
     }
 
     /**

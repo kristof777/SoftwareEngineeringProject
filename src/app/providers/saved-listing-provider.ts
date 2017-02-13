@@ -15,77 +15,116 @@ export class SavedListingProvider {
     constructor(public http: Http,
                 private _logger: Logger) {
 
+        this.loadListings();
         this.updateListings();
-
-        // These two instantiations will be handled in updateListings once it is implemented.
-        this.favListings = [
-            new Listing(1, 1, new Location(Province.fromAbbr("SK"), "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0), 3, 4, 1800, 288000, "Curabitur nec lacus diam. Maecenas placerat metus egestas sollicitudin malesuada. Mauris semper vehicula metus. Quisque faucibus nisl nec eros mollis, sit amet vulputate metus vehicula. Suspendisse non suscipit lorem. Ut metus magna, sollicitudin vitae facilisis vel, facilisis vel tellus. Donec bibendum pretium mauris. Praesent facilisis risus ut est accumsan imperdiet.", false, "2017-01-01","2017-01-20", ["http://placehold.it/1920x1080", "http://placehold.it/1920x1081","http://placehold.it/1920x1082","http://placehold.it/1920x1082","http://placehold.it/1920x1082"]),
-            new Listing(2, 1, new Location(Province.fromAbbr("SK"), "Regina", "1234 Regina St.", "C3B2A1", 0.0, 0.0), 2, 2, 1400, 248000, "Cras vel porttitor orci. Sed eget efficitur sapien, in commodo felis. Etiam ac erat tincidunt, pellentesque ante ut, convallis purus. In ullamcorper mi at fermentum interdum. Proin id orci enim. Sed pharetra turpis ligula, non lacinia ipsum aliquet lacinia. Sed urna risus, pharetra in dui ut, vulputate tincidunt dui.", false, "2017-01-08", "2017-01-17", ["http://placehold.it/1280x720", "http://placehold.it/1280x721","http://placehold.it/1280x720"])
-        ];
-
-        this.myListings = [
-            new Listing(1, 1, new Location(Province.fromAbbr("SK"), "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0), 3, 4, 1800, 288000, "yoyooyo  see i am changing metus. Quisque faucibus nisl nec eros mollis, sit amet vulputate metus vehicula. Suspendisse non suscipit lorem. Ut metus magna, sollicitudin vitae facilisis vel, facilisis vel tellus. Donec bibendum pretium mauris. Praesent facilisis risus ut est accumsan imperdiet.", false, "2017-01-01","2017-01-20", ["http://placehold.it/1920x1080", "http://placehold.it/1920x1081","http://placehold.it/1920x1082","http://placehold.it/1920x1082","http://placehold.it/1920x1082"]),
-            new Listing(2, 1, new Location(Province.fromAbbr("SK"), "Regina", "1234 Regina St.", "C3B2A1", 0.0, 0.0), 2, 2, 1400, 248000, "This changed from random text efficitur sapien, in commodo felis. Etiam ac erat tincidunt, pellentesque ante ut, convallis purus. In ullamcorper mi at fermentum interdum. Proin id orci enim. Sed pharetra turpis ligula, non lacinia ipsum aliquet lacinia. Sed urna risus, pharetra in dui ut, vulputate tincidunt dui.", false, "2017-01-08", "2017-01-17", ["http://placehold.it/1280x720", "http://placehold.it/1280x721","http://placehold.it/1280x720"])
-        ];
     }
 
     /**
-     * Load the listings from the server
+     * Load listings saved on the device
      */
-    updateListings(){
-        let savedFav = NativeStorage.getItem("favListings");
-        let savedMy = NativeStorage.getItem("myListings");
+    loadListings(): void{
+        let savedFav: string;
+        let savedMy: string;
+
+        NativeStorage.getItem("favListings").then(
+            data => savedFav = data,
+            error => console.log(error)
+        );
+
+        NativeStorage.getItem("myListings").then(
+            data => savedMy = data,
+            error => console.log(error)
+        );
 
         // If they do not have favListings or myListings, instantiate it as an empty array
         if(!savedFav){
-            NativeStorage.setItem("favListings", JSON.stringify([]));
+            savedFav = "{}";
+            NativeStorage.setItem("favListings", savedFav);
         }
         if(!savedMy){
-            NativeStorage.setItem("myListings", JSON.stringify([]));
+            savedMy = JSON.stringify({
+                // Add one listing under myListings by default.
+                "-1": new Listing(-1, -1, new Location(Province.fromAbbr("SK"), "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0), 3, 4, 1800, 288000, "(Should be) saved to the device by default.", false, "2017-01-01", "2017-01-20", ["http://placehold.it/1920x1080", "http://placehold.it/1920x1081", "http://placehold.it/1920x1082", "http://placehold.it/1920x1082", "http://placehold.it/1920x1082"])
+            });
+            NativeStorage.setItem("myListings", savedMy);
         }
 
+        this.favListings = JSON.parse(savedFav);
+        this.myListings = JSON.parse(savedMy);
+
+        this.updateListings();
+    }
+
+    /**
+     * Update the listings on the device with the ones from the server if they are outdated.
+     *
+     * Note: If this causes performance issues, we can move it to only be called when they open the detail page
+     */
+    updateListings(): void{
         // TODO get the users listings and favourites from the server
         // If they already have listings on their device, we must check if the modifiedDate of the listing on the
         // server is newer than the listing on the device and react accordingly (update information etc.)
     }
 
+    /**
+     * Save listings to the device.
+     */
+    saveMyListings(): void{
+        NativeStorage.setItem("myListings", JSON.stringify(this.myListings));
+    }
+
+    /**
+     * Save favourites to the device.
+     */
+    saveFavourites(): void{
+        NativeStorage.setItem("favListings", JSON.stringify(this.favListings));
+    }
+
+    /**
+     * Add a listing to the users favourites
+     *
+     * @param listing   the listing the user favourited
+     */
+    addFavourite(listing: Listing): void{
+        let key: string = listing.listingId.toString();
+        this.favListings[key] = listing;
+
+        this.saveFavourites();
+    }
 
     /**
      * Add a listing to the local database
+     *
+     * @param listing   the listing the user created
      */
-    addListing(newListing: Listing){
+    addListing(listing: Listing): void{
+        let key: string = listing.listingId.toString();
+        this.myListings[key] = listing;
+
+        this.saveMyListings();
     }
 
     /**
-     * Remove a listing from the database
+     * Remove a listing from the users's favourites
      *
-     * @param listingID the id of the listing
+     * @param listingId  the id of the listing to remove
      */
-    removeListing(listingID : number){
-        this._logger.error("ListingProvider.removeListing is not implemented.");
+    removeFavourite(listingId: number): void{
+        let key: string = listingId.toString();
+        delete this.favListings[key];
+
+        this.saveFavourites();
     }
 
     /**
-     * Search the database according to the specified filter
+     * Remove a listing from the device
      *
-     * @param filter the filter for the search
-     *
-     * @return an array of listingIDs
+     * @param listingId the id of the listing to remove
      */
-    search(filter : any) : number[] {
-        this._logger.error("ListingProvider.search is not implemented.");
-        return null;
-    }
+    removeListing(listingId: number): void{
+        let key: string = listingId.toString();
+        delete this.myListings[key];
 
-    /**
-     * Get the full information about a listing
-     *
-     * @param listingID
-     * @return a listing
-     */
-    getListing(listingID : number) : Listing{
-        this._logger.error("ListingProvider.getListing is not implemented.");
-        return null;
+        this.saveMyListings();
     }
-
 }

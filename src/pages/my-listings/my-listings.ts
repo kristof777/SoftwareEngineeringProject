@@ -1,8 +1,8 @@
 let assert = require('assert-plus');
+import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {Location} from "./location";
-import {SavedListingProvider} from "../../app/providers/saved-listing-provider";
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {BrowsePage} from "../browse/browse"
@@ -12,7 +12,7 @@ import {AddListingPage} from "../add-listing/add-listing"
 @Component({
     selector: 'page-my-listings',
     templateUrl: 'my-listings.html',
-    providers: [SavedListingProvider]
+    providers: [ListingProvider]
 
 })
 export class MyListingsPage {
@@ -20,9 +20,10 @@ export class MyListingsPage {
 
     listModel : string;
     constructor(public navCtrl: NavController,
-                public savedListings: SavedListingProvider,
+                public listingProvider: ListingProvider,
                 private _logger: Logger) {
-        this.listings = savedListings.myListings;
+
+        this.listings = listingProvider.savedListings.myListings;
 
         this.listModel="listings"
     }
@@ -33,11 +34,11 @@ export class MyListingsPage {
      * @param listing listing clicked by user
      */
     selectListing(listing:Listing){
-            this.navCtrl.push(BrowsePage, {
-                data: this.listings,
-                cursor: this.listings.indexOf(listing)
-            });
-            this._logger.debug("Listing  " + listing + " was clicked")
+        this.navCtrl.push(BrowsePage, {
+            data: this.listings,
+            cursor: this.listings.indexOf(listing)
+        });
+        this._logger.debug("Listing  " + listing + " was clicked")
     }
 
     /**

@@ -18,6 +18,7 @@ import {AddListingPage} from '../pages/add-listing/add-listing';
 
 import {FilterPage} from '../pages/filter/filter';
 import {ChangePasswordPage} from '../pages/change-password/change-password';
+import {SavedListingProvider} from "./providers/saved-listing-provider";
 
 @NgModule({
     declarations: [
@@ -52,7 +53,11 @@ import {ChangePasswordPage} from '../pages/change-password/change-password';
         SettingsPage,
         BrowsePage
     ],
-    providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, Logger, LOG_LOGGER_PROVIDERS]
+    providers: [
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        SavedListingProvider,
+        Logger,
+        LOG_LOGGER_PROVIDERS]
 })
 export class AppModule {
 }
