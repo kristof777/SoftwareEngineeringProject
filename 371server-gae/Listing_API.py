@@ -31,11 +31,12 @@ class CreateListing(webapp2.RequestHandler):
         isPublished = self.request.get('isPublished') != ''
         province = self.request.get('province')
         city = self.request.get('city')
+        address = self.request.get('address')
         images = self.request.get('images')
 
         listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                           price=price, description=description, isPublished=isPublished, province=province,
-                          city=city, images=images)
+                          city=city, address=address, images=images)
         key = Listing.build_key(lister_email, bedrooms, sqft, bathrooms, price, description, province, city)
         listing.key = key
         listing.put()
@@ -62,6 +63,7 @@ class ShowListings(webapp2.RequestHandler):
                 'isPublished': listing.isPublished,
                 'province': listing.province,
                 'city': listing.city,
+                'address': listing.address,
                 'images': listing.images #TODO: store image URLs from blobstore to a list
             }
             self.response.out.write(template.render(path, template_values))
