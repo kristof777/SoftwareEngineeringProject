@@ -9,7 +9,6 @@ class User(Webapp2User):
     first_name = ndb.StringProperty(required=True)
     phone1 = ndb.StringProperty(required=True)
     phone2 = ndb.StringProperty(required=True)
-    phone3 = ndb.StringProperty(required=True)
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
 

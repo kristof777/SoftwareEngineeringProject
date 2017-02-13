@@ -31,13 +31,12 @@ class CreateUser(BaseHandler):
         password = self.request.get('password')
         phone1 = self.request.get('phone1')
         phone2 = self.request.get('phone2')
-        phone3 = self.request.get('phone3')
         province = self.request.get('province')
         city = self.request.get('city')
 
         unique_properties = ['email_address']
         user_data = self.user_model.create_user(email, unique_properties, email_address=email,
-              first_name=first_name, password_raw=password, phone1=phone1, phone2=phone2, phone3=phone3,
+              first_name=first_name, password_raw=password, phone1=phone1, phone2=phone2,
               province=province, city=city, last_name=last_name, verified=False)
         if not user_data[0]: # user_data is a tuple
             self.display_message('Unable to create user for email %s because of \
