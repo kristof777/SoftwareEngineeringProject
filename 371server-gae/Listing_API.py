@@ -5,6 +5,8 @@ from google.appengine.ext.webapp import template
 from models.listing import Listing
 from models.user import User
 import json
+import main
+import unittest
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
 # for user inputs. The POST method is similar to create_user, what it does is to get
@@ -28,31 +30,31 @@ class CreateListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
-        # user = User.query().get()
-        # lister_email = user.email_address
-        # bedrooms = int(self.request.get('bedrooms'))
-        # sqft = int(self.request.get('sqft'))
-        # bathrooms = int(self.request.get('bathrooms'))
-        # price = int(self.request.get('price'))
-        # description = self.request.get('description')
-        # isPublished = self.request.get('isPublished') != ''
-        # province = self.request.get('province')
-        # city = self.request.get('city')
-        # address = self.request.get('address')
-        # images = self.request.get('images')
+        user = User.query().get()
+        lister_email = user.email_address
+        bedrooms = int(self.request.get('bedrooms'))
+        sqft = int(self.request.get('sqft'))
+        bathrooms = int(self.request.get('bathrooms'))
+        price = int(self.request.get('price'))
+        description = self.request.get('description')
+        isPublished = self.request.get('isPublished') != ''
+        province = self.request.get('province')
+        city = self.request.get('city')
+        address = self.request.get('address')
+        images = self.request.get('images')
 
-        d = json.loads(self.request.body)
-        lister_email = d['user_id']
-        bedrooms = d['n_bedrooms']
-        sqft = d['sqft']
-        bathrooms = d['n_bathrooms']
-        price = d['price']
-        description = d['description']
-        isPublished = d['isPublished']
-        province = d['province']
-        city = d['city']
-        address = d['address']
-        images = d['images']
+        # d = json.loads(self.request.body)
+        # lister_email = d['user_id']
+        # bedrooms = d['n_bedrooms']
+        # sqft = d['sqft']
+        # bathrooms = d['n_bathrooms']
+        # price = d['price']
+        # description = d['description']
+        # isPublished = d['isPublished']
+        # province = d['province']
+        # city = d['city']
+        # address = d['address']
+        # images = d['images']
 
         try:
             listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
@@ -94,3 +96,17 @@ class ShowListings(webapp2.RequestHandler):
             }
             self.response.out.write(template.render(path, template_values))
 
+
+
+
+
+class TestListingAPIHandlers(unittest.TestCase):
+   def test_create_listing(self):
+       # Build a request object passing the URI path to be tested.
+       # You can also pass headers, query arguments etc.
+       request = webapp2.Request.blank('/createlisting')
+       # Get a response for that request.
+       response = request.get_response(main.app)
+
+       # Let's check if the response is correct.
+       self.assertEqual(response.status_int, 200)
