@@ -30,7 +30,7 @@ browser_build(){
   else
     # ionic serve
     echo "${PYTHONPATH}"
-    export DJANGO_SETTINGS_MODULE=0.96
+    dev_appserver.py app.yaml
     python 371server-gae/main.py
     ls
   fi
