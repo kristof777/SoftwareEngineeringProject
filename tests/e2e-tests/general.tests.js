@@ -15,16 +15,10 @@ describe('Signing in, and using the app like a user would interact with it', fun
     it('Should login', function(done){
         registerButton = element(by.css('.register'));
         signInButton = element(by.buttonText('Sign In'));
-        username = element(by.id('emailLogin'));
-        browser.driver.sleep(5000);
-        username.click();
-        //username = element(by.css('[id="emailLogin"]'));
-        browser.driver.sleep(1000);
-        //username.sendKeys('test');
-        //browser.driver.sleep(1000);
-        //username.evaluate("email = 'test';");
-        //username.clear().sendKeys('test');
-        browser.driver.sleep(1000);
+        username = element(by.id('emailLogin')).all(by.tagName('input')).first();
+        password = element(by.id('password')).all(by.tagName('input')).first();
+        username.sendKeys('test');
+        password.sendKeys('somePassword');
         signInButton.click();
         browser.driver.sleep(500);
         done();
