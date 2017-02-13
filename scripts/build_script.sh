@@ -31,7 +31,6 @@ browser_build(){
     # ionic serve
     echo "${PYTHONPATH}"
     dev_appserver.py app.yaml
-    python 371server-gae/main.py
     ls
   fi
 }
