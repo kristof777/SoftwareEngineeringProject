@@ -14,12 +14,11 @@ class SignIn(BaseHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+
         d = json.loads(self.request.body)
-        user_email = d['email']
-        password = d['password']
-        # print user_email
-        # user_email = self.request.get('email')
-        # password = self.request.get('password')
+        user_email = str(d['email'])
+        password = str(d['password'])
+        print (user_email, password)
         try:
             u = self.auth.get_user_by_password(user_email, password, remember=True,
                                                save_session=True)

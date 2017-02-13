@@ -1,8 +1,8 @@
+import {ListingProvider} from "../../app/providers/listing-provider";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {Location} from "./location";
-import {SavedListingProvider} from "../../app/providers/saved-listing-provider";
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {BrowsePage} from "../browse/browse"
@@ -10,16 +10,18 @@ import {BrowsePage} from "../browse/browse"
 @Component({
     selector: 'page-favourites',
     templateUrl: 'favourites.html',
-    providers: [SavedListingProvider]
+    providers: [ListingProvider]
 
 })
 export class FavouritesPage {
     listings: Listing[];
 
     constructor(public navCtrl: NavController,
-                public savedListings: SavedListingProvider,
+                public listingProvider: ListingProvider,
                 private _logger: Logger) {
-        this.listings = savedListings.favListings;
+
+        let data = listingProvider.savedListings.favListings;
+        this.listings = Object.keys(data).map(key => data[key]);
     }
 
     /**

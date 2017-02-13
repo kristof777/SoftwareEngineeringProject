@@ -1,5 +1,6 @@
 from BaseHandler import *
-
+import logging
+import json
 
 #
 # We need to decide whether uses are allowed to
@@ -25,36 +26,101 @@ class CreateUser(BaseHandler):
         self.render_template('create_user.html')
 
     def post(self):
-        first_name = self.request.get('firstName')
-        last_name = self.request.get('lastName')
-        email = self.request.get('email')
-        password = self.request.get('password')
-        phone1 = self.request.get('phone1')
-        phone2 = self.request.get('phone2')
-        province = self.request.get('province')
-        city = self.request.get('city')
+
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        errros = {}
+        userInfoProvided = json.loads(self.request.body)
+        try:
+            email = userInfoProvided['email']
+        except (KeyError) as e:
+            errros['api.error.missing_email'] = "Email not provided"
+        try:
+            firstName = userInfoProvided['firstName']
+        except (KeyError) as e:
+            errros['api.error.missing_firstname'] = "First name not provided"
+
+        try:
+            lastName = userInfoProvided['lastName']
+        except (KeyError) as e:
+            errros['api.error.missing_lastname'] = "Last name not provided"
+
+        try:
+            password = userInfoProvided['password']
+        except (KeyError) as e:
+            errros['api.error.missing_password'] = "Password not provided"
+
+        try:
+            confirmedPassword = userInfoProvided['confirmedPassword']
+        except (KeyError) as e:
+            errros['api.error.missing_confirmed_password'] = "Confirmed password not provided"
+
+        try:
+            phone1 = userInfoProvided['phone1']
+        except (KeyError) as e:
+            errros['api.error.missing_phone1'] = "Phone number 1 not provided"
+
+        try:
+            phone2 = userInfoProvided['phone2']
+        except (KeyError) as e:
+            phone2 = None
+
+
+        try:
+            province = userInfoProvided['province']
+        except (KeyError) as e:
+            errros['api.error.missing_province'] = "Province not provided"
+
+        try:
+            city = userInfoProvided['city']
+        except (KeyError) as e:
+            errros['api.error.missing_city'] = "City not provided"
+
+        try:
+            postalCode = userInfoProvided['postalCode']
+        except (KeyError) as e:
+            errros['api.error.missing_postalcode'] = "Postal code not provided"
+
+
+
+        if len(errros) != 0:
+            errorJson = json.dumps(errros)
+            self.response.write(errorJson)
+            self.response.set_status(400)
+            return
+
+        if password != confirmedPassword:
+            errorJson = json.dumps({'api.error.password_mismatch' : 'Password \
+                                        doesn\'t match confirmed password'})
+            self.response.write(errorJson)
+            self.response.set_status(400)
+            return
+        # TODO return error if password is not strong enough
 
         unique_properties = ['email_address']
         user_data = self.user_model.create_user(email, unique_properties, email_address=email,
-              first_name=first_name, password_raw=password, phone1=phone1, phone2=phone2,
-              province=province, city=city, last_name=last_name, verified=False)
+              first_name=firstName, password_raw=password, phone1=phone1, phone2=phone2,
+              province=province, city=city, last_name=lastName, verified=False, postal_code = postalCode)
         if not user_data[0]: # user_data is a tuple
-            self.display_message('Unable to create user for email %s because of \
-                                 duplicate keys %s' % (email, user_data[1]))
+            errorJson = json.dumps({'api.error.email_already_exists'
+                                    :'Email already exists'})
+            self.response.write(errorJson)
+            self.response.set_status(400)
             return
 
         user = user_data[1]
         user_id = user.get_id()
-
         token = self.user_model.create_signup_token(user_id)
 
-        verification_url = self.uri_for('verification', type='v', user_id=user_id,
-                                        signup_token=token, _full=True)
+        self.response.write(json.dumps({'token':token}))
+        self.response.set_status(200)
 
-        msg = 'Send an email to user in order to verify their address. \
-                  They will be able to do so by visiting <a href="{url}">{url}</a>'
+        # verification_url = self.uri_for('verification', type='v', user_id=user_id,
+        #                                 signup_token=token, _full=True)
 
-        self.display_message(msg.format(url=verification_url))
+        # msg = 'Send an email to user in order to verify their address. \
+        #           They will be able to do so by visiting <a href="{url}">{url}</a>'
+
+        # self.display_message(msg.format(url=verification_url))
 
 # when websites send us an activation link after a registration,
 # the url usually contain their equivalent of signup tokens.

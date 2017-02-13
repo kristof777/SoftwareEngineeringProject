@@ -23,10 +23,9 @@
 #############################################################################################
 
 
-import logging
-from models.listing import Listing
-from models.user import User
-from BaseHandler import *
+
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from SignIn import SignIn
 from User_Auth import *
 from Listing_API import *
@@ -56,6 +55,6 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/password', SetPasswordHandler),
     webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
-    webapp2.Route('/createlisting', CreateListing),
-    webapp2.Route('/showlistings', ShowListings)
+    # webapp2.Route('/createlisting', CreateListing),
+    # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

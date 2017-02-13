@@ -7,10 +7,12 @@ from webapp2_extras.appengine.auth.models import User as Webapp2User
 class User(Webapp2User):
 
     first_name = ndb.StringProperty(required=True)
+    last_name = ndb.StringProperty(required=True)
     phone1 = ndb.StringProperty(required=True)
-    phone2 = ndb.StringProperty(required=True)
+    phone2 = ndb.StringProperty(required=False)
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
+    postal_code = ndb.StringProperty(required=True)
 
 
     def set_password(self, raw_password):

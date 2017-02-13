@@ -67,10 +67,9 @@ export class SignUpPage {
                 position: 'top'
             }).present();
         } else {
-            //TODO Sign up stuff
 
-            this.signUpRegister.signUp(this.email,this.password, this.firstName,this.lastName, this.phoneNumber, this.city);
-            this.navCtrl.setRoot(MainPage);
+            this.signUpRegister.signUp(this.email,this.password, this.confirmPassword,this.firstName,this.lastName, this.phoneNumber, this.city);
+            // this.navCtrl.setRoot(MainPage);
         }
     }
 

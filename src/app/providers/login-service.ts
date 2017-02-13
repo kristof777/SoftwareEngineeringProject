@@ -19,7 +19,7 @@ export class UserService {
         // this.http.get(URL, ResponseContentType.Json).subscribe(...)
 
          this.http.post("http://localhost:8080/signin",
-            { email: email, password: password }, ResponseContentType.Json)
+            JSON.stringify({ 'email': email, 'password': password }), ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
                  if(data["_body"] == "Hello")
@@ -30,17 +30,16 @@ export class UserService {
              });
 
     }
-    signUp(email:string,password:string, firstName:string,lastName:string, phoneNumber:string, city:string): void{
+    signUp(email:string,password:string,confirmedPassword:string ,firstName:string,lastName:string, phoneNumber:string, city:string): void{
 
 
          this.http.post("http://localhost:8080/createuser",
-            { email: email, password: password, firstName:firstName, lastName:lastName, phoneNumber:phoneNumber, city:city }, ResponseContentType.Json)
+            { email: email, password: password,confirmedPassword: password ,firstName:firstName, lastName:lastName, phone1:phoneNumber, city:city, province:"SK", postalCode:"123456" }, ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
                  console.log(this.data);
-
              }, error => {
-                 console.log("error" + error);
+                 console.log( error);
                  console.log("Oooops, sign failed!");
              });
 
