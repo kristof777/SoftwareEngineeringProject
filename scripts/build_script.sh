@@ -65,7 +65,7 @@ system_info(){
   java -version
   echo 'npm version:'
   npm -v
-  ionic info
+  #ionic info
 }
 
 
