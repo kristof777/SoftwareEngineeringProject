@@ -19,8 +19,11 @@ export class UserService {
         //GET
         // this.http.get(URL, ResponseContentType.Json).subscribe(...)
 
+        let body = new FormData();
+        body.append('email', email);
+        body.append('password', password);
          this.http.post(KasperConfig.API_URL + "/signin",
-            JSON.stringify({ 'email': email, 'password': password }), ResponseContentType.Json)
+            body, ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
                  if(data["_body"] == "Hello")

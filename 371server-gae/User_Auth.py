@@ -16,9 +16,7 @@ def user_required(handler):
             self.redirect(self.uri_for('signin'), abort=True)
         else:
             return handler(self, *args, **kwargs)
-
     return check_signin
-
 
 
 class CreateUser(BaseHandler):
@@ -26,7 +24,6 @@ class CreateUser(BaseHandler):
         self.render_template('create_user.html')
 
     def post(self):
-
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errros = {}
         userInfoProvided = json.loads(self.request.body)
@@ -102,7 +99,7 @@ class CreateUser(BaseHandler):
               province=province, city=city, last_name=lastName, verified=False, postal_code = postalCode)
         if not user_data[0]: # user_data is a tuple
             errorJson = json.dumps({'api.error.email_already_exists'
-                                    :'Email already exists'})
+                                    : 'Email already exists'})
             self.response.write(errorJson)
             self.response.set_status(400)
             return
