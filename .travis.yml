@@ -10,7 +10,7 @@ branches:
   - build_dev
   
 matrix:
-  include:
+  exclude:
   - os: android
   - os: osx
     os_image: xCode7
