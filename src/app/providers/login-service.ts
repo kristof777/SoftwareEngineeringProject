@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http, ResponseContentType} from '@angular/http';
+import {KasperConfig} from "../kasper-config";
 import 'rxjs/add/operator/map';
 let assert = require('assert-plus');
 
@@ -18,7 +19,7 @@ export class UserService {
         //GET
         // this.http.get(URL, ResponseContentType.Json).subscribe(...)
 
-         this.http.post("http://localhost:8080/signin",
+         this.http.post(KasperConfig.API_URL + "/signin",
             JSON.stringify({ 'email': email, 'password': password }), ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
@@ -33,7 +34,7 @@ export class UserService {
     signUp(email:string,password:string,confirmedPassword:string ,firstName:string,lastName:string, phoneNumber:string, city:string): void{
 
 
-         this.http.post("http://localhost:8080/createuser",
+         this.http.post(KasperConfig.API_URL + "/createuser",
             { email: email, password: password,confirmedPassword: password ,firstName:firstName, lastName:lastName, phone1:phoneNumber, city:city, province:"SK", postalCode:"123456" }, ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;

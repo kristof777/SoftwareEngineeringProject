@@ -6,6 +6,7 @@ import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
 import {Http, ResponseContentType} from '@angular/http';
 import {SavedListingProvider} from "./saved-listing-provider";
+import {KasperConfig} from "../kasper-config";
 
 @Injectable()
 export class ListingProvider {
@@ -226,7 +227,7 @@ export class ListingProvider {
     addListing(newListing: Listing){
         //POST
         console.log("here")
-        this.http.post("http://localhost:8912/createlisting",
+        this.http.post(KasperConfig.API_URL + "/createlisting",
             { user_id: newListing.listerId, n_bedroom: newListing.bedrooms,
                 sqft: newListing.squarefeet, n_bathrooms: newListing.bathrooms,
                 price: newListing.price, description: newListing.description,
