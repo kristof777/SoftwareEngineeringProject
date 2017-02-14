@@ -1,8 +1,9 @@
 from BaseHandler import *
 import logging
 import json
+import error_code
 
-#
+
 # We need to decide whether uses are allowed to
 # access certain resources depending on if they are logged in or not.
 def user_required(handler):
@@ -10,129 +11,137 @@ def user_required(handler):
     Decorator that checks if there's a user associated with the current session.
     Will also fail if there's no session present.
     """
-    def check_signin(self, *args, **kwargs):
+    def check_sign_in(self, *args, **kwargs):
         auth = self.auth
         if not auth.get_user_by_session():
             self.redirect(self.uri_for('signin'), abort=True)
         else:
             return handler(self, *args, **kwargs)
-    return check_signin
+    return check_sign_in
 
 
 class CreateUser(BaseHandler):
+    """
+    Class used to handle get and post.
+    Get:  is used to render an HTML page.
+    Post:
+        @pre-cond: Expecting keys to be email, firstName, lastName,
+                   password, confirmedPassword, phone1, phone2(optional),
+                   city, postalCode. If any of these is not present an
+                   appropriate error and status code 40 is returned.
+
+                   password and ConfirmedPassword are expected to be equal then
+                   if not then appropriate missing_invalid_parameter_error is
+                   returned.
+
+                   If email already exists, then an error is returned.
+        @post-cond: An user with provided information is created in the
+                    database. Token and userId is returned as an response
+                    object.
+    """
     def get(self):
         self.render_template('create_user.html')
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errros = {}
-        #
-        try:
-            email = self.request.POST.get('email')
-        except (KeyError) as e:
-            errros['api.error.missing_email'] = "Email not provided"
-        try:
-            firstName = self.request.POST.get('firstName')
-        except (KeyError) as e:
-            errros['api.error.missing_firstname'] = "First name not provided"
+        errors = {}
+        email = self.request.POST.get('email')
+        if email is None:
+            errors[error_code.missing_email['error']] = "Email not provided"
 
-        try:
-            lastName = self.request.POST.get('lastName')
-        except (KeyError) as e:
-            errros['api.error.missing_lastname'] = "Last name not provided"
+        first_name = self.request.POST.get('firstName')
+        if first_name is None:
+            errors[error_code.missing_first_name['error']] \
+                = "First name not provided"
 
-        try:
-            password = self.request.POST.get('password')
-        except (KeyError) as e:
-            errros['api.error.missing_password'] = "Password not provided"
+        last_name = self.request.POST.get('lastName')
+        if last_name is None:
+            errors[error_code.missing_last_name['error']] \
+                = "Last name not provided"
 
-        try:
-            confirmedPassword = self.request.POST.get('confirmedPassword')
-        except (KeyError) as e:
-            errros['api.error.missing_confirmed_password'] = "Confirmed password not provided"
+        password = self.request.POST.get('password')
+        if password is None:
+            errors[error_code.missing_password['error']] = \
+                "Password not provided"
 
-        try:
-            phone1 = self.request.POST.get('phone1')
-        except (KeyError) as e:
-            errros['api.error.missing_phone1'] = "Phone number 1 not provided"
+        confirmed_password = self.request.POST.get('confirmedPassword')
+        if confirmed_password is None:
+            errors[error_code.missing_confirmed_password['error']] \
+                = "Confirmed password not provided"
 
-        try:
-            phone2 = self.request.POST.get('phone2')
-        except (KeyError) as e:
-            phone2 = None
+        phone1 = self.request.POST.get('phone1')
+        if phone1 is None:
+            errors[error_code.missing_phone_number['error']] \
+                = "Phone number 1 not provided"
 
+        phone2 = self.request.POST.get('phone2')
+        province = self.request.POST.get('province')
+        if province is None:
+            errors[error_code.missing_province['error']] \
+                = "Province not provided"
 
-        try:
-            province = self.request.POST.get('province')
-        except (KeyError) as e:
-            errros['api.error.missing_province'] = "Province not provided"
+        city = self.request.POST.get('city')
+        if city is None:
+            errors[error_code.missing_city['error']] = "City not provided"
 
-        try:
-            city = self.request.POST.get('city')
-        except (KeyError) as e:
-            errros['api.error.missing_city'] = "City not provided"
+        postal_code = self.request.POST.get("postalCode")
+        if postal_code is None:
+            errors[error_code.missing_postal_code['error']] \
+                = "Postal code not provided"
 
-        try:
-            postalCode = self.request.POST.get('postalcode')
-        except (KeyError) as e:
-            errros['api.error.missing_postalcode'] = "Postal code not provided"
-
-
-
-        if len(errros) != 0:
-            errorJson = json.dumps(errros)
-            self.response.write(errorJson)
-            self.response.set_status(400)
+        if len(errors) != 0:
+            error_json = json.dumps(errors)
+            self.response.write(error_json)
+            self.response.set_status(
+                error_code.missing_invalid_parameter_error)
             return
 
-        if password != confirmedPassword:
-            errorJson = json.dumps({'api.error.password_mismatch' : 'Password \
-                                        doesn\'t match confirmed password'})
-            self.response.write(errorJson)
-            self.response.set_status(400)
+        if password != confirmed_password:
+            error_json = json.dumps(
+                {error_code.password_mismatch
+                 ['error']: 'Password does not match confirmed password'})
+
+            self.response.write(error_json)
+            self.response.set_status(error_code.missing_invalid_parameter_error)
             return
         # TODO return error if password is not strong enough
 
         unique_properties = ['email']
-        user_data = self.user_model.create_user(email, unique_properties, email=email,
-              firstName=firstName, password_raw=password, phone1=phone1, phone2=phone2,
-              province=province, city=city, lastName=lastName, verified=False, postalCode = postalCode)
-        if not user_data[0]: # user_data is a tuple
-            errorJson = json.dumps({'api.error.email_already_exists'
+        user_data = self.user_model.create_user(
+            email, unique_properties, email=email, first_name=first_name,
+            password_raw=password, phone1=phone1, phone2=phone2,
+            province=province, city=city, last_name=last_name,
+            verified=False, postal_code=postal_code)
+
+        if not user_data[0]:  # user_data is a tuple
+            error_json = json.dumps({error_code.email_alreadyExists['error']
                                     : 'Email already exists'})
-            self.response.write(errorJson)
-            self.response.set_status(400)
+            self.response.write(error_json)
+            self.response.set_status(error_code.missing_invalid_parameter_error)
             return
 
         user = user_data[1]
-        userId = user.get_id()
-        token = self.user_model.create_signup_token(userId)
+        user_id = user.get_id()
+        token = self.user_model.create_signup_token(user_id)
 
-        self.response.write(json.dumps({'token':token}))
-        self.response.set_status(200)
+        self.response.write(json.dumps({'token': token, "userId": user_id}))
+        self.response.set_status(error_code.success)
 
-        # verification_url = self.uri_for('verification', type='v', user_id=user_id,
-        #                                 signup_token=token, _full=True)
-
-        # msg = 'Send an email to user in order to verify their address. \
-        #           They will be able to do so by visiting <a href="{url}">{url}</a>'
-
-        # self.display_message(msg.format(url=verification_url))
 
 # when websites send us an activation link after a registration,
 # the url usually contain their equivalent of signup tokens.
 class VerificationHandler(BaseHandler):
     def get(self, *args, **kwargs):
         user = None
-        userId = kwargs['userId']
+        user_id = kwargs['user_id']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
 
-        user, ts = self.user_model.get_by_auth_token(int(userId), signup_token, 'signup')
+        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
 
         if not user:
             logging.info('Could not find any user with id "%s" signup token "%s"',
-                         userId, signup_token)
+                         user_id, signup_token)
             self.abort(404)
 
         # store user data in the session
@@ -203,10 +212,10 @@ class ForgotPasswordHandler(BaseHandler):
             logging.info('Could not find any user entry for email %s', email)
             self._serve_page(not_found=True)
             return
-        userId = user.get_id()
-        token = self.user_model.create_signup_token(userId)
+        user_id = user.get_id()
+        token = self.user_model.create_signup_token(user_id)
 
-        verification_url = self.uri_for('verification', type='p', userId=userId,
+        verification_url = self.uri_for('verification', type='p', user_id=user_id,
                                         signup_token=token, _full=True)
 
         msg = 'Send an email to user in order to reset their password. \
