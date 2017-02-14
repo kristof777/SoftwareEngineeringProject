@@ -29,43 +29,64 @@ class CreateListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        errors = {}
+        requestUserId = int(self.request.POST.get('userId'))
+        try:
+            user = User.get_by_id(requestUserId)
+            userId = requestUserId
+        except (KeyError) as e:
+            errors['api.error.invalid_user'] = "Can't find user"
+        try:
+            bedrooms = int(self.request.POST.get('bedrooms'))
+        except (KeyError) as e:
+            errors['api.error.missing_bedroom'] = "Number of bedrooms not provided"
+        try:
+            sqft = int(self.request.POST.get('sqft'))
+        except (KeyError) as e:
+            errors['api.error.missing_sqft'] = "Square feet not provided"
+        try:
+            bathrooms = int(self.request.POST.get('bathrooms'))
+        except (KeyError) as e:
+            errors['api.error.missing_bathroom'] = "Number of bathrooms not provided"
+        try:
+            price = int(self.request.POST.get('price'))
+        except (KeyError) as e:
+            errors['api.error.missing_price'] = "Price not provided"
+        try:
+            description = self.request.POST.get('description')
+        except (KeyError) as e:
+            errors['api.error.missing_description'] = "Description not provided"
+        try:
+            isPublished = self.request.POST.get('isPublished') != ''
+        except (KeyError) as e:
+            errors['api.error.invalid_publication'] = "Invalid Publication"
+        try:
+            province = self.request.POST.get('province')
+        except (KeyError) as e:
+            errors['api.error.invalid_province'] = "Province not valid"
+        try:
+            city = self.request.POST.get('city')
+        except (KeyError) as e:
+            errors['api.error.invalid_city'] = "City not valid"
+        try:
+            address = self.request.POST.get('address')
+        except (KeyError) as e:
+            errors['api.error.invalid_address'] = "Address not valid"
+        try:
+            images = self.request.POST.get('images')
+        except (KeyError) as e:
+            errors['api.error.missing_image'] = "There should be at least one image present"
 
-        user = User.query().get()
-        lister_email = user.email
-        bedrooms = int(self.request.POST.get('bedrooms'))
-        sqft = int(self.request.POST.get('sqft'))
-        bathrooms = int(self.request.POST.get('bathrooms'))
-        price = int(self.request.POST.get('price'))
-        description = self.request.POST.get('description')
-        isPublished = self.request.POST.get('isPublished') != ''
-        province = self.request.POST.get('province')
-        city = self.request.POST.get('city')
-        address = self.request.POST.get('address')
-        images = self.request.POST.get('images')
-
-        # d = json.loads(self.request.body)
-        # lister_email = d['user_id']
-        # bedrooms = d['n_bedrooms']
-        # sqft = d['sqft']
-        # bathrooms = d['n_bathrooms']
-        # price = d['price']
-        # description = d['description']
-        # isPublished = d['isPublished']
-        # province = d['province']
-        # city = d['city']
-        # address = d['address']
-        # images = d['images']
 
         try:
-            listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
+            listing = Listing(userId= userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                              price=price, description=description, isPublished=isPublished, province=province,
                              city=city, address=address, images=images)
             listing.put()
-            # self.response.out.write('<h1>New listing created!</h1>')
             listing.listingId = listing.key.id()
             self.response.out.write(listing.listingId)
         except RuntimeError as e:
-            logging.info('Creating failed for user %s because of %s', lister_email, type(e))
+            logging.info('Creating failed for user %s because of %s', userId, type(e))
             d = json.dumps('{errorKey: error}')
             self.response.write(d)
             self.response.set_status(401)
@@ -77,7 +98,7 @@ class ShowListings(webapp2.RequestHandler):
     def get(self):
         #TODO: Remove testing account, should pass in user email as parameter
         user = User.query().get()
-        listings = Listing.query(Listing.lister_email == user.email_address).fetch()
+        listings = Listing.query(Listing.lister_email == user.email).fetch()
         path = os.path.join(os.path.dirname(__file__), 'show_listings.html')
         for listing in listings:
             template_values = {
