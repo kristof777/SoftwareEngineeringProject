@@ -2,7 +2,6 @@ let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {Location} from "./location";
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {BrowsePage} from "../browse/browse"
@@ -18,15 +17,12 @@ import {AddListingPage} from "../add-listing/add-listing"
 export class MyListingsPage {
     listings: Listing[];
 
-    listModel : string;
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
                 private _logger: Logger) {
 
         let data = listingProvider.savedListings.myListings;
         this.listings = Object.keys(data).map(key => data[key]);
-
-        this.listModel = "listings"
     }
 
     /**

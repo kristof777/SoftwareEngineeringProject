@@ -2,17 +2,16 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {Camera, NativeStorage} from 'ionic-native';
+import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {SavedListingProvider} from "../../app/providers/saved-listing-provider";
 import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
 
 @Component({
     selector: 'page-add-listing',
     templateUrl: 'add-listing.html',
-    providers: [ListingProvider, SavedListingProvider]
+    providers: [ListingProvider]
 })
 export class AddListingPage {
     bathrooms: number;
@@ -28,9 +27,8 @@ export class AddListingPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
-                public savedListings: SavedListingProvider,
                 private _logger: Logger) {
-
+        this.images = [];
     }
 
     /**
@@ -60,17 +58,16 @@ export class AddListingPage {
     addImage(){
         const options = {
             // Turn image to byte64
-            destinationType: Camera.DestinationType.DATA_URL,
+            destinationType: 0,//Camera.DestinationType.DATA_URL,
             // Pick image from library
-            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            sourceType: 0,//Camera.PictureSourceType.PHOTOLIBRARY,
             // Dimensions to scale image to
             targetWidth: 1280,
             targetHeight: 720
         };
 
         Camera.getPicture(options).then((data) => {
-            // This should be the byte64 representation of the image.
-            console.log(data);
+            // data is the byte64 representation of the image selected
             // Add the data to the end of the images array.
             this.images[this.images.length] = data;
         }, (error) => {
