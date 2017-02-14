@@ -105,8 +105,8 @@ class CreateUser(BaseHandler):
             return
 
         user = user_data[1]
-        userId = user.get_id()
-        token = self.user_model.create_signup_token(userId)
+        user_id = user.get_id()
+        token = self.user_model.create_signup_token(user_id)
 
         self.response.write(json.dumps({'token':token}))
         self.response.set_status(200)
@@ -124,15 +124,15 @@ class CreateUser(BaseHandler):
 class VerificationHandler(BaseHandler):
     def get(self, *args, **kwargs):
         user = None
-        userId = kwargs['userId']
+        user_id = kwargs['user_id']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
 
-        user, ts = self.user_model.get_by_auth_token(int(userId), signup_token, 'signup')
+        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
 
         if not user:
             logging.info('Could not find any user with id "%s" signup token "%s"',
-                         userId, signup_token)
+                         user_id, signup_token)
             self.abort(404)
 
         # store user data in the session
@@ -203,10 +203,10 @@ class ForgotPasswordHandler(BaseHandler):
             logging.info('Could not find any user entry for email %s', email)
             self._serve_page(not_found=True)
             return
-        userId = user.get_id()
-        token = self.user_model.create_signup_token(userId)
+        user_id = user.get_id()
+        token = self.user_model.create_signup_token(user_id)
 
-        verification_url = self.uri_for('verification', type='p', userId=userId,
+        verification_url = self.uri_for('verification', type='p', user_id=user_id,
                                         signup_token=token, _full=True)
 
         msg = 'Send an email to user in order to reset their password. \
