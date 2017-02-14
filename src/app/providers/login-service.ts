@@ -36,9 +36,18 @@ export class UserService {
     }
     signUp(email:string,password:string,confirmedPassword:string ,firstName:string,lastName:string, phoneNumber:string, city:string): void{
 
-
+        let body = new FormData();
+        body.append('email', email);
+        body.append('password', password);
+        body.append('confirmedPassword', confirmedPassword);
+        body.append('firstName', firstName);
+        body.append('lastName', lastName);
+        body.append('phone1', phoneNumber);
+        body.append('city', city);
+        body.append('province', "SK");
+        body.append('postalcode', "123456");
          this.http.post(KasperConfig.API_URL + "/createuser",
-            { email: email, password: password,confirmedPassword: password ,firstName:firstName, lastName:lastName, phone1:phoneNumber, city:city, province:"SK", postalCode:"123456" }, ResponseContentType.Json)
+            body, ResponseContentType.Json)
              .subscribe(data => {
                 this.data = data;
                  console.log(this.data);

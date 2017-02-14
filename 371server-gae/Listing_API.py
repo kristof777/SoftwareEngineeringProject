@@ -31,17 +31,17 @@ class CreateListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
         user = User.query().get()
-        lister_email = user.email_address
-        bedrooms = int(self.request.get('bedrooms'))
-        sqft = int(self.request.get('sqft'))
-        bathrooms = int(self.request.get('bathrooms'))
-        price = int(self.request.get('price'))
-        description = self.request.get('description')
-        isPublished = self.request.get('isPublished') != ''
-        province = self.request.get('province')
-        city = self.request.get('city')
-        address = self.request.get('address')
-        images = self.request.get('images')
+        lister_email = user.email
+        bedrooms = int(self.request.POST.get('bedrooms'))
+        sqft = int(self.request.POST.get('sqft'))
+        bathrooms = int(self.request.POST.get('bathrooms'))
+        price = int(self.request.POST.get('price'))
+        description = self.request.POST.get('description')
+        isPublished = self.request.POST.get('isPublished') != ''
+        province = self.request.POST.get('province')
+        city = self.request.POST.get('city')
+        address = self.request.POST.get('address')
+        images = self.request.POST.get('images')
 
         # d = json.loads(self.request.body)
         # lister_email = d['user_id']
@@ -60,11 +60,10 @@ class CreateListing(webapp2.RequestHandler):
             listing = Listing(lister_email=lister_email, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                              price=price, description=description, isPublished=isPublished, province=province,
                              city=city, address=address, images=images)
-            key = Listing.build_key(lister_email, bedrooms, sqft, bathrooms, price, description, province, city, address)
-            listing.key = key
             listing.put()
             # self.response.out.write('<h1>New listing created!</h1>')
-            self.response.out.write(listing.key)
+            listing.listingId = listing.key.id()
+            self.response.out.write(listing.listingId)
         except RuntimeError as e:
             logging.info('Creating failed for user %s because of %s', lister_email, type(e))
             d = json.dumps('{errorKey: error}')

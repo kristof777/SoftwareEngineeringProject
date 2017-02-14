@@ -226,15 +226,22 @@ export class ListingProvider {
      */
     addListing(newListing: Listing){
         //POST
-        console.log("here")
+        let body = new FormData();
+        body.append('userId', newListing.listerId);
+        body.append('bedrooms', newListing.bedrooms);
+        body.append('sqft', newListing.squarefeet);
+        body.append('bathrooms', newListing.bathrooms);
+        body.append('price', newListing.price);
+        body.append('description', newListing.description);
+        body.append('isPublished', newListing.isPublished);
+        body.append('province', newListing.location.province);
+        body.append('city', newListing.location.city);
+        body.append('address', newListing.location.address);
+        body.append('images', newListing.images);
+
+
         this.http.post(KasperConfig.API_URL + "/createlisting",
-            { user_id: newListing.listerId, n_bedroom: newListing.bedrooms,
-                sqft: newListing.squarefeet, n_bathrooms: newListing.bathrooms,
-                price: newListing.price, description: newListing.description,
-                isPublished: newListing.isPublished, province: newListing.location.province,
-                city: newListing.location.city, address: newListing.location.address,
-                images: newListing.images},
-            ResponseContentType.Json)
+          body, ResponseContentType.Json)
             .subscribe(data => {
                 console.log(data)
                 //newListing.listerId = data["_body"]

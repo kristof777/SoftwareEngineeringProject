@@ -29,54 +29,54 @@ class CreateUser(BaseHandler):
 
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errros = {}
-        userInfoProvided = json.loads(self.request.body)
+        #
         try:
-            email = userInfoProvided['email']
+            email = self.request.POST.get('email')
         except (KeyError) as e:
             errros['api.error.missing_email'] = "Email not provided"
         try:
-            firstName = userInfoProvided['firstName']
+            firstName = self.request.POST.get('firstName')
         except (KeyError) as e:
             errros['api.error.missing_firstname'] = "First name not provided"
 
         try:
-            lastName = userInfoProvided['lastName']
+            lastName = self.request.POST.get('lastName')
         except (KeyError) as e:
             errros['api.error.missing_lastname'] = "Last name not provided"
 
         try:
-            password = userInfoProvided['password']
+            password = self.request.POST.get('password')
         except (KeyError) as e:
             errros['api.error.missing_password'] = "Password not provided"
 
         try:
-            confirmedPassword = userInfoProvided['confirmedPassword']
+            confirmedPassword = self.request.POST.get('confirmedPassword')
         except (KeyError) as e:
             errros['api.error.missing_confirmed_password'] = "Confirmed password not provided"
 
         try:
-            phone1 = userInfoProvided['phone1']
+            phone1 = self.request.POST.get('phone1')
         except (KeyError) as e:
             errros['api.error.missing_phone1'] = "Phone number 1 not provided"
 
         try:
-            phone2 = userInfoProvided['phone2']
+            phone2 = self.request.POST.get('phone2')
         except (KeyError) as e:
             phone2 = None
 
 
         try:
-            province = userInfoProvided['province']
+            province = self.request.POST.get('province')
         except (KeyError) as e:
             errros['api.error.missing_province'] = "Province not provided"
 
         try:
-            city = userInfoProvided['city']
+            city = self.request.POST.get('city')
         except (KeyError) as e:
             errros['api.error.missing_city'] = "City not provided"
 
         try:
-            postalCode = userInfoProvided['postalCode']
+            postalCode = self.request.POST.get('postalcode')
         except (KeyError) as e:
             errros['api.error.missing_postalcode'] = "Postal code not provided"
 
@@ -96,10 +96,10 @@ class CreateUser(BaseHandler):
             return
         # TODO return error if password is not strong enough
 
-        unique_properties = ['email_address']
-        user_data = self.user_model.create_user(email, unique_properties, email_address=email,
-              first_name=firstName, password_raw=password, phone1=phone1, phone2=phone2,
-              province=province, city=city, last_name=lastName, verified=False, postal_code = postalCode)
+        unique_properties = ['email']
+        user_data = self.user_model.create_user(email, unique_properties, email=email,
+              firstName=firstName, password_raw=password, phone1=phone1, phone2=phone2,
+              province=province, city=city, lastName=lastName, verified=False, postalCode = postalCode)
         if not user_data[0]: # user_data is a tuple
             errorJson = json.dumps({'api.error.email_already_exists'
                                     :'Email already exists'})
@@ -108,8 +108,8 @@ class CreateUser(BaseHandler):
             return
 
         user = user_data[1]
-        user_id = user.get_id()
-        token = self.user_model.create_signup_token(user_id)
+        userId = user.get_id()
+        token = self.user_model.create_signup_token(userId)
 
         self.response.write(json.dumps({'token':token}))
         self.response.set_status(200)
@@ -127,15 +127,15 @@ class CreateUser(BaseHandler):
 class VerificationHandler(BaseHandler):
     def get(self, *args, **kwargs):
         user = None
-        user_id = kwargs['user_id']
+        userId = kwargs['userId']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
 
-        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
+        user, ts = self.user_model.get_by_auth_token(int(userId), signup_token, 'signup')
 
         if not user:
             logging.info('Could not find any user with id "%s" signup token "%s"',
-                         user_id, signup_token)
+                         userId, signup_token)
             self.abort(404)
 
         # store user data in the session
@@ -206,10 +206,10 @@ class ForgotPasswordHandler(BaseHandler):
             logging.info('Could not find any user entry for email %s', email)
             self._serve_page(not_found=True)
             return
-        user_id = user.get_id()
-        token = self.user_model.create_signup_token(user_id)
+        userId = user.get_id()
+        token = self.user_model.create_signup_token(userId)
 
-        verification_url = self.uri_for('verification', type='p', user_id=user_id,
+        verification_url = self.uri_for('verification', type='p', userId=userId,
                                         signup_token=token, _full=True)
 
         msg = 'Send an email to user in order to reset their password. \

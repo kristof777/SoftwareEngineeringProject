@@ -44,7 +44,7 @@ class BaseHandler(webapp2.RequestHandler):
             The instance of the user model associated to the signed-in user.
         """
         user = self.user_info
-        return self.user_model.get_by_id(user['user_id']) if user else None
+        return self.user_model.get_by_id(user['userId']) if user else None
 
     @webapp2.cached_property
     def user_model(self):
