@@ -9,7 +9,10 @@
 <ion-content padding>
     <ion-list>
         <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
-        <ion-item-sliding *ngFor="let cur of listings">
+        <ion-list-header>
+            Published
+        </ion-list-header>
+        <ion-item-sliding *ngFor="let cur of getPublished()">
             <ion-item (click)="selectListing(cur)">
                 <ion-thumbnail item-left>
                     <img src="{{ cur['thumbnail'] }}">
@@ -26,7 +29,27 @@
                     Delete
                 </button>
             </ion-item-options>
-
+        </ion-item-sliding>
+        <ion-list-header>
+            Unpublished
+        </ion-list-header>
+        <ion-item-sliding *ngFor="let cur of getUnpublished()">
+            <ion-item (click)="selectListing(cur)">
+                <ion-thumbnail item-left>
+                    <img src="{{ cur['thumbnail'] }}">
+                </ion-thumbnail>
+                <p>{{ cur['description'] }}</p>
+            </ion-item>
+            <ion-item-options slide="left">
+                <button ion-button color="blue" (click)="editListing(cur)">
+                    <ion-icon name="create"></ion-icon>
+                    Edit
+                </button>
+                <button ion-button color="danger" (click)="deleteListing(cur)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+            </ion-item-options>
         </ion-item-sliding>
     </ion-list>
 </ion-content>
