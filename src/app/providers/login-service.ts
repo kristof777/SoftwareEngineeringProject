@@ -2,40 +2,50 @@ import { Injectable } from '@angular/core';
 import {Http, ResponseContentType} from '@angular/http';
 import {KasperConfig} from "../kasper-config";
 import 'rxjs/add/operator/map';
+import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 
 @Injectable()
 export class UserService {
-    data: any;
 
-    constructor(public http: Http) {
-        this.data = null;
+    constructor(public http: Http,
+                private _logger: Logger) {
     }
 
-    login(email: string, password: string, myFunc, navCont): void{
-
-         //POST
-        // this.http.post(URL, data, ResponseContentType.Json).subscribe(...)
-        //GET
-        // this.http.get(URL, ResponseContentType.Json).subscribe(...)
-
+    /**
+     * Send a login request to the server
+     *
+     * @param email     the email to sign in with
+     * @param password  the password to sign in with
+     * @param cbLogin   the callback for the data
+     */
+    login(email: string, password: string, cbLogin: (data: any) => void): void{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
-         this.http.post(KasperConfig.API_URL + "/signin",
-            body, ResponseContentType.Json)
-             .subscribe(data => {
-                this.data = data;
-                 if(data["_body"] == "Hello")
-                    myFunc(navCont);
-             }, error => {
-                 console.log(error);
-                 console.log("Oooops, sign in failed!");
-             });
 
+        this.http.post(KasperConfig.API_URL + "/signin", body, ResponseContentType.Json)
+            .subscribe(data => {
+                cbLogin(data);
+            }, error => {
+                this._logger.log("Oooops, sign in failed!");
+                this._logger.log(error);
+            });
     }
-    signUp(email:string,password:string,confirmedPassword:string ,firstName:string,lastName:string, phoneNumber:string, city:string): void{
 
+    /**
+     * Send a request to register the user in the database, then log them in
+     *
+     * @param email             the email of the user
+     * @param password          the desired password
+     * @param confirmedPassword the password confirmation
+     * @param firstName         the first name of the user
+     * @param lastName          the last name of the user
+     * @param phoneNumber       the primary phone number of the user
+     * @param city              the city of the user
+     */
+    signUp(email: string, password: string, confirmedPassword: string, firstName: string,
+           lastName: string, phoneNumber: string, city: string): void{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
@@ -46,27 +56,25 @@ export class UserService {
         body.append('city', city);
         body.append('province', "SK");
         body.append('postalcode', "123456");
-         this.http.post(KasperConfig.API_URL + "/createuser",
-            body, ResponseContentType.Json)
-             .subscribe(data => {
-                this.data = data;
-                 console.log(this.data);
-             }, error => {
-                 console.log( error);
-                 console.log("Oooops, sign failed!");
-             });
 
-
+        this.http.post(KasperConfig.API_URL + "/createuser", body, ResponseContentType.Json)
+            .subscribe(data => {
+                this._logger.log(data);
+                // TODO use the response to login
+            }, error => {
+                this._logger.log("Oooops, sign in failed!");
+                this._logger.log(error);
+            });
     }
      /** Checks a password for validity.
      *
      * @param password  the password to check
      * @precond         the password is not null
-     * @returns an object with the following attributes
+     * @returns {strength, message}
      *          strength    the strength of the password [0 to 4]
      *          message     a message depicting how to raise the strength
      */
-    checkPass(password: string): any{
+    checkPass(password: string): Object{
         assert (password != null);
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
@@ -78,28 +86,25 @@ export class UserService {
                 strength: 0,
                 message: "Password must include at least one lower case letter"
             };
-        }
-        if(!upperCase.test(password)){
+        } else if(!upperCase.test(password)){
             return {
                 strength: 1,
                 message: "Password must include at least one upper case letter"
             };
-        }
-        if(!numeric.test(password)){
+        } else if(!numeric.test(password)){
             return {
                 strength: 2,
                 message: "Password must include at least one number"
             };
-        }
-        if(!length.test(password)){
+        } else if(!length.test(password)){
             return {
                 strength: 3,
                 message: "Password must include at least 7 characters long"
             };
+        } else {
+            return {
+                strength: 4
+            };
         }
-        return {
-            strength: 4
-        };
     }
-
 }

@@ -10,6 +10,14 @@ export class SavedListingProvider {
     myListings: any;
     favListings: any;
 
+//
+//
+//
+// NOTE: this class has not yet been implemented
+//
+//
+//
+
     constructor(public http: Http,
                 private _logger: Logger) {
 
@@ -21,7 +29,8 @@ export class SavedListingProvider {
      * Load listings saved on the device
      */
     loadListings(): void{
-
+        this.myListings = {};
+        this.favListings = {};
 
         this.updateListings();
     }

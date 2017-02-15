@@ -3,9 +3,7 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 
 import {NavController, ToastController} from 'ionic-angular';
-import {MainPage} from "../main/main";
 import {UserService} from '../../app/providers/login-service'
-import {User} from "../../app/models/user"
 
 @Component({
     selector: 'page-sign-up',
@@ -21,14 +19,15 @@ export class SignUpPage {
     lastName: string;
     phoneNumber: string;
     city: string;
+
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController,
                 public signUpRegister:UserService) {
-
     }
 
-    /**Function which is called when the user clicks the register button.
+    /**
+     * Function which is called when the user clicks the register button.
      * This will check the fields and either complain or accept the registration.
      */
     doRegister(): void{
@@ -133,15 +132,11 @@ export class SignUpPage {
      * @returns {boolean} true if it was accepted by the regex, false otherwise
      */
     checkEmail(email: string): boolean{
-        if (!email){
+        if (!email)
             return false
-        }
-        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}")
-        return (regExp.test(email))
+
+        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}");
+
+        return (regExp.test(email));
     }
-
-
-
-
-
 }

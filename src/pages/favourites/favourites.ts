@@ -2,7 +2,6 @@ import {ListingProvider} from "../../app/providers/listing-provider";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
-import {Location} from "./location";
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {BrowsePage} from "../browse/browse"
@@ -35,11 +34,11 @@ export class FavouritesPage {
             data:this.listings,
             cursor:this.listings.indexOf(listing)
         });
-        this._logger.debug("Listing  " + listing +" was clicked");
+        this._logger.debug("Listing " + this.listings.indexOf(listing) + " was clicked");
     }
 
     /**
-     *
+     * Remove a listing from the user's favourites
      *
      * @param listing: listing to unfavourited
      */

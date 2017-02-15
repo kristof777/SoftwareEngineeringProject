@@ -37,18 +37,18 @@ export class BrowsePage {
      * Navigate to the My Listings page.
      */
     goToFavourites(): void{
-        this._logger.debug("Favourites was clicked");
+        this._logger.info("Favourites was clicked");
     }
 
     /**
      * Display the filters screen
      */
     goToFilters(): void{
-        this._logger.debug("Filters was clicked");
+        this._logger.info("Filters was clicked");
         let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
 
         filterModal.onDidDismiss(data => {
-            this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
+            this._logger.info("Filter Modal Data: " + JSON.stringify(data));
         });
 
         filterModal.present();
@@ -58,14 +58,14 @@ export class BrowsePage {
      * Add the house to the users dislike list
      */
     unlike(): void{
-        this._logger.debug("Unlike was clicked");
+        this._logger.info("Unlike was clicked");
     }
 
     /**
      * Add the house to the users favourites list
      */
     like(): void{
-        this._logger.debug("Like was clicked.");
+        this._logger.info("Like was clicked.");
     }
 
     /**
@@ -80,7 +80,7 @@ export class BrowsePage {
      */
     nextProperty(): void{
         this.goToFirstSlide();
-        this._logger.debug("Next Property was clicked");
+        this._logger.info("Next Property was clicked");
         if(this.cursor < (this.data.length - 1))
             this.cursor += 1;
     }
@@ -90,7 +90,7 @@ export class BrowsePage {
      */
     previousProperty(): void{
         this.goToFirstSlide();
-        this._logger.debug("Previous Property was clicked");
+        this._logger.info("Previous Property was clicked");
         if(this.cursor > 0)
             this.cursor -= 1;
     }

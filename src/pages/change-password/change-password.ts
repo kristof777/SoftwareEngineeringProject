@@ -64,6 +64,7 @@ export class ChangePasswordPage {
 
     /**
      * Helper functions for quick alerts
+     *
      * @param title     the title for the alert
      * @param message   the message for the alert
      */

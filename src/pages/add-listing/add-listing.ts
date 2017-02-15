@@ -38,18 +38,20 @@ export class AddListingPage {
         return false;
     }
 
+    /**
+     * Save the listing to the device and the server
+     */
     save(){
-        let newLocation: Location = new Location(Province.fromAbbr(this.province), this.city, this.address,
-            this.postalCode, 0.0, 0.0);
+        let newListing: Listing = new Listing(
+            -1, -1, // listingId, listerId
+            new Location(Province.fromAbbr(this.province), this.city, this.address, this.postalCode,
+                0.0, 0.0), // longintude, latitude
+            this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
+            false, "0000-00-00", "0000-00-00", // isPublished, created, modified
+            this.images,
+        );
 
-        let newListing: Listing = new Listing(-1, -1, newLocation, this.bedrooms, this.bathrooms, this.squarefeet,
-            this.price, this.description, false, "0000-00-00", "0000-00-00", []);
-
-        // TODO save to device
-
-        // TODO save to server
-        console.log("save button clicked")
-        this.addListingToServer(newListing)
+        this.listingProvider.addListing(newListing);
     }
 
     /**
@@ -57,34 +59,24 @@ export class AddListingPage {
      */
     addImage(){
         const options = {
-            // Turn image to byte64
+            // Get image in byte64
             destinationType: 0,//Camera.DestinationType.DATA_URL,
             // Pick image from library
             sourceType: 0,//Camera.PictureSourceType.PHOTOLIBRARY,
-            // Dimensions to scale image to
+            // Dimensions to scale the image to
             targetWidth: 1280,
             targetHeight: 720
         };
 
         Camera.getPicture(options).then((data) => {
-            // data is the byte64 representation of the image selected
-            // Add the data to the end of the images array.
             this.images[this.images.length] = data;
         }, (error) => {
-            console.log(error);
+            this._logger.log(error);
         });
     }
 
-    publish(){
-
-    }
-
     /**
-     * Call the method to create a new listing in the database
-     * @param newListing
+     * Set the listing to published
      */
-    addListingToServer(newListing: Listing): void{
-        console.log("addListingToServer function called.")
-        this.listingProvider.addListing(newListing);
-    }
+    publish(){}
 }

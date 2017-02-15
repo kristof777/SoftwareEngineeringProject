@@ -10,7 +10,7 @@ import {KasperConfig} from "../kasper-config";
 
 @Injectable()
 export class ListingProvider {
-    data: any;
+    data: Listing[];
 
     constructor(public http: Http,
                 public savedListings: SavedListingProvider,
@@ -220,12 +220,12 @@ export class ListingProvider {
         ];
     }
 
-
     /**
      * Add a listing to the database
      */
     addListing(newListing: Listing){
-        //POST
+        // TODO add the listing to the device
+
         let body = new FormData();
         body.append('userId', newListing.listerId);
         body.append('bedrooms', newListing.bedrooms);
@@ -239,15 +239,15 @@ export class ListingProvider {
         body.append('address', newListing.location.address);
         body.append('images', newListing.images);
 
-
-        this.http.post(KasperConfig.API_URL + "/createlisting",
-          body, ResponseContentType.Json)
+        this.http.post(KasperConfig.API_URL + "/createlisting", body, ResponseContentType.Json)
             .subscribe(data => {
-                console.log(data)
+                this._logger.log(data);
                 //newListing.listerId = data["_body"]
+                // TODO get the listingId from the server
+                // TODO add the listing to the device
             }, error => {
-                console.log(error);
-                console.log("Oooops, listing creation failed!");
+                this._logger.log(error);
+                this._logger.log("addListing POST request failed.");
             });
     }
 
@@ -334,10 +334,6 @@ export class ListingProvider {
     unpublishListing(listingID : number){
         this._logger.error("ListingProvider.unpublishListing is not implemented.");
     }
-
-
-
-
 }
 
 

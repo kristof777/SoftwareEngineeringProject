@@ -60,9 +60,10 @@ export class MyListingsPage {
     }
 
     /**
-     *  Takes you to listing page
+     * Takes you to listing page
      */
     addListing(){
+        // TODO switch to a modal
         this.navCtrl.push(AddListingPage);
     }
 }

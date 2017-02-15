@@ -33,23 +33,27 @@ export class SignInPage {
         this.navCtrl.push(SignUpPage);
     }
 
-    fromServerSignIn(navCont): void{
-        navCont.setRoot(MainPage);
-    }
-
+    // TODO make this function block
     /**
      * Attempt to log the user in with the provided information
      */
     doSignIn(): void{
-        this._logger.debug("Sign In was clicked.")
+        this._logger.debug("Sign In was clicked.");
 
         // "log in" if the email is set to "test"
         if(this.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else {
-            this.loginService.login(this.email, this.password, this.fromServerSignIn,this.navCtrl);
+            this.loginService.login(this.email, this.password, this.signInCallback);
         }
     }
 
-
+    /**
+     * Handle data from the login request
+     *
+     * @param data the response from the server
+     */
+    signInCallback(data: any): void{
+        this.navCtrl.setRoot(MainPage);
+    }
 }
