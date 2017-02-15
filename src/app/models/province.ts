@@ -1,19 +1,33 @@
+let assert = require('assert-plus');
+
 export class Province{
+    abbr: string;
+    name: string;
 
-    static AB = { abbr: "AB", name: "Alberta"};
-    static BC = { abbr: "BC", name: "British Columbia"};
-    static MB = { abbr: "MB", name: "Manitoba"};
-    static NB = { abbr: "NB", name: "New Brunswick"};
-    static NL = { abbr: "NL", name: "Newfoundland and Labrador"};
-    static NS = { abbr: "NS", name: "Nova Scotia"};
-    static NU = { abbr: "NU", name: "Nunavut"};
-    static NW = { abbr: "NW", name: "North West Territories"};
-    static ON = { abbr: "ON", name: "Ontario"};
-    static PE = { abbr: "PE", name: "Prince Edward Island"};
-    static QC = { abbr: "QC", name: "Quebec"};
-    static SK = { abbr: "SK", name: "Saskatchewan"};
-    static YT = { abbr: "YT", name: "Yukon"};
+    private constructor(abbr: string, name: string){
+        this.abbr = abbr;
+        this.name = name;
+    }
 
+    static AB = new Province("AB", "Alberta");
+    static BC = new Province("BC", "British Columbia");
+    static MB = new Province("MB", "Manitoba");
+    static NB = new Province("NB", "New Brunswick");
+    static NL = new Province("NL", "Newfoundland and Labrador");
+    static NS = new Province("NS", "Nova Scotia");
+    static NU = new Province("NU", "Nunavut");
+    static NW = new Province("NW", "North West Territories");
+    static ON = new Province("ON", "Ontario");
+    static PE = new Province("PE", "Prince Edward Island");
+    static QC = new Province("QC", "Quebec");
+    static SK = new Province("SK", "Saskatchewan");
+    static YT = new Province("YT", "Yukon");
+
+    /**
+     * Return an array of all of the provinces and territories
+     *
+     * @type {Province[]}
+     */
     static asArray: Province[] = [
         Province.AB,
         Province.BC,
@@ -30,7 +44,16 @@ export class Province{
         Province.YT,
     ];
 
+    /**
+     * Returns a Province from the abbreviation provided
+     *
+     * @param abbr          the abbreviation of the province
+     * @returns {Province}  the province with the specivied abbreviation
+     * @returns null        if the abbreviation provided was not valid
+     */
     static fromAbbr(abbr: string): Province{
+        assert.string(abbr);
+
         let provinces: Province[] = Province.asArray;
 
         for(let i=0; i<provinces.length; i++){
