@@ -38,6 +38,11 @@
         </ion-item>
 
         <ion-item>
+            <ion-label stacked>Postal Code </ion-label>
+            <ion-input [(ngModel)]="postalCode" type = "text"></ion-input>
+        </ion-item>
+
+        <ion-item>
             <ion-label stacked>Price </ion-label>
             <ion-input [(ngModel)]="price" type = "text"></ion-input>
         </ion-item>
@@ -63,7 +68,7 @@
         </ion-item>
 
         <ion-item>
-            <button item-left ion-button small (click)="uploadImage()">Upload Image</button>
+            <button item-left ion-button small (click)="addImage()">Add Image</button>
             <button item-right ion-button small (click)="save()">Save</button>
         </ion-item>
 

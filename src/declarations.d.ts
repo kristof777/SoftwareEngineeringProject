@@ -12,6 +12,4 @@
  https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html
  */
 declare module '*'
-;
-
-declare var require: any
+declare var require: any;
