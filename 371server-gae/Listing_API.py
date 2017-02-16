@@ -71,8 +71,8 @@ class CreateListing(webapp2.RequestHandler):
         if address is emptyData:
             errors[error_code.missing_address['error']] = "Address not provided"
 
-        images = self.request.POST.get('images')
-        if images is None:
+        images = str(self.request.POST.get('images'))
+        if images is '':
             errors[error_code.missing_image['error']] = "Images not provided"
 
         thumbnailImageIndex = self.request.POST.get('thumbnailImageIndex')
@@ -88,6 +88,7 @@ class CreateListing(webapp2.RequestHandler):
             return
 
         else:  # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
+
             try:
                 requestUserId = int(requestUserId)
             except:
@@ -95,7 +96,7 @@ class CreateListing(webapp2.RequestHandler):
 
             # find the correct user with userId
             user = User.get_by_id(requestUserId)
-            if user is emptyData:   # if user not found
+            if user is None:
                 errors[error_code.un_auth_listing['error']] = "listing unauthorized"
 
             userId = requestUserId
@@ -133,15 +134,16 @@ class CreateListing(webapp2.RequestHandler):
                 self.response.set_status(
                     error_code.missing_invalid_parameter_error)
                 return
-
-        # all set
-        listing = Listing(userId= userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
-                             price=price, description=description, isPublished=isPublished, province=province,
-                             city=city, address=address, images=images,thumbnailImageIndex=thumbnailImageIndex)
-        listing.put()
-        listing.listingId = listing.key.id()
-        self.response.out.write(listing.listingId)
-        self.response.set_status(error_code.success)
+            else:
+                # all set
+                listing = Listing(userId=userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
+                                  price=price, description=description, isPublished=isPublished, province=province,
+                                  city=city, address=address, images=images, thumbnailImageIndex=thumbnailImageIndex)
+                listing.put()
+                listing.listingId = listing.key.id()
+                self.response.write(json.dumps({"listingId": listing.listingId}))
+                self.response.out.write(listing.listingId)
+                self.response.set_status(error_code.success)
 
 
 # All the listings that belongs to a specific user would bound with the user email.
