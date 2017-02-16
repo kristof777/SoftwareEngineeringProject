@@ -21,7 +21,22 @@ class TestHandlerSignIn(unittest.TestCase):
         self.testbed.init_memcache_stub()
 
     def test_sign_in(self):
-        input1 = {}  # Json object you need to send
+        database_entry1 = {"email": "student@usask.ca",
+                  "password": "123456",
+                  "firstName": "Student",
+                  "lastName": "USASK",
+                  "city": "Saskatoon",
+                  "postalCode": "S7N 4P7",
+                  "province": "Saskatchewan",
+                  "phone1": 1111111111,
+                  "confirmedPassword": "123456" }
+
+        request = webapp2.Request.blank('/createuser', POST=database_entry1)
+        response = request.get_response(main.app)
+        #If this fails then create user unit tests should be run
+        self.assertEquals(response.status_int, 200)
+
+        input1 = {}  # Json object to send
         request = webapp2.Request.blank('/signin', POST=input1)  # api you need to test
         response = request.get_response(main.app)  # get response back
         # unit testing example checking if status is what we expected
@@ -39,7 +54,7 @@ class TestHandlerSignIn(unittest.TestCase):
                               difference(set(error_keys))), 0)
 
         input2 = {"email": "student@usask.ca",
-                  "password": "123456" }
+                  "password": "notRighpassword123" }
 
         request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
         response = request.get_response(main.app)
