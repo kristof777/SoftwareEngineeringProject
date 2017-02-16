@@ -5,16 +5,16 @@ export class Location{
     public city: string;
     public address: string;
     public postalCode: string;
-    public long: number;
-    public lat: number;
+    public longitude: number;
+    public latitude: number;
 
-    constructor(province: Province, city: string, address: string, postalCode: string, long: number,
-                lat: number){
+    constructor(province: Province, city: string, address: string, postalCode: string,
+                longitude: number, latitude: number){
         this.province = province;
         this.city = city;
         this.address = address;
         this.postalCode = postalCode;
-        this.long = long;
-        this.lat = lat;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 }
