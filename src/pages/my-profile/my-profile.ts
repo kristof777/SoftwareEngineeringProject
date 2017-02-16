@@ -9,10 +9,10 @@ import {Province} from "../../app/models/province";
 import {NavController, ModalController} from 'ionic-angular';
 
 @Component({
-    selector: 'page-settings',
-    templateUrl: 'settings.html'
+    selector: 'page-my-profile',
+    templateUrl: 'my-profile.html'
 })
-export class SettingsPage {
+export class MyProfilePage {
     private provinces: Province[];
     /** the user currently logged in to this device */
     currentUser: User;
