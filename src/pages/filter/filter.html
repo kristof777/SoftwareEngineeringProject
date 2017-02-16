@@ -31,12 +31,11 @@
 
         <!--Price Range Text Inputs-->
         <ion-item>
-            <ion-label stacked>Min. Price</ion-label>
-            <ion-input type="number" step="1000" [(ngModel)]="minPrice"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Max. Price</ion-label>
-            <ion-input type="number" step="1000" [(ngModel)]="maxPrice"></ion-input>
+            <ion-label stacked>Price Range</ion-label>
+            <ion-range [(ngModel)]="price" id="priceRange" dualKnobs="true" step="15000" snap="true" min="100000" max="1600000" pin="true">
+                <ion-label range-left>100000</ion-label>
+                <ion-label range-right>1600000</ion-label>
+            </ion-range>
         </ion-item>
 
         <!--Square Feet Range-->
