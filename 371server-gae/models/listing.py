@@ -15,6 +15,7 @@ class Listing(ndb.Model):
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
     address = ndb.StringProperty(required=True)
+    thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
     images = ndb.BlobProperty()
 
     # @classmethod

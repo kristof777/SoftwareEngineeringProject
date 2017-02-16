@@ -6,6 +6,7 @@ from models.listing import Listing
 from models.user import User
 import json
 import main
+import error_code
 import unittest
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
@@ -31,57 +32,51 @@ class CreateListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errors = {}
         requestUserId = int(self.request.POST.get('userId'))
-        try:
-            user = User.get_by_id(requestUserId)
-            userId = requestUserId
-        except (KeyError) as e:
-            errors['api.error.invalid_user'] = "Can't find user"
-        try:
-            bedrooms = int(self.request.POST.get('bedrooms'))
-        except (KeyError) as e:
-            errors['api.error.missing_bedroom'] = "Number of bedrooms not provided"
-        try:
-            sqft = int(self.request.POST.get('sqft'))
-        except (KeyError) as e:
-            errors['api.error.missing_sqft'] = "Square feet not provided"
-        try:
-            bathrooms = int(self.request.POST.get('bathrooms'))
-        except (KeyError) as e:
-            errors['api.error.missing_bathroom'] = "Number of bathrooms not provided"
-        try:
-            price = int(self.request.POST.get('price'))
-        except (KeyError) as e:
-            errors['api.error.missing_price'] = "Price not provided"
-        try:
-            description = self.request.POST.get('description')
-        except (KeyError) as e:
-            errors['api.error.missing_description'] = "Description not provided"
-        try:
-            isPublished = self.request.POST.get('isPublished') != ''
-        except (KeyError) as e:
-            errors['api.error.invalid_publication'] = "Invalid Publication"
-        try:
-            province = self.request.POST.get('province')
-        except (KeyError) as e:
-            errors['api.error.invalid_province'] = "Province not valid"
-        try:
-            city = self.request.POST.get('city')
-        except (KeyError) as e:
-            errors['api.error.invalid_city'] = "City not valid"
-        try:
-            address = self.request.POST.get('address')
-        except (KeyError) as e:
-            errors['api.error.invalid_address'] = "Address not valid"
-        try:
-            images = self.request.POST.get('images')
-        except (KeyError) as e:
-            errors['api.error.missing_image'] = "There should be at least one image present"
+        if requestUserId is None:
+            errors[error_code.missing_user_id['error']] = "UserId not provided"
+
+        user = User.get_by_id(requestUserId)
+        if user is None:
+            errors[error_code.un_auth_listing['error']] = "listing unauthorized"
+
+        userId = requestUserId
+        bedrooms = int(self.request.POST.get('bedrooms'))
+        if bedrooms is None:
+            errors[error_code.missing_bedrooms['error']] = "Number of bedrooms not provided"
+        sqft = int(self.request.POST.get('sqft'))
+        if sqft is None:
+            errors[error_code.missing_sqft['error']] = "Square feet not provided"
+        bathrooms = int(self.request.POST.get('bathrooms'))
+        if bathrooms is None:
+            errors[error_code.missing_bathrooms['error']] = "Number of bathrooms not provided"
+        price = int(self.request.POST.get('price'))
+        if price is None:
+            errors[error_code.missing_price['error']] = "Price not provided"
+        description = self.request.POST.get('description')
+        if description is None:
+            error_code[error_code.missing_description['error']] = "Description not provided"
+        isPublished = self.request.POST.get('isPublished') != ''
+        province = self.request.POST.get('province')
+        if province is None:
+            errors[error_code.missing_province['error']] = "Province not provided"
+        city = self.request.POST.get('city')
+        if city is None:
+            errors[error_code.missing_city['error']] = "City not provided"
+        address = self.request.POST.get('address')
+        if address is None:
+            errors[error_code.missing_address['error']] = "Address not provided"
+        images = self.request.POST.get('images')
+        if images is None:
+            errors[error_code.missing_image['error']] = "Images not provided"
+        thumbnailImageIndex = self.request.POST.get('thumbnailImageIndex')
+        if thumbnailImageIndex is None:
+            errors[error_code.missing_image_index['error']] = "thumbnail not provided"
 
 
         try:
             listing = Listing(userId= userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                              price=price, description=description, isPublished=isPublished, province=province,
-                             city=city, address=address, images=images)
+                             city=city, address=address, images=images, thumbnailImageIndex=thumbnailImageIndex)
             listing.put()
             listing.listingId = listing.key.id()
             self.response.out.write(listing.listingId)
