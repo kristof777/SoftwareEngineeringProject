@@ -17,6 +17,7 @@ ios_install(){
   echo $JAVA_HOME
   npm install -g grunt-cli cordova ionic
   npm install
+  ionic state restore
 }
 
 # downloads and installs all the common files required to run android/linux
@@ -27,6 +28,7 @@ lindroid_install(){
   npm install -g bower cordova ionic
   # installs packages specified in the ionic json
   npm install
+  ionic state restore
   bower update
 }
 
