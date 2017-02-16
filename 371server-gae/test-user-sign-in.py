@@ -22,21 +22,14 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_sign_in(self):
         input1 = {}  # Json object you need to send
-        request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
+        request = webapp2.Request.blank('/signin', POST=input1)  # api you need to test
         response = request.get_response(main.app)  # get response back
         # unit testing example checking if status is what we expected
         # test case 1
         # checking if all error codes are received, if empty code is sent
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_province['error'],
-                           error_code.missing_confirmed_password['error'],
-                           error_code.missing_password['error'],
-                           error_code.missing_last_name['error'],
-                           error_code.missing_phone_number['error'],
-                           error_code.missing_first_name['error'],
-                           error_code.missing_postal_code['error'],
-                           error_code.missing_city['error'],
+        errors_expected = [error_code.missing_password['error'],
                            error_code.missing_email['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
@@ -46,17 +39,9 @@ class TestHandlerSignIn(unittest.TestCase):
                               difference(set(error_keys))), 0)
 
         input2 = {"email": "student@usask.ca",
-                  "password": "123456",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "654321"
-                  }
+                  "password": "123456" }
 
-        request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
         response = request.get_response(main.app)
         self.assertEquals(response.status_int, 400)
         try:
@@ -69,17 +54,9 @@ class TestHandlerSignIn(unittest.TestCase):
         # test case 3
 
         input2 = {"email": "student@usask.ca",
-                  "password": "123456",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "123456"
-                  }
+                  "password": "123456" }
 
-        request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
         response = request.get_response(main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
