@@ -1,81 +1,80 @@
+<ion-content>
+    <ion-slides effect="flip">
+        <ion-slide padding>
+            <ion-item>
+                <ion-label stacked>Email</ion-label>
+                <ion-input type="text" [(ngModel)]="email" placeholder="Enter your email here"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>Password</ion-label>
+                <ion-input type="text" [(ngModel)]="password" placeholder="Enter your password here"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>Confirm Password</ion-label>
+                <ion-input type="text" [(ngModel)]="confirmPassword" placeholder="Enter your password again"></ion-input>
+            </ion-item>
+        </ion-slide>
 
-<ion-header>
-    <ion-navbar>
-        <ion-title>Register</ion-title>
-    </ion-navbar>
-</ion-header>
-<ion-content padding>
+        <ion-slide padding>
+            <ion-item>
+                <ion-label stacked>First Name</ion-label>
+                <ion-input type="text" [(ngModel)]="firstName" placeholder="Enter your first name here"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>Last Name</ion-label>
+                <ion-input type="text" [(ngModel)]="lastName" placeholder="Enter your last name here"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label stacked>10-digit Phone Number</ion-label>
+                <ion-input type="tel" maxlength="10" [(ngModel)]="phoneNumber" placeholder="Enter your phone number here"></ion-input>
+            </ion-item>
+        </ion-slide>
 
-    <img class="logo" src="http://placehold.it/50x50" />
+        <ion-slide padding>
+            <ion-item>
+                <ion-label stacked>Province</ion-label>
+                <ion-select [(ngModel)]="province">
+                    <ion-option value="AB">Alberta</ion-option>
+                    <ion-option value="BC">British Columbia</ion-option>
+                    <ion-option value="MB">Manitoba</ion-option>
+                    <ion-option value="NB">New Brunswick</ion-option>
+                    <ion-option value="NL">Newfoundland and Labrador</ion-option>
+                    <ion-option value="NS">Nova Scotia</ion-option>
+                    <ion-option value="NU">Nunavut</ion-option>
+                    <ion-option value="NW">North West Territories</ion-option>
+                    <ion-option value="ON">Ontario</ion-option>
+                    <ion-option value="PE">Prince Edward Island</ion-option>
+                    <ion-option value="QC">Quebec</ion-option>
+                    <ion-option value="SK">Saskatchewan</ion-option>
+                    <ion-option value="YT">Yukon</ion-option>
+                </ion-select>
+            </ion-item>
 
-    <ion-list inset>
-        <ion-item>
-            <ion-label stacked>E-mail</ion-label>
-            <ion-input [(ngModel)]="email" type="text"></ion-input>
-        </ion-item>
+            <ion-item>
+                <ion-label stacked>City</ion-label>
+                <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
+            </ion-item>
+        </ion-slide>
 
-        <ion-item>
-            <ion-label stacked>Confirm E-mail</ion-label>
-            <ion-input [(ngModel)]="confirmEmail" type="text"></ion-input>
-        </ion-item>
-
-
-        <ion-item>
-            <ion-label stacked>Password</ion-label>
-            <ion-input [(ngModel)]="password" clearOnEdit="false" type="password"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-label stacked>Confirm Password</ion-label>
-            <ion-input [(ngModel)]="confirmPassword" clearOnEdit="false"  type="password"></ion-input>
-        </ion-item>
-
-
-        <ion-item>
-            <ion-label stacked>First Name</ion-label>
-            <ion-input [(ngModel)]="firstName" type="text" placeholder="First Name"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-label stacked>Last Name</ion-label>
-            <ion-input [(ngModel)]="lastName" type="text" placeholder="Last Name"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-label stacked>Phone Number</ion-label>
-            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="Phone Number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-            <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province">
-                <ion-option value="AB">Alberta</ion-option>
-                <ion-option value="BC">British Columbia</ion-option>
-                <ion-option value="MB">Manitoba</ion-option>
-                <ion-option value="NB">New Brunswick</ion-option>
-                <ion-option value="NL">Newfoundland and Labrador</ion-option>
-                <ion-option value="NS">Nova Scotia</ion-option>
-                <ion-option value="NU">Nunavut</ion-option>
-                <ion-option value="NW">North West Territories</ion-option>
-                <ion-option value="ON">Ontario</ion-option>
-                <ion-option value="PE">Prince Edward Island</ion-option>
-                <ion-option value="QC">Quebec</ion-option>
-                <ion-option value="SK">Saskatchewan</ion-option>
-                <ion-option value="YT">Yukon</ion-option>
-            </ion-select>
-        </ion-item>
-
-        <ion-item>
-            <ion-label stacked>City</ion-label>
-            <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
-        </ion-item>
-
-    </ion-list>
+        <ion-slide id="buySellSlide">
+            <ion-grid>
+                <ion-row>
+                    <ion-col center id="buyMode">
+                        <button ion-button (click)="onModeSelect(0)">Buy Mode</button>
+                    </ion-col>
+                    <ion-col  center id="sellMode">
+                        <button ion-button (click)="onModeSelect(1)">Sell Mode</button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-slide>
+    </ion-slides>
 </ion-content>
 
-
 <ion-footer>
-    <ion-item>
-        <button item-right ion-button clear (click)="doRegister()">Register</button>
+    <ion-item no-lines>
+        <button *ngIf="slides.getActiveIndex() > 0" item-left ion-button (click)="previousStep()">Back</button>
+        <button *ngIf="slides.getActiveIndex() < 3" item-right ion-button (click)="nextStep()">Next</button>
+        <button *ngIf="slides.getActiveIndex() == 3 && selectedMode != null" item-right ion-button (click)="doRegister()">Confirm Selection</button>
     </ion-item>
 </ion-footer>

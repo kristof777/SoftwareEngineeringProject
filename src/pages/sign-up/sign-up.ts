@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 
-import {NavController, ToastController} from 'ionic-angular';
+import {NavController, ToastController, Slides} from 'ionic-angular';
 import {UserService} from '../../app/providers/login-service'
+import {MainPage} from "../main/main";
 
 @Component({
     selector: 'page-sign-up',
@@ -11,130 +12,155 @@ import {UserService} from '../../app/providers/login-service'
     providers: [UserService]
 })
 export class SignUpPage {
-    email: string;
-    password: string;
-    confirmEmail: string;
-    confirmPassword: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    province: string;
-    city: string;
+    @ViewChild(Slides) slides: Slides;
+    email: string = "test@mail.com";
+    password: string = "Password1";
+    confirmPassword: string = "Password1";
+
+    firstName: string = "aa";
+    lastName: string ="aa";
+    phoneNumber: string ="1234567890";
+
+    province: string = "SK";
+    city: string = "Saskatoon";
+
+    selectedMode: number;
 
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController,
-                public signUpRegister:UserService) {
+                public userService: UserService) {
+    }
+
+    doRegister(): void{
+        this.userService.signUp(this.email,this.password, this.confirmPassword,this.firstName,this.lastName, this.phoneNumber, this.city);
+        this.navCtrl.setRoot(MainPage);
     }
 
     /**
-     * Function which is called when the user clicks the register button.
-     * This will check the fields and either complain or accept the registration.
+     * Go to the next step if the fields are valid
      */
-    doRegister(): void{
-        this._logger.debug("Register was clicked.");
-        let message = null;
-        let passwordCheck = null;
-
-        if (!this.email || !(this.checkEmail(this.email))) {
-            message = "Please enter a valid E-mail address";
-        } else if (!this.confirmTwo(this.email, this.confirmEmail)) {
-            message = "E-mails do not match";
-        } else if (!this.password){
-            message = "Please enter a password";
+    nextStep(): void{
+        if(this.confirmStep()){
+            this.slides.slideTo(this.slides.getActiveIndex() + 1);
         } else {
-            passwordCheck = this.checkPass(this.password);
+            this._logger.error("Confirm step was false");
+        }
+    }
 
-            if (passwordCheck.strength < 4) {
-                message = passwordCheck.message;
-            } else if (!this.confirmTwo(this.password, this.confirmPassword)) {
-                message = "Passwords do not match";
-            } else if (!this.firstName){
-                message = "Please enter your first name";
-            } else if (!this.lastName){
-                message = "Please enter your last name";
-            } else if (!this.phoneNumber){
-                message = "Please enter your phone-number";
-            } else if (!this.city){
-                message = "Please enter the name of your city";
-            }
+    previousStep(): void{
+        if(this.slides.getActiveIndex() != 0)
+            this.slides.slideTo(this.slides.getActiveIndex() - 1);
+    }
+
+    /**
+     * Confirm the validity of the current step
+     *
+     * @returns {boolean}   true if the fields are valid
+     *                      false otherwise
+     */
+    confirmStep(): boolean{
+        this._logger.error(this.slides.getActiveIndex());
+        switch(this.slides.getActiveIndex()){
+            case 0:
+                return this.confirmStepOne();
+            case 1:
+                return this.confirmStepTwo();
+            case 2:
+                return this.confirmStepThree();
+        }
+    }
+
+    /**
+     * Confirm the validity of step one
+     *
+     * @returns {boolean}   true if the fields are valid
+     *                      false otherwise
+     */
+    confirmStepOne(): boolean{
+        let checkPw: any = this.userService.checkPass(this.password);
+        let error: string = null;
+
+        if(!this.email || !this.password || !this.confirmPassword) {
+            error = "Please fill in all required fields.";
+        } else if(!this.checkEmail(this.email)) {
+            error = "Please enter a valid e-mail address";
+        } else if(checkPw.strengh != 4) {
+            error = checkPw.message;
+        } else if (this.password != this.confirmPassword){
+            error = "The passwords you provided do not match.";
         }
 
-        if (message) {
+        if(error) {
             this.toastCtrl.create({
-                message: message,
+                message: error,
                 duration: 3000,
                 position: 'top'
             }).present();
+        }
+
+        return !error;
+    }
+
+    confirmStepTwo(): boolean{
+        let error: string = null;
+
+        if(!this.firstName || !this.lastName || !this.phoneNumber){
+            error = "Please fill in all required fields.";
+        } else if (this.phoneNumber.length != 10 || !Number(this.phoneNumber)){
+            error = "Please enter a valid phone number.";
+        }
+
+        if(error) {
+            this.toastCtrl.create({
+                message: error,
+                duration: 3000,
+                position: 'top'
+            }).present();
+        }
+
+        return !error;
+    }
+
+    confirmStepThree(): boolean{
+        let error: string = null;
+
+        if(!this.province || !this.city){
+            error = "Please fill in all required fields.";
+        }
+        // TODO verify the city
+
+        if(error) {
+            this.toastCtrl.create({
+                message: error,
+                duration: 3000,
+                position: 'top'
+            }).present();
+        }
+
+        return !error;
+    }
+
+    onModeSelect (mode: number): void{
+        if(mode == 0){
+            document.getElementById("buyMode").removeAttribute("width-25");
+            document.getElementById("buyMode").setAttribute("width-75", "true");
         } else {
-
-            this.signUpRegister.signUp(this.email,this.password, this.confirmPassword,this.firstName,this.lastName, this.phoneNumber, this.city);
-            // this.navCtrl.setRoot(MainPage);
+            document.getElementById("buyMode").removeAttribute("width-75");
+            document.getElementById("buyMode").setAttribute("width-25", "true");
         }
+
+        this.selectedMode = mode;
     }
-
-    /** Checks a password for validity.
-     *
-     * @param password  the password to check
-     * @precond         the password is not null
-     * @returns an object with the following attributes
-     *          strength    the strength of the password [0 to 4]
-     *          message     a message depicting how to raise the strength
-     */
-    checkPass(password: string): any{
-        assert (password != null);
-        let lowerCase = new RegExp("^(?=.*[a-z])");
-        let upperCase = new RegExp("^(?=.*[A-Z])");
-        let numeric = new RegExp("^(?=.*[0-9])");
-        let length = new RegExp("^(?=.{7,})");
-
-        if(!lowerCase.test(password)){
-            return {
-                strength: 0,
-                message: "Password must include at least one lower case letter"
-            };
-        }
-        if(!upperCase.test(password)){
-            return {
-                strength: 1,
-                message: "Password must include at least one upper case letter"
-            };
-        }
-        if(!numeric.test(password)){
-            return {
-                strength: 2,
-                message: "Password must include at least one number"
-            };
-        }
-        if(!length.test(password)){
-            return {
-                strength: 3,
-                message: "Password must include at least 7 characters long"
-            };
-        }
-        return {
-            strength: 4
-        };
-    }
-
-    /**Checks if two parameters are equal.
-     *
-     * @param firstField first string to compare
-     * @param secondField second string to compare
-     * @returns {boolean} true if they match, false otherwise.
-     */
-    confirmTwo(firstField: string, secondField: string): boolean{
-        return (firstField == secondField)
-    }
-
-    /**Checks the input with an e-mail regex
+    /**
+     * Checks the input with an e-mail regex
      *
      * @param email the email to check
      * @returns {boolean} true if it was accepted by the regex, false otherwise
      */
     checkEmail(email: string): boolean{
         if (!email)
-            return false
+            return false;
 
         let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}");
 
