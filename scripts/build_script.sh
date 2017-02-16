@@ -73,15 +73,13 @@ system_info(){
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
   echo 'got to build: osx'
   ios_build
-  system_info
 elif [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then
   echo 'got to build: linux'
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   browser_build
-  system_info
 else
   echo 'got to build: android'
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   android_build
-  system_info
 fi
+system_info
