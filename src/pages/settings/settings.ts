@@ -34,9 +34,10 @@ export class SettingsPage {
         let firstName: string = "John";
         let lastName: string = "Doe";
         let phoneNumber: string = "3065555555";
+        let mode: number = 0;
         let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
 
-        this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, location);
+        this.currentUser = new User(userID, email, firstName, lastName, phoneNumber, null, mode, location);
     }
 
     /**
