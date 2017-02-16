@@ -34,49 +34,49 @@ class CreateListing(webapp2.RequestHandler):
         # check if there's any missing field, if so, just return to the user what all is missing
         # if not, then go ahead and check validity
         requestUserId = self.request.POST.get('userId')
-        if requestUserId is emptyData:
+        if requestUserId is emptyData or requestUserId is None:
             errors[error_code.missing_user_id['error']] = "UserId not provided"
 
         bedrooms = self.request.POST.get('bedrooms')
-        if bedrooms is emptyData:
+        if bedrooms is emptyData or bedrooms is None:
             errors[error_code.missing_bedrooms['error']] = "Number of bedrooms not provided"
 
         sqft = self.request.POST.get('sqft')
-        if sqft is emptyData:
+        if sqft is emptyData or sqft is None:
             errors[error_code.missing_sqft['error']] = "Square feet not provided"
 
         bathrooms = self.request.POST.get('bathrooms')
-        if bathrooms is emptyData:
+        if bathrooms is emptyData or bathrooms is None:
             errors[error_code.missing_bathrooms['error']] = "Number of bathrooms not provided"
 
         price = self.request.POST.get('price')
-        if price is emptyData:
+        if price is emptyData or price is None:
             errors[error_code.missing_price['error']] = "Price not provided"
 
         description = self.request.POST.get('description')
-        if description is emptyData:
+        if description is emptyData or description is None:
             errors[error_code.missing_description['error']] = "Description not provided"
 
         isPublished = self.request.POST.get('isPublished') != ''
 
         province = self.request.POST.get('province')
-        if province is emptyData:
+        if province is emptyData or province is None:
             errors[error_code.missing_province['error']] = "Province not provided"
 
         city = self.request.POST.get('city')
-        if city is emptyData:
+        if city is emptyData or city is None:
             errors[error_code.missing_city['error']] = "City not provided"
 
         address = self.request.POST.get('address')
-        if address is emptyData:
+        if address is emptyData or address is None:
             errors[error_code.missing_address['error']] = "Address not provided"
 
         images = str(self.request.POST.get('images'))
-        if images is '':
+        if images is '' or images == 'None':
             errors[error_code.missing_image['error']] = "Images not provided"
 
         thumbnailImageIndex = self.request.POST.get('thumbnailImageIndex')
-        if thumbnailImageIndex is emptyData:
+        if thumbnailImageIndex is emptyData or thumbnailImageIndex is None:
             errors[error_code.missing_image_index['error']] = "thumbnail not provided"
 
         # if there are missing fields, return

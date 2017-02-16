@@ -24,7 +24,36 @@ class TestHandlers(unittest.TestCase):
 
 
     def test_create_listings(self):
+        input = {}
 
+        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        response = request.get_response(main.app)
+
+        self.assertEquals(response.status_int, 400)
+
+        errors_expected = [error_code.missing_user_id['error'],
+                           error_code.missing_bedrooms['error'],
+                           error_code.missing_sqft['error'],
+                           error_code.missing_bathrooms['error'],
+                           error_code.missing_price['error'],
+                           error_code.missing_description['error'],
+                           error_code.missing_province['error'],
+                           error_code.missing_city['error'],
+                           error_code.missing_address['error'],
+                           error_code.missing_image['error'],
+                           error_code.missing_image_index['error']]
+
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        # checking if there is a difference between error_keys and what we got
+        self.assertEquals(len(set(errors_expected).
+                              difference(set(error_keys))), 0)
+
+
+
+
+
+        #################################################################
         # test case 1
         # checking if all error codes are received, if empty code is sent
 
