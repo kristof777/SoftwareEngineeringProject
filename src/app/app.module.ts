@@ -8,6 +8,7 @@ import {SignInPage} from '../pages/sign-in/sign-in';
 import {SignUpPage} from '../pages/sign-up/sign-up';
 
 import {MainPage} from '../pages/main/main';
+import {DetailPage} from '../pages/detail/detail';
 import {BrowsePage} from '../pages/browse/browse';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {FavouritesPage} from '../pages/favourites/favourites';
@@ -33,6 +34,7 @@ import {SavedListingProvider} from "./providers/saved-listing-provider";
         MainPage,
         MyListingsPage,
         SettingsPage,
+        DetailPage,
         BrowsePage
     ],
     imports: [
@@ -51,6 +53,7 @@ import {SavedListingProvider} from "./providers/saved-listing-provider";
         MainPage,
         MyListingsPage,
         SettingsPage,
+        DetailPage,
         BrowsePage
     ],
     providers: [

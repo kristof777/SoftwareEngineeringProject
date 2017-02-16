@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
-import {BrowsePage} from "../browse/browse"
+import {DetailPage} from "../detail/detail"
 import {EditListingsPage} from "../edit-listings/edit-listings"
 import {AddListingPage} from "../add-listing/add-listing"
 
@@ -31,7 +31,7 @@ export class MyListingsPage {
      * @param listing listing clicked by user
      */
     selectListing(listing:Listing){
-        this.navCtrl.push(BrowsePage, {
+        this.navCtrl.push(DetailPage, {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
