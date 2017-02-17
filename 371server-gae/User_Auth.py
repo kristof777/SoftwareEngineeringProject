@@ -1,7 +1,8 @@
-from BaseHandler import *
-import logging
 import json
-import error_code
+import logging
+
+import Error_Code
+from Base_Handler import *
 
 
 # We need to decide whether uses are allowed to
@@ -40,69 +41,69 @@ class CreateUser(BaseHandler):
                     object.
     """
     def get(self):
-        self.render_template('create_user.html')
+        self.render_template('Create_User.html')
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errors = {}
         email = self.request.POST.get('email')
         if email is None:
-            errors[error_code.missing_email['error']] = "Email not provided"
+            errors[Error_Code.missing_email['error']] = "Email not provided"
 
         first_name = self.request.POST.get('firstName')
         if first_name is None:
-            errors[error_code.missing_first_name['error']] \
+            errors[Error_Code.missing_first_name['error']] \
                 = "First name not provided"
 
         last_name = self.request.POST.get('lastName')
         if last_name is None:
-            errors[error_code.missing_last_name['error']] \
+            errors[Error_Code.missing_last_name['error']] \
                 = "Last name not provided"
 
         password = self.request.POST.get('password')
         if password is None:
-            errors[error_code.missing_password['error']] = \
+            errors[Error_Code.missing_password['error']] = \
                 "Password not provided"
 
         confirmed_password = self.request.POST.get('confirmedPassword')
         if confirmed_password is None:
-            errors[error_code.missing_confirmed_password['error']] \
+            errors[Error_Code.missing_confirmed_password['error']] \
                 = "Confirmed password not provided"
 
         phone1 = self.request.POST.get('phone1')
         if phone1 is None:
-            errors[error_code.missing_phone_number['error']] \
+            errors[Error_Code.missing_phone_number['error']] \
                 = "Phone number 1 not provided"
 
         phone2 = self.request.POST.get('phone2')
         province = self.request.POST.get('province')
         if province is None:
-            errors[error_code.missing_province['error']] \
+            errors[Error_Code.missing_province['error']] \
                 = "Province not provided"
 
         city = self.request.POST.get('city')
         if city is None:
-            errors[error_code.missing_city['error']] = "City not provided"
+            errors[Error_Code.missing_city['error']] = "City not provided"
 
         postal_code = self.request.POST.get("postalCode")
         if postal_code is None:
-            errors[error_code.missing_postal_code['error']] \
+            errors[Error_Code.missing_postal_code['error']] \
                 = "Postal code not provided"
 
         if len(errors) != 0:
             error_json = json.dumps(errors)
             self.response.write(error_json)
             self.response.set_status(
-                error_code.missing_invalid_parameter_error)
+                Error_Code.missing_invalid_parameter_error)
             return
 
         if password != confirmed_password:
             error_json = json.dumps(
-                {error_code.password_mismatch
+                {Error_Code.password_mismatch
                  ['error']: 'Password does not match confirmed password'})
 
             self.response.write(error_json)
-            self.response.set_status(error_code.missing_invalid_parameter_error)
+            self.response.set_status(Error_Code.missing_invalid_parameter_error)
             return
         # TODO return error if password is not strong enough
 
@@ -114,10 +115,10 @@ class CreateUser(BaseHandler):
             verified=False, postal_code=postal_code)
 
         if not user_data[0]:  # user_data is a tuple
-            error_json = json.dumps({error_code.email_alreadyExists['error']
+            error_json = json.dumps({Error_Code.email_alreadyExists['error']
                                     : 'Email already exists'})
             self.response.write(error_json)
-            self.response.set_status(error_code.missing_invalid_parameter_error)
+            self.response.set_status(Error_Code.missing_invalid_parameter_error)
             return
 
         user = user_data[1]
@@ -125,7 +126,7 @@ class CreateUser(BaseHandler):
         token = self.user_model.create_signup_token(user_id)
 
         self.response.write(json.dumps({'token': token, "userId": user_id}))
-        self.response.set_status(error_code.success)
+        self.response.set_status(Error_Code.success)
 
 
 # when websites send us an activation link after a registration,
@@ -162,7 +163,7 @@ class VerificationHandler(BaseHandler):
                 'user': user,
                 'token': signup_token
             }
-            self.render_template('resetpassword.html', params)
+            self.render_template('Reset_Password.html', params)
         else:
             logging.info('verification type not supported.')
             self.abort(404)
@@ -192,7 +193,7 @@ class SetPasswordHandler(BaseHandler):
 class AuthenticatedHandler(BaseHandler):
   @user_required
   def get(self):
-    self.render_template('authenticated.html')
+    self.render_template('Authenticated.html')
 
 
 class LogoutHandler(BaseHandler):
@@ -229,4 +230,4 @@ class ForgotPasswordHandler(BaseHandler):
             'username': username,
             'not_found': not_found
         }
-        self.render_template('forgot.html', params)
+        self.render_template('Forgot.html', params)

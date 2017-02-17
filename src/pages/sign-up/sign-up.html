@@ -3,39 +3,39 @@
         <ion-slide padding>
             <ion-item>
                 <ion-label stacked>Email</ion-label>
-                <ion-input type="text" [(ngModel)]="email" placeholder="Enter your email here"></ion-input>
+                <ion-input type="text" [(ngModel)]="email" placeholder="Enter your email here" id="signUpEmail"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label stacked>Password</ion-label>
-                <ion-input type="text" [(ngModel)]="password" placeholder="Enter your password here"></ion-input>
+                <ion-input type="text" [(ngModel)]="password" placeholder="Enter your password here" id="signUpPassword"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label stacked>Confirm Password</ion-label>
-                <ion-input type="text" [(ngModel)]="confirmPassword" placeholder="Enter your password again"></ion-input>
+                <ion-input type="text" [(ngModel)]="confirmPassword" placeholder="Enter your password again" id="signUpConfirmPassword"></ion-input>
             </ion-item>
         </ion-slide>
 
         <ion-slide padding>
             <ion-item>
                 <ion-label stacked>First Name</ion-label>
-                <ion-input type="text" [(ngModel)]="firstName" placeholder="Enter your first name here"></ion-input>
+                <ion-input type="text" [(ngModel)]="firstName" placeholder="Enter your first name here" id="signUpFirstName"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label stacked>Last Name</ion-label>
-                <ion-input type="text" [(ngModel)]="lastName" placeholder="Enter your last name here"></ion-input>
+                <ion-input type="text" [(ngModel)]="lastName" placeholder="Enter your last name here" id="signUpLastName"></ion-input>
             </ion-item>
             <ion-item>
                 <ion-label stacked>10-digit Phone Number</ion-label>
-                <ion-input type="tel" maxlength="10" [(ngModel)]="phoneNumber" placeholder="Enter your phone number here"></ion-input>
+                <ion-input type="tel" maxlength="10" [(ngModel)]="phoneNumber" placeholder="Enter your phone number here" id="signUpPhoneNumber"></ion-input>
             </ion-item>
         </ion-slide>
 
         <ion-slide padding>
             <ion-item>
                 <ion-label stacked>Province</ion-label>
-                <ion-select [(ngModel)]="province">
+                <ion-select [(ngModel)]="province" id="signUpProvinceSelect">
                     <ion-option value="AB">Alberta</ion-option>
-                    <ion-option value="BC">British Columbia</ion-option>
+                    <ion-option value="BC" id="signUpBC">British Columbia</ion-option>
                     <ion-option value="MB">Manitoba</ion-option>
                     <ion-option value="NB">New Brunswick</ion-option>
                     <ion-option value="NL">Newfoundland and Labrador</ion-option>
@@ -52,7 +52,7 @@
 
             <ion-item>
                 <ion-label stacked>City</ion-label>
-                <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
+                <ion-input [(ngModel)]="city" type="text" placeholder="City" id="signUpCity"></ion-input>
             </ion-item>
         </ion-slide>
 
@@ -75,6 +75,6 @@
     <ion-item no-lines>
         <button *ngIf="slides.getActiveIndex() > 0" item-left ion-button (click)="previousStep()">Back</button>
         <button *ngIf="slides.getActiveIndex() < 3" item-right ion-button (click)="nextStep()">Next</button>
-        <button *ngIf="slides.getActiveIndex() == 3 && selectedMode != null" item-right ion-button (click)="doRegister()">Confirm Selection</button>
+        <button *ngIf="slides.getActiveIndex() == 3 && selectedMode != null" item-right ion-button (click)="doRegister()" id="signUpRegister">Confirm Selection</button>
     </ion-item>
 </ion-footer>

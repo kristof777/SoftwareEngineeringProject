@@ -1,12 +1,14 @@
-import unittest
-import webapp2
-import os
-import main
 import json
-import error_code
-from models.user import User
-from google.appengine.ext import db
+import os
+import unittest
+
+import Error_Code
+import Main
+import webapp2
 from google.appengine.ext import testbed
+
+from models.User import User
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -24,21 +26,21 @@ class TestHandlers(unittest.TestCase):
     def test_create_user(self):
         input1 = {}  # Json object you need to send
         request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
-        response = request.get_response(main.app)  # get response back
+        response = request.get_response(Main.app)  # get response back
         # unit testing example checking if status is what we expected
         # test case 1
         # checking if all error codes are received, if empty code is sent
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_province['error'],
-                           error_code.missing_confirmed_password['error'],
-                           error_code.missing_password['error'],
-                           error_code.missing_last_name['error'],
-                           error_code.missing_phone_number['error'],
-                           error_code.missing_first_name['error'],
-                           error_code.missing_postal_code['error'],
-                           error_code.missing_city['error'],
-                           error_code.missing_email['error']]
+        errors_expected = [Error_Code.missing_province['error'],
+                           Error_Code.missing_confirmed_password['error'],
+                           Error_Code.missing_password['error'],
+                           Error_Code.missing_last_name['error'],
+                           Error_Code.missing_phone_number['error'],
+                           Error_Code.missing_first_name['error'],
+                           Error_Code.missing_postal_code['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_email['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -58,14 +60,14 @@ class TestHandlers(unittest.TestCase):
                   }
 
         request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
         try:
             errors_expected = str(json.loads(response.body).keys()[0])
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(error_code.password_mismatch['error'], errors_expected)
+        self.assertEquals(Error_Code.password_mismatch['error'], errors_expected)
 
         # test case 3
 
@@ -81,7 +83,7 @@ class TestHandlers(unittest.TestCase):
                   }
 
         request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
         self.assertTrue("token" in output)

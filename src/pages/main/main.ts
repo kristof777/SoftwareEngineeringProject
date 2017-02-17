@@ -6,7 +6,7 @@ import {BrowsePage} from "../browse/browse";
 import {FavouritesPage} from "../favourites/favourites";
 
 @Component({
-    templateUrl: '../main/main.html'
+    templateUrl: '../main/Main.html'
 })
 export class MainPage {
     tab1Root: any = BrowsePage;

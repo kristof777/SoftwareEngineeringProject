@@ -1,12 +1,13 @@
+import json
 import os
-import logging
+
 import webapp2
 from google.appengine.ext.webapp import template
-from models.listing import Listing
-from models.user import User
-import json
-import main
-import unittest
+
+import Error_Code
+from models.Listing import Listing
+from models.User import User
+
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
 # for user inputs. The POST method is similar to create_user, what it does is to get
@@ -18,78 +19,137 @@ class CreateListing(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
+    # this GET method is only used for the testing browser
     def get(self):
         template_values = {
             # 'first_name': user2.first_name,
             # 'last_name': user2.last_name
         }
         # test = json.dumps(template_values)
-        path = os.path.join(os.path.dirname(__file__), 'create_listing.html')
+        path = os.path.join(os.path.dirname(__file__), 'Create_Listing.html')
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        emptyData = u''
         errors = {}
-        requestUserId = int(self.request.POST.get('userId'))
-        try:
+
+        # check if there's any missing field, if so, just return to the user what all is missing
+        # if not, then go ahead and check validity
+        requestUserId = self.request.POST.get('userId')
+        if requestUserId is emptyData or requestUserId is None or requestUserId.isspace():
+            errors[Error_Code.missing_user_id['error']] = "UserId not provided"
+
+        bedrooms = self.request.POST.get('bedrooms')
+        if bedrooms is emptyData or bedrooms is None or bedrooms.isspace():
+            errors[Error_Code.missing_bedrooms['error']] = "Number of bedrooms not provided"
+
+        sqft = self.request.POST.get('sqft')
+        if sqft is emptyData or sqft is None or sqft.isspace():
+            errors[
+                Error_Code.missing_sqft['error']] = "Square feet not provided"
+
+        bathrooms = self.request.POST.get('bathrooms')
+        if bathrooms is emptyData or bathrooms is None or bathrooms.isspace():
+            errors[Error_Code.missing_bathrooms['error']] = "Number of bathrooms not provided"
+
+        price = self.request.POST.get('price')
+        if price is emptyData or price is None or price.isspace():
+            errors[Error_Code.missing_price['error']] = "Price not provided"
+
+        description = self.request.POST.get('description')
+        if description is emptyData or description is None or description.isspace():
+            errors[Error_Code.missing_description['error']] = "Description not provided"
+
+        isPublished = self.request.POST.get('isPublished') != ''
+
+        province = self.request.POST.get('province')
+        if province is emptyData or province is None or province.isspace():
+            errors[
+                Error_Code.missing_province['error']] = "Province not provided"
+
+        city = self.request.POST.get('city')
+        if city is emptyData or city is None or city.isspace():
+            errors[Error_Code.missing_city['error']] = "City not provided"
+
+        address = self.request.POST.get('address')
+        if address is emptyData or address is None or address.isspace():
+            errors[Error_Code.missing_address['error']] = "Address not provided"
+
+        images = str(self.request.POST.get('images'))
+        if images is '' or images == 'None' or images.isspace():
+            errors[Error_Code.missing_image['error']] = "Images not provided"
+
+        thumbnailImageIndex = self.request.POST.get('thumbnailImageIndex')
+        if thumbnailImageIndex is emptyData or thumbnailImageIndex is None or thumbnailImageIndex.isspace():
+            errors[Error_Code.missing_image_index['error']] = "thumbnail not provided"
+
+        # if there are missing fields, return
+        if len(errors) != 0:
+            error_json = json.dumps(errors)
+            self.response.write(error_json)
+            self.response.set_status(
+                Error_Code.missing_invalid_parameter_error)
+            return
+
+        else:  # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
+
+            try:
+                requestUserId = int(requestUserId)
+            except:
+                errors[Error_Code.invalid_user_id['error']] = "UserId not valid"
+
+            # find the correct user with userId
             user = User.get_by_id(requestUserId)
+            if user is None:
+                errors[Error_Code.un_auth_listing['error']] = "listing unauthorized"
+
             userId = requestUserId
-        except (KeyError) as e:
-            errors['api.error.invalid_user'] = "Can't find user"
-        try:
-            bedrooms = int(self.request.POST.get('bedrooms'))
-        except (KeyError) as e:
-            errors['api.error.missing_bedroom'] = "Number of bedrooms not provided"
-        try:
-            sqft = int(self.request.POST.get('sqft'))
-        except (KeyError) as e:
-            errors['api.error.missing_sqft'] = "Square feet not provided"
-        try:
-            bathrooms = int(self.request.POST.get('bathrooms'))
-        except (KeyError) as e:
-            errors['api.error.missing_bathroom'] = "Number of bathrooms not provided"
-        try:
-            price = int(self.request.POST.get('price'))
-        except (KeyError) as e:
-            errors['api.error.missing_price'] = "Price not provided"
-        try:
-            description = self.request.POST.get('description')
-        except (KeyError) as e:
-            errors['api.error.missing_description'] = "Description not provided"
-        try:
-            isPublished = self.request.POST.get('isPublished') != ''
-        except (KeyError) as e:
-            errors['api.error.invalid_publication'] = "Invalid Publication"
-        try:
-            province = self.request.POST.get('province')
-        except (KeyError) as e:
-            errors['api.error.invalid_province'] = "Province not valid"
-        try:
-            city = self.request.POST.get('city')
-        except (KeyError) as e:
-            errors['api.error.invalid_city'] = "City not valid"
-        try:
-            address = self.request.POST.get('address')
-        except (KeyError) as e:
-            errors['api.error.invalid_address'] = "Address not valid"
-        try:
-            images = self.request.POST.get('images')
-        except (KeyError) as e:
-            errors['api.error.missing_image'] = "There should be at least one image present"
+
+            try:
+                bedrooms = int(bedrooms)
+            except:
+                errors[Error_Code.invalid_bedrooms['error']] = "Number of bedrooms not valid"
+
+            try:
+                 sqft = int(sqft)
+            except:
+                errors[
+                    Error_Code.invalid_sqft['error']] = "Square feet not valid"
+
+            try:
+                bathrooms = int(bathrooms)
+            except:
+                errors[Error_Code.invalid_bathrooms['error']] = "Number of bathrooms not valid"
+
+            try:
+                price = int(self.request.POST.get('price'))
+            except:
+                errors[Error_Code.invalid_price['error']] = "Price not valid"
 
 
-        try:
-            listing = Listing(userId= userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
-                             price=price, description=description, isPublished=isPublished, province=province,
-                             city=city, address=address, images=images)
-            listing.put()
-            listing.listingId = listing.key.id()
-            self.response.out.write(listing.listingId)
-        except RuntimeError as e:
-            logging.info('Creating failed for user %s because of %s', userId, type(e))
-            d = json.dumps('{errorKey: error}')
-            self.response.write(d)
-            self.response.set_status(401)
+            try:
+                thumbnailImageIndex = int(thumbnailImageIndex)
+            except:
+                errors[Error_Code.invalid_thumbnail_image_index['error']] = "Thumbnail image index not valid"
+
+
+            if len(errors) != 0:    # if there is invalid fields
+                error_json = json.dumps(errors)
+                self.response.write(error_json)
+                self.response.set_status(
+                    Error_Code.missing_invalid_parameter_error)
+                return
+            else:
+                # all set
+                listing = Listing(userId=userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
+                                  price=price, description=description, isPublished=isPublished, province=province,
+                                  city=city, address=address, images=images, thumbnailImageIndex=thumbnailImageIndex)
+                listing.put()
+                listing.listingId = listing.key.id()
+                self.response.write(json.dumps({"listingId": listing.listingId}))
+                self.response.set_status(Error_Code.success)
+
 
 # All the listings that belongs to a specific user would bound with the user email.
 # (More fields in listing should be added later on.). The GET method currently get
@@ -99,7 +159,7 @@ class ShowListings(webapp2.RequestHandler):
         #TODO: Remove testing account, should pass in user email as parameter
         user = User.query().get()
         listings = Listing.query(Listing.lister_email == user.email).fetch()
-        path = os.path.join(os.path.dirname(__file__), 'show_listings.html')
+        path = os.path.join(os.path.dirname(__file__), 'Show_Listings.html')
         for listing in listings:
             template_values = {
                 'lister_email': listing.lister_email,
@@ -118,15 +178,3 @@ class ShowListings(webapp2.RequestHandler):
 
 
 
-
-
-class TestListingAPIHandlers(unittest.TestCase):
-   def test_create_listing(self):
-       # Build a request object passing the URI path to be tested.
-       # You can also pass headers, query arguments etc.
-       request = webapp2.Request.blank('/createlisting')
-       # Get a response for that request.
-       response = request.get_response(main.app)
-
-       # Let's check if the response is correct.
-       self.assertEqual(response.status_int, 200)

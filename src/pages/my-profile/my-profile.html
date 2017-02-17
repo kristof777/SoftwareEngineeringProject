@@ -13,22 +13,22 @@
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Email</ion-label>
-            <ion-input [(ngModel)]="email" type="text" placeholder="{{ currentUser.email }}"></ion-input>
+            <ion-input [(ngModel)]="email" type="text" placeholder="{{ currentUser.email }}" id="settingsEmail"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>First Name</ion-label>
-            <ion-input [(ngModel)]="firstName" type="text" placeholder="{{ currentUser.firstName }}"></ion-input>
+            <ion-input [(ngModel)]="firstName" type="text" placeholder="{{ currentUser.firstName }}" id="settingsFirstName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Last Name</ion-label>
-            <ion-input [(ngModel)]="lastName" type="text" placeholder="{{ currentUser.lastName }}"></ion-input>
+            <ion-input [(ngModel)]="lastName" type="text" placeholder="{{ currentUser.lastName }}" id="settingsLastName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Primary Phone</ion-label>
-            <ion-input [(ngModel)]="phone2" type="tel" placeholder="{{ currentUser.phone1 }}"></ion-input>
+            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone1 }}" id="settingsPhoneNumber"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -38,14 +38,14 @@
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province" placeholder="{{ currentUser.location.province.name }}">
+            <ion-select [(ngModel)]="province" placeholder="{{ currentUser.location.province.name }}" id="settingsProvince">
                 <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
             </ion-select>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>City</ion-label>
-            <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}"></ion-input>
+            <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}" id="settingsCity"></ion-input>
         </ion-item>
 
         <ion-item>

@@ -4,6 +4,7 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+set v
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
 # builds and emulates the app for testing.
@@ -22,9 +23,15 @@ ios_build(){
 # TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    ionic build
+    # ionic build & export IONIC_PID= $!
+    # kill -9 $IONIC_PID
+    ls
+    python 371server-gae/main.py
   else
-    ionic serve
+    # ionic serve
+    echo "${PYTHONPATH}"
+    dev_appserver.py 371server-gae/main.py
+    ls
   fi
 }
 
@@ -58,7 +65,7 @@ system_info(){
   java -version
   echo 'npm version:'
   npm -v
-  ionic info
+  #ionic info
 }
 
 
@@ -66,14 +73,13 @@ system_info(){
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
   echo 'got to build: osx'
   ios_build
-  system_info
 elif [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then
   echo 'got to build: linux'
+  export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   browser_build
-  system_info
 else
   echo 'got to build: android'
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   android_build
-  system_info
 fi
+system_info
