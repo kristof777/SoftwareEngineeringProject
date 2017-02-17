@@ -18,6 +18,12 @@ matrix:
 language: node_js
 node_js:
 - 6.9.4
+
+cache:
+  - npm
+  - pip
+
+
 sudo: true
 addons:
   apt:
