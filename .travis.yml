@@ -17,7 +17,8 @@ matrix:
     
 language: node_js
 cache:
-  - /home/travis/.nvm/
+  directories:
+    - /home/travis/.nvm/
 node_js:
 - 6.9.4
 
