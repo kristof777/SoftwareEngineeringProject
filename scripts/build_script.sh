@@ -30,6 +30,7 @@ browser_build(){
   else
     # dev_appserver.py 371server-gae/main.py
     # ionic serve --chrome@56.0.2924 & export IONIC_PID= $!
+    sudo du / | grep "chrome"
     webdriver-manager start &
     protractor e2e-tests.conf.js
     # kill -9 $IONIC_PID # should occure after tests
