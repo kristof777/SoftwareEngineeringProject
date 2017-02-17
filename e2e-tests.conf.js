@@ -3,7 +3,7 @@ exports.config = {
         //platformName: 'iOS',
         'browserName': 'chrome',
         'chromeOptions': {
-            binary: '/opt/google/chrome/chrome'
+            binary: ['/opt/google/chrome/chrome']
             args: ['--disable-web-security']
         },
         shardTestFiles: true,
