@@ -17,9 +17,7 @@ matrix:
     
 language: node_js
 cache:
-  - npm
-  - pip
-  - nvm
+  - /home/travis/.nvm/
 node_js:
 - 6.9.4
 
