@@ -36,7 +36,7 @@ from Listing_API import *
 config = {
     'webapp2_extras.auth': {
         'user_model': User,
-        'user_attributes': ['first_name', 'phone1', 'phone2', 'phone3', 'province', 'city']
+        'user_attributes': ['first_name', 'phone1', 'phone2', 'province', 'city']
     },
     'webapp2_extras.sessions':{
         'secret_key': 'YOUR_SECRET_KEY'
