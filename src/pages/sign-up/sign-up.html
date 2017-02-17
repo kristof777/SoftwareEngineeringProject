@@ -12,46 +12,46 @@
     <ion-list inset>
         <ion-item>
             <ion-label stacked>E-mail</ion-label>
-            <ion-input [(ngModel)]="email" type="text"></ion-input>
+            <ion-input [(ngModel)]="email" type="text" id="signUpEmail"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Confirm E-mail</ion-label>
-            <ion-input [(ngModel)]="confirmEmail" type="text"></ion-input>
+            <ion-input [(ngModel)]="confirmEmail" type="text" id="signUpConfirmEmail"></ion-input>
         </ion-item>
 
 
         <ion-item>
             <ion-label stacked>Password</ion-label>
-            <ion-input [(ngModel)]="password" clearOnEdit="false" type="password"></ion-input>
+            <ion-input [(ngModel)]="password" clearOnEdit="false" type="password" id="signUpPassword"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Confirm Password</ion-label>
-            <ion-input [(ngModel)]="confirmPassword" clearOnEdit="false"  type="password"></ion-input>
+            <ion-input [(ngModel)]="confirmPassword" clearOnEdit="false"  type="password" id="signUpConfirmPassword"></ion-input>
         </ion-item>
 
 
         <ion-item>
             <ion-label stacked>First Name</ion-label>
-            <ion-input [(ngModel)]="firstName" type="text" placeholder="First Name"></ion-input>
+            <ion-input [(ngModel)]="firstName" type="text" placeholder="First Name" id="signUpFirstName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Last Name</ion-label>
-            <ion-input [(ngModel)]="lastName" type="text" placeholder="Last Name"></ion-input>
+            <ion-input [(ngModel)]="lastName" type="text" placeholder="Last Name" id="signUpLastName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Phone Number</ion-label>
-            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="Phone Number"></ion-input>
+            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="Phone Number" id="signUpPhoneNumber"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province">
+            <ion-select [(ngModel)]="province" id="signUpProvinceSelect">
                 <ion-option value="AB">Alberta</ion-option>
-                <ion-option value="BC">British Columbia</ion-option>
+                <ion-option value="BC" id="signUpBC">British Columbia</ion-option>
                 <ion-option value="MB">Manitoba</ion-option>
                 <ion-option value="NB">New Brunswick</ion-option>
                 <ion-option value="NL">Newfoundland and Labrador</ion-option>
@@ -68,7 +68,7 @@
 
         <ion-item>
             <ion-label stacked>City</ion-label>
-            <ion-input [(ngModel)]="city" type="text" placeholder="City"></ion-input>
+            <ion-input [(ngModel)]="city" type="text" placeholder="City" id="signUpCity"></ion-input>
         </ion-item>
 
     </ion-list>
@@ -77,6 +77,6 @@
 
 <ion-footer>
     <ion-item>
-        <button item-right ion-button clear (click)="doRegister()">Register</button>
+        <button item-right ion-button clear (click)="doRegister()" id="signUpRegister">Register</button>
     </ion-item>
 </ion-footer>
