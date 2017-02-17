@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
-import {BrowsePage} from "../browse/browse"
+import {DetailPage} from "../detail/detail"
 
 @Component({
     selector: 'page-favourites',
@@ -30,7 +30,7 @@ export class FavouritesPage {
      */
     selectListing(listing:Listing){
         // open about that listing
-        this.navCtrl.push(BrowsePage,{
+        this.navCtrl.push(DetailPage,{
             data:this.listings,
             cursor:this.listings.indexOf(listing)
         });

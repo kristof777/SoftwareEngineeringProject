@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Settings
+            My Profile
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -27,19 +27,14 @@
         </ion-item>
 
         <ion-item>
-            <ion-label stacked>Phone Number</ion-label>
-            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone1 }}"></ion-input>
+            <ion-label stacked>Primary Phone</ion-label>
+            <ion-input [(ngModel)]="phone2" type="tel" placeholder="{{ currentUser.phone1 }}"></ion-input>
         </ion-item>
 
-        <!--<ion-item>-->
-            <!--<ion-label>Phone Number 2</ion-label>-->
-            <!--<ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone2 }}"></ion-input>-->
-        <!--</ion-item>-->
-
-        <!--<ion-item>-->
-            <!--<ion-label>Phone Number 3</ion-label>-->
-            <!--<ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone3 }}"></ion-input>-->
-        <!--</ion-item>-->
+        <ion-item>
+            <ion-label stacked>Secondary Phone</ion-label>
+            <ion-input [(ngModel)]="phone2" type="tel" placeholder="{{ currentUser.phone2 }}"></ion-input>
+        </ion-item>
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
@@ -62,19 +57,11 @@
             <button ion-button block (click)="showChangePassword()">Change Password</button>
         </ion-item>
     </ion-list>
+</ion-content>
 
-    <ion-item no-lines>
+<ion-footer>
+    <ion-item>
         <button item-left ion-button clear (click)="signOut()">Sign Out</button>
         <button item-right ion-button clear (click)="saveChanges()">Save</button>
     </ion-item>
-
-
-    <!-- Removing footer because it's having issues -->
-    <!-- It's staying in one place as you scroll, above the content of the page -->
-    <!--<ion-footer>-->
-        <!--<ion-toolbar>-->
-            <!--<button item-left ion-button clear (click)="signOut()">Sign Out</button>-->
-            <!--<button item-right ion-button clear (click)="saveChanges()">Save</button>-->
-        <!--</ion-toolbar>-->
-    <!--</ion-footer>-->
-</ion-content>
+</ion-footer>
