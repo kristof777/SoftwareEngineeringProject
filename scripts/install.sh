@@ -74,7 +74,7 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   lindroid_install
   export CLOUDSDK_INSTALL_DIR=/$HOME
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  #gae_install
+  gae_install
   protractor --version
   mkdir www
 else
