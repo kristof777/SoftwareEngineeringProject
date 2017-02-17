@@ -7,9 +7,12 @@ import {NavController, ToastController} from 'ionic-angular';
 import {SignUpPage} from '../sign-up/sign-up';
 import {MainPage} from "../main/main";
 
+import {UserService} from '../../app/providers/login-service'
+
 @Component({
     selector: 'page-sign-in',
-    templateUrl: 'sign-in.html'
+    templateUrl: 'sign-in.html',
+    providers: [UserService]
 })
 export class SignInPage {
     email: string;
@@ -17,7 +20,8 @@ export class SignInPage {
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
-                private _logger: Logger) {
+                private _logger: Logger,
+                public loginService: UserService) {
     }
 
     /**
@@ -29,21 +33,27 @@ export class SignInPage {
         this.navCtrl.push(SignUpPage);
     }
 
+    // TODO make this function block
     /**
      * Attempt to log the user in with the provided information
      */
     doSignIn(): void{
-        this._logger.debug("Sign In was clicked.")
+        this._logger.debug("Sign In was clicked.");
 
         // "log in" if the email is set to "test"
         if(this.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else {
-            this.toastCtrl.create({
-                message: 'To continue, set e-mail to "test"',
-                duration: 3000,
-                position: 'top'
-            }).present();
+            this.loginService.login(this.email, this.password, this.signInCallback);
         }
+    }
+
+    /**
+     * Handle data from the login request
+     *
+     * @param data the response from the server
+     */
+    signInCallback(data: any): void{
+        this.navCtrl.setRoot(MainPage);
     }
 }

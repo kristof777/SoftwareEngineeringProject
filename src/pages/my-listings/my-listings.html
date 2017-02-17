@@ -1,59 +1,32 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            <ion-segment [(ngModel)]="listModel">
-                <ion-segment-button value="listings" (ionSelect)="selectListings()">
-                    My Listings
-                </ion-segment-button>
-                <ion-segment-button value="favourites" (ionSelect)="selectFavourites()">
-                    Favourites
-                </ion-segment-button>
-            </ion-segment>
+            My Listings
         </ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <div [ngSwitch]="listModel">
-        <ion-list *ngSwitchCase="'listings'">
-            <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
-            <ion-item-sliding *ngFor="let d of mineSavedData">
-
-                <ion-item (click)="clickMineListing(d)">
-                    <ion-thumbnail item-left>
-                        <img src="{{d['thumbnail']}}">
-                    </ion-thumbnail>
-                    <p>{{d['description']}}</p>
-                </ion-item>
-                <ion-item-options slide="left">
-                    <button ion-button color="blue" (click)="editMineListing(d)">
-                        <ion-icon name="create"></ion-icon>
-                        Edit
-                    </button>
-                    <button ion-button color="danger" (click)="deleteMineListing(d)">
-                        <ion-icon name="trash"></ion-icon>
-                        Delete
-                    </button>
-                </ion-item-options>
-
-            </ion-item-sliding>
-        </ion-list>
-        <ion-list *ngSwitchCase="'favourites'">
-            <ion-item-sliding *ngFor="let d of favSavedData">
-
-            <ion-item (click)="clickFavListing(d)">
+    <ion-list>
+        <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
+        <ion-item-sliding *ngFor="let cur of listings">
+            <ion-item (click)="selectListing(cur)">
                 <ion-thumbnail item-left>
-                    <img src="{{d['thumbnail']}}">
+                    <img src="{{ cur['thumbnail'] }}">
                 </ion-thumbnail>
-                <p>{{d['description']}}</p>
+                <p>{{ cur['description'] }}</p>
             </ion-item>
-                <ion-item-options slide="left">
-                    <button ion-button color="danger" (click)="deleteFavListing(d)">
-                        <ion-icon name="trash"></ion-icon>
-                        Delete
-                    </button>
-                </ion-item-options>
-            </ion-item-sliding>
-        </ion-list>
-    </div>
+            <ion-item-options slide="left">
+                <button ion-button color="blue" (click)="editListing(cur)">
+                    <ion-icon name="create"></ion-icon>
+                    Edit
+                </button>
+                <button ion-button color="danger" (click)="deleteListing(cur)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+            </ion-item-options>
+
+        </ion-item-sliding>
+    </ion-list>
 </ion-content>

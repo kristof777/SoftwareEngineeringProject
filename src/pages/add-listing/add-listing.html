@@ -10,7 +10,7 @@
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province">
+            <ion-select [(ngModel)]="province" id="alProvince">
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
                 <ion-option value="MB">Manitoba</ion-option>
@@ -29,46 +29,51 @@
 
         <ion-item>
             <ion-label stacked>City/Town </ion-label>
-            <ion-input [(ngModel)]="city" type = "text"></ion-input>
+            <ion-input [(ngModel)]="city" type = "text" id ='alCityTown'></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Address </ion-label>
-            <ion-input [(ngModel)]="address" type = "text"></ion-input>
+            <ion-input [(ngModel)]="address" type = "text" id='alAddress'></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Postal Code </ion-label>
+            <ion-input [(ngModel)]="postalCode" type = "text" id='alPostalCode'></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Price </ion-label>
-            <ion-input [(ngModel)]="price" type = "text"></ion-input>
+            <ion-input [(ngModel)]="price" type = "text" id='alPrice'></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label stacked>Square Feet </ion-label>
-            <ion-input [(ngModel)]="squarefeet" type = "text"></ion-input>
+            <ion-label stacked>Square Feet</ion-label>
+            <ion-input [(ngModel)]="squarefeet" type = "text" id='alSqFeet'></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Bed Rooms </ion-label>
-            <ion-input [(ngModel)]="bedrooms" type = "text" ></ion-input>
+            <ion-input [(ngModel)]="bedrooms" type = "text" id='alBed'></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Bath Rooms </ion-label>
-            <ion-input [(ngModel)]="bathrooms" type="text"></ion-input>
+            <ion-input [(ngModel)]="bathrooms" type="text" id="alBathRoom"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label floating stacked>Description </ion-label>
-            <ion-textarea [(ngModel)]="description" text-wrap></ion-textarea>
+            <ion-textarea [(ngModel)]="description" text-wrap id="alDesc"></ion-textarea>
         </ion-item>
 
         <ion-item>
-            <button item-left ion-button small (click)="uploadImage()">Upload Image</button>
-            <button item-right ion-button small (click)="save()">Save</button>
+            <button item-left ion-button small (click)="addImage()" id="alImage">Add Image</button>
+            <button item-right ion-button small (click)="save()" id="alSave">Save</button>
         </ion-item>
 
         <ion-item>
-            <button ion-button block (click)="publish()">Publish</button>
+            <button ion-button block (click)="publish()" id="alPublish">Publish</button>
         </ion-item>
     </ion-list>
 </ion-content>
