@@ -26,11 +26,11 @@ node_js:
 
 sudo: true
 addons:
-  chrome: 56.0.2924
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
+    - google-chrome-stable
     - g++-4.8
     - oracle-java8-installer
     - lib32stdc++6
