@@ -11,23 +11,8 @@ describe('Signing in, and using the app like a user would interact with it', fun
         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 
-
-    it('Should test the register page', function(done){
-        let registerButton = element(by.css('.register'));
-        registerButton.click();
-        browser.driver.sleep(500);
-        //let backButton = element(by.css('[ion-button="bar-button"]'));
-        //backButton.click();
-        let newRegisterButton = element(by.id('regButton'));
-        newRegisterButton.click();
-        browser.driver.sleep(500);
-        done();
-    });
-
-/*
     it('Should login', function(done){
-        let username, password, registerButton, signInButton;
-        registerButton = element(by.css('.register'));
+        let username, password, signInButton;
         signInButton = element(by.buttonText('Sign In'));
         username = element(by.id('email')).all(by.tagName('input')).first();
         password = element(by.id('password')).all(by.tagName('input')).first();
@@ -37,9 +22,8 @@ describe('Signing in, and using the app like a user would interact with it', fun
         browser.driver.sleep(500);
         done();
     });
-*/
-/*
 
+    /*
     it('Should switch to the "My Profile" tab, and fill out new information', function(done){
         let myProfileTab;
         myProfileTab = element(by.id('tab-t0-3'));
@@ -59,9 +43,9 @@ describe('Signing in, and using the app like a user would interact with it', fun
         //city.sendKeys('test');
         done();
     });
+*/
 
 
-    /*
     it('Should test the filter screen on the browse page', function (done) {
         let filtersButton, applyFilterButton, sqftRange, bedRange, provinceDropList, ykOption, abOption, bcOption, nbOption, nlOption, provFilterOK, cancelFilterButton;
         filtersButton = element(by.id('goToFilters'));
@@ -156,5 +140,5 @@ describe('Signing in, and using the app like a user would interact with it', fun
         browser.driver.sleep(500);
         done();
     });
-    */
+
 });
