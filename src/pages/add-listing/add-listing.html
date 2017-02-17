@@ -69,11 +69,12 @@
 
         <ion-item>
             <button item-left ion-button small (click)="addImage()">Add Image</button>
-            <button item-right ion-button small (click)="save()">Save</button>
         </ion-item>
 
         <ion-item>
-            <button ion-button block (click)="publish()">Publish</button>
+            <button ion-button block (click)="saveWithoutPublishing()">Save without Publishing</button>
+            <button ion-button block (click)="saveAndPublish()">Publish</button>
+            <button *ngIf="(curListing == null) && curListing.isPublished" ion-button block (click)="unpublish()">Unpublish</button>
         </ion-item>
     </ion-list>
 </ion-content>
