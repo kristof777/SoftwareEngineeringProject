@@ -28,7 +28,7 @@ browser_build(){
     ls
     #python 371server-gae/main.py
   else
-    ionic serve & export IONIC_PID= $!
+    ionic serve --firefox@47.0.1 & export IONIC_PID= $!
     webdriver-manager start
     protractor e2e-tests.conf.js
     # kill -9 $IONIC_PID # should occure after tests
