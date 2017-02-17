@@ -12,3 +12,4 @@ You may need to run `sudo npm install -g ionic cordova` or run your command prom
 4. Add the browser by running `ionic platform add browser`.
 
 5. Run the project in your browser with `ionic run browser`
+Note that running in the browser does not have all of the functionality a phone would have (saving to device, selecting images etc.)
