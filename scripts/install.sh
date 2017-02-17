@@ -70,10 +70,11 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   mkdir www
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   #echo "got to linux install"
-  #lindroid_install
+  lindroid_install
   export CLOUDSDK_INSTALL_DIR=/$HOME
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  gae_install
+  #gae_install
+  protractor --version
   mkdir www
 else
   echo "got to install: android"
