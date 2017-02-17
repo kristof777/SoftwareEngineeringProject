@@ -27,7 +27,6 @@ node_js:
 sudo: true
 addons:
   apt:
-  - google-chrome
     sources:
     - google-chrome
     - ubuntu-toolchain-r-test
