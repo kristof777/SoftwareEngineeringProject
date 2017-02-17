@@ -1,13 +1,14 @@
-import unittest
-import webapp2
-import os
-import main
 import json
-import error_code
-from models.user import User
-from models.listing import Listing
-from google.appengine.ext import db
+import os
+import unittest
+
+import Error_Code
+import Main
+import webapp2
 from google.appengine.ext import testbed
+
+from models.Listing import Listing
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class TestHandlers(unittest.TestCase):
@@ -28,21 +29,21 @@ class TestHandlers(unittest.TestCase):
         input = {}
 
         request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_user_id['error'],
-                           error_code.missing_bedrooms['error'],
-                           error_code.missing_sqft['error'],
-                           error_code.missing_bathrooms['error'],
-                           error_code.missing_price['error'],
-                           error_code.missing_description['error'],
-                           error_code.missing_province['error'],
-                           error_code.missing_city['error'],
-                           error_code.missing_address['error'],
-                           error_code.missing_image['error'],
-                           error_code.missing_image_index['error']]
+        errors_expected = [Error_Code.missing_user_id['error'],
+                           Error_Code.missing_bedrooms['error'],
+                           Error_Code.missing_sqft['error'],
+                           Error_Code.missing_bathrooms['error'],
+                           Error_Code.missing_price['error'],
+                           Error_Code.missing_description['error'],
+                           Error_Code.missing_province['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_address['error'],
+                           Error_Code.missing_image['error'],
+                           Error_Code.missing_image_index['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -73,21 +74,21 @@ class TestHandlers(unittest.TestCase):
                  }
 
         request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_user_id['error'],
-                           error_code.missing_bedrooms['error'],
-                           error_code.missing_sqft['error'],
-                           error_code.missing_bathrooms['error'],
-                           error_code.missing_price['error'],
-                           error_code.missing_description['error'],
-                           error_code.missing_province['error'],
-                           error_code.missing_city['error'],
-                           error_code.missing_address['error'],
-                           error_code.missing_image['error'],
-                           error_code.missing_image_index['error']]
+        errors_expected = [Error_Code.missing_user_id['error'],
+                           Error_Code.missing_bedrooms['error'],
+                           Error_Code.missing_sqft['error'],
+                           Error_Code.missing_bathrooms['error'],
+                           Error_Code.missing_price['error'],
+                           Error_Code.missing_description['error'],
+                           Error_Code.missing_province['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_address['error'],
+                           Error_Code.missing_image['error'],
+                           Error_Code.missing_image_index['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -114,21 +115,21 @@ class TestHandlers(unittest.TestCase):
                  }
 
         request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_user_id['error'],
-                           error_code.missing_bedrooms['error'],
-                           error_code.missing_sqft['error'],
-                           error_code.missing_bathrooms['error'],
-                           error_code.missing_price['error'],
-                           error_code.missing_description['error'],
-                           error_code.missing_province['error'],
-                           error_code.missing_city['error'],
-                           error_code.missing_address['error'],
-                           error_code.missing_image['error'],
-                           error_code.missing_image_index['error']]
+        errors_expected = [Error_Code.missing_user_id['error'],
+                           Error_Code.missing_bedrooms['error'],
+                           Error_Code.missing_sqft['error'],
+                           Error_Code.missing_bathrooms['error'],
+                           Error_Code.missing_price['error'],
+                           Error_Code.missing_description['error'],
+                           Error_Code.missing_province['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_address['error'],
+                           Error_Code.missing_image['error'],
+                           Error_Code.missing_image_index['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -154,15 +155,15 @@ class TestHandlers(unittest.TestCase):
                  }
 
         request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.missing_user_id['error'],
-                           error_code.missing_sqft['error'],
-                           error_code.missing_description['error'],
-                           error_code.missing_city['error'],
-                           error_code.missing_image['error']]
+        errors_expected = [Error_Code.missing_user_id['error'],
+                           Error_Code.missing_sqft['error'],
+                           Error_Code.missing_description['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_image['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -189,11 +190,11 @@ class TestHandlers(unittest.TestCase):
                   }
 
         request = webapp2.Request.blank('/createlisting', POST=input)
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.un_auth_listing['error']]
+        errors_expected = [Error_Code.un_auth_listing['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -219,17 +220,17 @@ class TestHandlers(unittest.TestCase):
                  }
 
         request = webapp2.Request.blank('/createlisting', POST=input)
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [error_code.invalid_user_id['error'],
-                           error_code.un_auth_listing['error'],
-                           error_code.invalid_bedrooms['error'],
-                           error_code.invalid_sqft['error'],
-                           error_code.invalid_bathrooms['error'],
-                           error_code.invalid_price['error'],
-                           error_code.invalid_thumbnail_image_index['error']]
+        errors_expected = [Error_Code.invalid_user_id['error'],
+                           Error_Code.un_auth_listing['error'],
+                           Error_Code.invalid_bedrooms['error'],
+                           Error_Code.invalid_sqft['error'],
+                           Error_Code.invalid_bathrooms['error'],
+                           Error_Code.invalid_price['error'],
+                           Error_Code.invalid_thumbnail_image_index['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -256,7 +257,7 @@ class TestHandlers(unittest.TestCase):
                   }
 
         request = webapp2.Request.blank('/createuser', POST=newUser)  # api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
 
@@ -278,7 +279,7 @@ class TestHandlers(unittest.TestCase):
         input["userId"] = output["userId"]
         #FIXME
         request = webapp2.Request.blank('/createlisting', POST=input)
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 200)
 

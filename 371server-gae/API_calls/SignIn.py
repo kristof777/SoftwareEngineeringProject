@@ -1,8 +1,8 @@
 import logging
 import json
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-from BaseHandler import BaseHandler
-from error_code import *
+from Base_Handler import BaseHandler
+from Error_Code import *
 
 
 class SignIn(BaseHandler):
@@ -66,4 +66,4 @@ class SignIn(BaseHandler):
             'failed': failed
         }
         self.response.write("Failed")
-        self.render_template('sign_in.html', params)
+        self.render_template('Sign_In.html', params)

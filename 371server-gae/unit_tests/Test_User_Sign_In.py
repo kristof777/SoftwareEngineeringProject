@@ -1,11 +1,12 @@
-import unittest
-import webapp2
-import os
-import main
 import json
-import error_code
-from models.user import User
+import os
+import unittest
+
+import Error_Code
+import Main
+import webapp2
 from google.appengine.ext import testbed
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -32,18 +33,18 @@ class TestHandlerSignIn(unittest.TestCase):
                   "confirmedPassword": "123456" }
 
         request = webapp2.Request.blank('/createuser', POST=database_entry1)
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         #If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
 
         input1 = {}  # Json object to send
         request = webapp2.Request.blank('/signin', POST=input1)
-        response = request.get_response(main.app)  # get response back
+        response = request.get_response(Main.app)  # get response back
 
         #Test when no paramaters are given
         self.assertEquals(response.status_int, 400)
-        errors_expected = [error_code.missing_password['error'],
-                           error_code.missing_email['error']]
+        errors_expected = [Error_Code.missing_password['error'],
+                           Error_Code.missing_email['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(len(set(errors_expected).
@@ -52,21 +53,21 @@ class TestHandlerSignIn(unittest.TestCase):
                   "password": "notRighpassword123" }
 
         request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(error_code.not_authorized['error'], error_message)
+        self.assertEquals(Error_Code.not_authorized['error'], error_message)
 
         # Test with correct e-mail and password
         input2 = {"email": "student@usask.ca",
                   "password": "123456" }
 
         request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
-        response = request.get_response(main.app)
+        response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
 
