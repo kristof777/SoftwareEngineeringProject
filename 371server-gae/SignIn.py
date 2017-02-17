@@ -54,7 +54,7 @@ class SignIn(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          user_email, type(e))
-            error = json.dumps({not_authorized["error"]})
+            error = json.dumps(not_authorized["error"])
             self.response.write(error)
             self.response.set_status(not_authorized['status'])
 
