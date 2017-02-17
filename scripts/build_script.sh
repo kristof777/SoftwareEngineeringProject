@@ -30,7 +30,8 @@ browser_build(){
   else
     # ionic serve
     echo "${PYTHONPATH}"
-    dev_appserver.py app.yaml
+    cd gae
+    dev_appserver.py main.py
     ls
   fi
 }
