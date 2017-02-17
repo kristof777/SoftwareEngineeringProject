@@ -28,6 +28,8 @@ lindroid_install(){
   npm install -g bower protractor cordova ionic
   # installs packages specified in the ionic json
   npm install
+  wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
+  unzip chromedriver_linux64.zip
   webdriver-manager update
   ionic state restore
   bower update
