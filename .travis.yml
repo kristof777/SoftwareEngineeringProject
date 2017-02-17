@@ -30,7 +30,7 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - google-chrome-stable
+    - google-chrome
     - g++-4.8
     - oracle-java8-installer
     - lib32stdc++6
