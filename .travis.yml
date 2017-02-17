@@ -22,7 +22,7 @@ node_js:
 cache:
   - npm
   - pip
-
+  - nvm
 
 sudo: true
 addons:
