@@ -24,8 +24,38 @@ class TestHandlers(unittest.TestCase):
 
 
     def test_create_listings(self):
+        # test case 1: empty object as input
+        input = {}
 
-        # test case 1
+        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        response = request.get_response(main.app)
+
+        self.assertEquals(response.status_int, 400)
+
+        errors_expected = [error_code.missing_user_id['error'],
+                           error_code.missing_bedrooms['error'],
+                           error_code.missing_sqft['error'],
+                           error_code.missing_bathrooms['error'],
+                           error_code.missing_price['error'],
+                           error_code.missing_description['error'],
+                           error_code.missing_province['error'],
+                           error_code.missing_city['error'],
+                           error_code.missing_address['error'],
+                           error_code.missing_image['error'],
+                           error_code.missing_image_index['error']]
+
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        # checking if there is a difference between error_keys and what we got
+        self.assertEquals(len(set(errors_expected).
+                              difference(set(error_keys))), 0)
+
+
+
+
+
+        #################################################################
+        # test case 2
         # checking if all error codes are received, if empty code is sent
 
         input = {"userId": "",
@@ -65,9 +95,50 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
+        #################################################################
+        # test case 3
+        # checking if all error codes are received, if all user inputs are spaces
+
+        input = {"userId": "      ",
+                 "bedrooms": "       ",
+                 "sqft": "        ",
+                 "bathrooms": "      ",
+                 "price": "        ",
+                 "description": "      ",
+                 "isPublished": "      ",
+                 "province": "       ",
+                 "city": "       ",
+                 "address": "      ",
+                 "thumbnailImageIndex": "      ",
+                 "images": '    '
+                 }
+
+        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        response = request.get_response(main.app)
+
+        self.assertEquals(response.status_int, 400)
+
+        errors_expected = [error_code.missing_user_id['error'],
+                           error_code.missing_bedrooms['error'],
+                           error_code.missing_sqft['error'],
+                           error_code.missing_bathrooms['error'],
+                           error_code.missing_price['error'],
+                           error_code.missing_description['error'],
+                           error_code.missing_province['error'],
+                           error_code.missing_city['error'],
+                           error_code.missing_address['error'],
+                           error_code.missing_image['error'],
+                           error_code.missing_image_index['error']]
+
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        # checking if there is a difference between error_keys and what we got
+        self.assertEquals(len(set(errors_expected).
+                              difference(set(error_keys))), 0)
 
         ###########################################################################
-        # test case 2: there're some missing fields
+
+        # test case 4: there're some missing fields
         input = {"userId": "",
                  "bedrooms": "2",
                  "sqft": "",
@@ -101,7 +172,7 @@ class TestHandlers(unittest.TestCase):
 
 
         ###########################################################################
-        # test case 3
+        # test case 5
         # checking if all error codes are received, if there's a non-existing userId
         input = {"userId": "1",
                   "bedrooms": "2",
@@ -131,7 +202,7 @@ class TestHandlers(unittest.TestCase):
                               difference(set(error_keys))), 0)
 
         ###########################################################################
-        # test case 4
+        # test case 6
         # checking if all error codes are received, if all numeric fields are invalid
         input = {"userId": "supposed to be int",
                  "bedrooms": "supposed to be int",
@@ -167,13 +238,34 @@ class TestHandlers(unittest.TestCase):
                               difference(set(error_keys))), 0)
 
         #############################################################################
-        # test case 5: correct input
+        # test case 7: correct input
         # Note that the user along with the userId is created on melody's local host,
         # so it shouldn't be working on other computer
-        input = {"userId": "5681726336532480",
+
+
+        # first, we need to create a user
+        newUser = {"email": "student@usask.ca",
+                  "password": "123456",
+                  "firstName": "Student",
+                  "lastName": "USASK",
+                  "city": "Saskatoon",
+                  "postalCode": "S7N 4P7",
+                  "province": "Saskatchewan",
+                  "phone1": 1111111111,
+                  "confirmedPassword": "123456"
+                  }
+
+        request = webapp2.Request.blank('/createuser', POST=newUser)  # api you need to test
+        response = request.get_response(main.app)
+        self.assertEquals(response.status_int, 200)
+        output = json.loads(response.body)
+
+
+        # now we can create a listing using the userId that just returned back from the new created user
+        input = {"userId": "",
                   "bedrooms": "2",
                   "sqft": "1200",
-                  "bathroom": "2",
+                  "bathrooms": "2",
                   "price": "200000",
                   "description": "This is a nice house",
                   "isPublished": "True",
@@ -183,18 +275,28 @@ class TestHandlers(unittest.TestCase):
                   "thumbnailImageIndex": 0,
                   "images": 'some images'
                   }
+        input["userId"] = output["userId"]
         #FIXME
-        # request = webapp2.Request.blank('/createlisting', POST=input)
-        # response = request.get_response(main.app)
-        #
-        # self.assertEquals(response.status_int, 200)
-        #
-        # output = json.loads(response.body)
-        # self.assertTrue("listingId" in output)
+        request = webapp2.Request.blank('/createlisting', POST=input)
+        response = request.get_response(main.app)
 
+        self.assertEquals(response.status_int, 200)
 
+        output = json.loads(response.body)
+        self.assertTrue("listingId" in output)
 
-
+        listing_created = Listing.get_by_id(output["listingId"])
+        self.assertEquals(listing_created.bedrooms, 2)
+        self.assertEquals(listing_created.sqft, 1200)
+        self.assertEquals(listing_created.bathrooms, 2)
+        self.assertEquals(listing_created.price, 200000)
+        self.assertEquals(listing_created.description, "This is a nice house")
+        self.assertEquals(listing_created.isPublished, True)
+        self.assertEquals(listing_created.province, "Saskatchewan")
+        self.assertEquals(listing_created.city, "Saskatoon")
+        self.assertEquals(listing_created.address, "91 Campus Dr.")
+        self.assertEquals(listing_created.thumbnailImageIndex, 0)
+        self.assertEquals(listing_created.images, 'some images')
 
 
 
