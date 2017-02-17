@@ -32,7 +32,7 @@ describe('Signing in, and using the app like a user would interact with it', fun
         email = element(by.id('settingsEmail')).all(by.tagName('input')).first();
         firstName = element(by.id('settingsFirstName')).all(by.tagName('input')).first();
         lastName = element(by.id('settingsLastName')).all(by.tagName('input')).first();
-        phoneNum = element(by.id('settingsPhoneNum')).all(by.tagName('input')).first();
+        phoneNum = element(by.id('settingsPhoneNumber')).all(by.tagName('input')).first();
         province = element(by.id('settingsProvince'));
         city = element(by.id('settingsCity')).all(by.tagName('input')).first();
         email.sendKeys('email@mail.usask.ca');
