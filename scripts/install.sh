@@ -25,9 +25,10 @@ ios_install(){
 # of the build log
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default
-  npm install -g bower cordova ionic
+  npm install -g bower protractor cordova ionic
   # installs packages specified in the ionic json
   npm install
+  webdriver-manager update
   ionic state restore
   bower update
 }
