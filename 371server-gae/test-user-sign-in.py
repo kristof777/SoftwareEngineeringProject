@@ -33,16 +33,14 @@ class TestHandlerSignIn(unittest.TestCase):
 
         request = webapp2.Request.blank('/createuser', POST=database_entry1)
         response = request.get_response(main.app)
-        #If this fails then create user unit tests should be run
+        #If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
 
         input1 = {}  # Json object to send
-        request = webapp2.Request.blank('/signin', POST=input1)  # api you need to test
+        request = webapp2.Request.blank('/signin', POST=input1)
         response = request.get_response(main.app)  # get response back
-        # unit testing example checking if status is what we expected
 
-        #Test when correct e-mail and incorrect password
-        # checking if all error codes are received, if empty code is sent
+        #Test when no paramaters are given
         self.assertEquals(response.status_int, 400)
         errors_expected = [error_code.missing_password['error'],
                            error_code.missing_email['error']]
