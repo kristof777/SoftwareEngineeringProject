@@ -16,13 +16,14 @@ matrix:
     os_image: xCode7
     
 language: node_js
-node_js:
-- 6.9.4
-
 cache:
   - npm
   - pip
   - nvm
+node_js:
+- 6.9.4
+
+
 
 sudo: true
 addons:
