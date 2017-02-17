@@ -16,7 +16,7 @@ describe('Registering new user as a user would', function() {
         registerButton = element(by.css('.register'));
         registerButton.click();
         browser.driver.sleep(500);
-        let email, confirmEmail, password, confirmPassword, firstName, LastName, phoneNumber, provinceSelect, city, registerButton2;
+        let email, confirmEmail, password, confirmPassword, firstName, lastName, phoneNumber, provinceSelect, city, registerButton2;
         let ABoption, BCoption, MBoption, NBoption, NLoption, NSoption, NUoption, NWoption, ONoption, PEoption, QCoption, SKoption, YToption;
 
         email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
@@ -78,12 +78,11 @@ describe('Registering new user as a user would', function() {
         let okButton;
         okButton = element(by.buttonText('OK'));
         okButton.click();
+        browser.driver.sleep(500);
+        registerButton2.click();
 
-       registerButton2.click();
-
-    // TODO : test differnt emails correct password etc.
-
-
+        // TODO : test differnt emails correct password etc.
+        done();
 
 
 
