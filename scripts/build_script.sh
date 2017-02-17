@@ -23,12 +23,14 @@ ios_build(){
 # TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    # ionic build & export IONIC_PID= $!
+    ionic build & export IONIC_PID= $!
     # kill -9 $IONIC_PID
     ls
     #python 371server-gae/main.py
   else
-    # ionic serve & export IONIC_PID= $!
+    ionic serve & export IONIC_PID= $!
+    webdriver-manager start
+    protractor e2e-tests.conf.js
     # kill -9 $IONIC_PID # should occure after tests
     echo "${PYTHONPATH}"
     #dev_appserver.py 371server-gae/main.py
