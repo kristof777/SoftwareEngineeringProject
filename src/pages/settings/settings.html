@@ -54,6 +54,11 @@
         </ion-item>
 
         <ion-item>
+            <ion-label>Notification</ion-label>
+            <ion-toggle [(ngModel)]="notificationsEnabled"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
             <button ion-button block (click)="showChangePassword()">Change Password</button>
         </ion-item>
     </ion-list>
@@ -62,6 +67,7 @@
         <button item-left ion-button clear (click)="signOut()">Sign Out</button>
         <button item-right ion-button clear (click)="saveChanges()">Save</button>
     </ion-item>
+
 
     <!-- Removing footer because it's having issues -->
     <!-- It's staying in one place as you scroll, above the content of the page -->
