@@ -40,34 +40,30 @@ class TestHandlerSignIn(unittest.TestCase):
         request = webapp2.Request.blank('/signin', POST=input1)  # api you need to test
         response = request.get_response(main.app)  # get response back
         # unit testing example checking if status is what we expected
-        # test case 1
+
+        #Test when correct e-mail and incorrect password
         # checking if all error codes are received, if empty code is sent
         self.assertEquals(response.status_int, 400)
-
         errors_expected = [error_code.missing_password['error'],
                            error_code.missing_email['error']]
-
         error_keys = [str(x) for x in json.loads(response.body)]
-
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
-
         input2 = {"email": "student@usask.ca",
                   "password": "notRighpassword123" }
 
         request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
         response = request.get_response(main.app)
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, 401)
         try:
-            errors_expected = str(json.loads(response.body).keys()[0])
+            error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(error_code.password_mismatch['error'], errors_expected)
+        self.assertEquals(error_code.not_authorized['error'], error_message)
 
-        # test case 3
-
+        # Test with correct e-mail and password
         input2 = {"email": "student@usask.ca",
                   "password": "123456" }
 
@@ -75,20 +71,8 @@ class TestHandlerSignIn(unittest.TestCase):
         response = request.get_response(main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
-        self.assertTrue("token" in output)
-        self.assertTrue("userId" in output)
-        user_saved = User.get_by_id(int(output["userId"]))
-        self.assertEquals(user_saved.first_name,"Student")
-        self.assertEquals(user_saved.last_name,"USASK")
-        self.assertEquals(user_saved.city,"Saskatoon")
-        self.assertEquals(user_saved.postal_code,"S7N 4P7")
-        self.assertEquals(user_saved.email,"student@usask.ca")
-        self.assertEquals(int(user_saved.phone1),1111111111)
-        self.assertEquals(user_saved.province,"Saskatchewan")
 
-
-
-
+        #Add testing for correct token retrival and storage later on
 
 
     def tearDown(self):
