@@ -11,6 +11,20 @@ describe('Signing in, and using the app like a user would interact with it', fun
         jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
     });
 
+
+    it('Should test the register page', function(done){
+        let registerButton = element(by.css('.register'));
+        registerButton.click();
+        browser.driver.sleep(500);
+        //let backButton = element(by.css('[ion-button="bar-button"]'));
+        //backButton.click();
+        let newRegisterButton = element(by.id('regButton'));
+        newRegisterButton.click();
+        browser.driver.sleep(500);
+        done();
+    });
+
+/*
     it('Should login', function(done){
         let username, password, registerButton, signInButton;
         registerButton = element(by.css('.register'));
@@ -23,7 +37,31 @@ describe('Signing in, and using the app like a user would interact with it', fun
         browser.driver.sleep(500);
         done();
     });
+*/
+/*
 
+    it('Should switch to the "My Profile" tab, and fill out new information', function(done){
+        let myProfileTab;
+        myProfileTab = element(by.id('tab-t0-3'));
+        myProfileTab.click();
+        let email, firstName, lastName, phoneNum, province, city;
+        email = element(by.id('settingsEmail')).all(by.tagName('input')).first();
+        firstName = element(by.id('settingsFirstName')).all(by.tagName('input')).first();
+        lastName = element(by.id('settingsLastName')).all(by.tagName('input')).first();
+        phoneNum = element(by.id('settingsPhoneNum')).all(by.tagName('input')).first();
+        province = element(by.id('settingsProvince'));
+        city = element(by.id('settingsCity')).all(by.tagName('input')).first();
+        email.sendKeys('email@mail.usask.ca');
+        firstName.sendKeys('stu');
+        lastName.sendKeys('dent');
+        phoneNum.sendKeys('3061234567');
+        province.click();
+        //city.sendKeys('test');
+        done();
+    });
+
+
+    /*
     it('Should test the filter screen on the browse page', function (done) {
         let filtersButton, applyFilterButton, sqftRange, bedRange, provinceDropList, ykOption, abOption, bcOption, nbOption, nlOption, provFilterOK, cancelFilterButton;
         filtersButton = element(by.id('goToFilters'));
@@ -46,10 +84,8 @@ describe('Signing in, and using the app like a user would interact with it', fun
         nlOption = element(by.buttonText('Newfoundland and Labrador'));
         provFilterOK = element(by.buttonText('OK'));
         browser.executeScript("arguments[0].scrollIntoView();", ykOption);
-        //expect(abOption.isPresent()).toBe(true);
         browser.driver.sleep(500);
         ykOption.click();
-        //browser.driver.sleep(800);
         browser.executeScript("arguments[0].scrollIntoView();", abOption);
         browser.driver.sleep(500);
         abOption.click();
@@ -62,7 +98,7 @@ describe('Signing in, and using the app like a user would interact with it', fun
         bcOption.click();
         abOption.click();
         nlOption.click();
-        provFilterOK.click(); // Used in place of the provFilterCancel until fixed
+        provFilterOK.click(); // Used in place of provFilterCancel until we find a way around it
         browser.driver.sleep(500);
         applyFilterButton.click();
         browser.driver.sleep(500);
@@ -105,16 +141,20 @@ describe('Signing in, and using the app like a user would interact with it', fun
         done();
     });
 
-    /* If you uncomment this, remember to click on the settings tab during the test
-     it('Should test the settings page', function(done){
-     browser.driver.sleep(5000);
-     let changePW = element(by.buttonText('Change Password'));
-     changePW.click();
-     browser.driver.sleep(500);
-     let cancel = element(by.buttonText('Cancel'));
-     cancel.click();
-     done();
-     });
-     */
-
+    it('Should traverse between tabs', function(done){
+        let browseTab = element(by.id('tab-t0-0'));
+        let myListingsTab = element(by.id('tab-t0-1'));
+        let favouritesTab = element(by.id('tab-t0-2'));
+        let myProfileTab = element(by.id('tab-t0-3'));
+        myListingsTab.click();
+        browser.driver.sleep(500);
+        favouritesTab.click();
+        browser.driver.sleep(500);
+        myProfileTab.click();
+        browser.driver.sleep(500);
+        browseTab.click();
+        browser.driver.sleep(500);
+        done();
+    });
+    */
 });

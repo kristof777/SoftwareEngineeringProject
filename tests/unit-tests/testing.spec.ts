@@ -5,6 +5,6 @@ import {Province} from "../../src/app/models/province";
 
 describe('Your test here', () => {
     it('true should be true', () => {
-        expect(true).toBe(true);
+        expect(UserService.checkPass("aaaAAA1124")['strength']).toBe(4);
     });
 });
