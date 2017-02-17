@@ -28,6 +28,7 @@ lindroid_install(){
   npm install -g bower protractor cordova ionic
   # installs packages specified in the ionic json
   npm install
+  chrome_install
   wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
   unzip chromedriver_linux64.zip
   webdriver-manager update
@@ -66,6 +67,12 @@ gae_install(){
   # sudo du / | grep "google-cloud"
 }
 
+# downloads and installs chrome
+chrome_install(){
+    export CHROME_BIN=/usr/bin/google-chrome
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome*.deb
+}
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
