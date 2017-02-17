@@ -1,14 +1,11 @@
 import json
 import os
 import unittest
-
 import Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
 from models.User import User
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
