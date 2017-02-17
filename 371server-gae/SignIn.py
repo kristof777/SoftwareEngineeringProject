@@ -38,16 +38,17 @@ class SignIn(BaseHandler):
         assert user_email is not None and password is not None
         try:
             user = self.auth.get_user_by_password(
-                    user_email, password, remember=True, save_session=True)
-            user_dict = { 'token': user['token'],
-                         'userId': user.get_id(),
-                            'email' : user.email,
-                            'firstName': user.first_name,
-                            'lastName': user.last_name,
-                            'phone1': user.phone1,
-                            'phone2': user.phone2,
-                            'city': user.city,
-                            'province': user.province}
+                user_email, password, remember=True, save_session=True)
+            #This should be changed later so that user email is in the database.
+            user_dict = {'token': user['token'],
+                         'userId': user['user_id'],
+                         'email': user_email,
+                         'firstName': user['first_name'],
+                         #'lastName': user['last_name'],
+                         'phone1': user['phone1'],
+                         'phone2': user['phone2'],
+                         'city': user['city'],
+                         'province': user['province']}
             self.response.out.write(json.dumps(user_dict))
             self.response.set_status(success)
 
@@ -58,7 +59,6 @@ class SignIn(BaseHandler):
             self.response.write(error)
             self.response.set_status(not_authorized['status'])
 
-
     def _serve_page(self, failed=False):
         user_email = self.request.get('email')
         params = {
@@ -67,5 +67,3 @@ class SignIn(BaseHandler):
         }
         self.response.write("Failed")
         self.render_template('sign_in.html', params)
-
-
