@@ -27,10 +27,11 @@ node_js:
 sudo: true
 addons:
   apt:
+  - google-chrome
     sources:
+    - google-chrome
     - ubuntu-toolchain-r-test
     packages:
-    - google-chrome
     - g++-4.8
     - oracle-java8-installer
     - lib32stdc++6
