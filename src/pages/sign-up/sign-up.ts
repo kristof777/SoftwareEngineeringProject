@@ -18,6 +18,7 @@ export class SignUpPage {
     firstName: string;
     lastName: string;
     phoneNumber: string;
+    province: string;
     city: string;
 
     constructor(public navCtrl: NavController,

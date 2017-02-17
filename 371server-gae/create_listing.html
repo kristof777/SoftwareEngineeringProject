@@ -6,8 +6,8 @@
 </head>
 <body>
     <form method="post" action="/createlisting", enctype="multipart/form-data">
-        <label>Lister Email</label>
-        <input name="lister_email" type="email">
+        <label>User Id</label>
+        <input name="userId" type="number">
         <br>
         <label>Bedrooms</label>
         <input name="bedrooms" type="number">
@@ -37,7 +37,11 @@
         <input name="isPublished" type="checkbox">
         <br>
         <label>images</label>
-        <input type="file" name="image" multiple>
+        <input type="file" name="images" multiple>
+        <br>
+        <label>Thumbnail Image Index</label>
+        <input name="thumbnailImageIndex" type="number">
+        <br>
         <input type="submit" value="Submit">
     </form>
 </body>
