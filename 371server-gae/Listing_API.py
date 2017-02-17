@@ -3,10 +3,10 @@ import os
 
 import webapp2
 from google.appengine.ext.webapp import template
-from models.Listing import Listing
-from models.User import User
 
 import Error_Code
+from models.Listing import Listing
+from models.User import User
 
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
