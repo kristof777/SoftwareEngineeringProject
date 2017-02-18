@@ -25,7 +25,7 @@ ios_install(){
 # of the build log
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default
-  npm install -g bower protractor cordova ionic jasmine
+  npm install -g bower protractor cordova ionic jasmine jasmine-core
   # installs packages specified in the ionic json
   npm install
   #chrome_install
