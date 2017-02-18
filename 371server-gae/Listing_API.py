@@ -170,7 +170,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def get(self):
         template_values = {}
         # test = json.dumps(template_values)
-        path = os.path.join(os.path.dirname(__file__), 'like_dislike_listing.html')
+        path = os.path.join(os.path.dirname(__file__), 'Like_dislike_listing.html')
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
