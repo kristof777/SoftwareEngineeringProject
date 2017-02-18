@@ -79,7 +79,7 @@ geckodriver_install(){
     tar -xvzf geckodriver*
     chmod +x geckodriver
     ls
-    ls geckodriver-v0.14.0-linux64.tar.gz
+    ls geckodriver
     echo $PWD
 }
 
