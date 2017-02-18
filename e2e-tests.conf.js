@@ -1,11 +1,13 @@
 exports.config = {
     capabilities: {
         //platformName: 'iOS',
+        /*
         'browserName': 'chrome',
         'chromeOptions': {
-            binary: '/opt/google/chrome/chrome',
             args: ['--disable-web-security']
         },
+        */
+        'browserName': 'firefox',
         shardTestFiles: true,
     },
     baseUrl: 'http://localhost:8100',
@@ -16,3 +18,4 @@ exports.config = {
         isVerbose: true,
     }
 };
+
