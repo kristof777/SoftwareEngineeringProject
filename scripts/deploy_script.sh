@@ -37,8 +37,8 @@ setup_deploy(){
 # moves compiled files to the right repo folder then pushes the files to the repo
 # this should be changed to run some kind of releases script
 deploy(){
-  git add ${TRAVIS_BUILD_ID}
-  git commit -m "Deploy build from $TRAVIS_BUILD_ID [ci skip]"
+  git add ID2
+  git commit -m "Deploy build for ID2 [ci skip]"
   git push
 }
 
