@@ -7,6 +7,7 @@ from google.appengine.ext.webapp import template
 import Error_Code
 from models.Listing import Listing
 from models.User import User
+from models.favorite import Favorite
 
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
