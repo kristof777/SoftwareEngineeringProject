@@ -24,15 +24,15 @@ ios_install(){
 # you can find the versions inside the doc or posted at the end 
 # of the build log
 lindroid_install(){
-  #sudo apt-get install oracle-java8-set-default
-  #npm install -g bower protractor cordova ionic
+  sudo apt-get install oracle-java8-set-default
+  npm install -g bower protractor cordova ionic
   # installs packages specified in the ionic json
-  #npm install
+  npm install
   #chrome_install
-  #webdriver-manager update
-  #ionic state restore
+  webdriver-manager update
+  ionic state restore
   geckodriver_install
-  #bower update
+  bower update
 }
 
 # downloads and installs all the files required to run android
