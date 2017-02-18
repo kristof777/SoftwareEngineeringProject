@@ -8,7 +8,7 @@ exports.config = {
         },
         */
         'browserName': 'firefox',
-        shardTestFiles: true,
+        SharedTestFiles: true,
     },
     baseUrl: 'http://localhost:8100',
     specs: [
@@ -18,3 +18,4 @@ exports.config = {
         isVerbose: true,
     }
 };
+

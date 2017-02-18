@@ -1,3 +1,4 @@
+
 notifications:
   email: false
   slack:
@@ -10,10 +11,10 @@ branches:
   - build_dev
   
 matrix:
-  exclude:
+  include:
   - os: android
-  - os: osx
-    os_image: xCode7
+ # - os: osx
+ #   os_image: xCode7
     
 language: node_js
 cache:
@@ -26,6 +27,7 @@ node_js:
 
 sudo: true
 addons:
+  firefox: "47.0.1"
   apt:
     sources:
     - ubuntu-toolchain-r-test
@@ -39,9 +41,11 @@ env:
   CXX=g++-4.8 
   ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
   PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/25.0.1:/usr/lib/google-cloud-sdk/platform/google_appengine
+  PATH=/home/travis/build/CMPT371Team1/Project/geckodriver:${PATH}
+  PATH/home/travis/.nvm/versions/node/v6.9.4/lib/node_modules/jasmine/bin:${PATH}
   PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine
   PYTHONPATH=${PYTHONPATH}:${TRAVIS_HOME}
-  BUILD_TYPE=test
+  BUILD_TYPE=deployment
   
 install:
   - "./scripts/install.sh"
@@ -53,9 +57,9 @@ before_script:
 script:
   - "./scripts/build_script.sh"
   
-deploy:
- provider: script
- script: scripts/deploy_script.sh
+#deploy:
+# provider: script
+# script: scripts/deploy_script.sh
 #  api_key:
 #    secure: D2XfSOh5lr2uucgVkgFvLHNCmALctT9LTLVijaFpSrQs96Q+l+Qs3Ynm1ipUCA+4Wj3IexjaWjH2avXOZp1MAiNYGlqM4oa5C/wo1080HLZ/nvdYslmswBUYQeIqgynKF6InqtESmr522HuYZP3OY+NPKWKoGfcItjdXo0qtJcGLerMwZNefxWY2PZ3KL9WWg3thumEibKEE8MBJiX93cUFclA9pY9vraykGpT0yuAtH10y+cSNdr54baHFDDT2kmfYa5vx2PXmR7cNPiOq2iIjrHTtmpRNv930y5HmZYe/9UopZ7c4M78zdnaTptk9hlNuD1xZCt1xylvPIykwvkfDH+jA5qFAERGWdEMxxnmERZvsjPAqpkGotApkiy1E58Wflqe6Ng9ZlMSRxVshwysaHro4ZPfrr87p1YIpgqtNzvpZ6AYRkxvI7ItOn3DhE3XZlXUbtmyExbkUUboiYax+1o9dYbZWbSJcUaG8NxZswyQ+FnVC/VMKOmP5TvxCoHKw0+zItyPbOoHWwDzGL13wxyO+VLzKrFTTvWQFd2USy+C/kLVzyVJIE7a+yJVa/oczLMvM8QvymHP6kLC9WbSnLHnBYIzmugaAuDI22aY4CqEvO8uRciwyqah76uyG2NUaMcF551hhJ8saEucTkKSp+XWlZwK7ICdZBP2lgtKw=
 #  file: platforms/android/build/outputs/apk/android-debug.apk

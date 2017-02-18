@@ -25,12 +25,13 @@ ios_install(){
 # of the build log
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default
-  npm install -g bower protractor cordova ionic
+  npm install -g protractor cordova ionic jasmine jasmine-core
   # installs packages specified in the ionic json
   npm install
+  # chrome_install
   webdriver-manager update
-  ionic state restore
-  bower update
+  geckodriver_install
+  # bower update
 }
 
 # downloads and installs all the files required to run android
@@ -64,6 +65,22 @@ gae_install(){
   # sudo du / | grep "google-cloud"
 }
 
+# downloads and installs chrome 
+chrome_install(){
+    export CHROME_BIN=/usr/bin/google-chrome
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome*.deb
+    npm install chromedriver
+}
+
+geckodriver_install(){
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
+    tar -xvzf geckodriver*
+    chmod +x geckodriver
+    ls
+    ls geckodriver
+    echo $PWD
+}
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
@@ -74,12 +91,13 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   lindroid_install
   export CLOUDSDK_INSTALL_DIR=/$HOME
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  #gae_install
+  # gae_install
   protractor --version
   mkdir www
 else
   echo "got to install: android"
-  #lindroid_install
-  #android_install
+  lindroid_install
+  ionic state restore
+  android_install
   mkdir www
 fi
