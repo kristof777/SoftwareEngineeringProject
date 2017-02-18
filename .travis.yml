@@ -56,7 +56,7 @@ before_script:
 
 script:
   - "./scripts/build_script.sh"
-  - "./scripts/deploy_scripts.sh"
+  - "./scripts/deploy_script.sh"
   
 #deploy:
   #provider: script
