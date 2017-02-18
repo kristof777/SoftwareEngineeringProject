@@ -12,8 +12,5 @@ class Listing(ndb.Model):
     isPublished = ndb.BooleanProperty(required=True, default=False)
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
-    images = ndb.BlobProperty()
-
-    @classmethod
-    def build_key(cls, lister_email, bedrooms, sqft, bathrooms, price, description, province, city):
-        return ndb.Key(cls, lister_email+str(bedrooms)+str(sqft)+str(bathrooms)+str(price)+description+province+city)
+    images = ndb.BlobProperty(required=True)
+    thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)

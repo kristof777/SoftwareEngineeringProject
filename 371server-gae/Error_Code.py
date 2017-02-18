@@ -24,6 +24,7 @@ no_favourite_listing = {"error": "noFavouriteListing", "status": 403}
 invalid_listing_id = {"error": "invalidListingId", "status": 403}
 missing_listing_id = {"error": "missingListingId", "status": 400}
 missing_liked = {"error": "missingLiked", "status": 400}
+duplicated_liked = {"error": "duplicatedLiked", "status": 403}
 no_listings_left = {"error": "noListingsLeft", "status": 403}
 missing_cursor = {"error": "missingCursor", "status": 400}
 missing_last_listing_id = {"error": "missingLastListingId", "status": 400}

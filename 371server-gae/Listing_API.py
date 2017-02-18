@@ -7,7 +7,7 @@ from google.appengine.ext.webapp import template
 import Error_Code
 from models.Listing import Listing
 from models.User import User
-from models.favorite import Favorite
+from models.Favorite import Favorite
 
 
 # The GET method is simply get the html page ( in the browser for back-end testing)
@@ -159,10 +159,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
-        template_values = {
-            # 'first_name': user2.first_name,
-            # 'last_name': user2.last_name
-        }
+        template_values = {}
         # test = json.dumps(template_values)
         path = os.path.join(os.path.dirname(__file__), 'like_dislike_listing.html')
         self.response.out.write(template.render(path, template_values))
@@ -170,38 +167,108 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errors = {}
+        emptyData = u''
 
-        requestUserId = int(self.request.POST.get('userId'))
-        # requestUserId = 5874690627207168
-        try:
+        requestUserId = self.request.POST.get('userId')
+        if requestUserId is emptyData or requestUserId is None or requestUserId.isspace():
+            errors[Error_Code.missing_user_id['error']] = "UserId not provided"
+
+        requestListingId = self.request.POST.get('listingId')
+        if requestListingId is emptyData or requestListingId is None or requestListingId.isspace():
+            errors[Error_Code.missing_listing_id['error']] = "ListingId not provided"
+
+        # requestLiked = self.request.POST.get('liked')
+        # if requestLiked is emptyData or requestLiked is None or requestLiked.isspace():
+        #     errors[Error_Code.missing_liked['error']] = "Liked not provided"
+
+        liked = self.request.POST.get('liked') != ''
+
+        if len(errors) != 0:
+            error_json = json.dumps(errors)
+            self.response.write(error_json)
+            self.response.set_status(Error_Code.missing_invalid_parameter_error)
+            return
+
+        else:
+
+            try:
+                requestUserId = int(requestUserId)
+            except:
+                errors[Error_Code.invalid_user_id['error']] = "UserId not valid"
+
             user = User.get_by_id(requestUserId)
+            if user is None:
+                errors[Error_Code.not_authorized['error']] = "User not authorized"
+
             userId = requestUserId
-        except (KeyError) as e:
-            errors['api.error.invalid_user_id'] = "User id is not valid"
 
-        requestListingId = int(self.request.POST.get('listingId'))
-        # requestListingId = 311740673785856
-        try:
+            try:
+                requestListingId = int(requestListingId)
+            except:
+                errors[Error_Code.invalid_listing_id['error']] = "ListingId not valid"
+
             listing = Listing.get_by_id(requestListingId)
-            listingId = requestListingId
-        except (KeyError) as e:
-            errors['api.error.invalid_listing_id'] = "Listing Id not valid"
-        try:
-            liked = bool(self.request.POST.get('liked'))
-            # liked = True
-        except (KeyError) as e:
-            errors['api.error.missing_liked'] = "Liked or not liked not provided"
+            if listing is None:
+                errors[Error_Code.un_auth_listing['error']] = "Listing not authorized"
 
-        try:
-            if liked == False:  # move the listing to favorite
-                favorite = Favorite(listingId=listingId, userId=userId)
-                favorite.put()
-                self.response.write("success")
-            else:  # remove the listing from favorite
-                favorited = Favorite.query(Favorite.userId == userId, Favorite.listingId == listingId).get()
-                favorited.delete()
-        except (KeyError) as e:
-            errors['api.error.dislike_failed'] = "dislike listings failed"
+            listingId = requestListingId
+
+
+            if len(errors) != 0:
+                error_json = json.dumps(errors)
+                self.response.write(error_json)
+                self.response.set_status(Error_Code.missing_invalid_parameter_error)
+                return
+
+            else:
+
+                # check if the favorite object already exists
+                # if it already exists, check the user input liked
+                #   if liked == true, then it means the user want to like the list
+                #       if the liked field in the object is true, return error
+                #       if the liked field in the object is false, change it to true
+                #   if liked == false, then it means the user want to unlike the list
+                #       if the liked field in the object is false, then return error
+                #       if the liked field in the object is true, change it to false
+                # if the favorite object doesn't exist
+                #   create a new favorite object with liked input value
+
+
+                # check if the favorite object exists
+
+                favorite = Favorite.query(Favorite.userId == userId, Favorite.listingId == listingId).get()
+                if favorite is None:
+                    #TODO: do we need to make sure that the liked input is true when creating the favorite object?
+                    #TODO: make sure that the owner can't like his/her own listing
+                    favorite = Favorite(userId=userId, listingId=listingId, liked=liked)
+                    favorite.put()
+                else: # if the favorite object does exist
+                    favoriteLiked = bool(favorite['liked'])
+                    if liked == True:
+                        # user want to like the list
+                        if  favoriteLiked == True:
+                            # return duplicate error
+                            errors[Error_Code.duplicated_liked['error']] = "The listing is already liked"
+                        else:
+                            # change the liked field to be true
+                            favorite['liked'] = True
+                    else:
+                        # user want to unlike the list
+                        if favoriteLiked == False:
+                            # return error
+                            errors[Error_Code.duplicated_liked['error']] = "The listing is already disliked"
+                        else:
+                            # change the liked field to be false
+                            favorite['liked'] = False
+
+                if len(errors) != 0:
+                    error_json = json.dumps(errors)
+                    self.response.write(error_json)
+                    self.response.set_status(Error_Code.missing_invalid_parameter_error)
+
+                else:
+                    self.response.set_status(Error_Code.success)
+                return
 
 
 # All the listings that belongs to a specific user would bound with the user email.
