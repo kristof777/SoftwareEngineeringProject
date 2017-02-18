@@ -1,14 +1,11 @@
 import json
 import os
 import unittest
-
 import Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
 from models.User import User
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -24,7 +21,10 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_memcache_stub()
 
     def test_create_user(self):
-        input1 = {}  # Json object you need to send
+        input1 = {
+            "email" : "  ",
+            "lastName": ""
+        }  # Json object you need to send
         request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
         response = request.get_response(Main.app)  # get response back
         # unit testing example checking if status is what we expected
@@ -69,7 +69,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(Error_Code.password_mismatch['error'], errors_expected)
 
-        # test case 3
+        # test case 3 without strong password
 
         input2 = {"email": "student@usask.ca",
                   "password": "123456",
@@ -83,6 +83,24 @@ class TestHandlers(unittest.TestCase):
                   }
 
         request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, 400)
+
+        # test case 4 without strong password
+
+        input3 = {"email": "student@usask.ca",
+                  "password": "ABab1234",
+                  "firstName": "Student",
+                  "lastName": "USASK",
+                  "city": "Saskatoon",
+                  "postalCode": "S7N 4P7",
+                  "province": "Saskatchewan",
+                  "phone1": 1111111111,
+                  "confirmedPassword": "ABab1234"
+                  }
+
+        request = webapp2.Request.blank('/createuser',
+                                        POST=input3)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)

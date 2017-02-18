@@ -1,15 +1,14 @@
+import unittest
 import json
 import os
-import unittest
-
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
 from models.Listing import Listing
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
@@ -261,9 +260,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
 
-
         # now we can create a listing using the userId that just returned back from the new created user
-        input = {"userId": "",
+        input = {"userId": output['userId'],
                   "bedrooms": "2",
                   "sqft": "1200",
                   "bathrooms": "2",
@@ -311,5 +309,8 @@ class TestHandlers(unittest.TestCase):
 
 
 
-if __name__ == '__main__':
+def run_tests():
     unittest.main()
+
+if __name__ == "__main__":
+    run_tests()

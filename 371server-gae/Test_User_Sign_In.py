@@ -1,13 +1,11 @@
 import json
 import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import unittest
-
 import Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlerSignIn(unittest.TestCase):
