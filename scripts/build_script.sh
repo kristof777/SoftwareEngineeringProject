@@ -4,6 +4,7 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+set v
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
 # builds and emulates the app for testing.
@@ -22,15 +23,27 @@ ios_build(){
 # TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
+    ionic platform remove ios
     ionic build
+    # kill -9 $IONIC_PID
+    ls
+    #python 371server-gae/main.py
   else
-    ionic serve
+    # dev_appserver.py 371server-gae/main.py
+    # ionic serve --chrome@56.0.2924 & export IONIC_PID= $!
+    # sudo du / | grep "geckodriver"
+    jasmine init
+    webdriver-manager start &
+    protractor e2e-tests.conf.js --troubleshoot 
+    # kill -9 $IONIC_PID # should occure after tests
+    echo "${PYTHONPATH}"
+    ls
   fi
 }
 
 # Builds the android version of our app.  If it's a deployment build
 # does a release build and if not then builds and emulates the app for testing
-# TODO: GET THE APP SIGNED W/ A KEY
+# TODO: GET THE APP SIGNED W/ A KEY 
 android_build(){
   ionic platform remove android
   ionic platform add android
@@ -58,7 +71,7 @@ system_info(){
   java -version
   echo 'npm version:'
   npm -v
-  ionic info
+  #ionic info
 }
 
 
@@ -66,14 +79,13 @@ system_info(){
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
   echo 'got to build: osx'
   ios_build
-  system_info
 elif [[ "${TRAVIS_OS_NAME}" == 'linux' ]]; then
   echo 'got to build: linux'
+  export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   browser_build
-  system_info
 else
   echo 'got to build: android'
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   android_build
-  system_info
 fi
+system_info

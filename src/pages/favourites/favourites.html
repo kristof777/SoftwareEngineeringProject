@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Favourites
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list>
+        <ion-item-sliding *ngFor="let cur of listings">
+            <ion-item (click)="selectListing(cur)">
+                <ion-thumbnail item-left>
+                    <img src="{{ cur['thumbnail'] }}">
+                </ion-thumbnail>
+                <p>{{ cur['description']}}</p>
+            </ion-item>
+            <ion-item-options slide="left">
+                <button ion-button color="danger" (click)="unfavourite(cur)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>

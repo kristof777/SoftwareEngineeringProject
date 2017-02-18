@@ -15,6 +15,7 @@ export class EditListingsPage {
     squarefeet: number;
     price: number;
     address: string;
+    postalCode: string;
     description: string;
 
     constructor(public navCtrl: NavController,
