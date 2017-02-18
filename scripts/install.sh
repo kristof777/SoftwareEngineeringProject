@@ -29,8 +29,6 @@ lindroid_install(){
   # installs packages specified in the ionic json
   npm install
   chrome_install
-  wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
-  unzip chromedriver_linux64.zip
   webdriver-manager update
   ionic state restore
   bower update
@@ -72,6 +70,7 @@ chrome_install(){
     export CHROME_BIN=/usr/bin/google-chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dpkg -i google-chrome*.deb
+    npm install chromedriver
 }
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
