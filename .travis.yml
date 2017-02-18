@@ -1,4 +1,4 @@
-dist: trusty
+# dist: trusty
 
 notifications:
   email: false
@@ -28,9 +28,9 @@ node_js:
 
 sudo: true
 addons:
+  firefox: "47.0.1"
   apt:
     sources:
-    - google-chrome
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
