@@ -3,7 +3,6 @@ from google.appengine.ext import ndb
 
 class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""
-    lister_email = ndb.StringProperty(required=True)
     bedrooms = ndb.IntegerProperty(required=True)
     sqft = ndb.IntegerProperty(required=True)
     bathrooms = ndb.IntegerProperty(required=True)
@@ -14,3 +13,5 @@ class Listing(ndb.Model):
     city = ndb.StringProperty(required=True)
     images = ndb.BlobProperty(required=True)
     thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
+    userId = ndb.IntegerProperty(required=True)
+    address = ndb.StringProperty(required=True)
