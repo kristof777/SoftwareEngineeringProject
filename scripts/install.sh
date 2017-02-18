@@ -96,8 +96,8 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   mkdir www
 else
   echo "got to install: android"
-  #lindroid_install
+  lindroid_install
   ionic state restore
-  #android_install
+  android_install
   mkdir www
 fi
