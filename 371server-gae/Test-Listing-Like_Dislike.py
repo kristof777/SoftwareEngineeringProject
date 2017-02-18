@@ -164,7 +164,7 @@ class TestHandlers(unittest.TestCase):
 
 
         ########################################################################################################
-        # test case 3: dislike this listing
+        # test case 4: dislike this listing
         # should be a successful delivery
 
         dislikeTheListing = {
@@ -183,7 +183,7 @@ class TestHandlers(unittest.TestCase):
 
 
         ########################################################################################################
-        # test case 3: dislike this listing again
+        # test case 5: dislike this listing again
         dislikeTheListingAgain = {
             "userId": "",
             "listingId": "",
@@ -206,7 +206,7 @@ class TestHandlers(unittest.TestCase):
 
 
         ########################################################################################################
-        # test case 3: missing user input
+        # test case 6: missing user input
 
         likeWithMissingInput = {
             "userId": "",
@@ -229,7 +229,7 @@ class TestHandlers(unittest.TestCase):
 
 
         ########################################################################################################
-        # test case 3: invalid user input
+        # test case 7: invalid user input
 
         likeWithInvalidInput = {
             "userId": "supposed to be an integer",
