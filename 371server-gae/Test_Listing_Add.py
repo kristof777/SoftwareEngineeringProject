@@ -245,14 +245,14 @@ class TestHandlers(unittest.TestCase):
 
         # first, we need to create a user
         newUser = {"email": "student@usask.ca",
-                  "password": "123456",
+                  "password": "aaAA1234",
                   "firstName": "Student",
                   "lastName": "USASK",
                   "city": "Saskatoon",
                   "postalCode": "S7N 4P7",
                   "province": "Saskatchewan",
                   "phone1": 1111111111,
-                  "confirmedPassword": "123456"
+                  "confirmedPassword": "aaAA1234"
                   }
 
         request = webapp2.Request.blank('/createuser', POST=newUser)  # api you need to test
