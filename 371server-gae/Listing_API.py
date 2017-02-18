@@ -62,7 +62,9 @@ class CreateListing(webapp2.RequestHandler):
         if description is emptyData or description is None or description.isspace():
             errors[Error_Code.missing_description['error']] = "Description not provided"
 
-        isPublished = self.request.POST.get('isPublished') != ''
+        isPublished = self.request.POST.get('isPublished')
+        if isPublished is emptyData or isPublished is None or isPublished.isspace():
+            errors[Error_Code.missing_published['error']] = "isPublished not provided"
 
         province = self.request.POST.get('province')
         if province is emptyData or province is None or province.isspace():
@@ -128,6 +130,13 @@ class CreateListing(webapp2.RequestHandler):
             except:
                 errors[Error_Code.invalid_price['error']] = "Price not valid"
 
+            if isPublished != "True" and isPublished != "False":
+                errors[Error_Code.invalid_published['error']] = "isPublished not valid"
+
+            if isPublished == "True":
+                isPublished = True
+            else:
+                isPublished = False
 
             try:
                 thumbnailImageIndex = int(thumbnailImageIndex)
@@ -181,7 +190,9 @@ class LikeDislikeListing(webapp2.RequestHandler):
         # if requestLiked is emptyData or requestLiked is None or requestLiked.isspace():
         #     errors[Error_Code.missing_liked['error']] = "Liked not provided"
 
-        liked = self.request.POST.get('liked') != ''
+        liked = self.request.POST.get('liked')
+        if liked is emptyData or liked is None or liked.isspace():
+            errors[Error_Code.missing_liked['error']] = "Liked not provided"
 
         if len(errors) != 0:
             error_json = json.dumps(errors)
@@ -213,6 +224,14 @@ class LikeDislikeListing(webapp2.RequestHandler):
 
             listingId = requestListingId
 
+            if liked != "True" and liked != "False":
+                errors[Error_Code.invalid_liked['error']] = "Liked not valid"
+
+            if liked == "True":
+                liked = True
+            else:
+                liked = False
+
 
             if len(errors) != 0:
                 error_json = json.dumps(errors)
@@ -221,6 +240,18 @@ class LikeDislikeListing(webapp2.RequestHandler):
                 return
 
             else:
+
+                # make sure that the owner can't like his/her own listing
+                listingOwnerId = listing.userId
+                if listingOwnerId == userId:
+                    errors[Error_Code.unallowed_liked['error']] = "Listing can't be liked by owner"
+                    error_json = json.dumps(errors)
+                    self.response.write(error_json)
+                    self.response.set_status(Error_Code.missing_invalid_parameter_error)
+                    return
+
+
+
 
                 # check if the favorite object already exists
                 # if it already exists, check the user input liked
@@ -235,15 +266,17 @@ class LikeDislikeListing(webapp2.RequestHandler):
 
 
                 # check if the favorite object exists
-
                 favorite = Favorite.query(Favorite.userId == userId, Favorite.listingId == listingId).get()
                 if favorite is None:
                     #TODO: do we need to make sure that the liked input is true when creating the favorite object?
-                    #TODO: make sure that the owner can't like his/her own listing
                     favorite = Favorite(userId=userId, listingId=listingId, liked=liked)
                     favorite.put()
                 else: # if the favorite object does exist
-                    favoriteLiked = bool(favorite['liked'])
+
+
+
+
+                    favoriteLiked = favorite.liked
                     if liked == True:
                         # user want to like the list
                         if  favoriteLiked == True:
@@ -251,7 +284,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
                             errors[Error_Code.duplicated_liked['error']] = "The listing is already liked"
                         else:
                             # change the liked field to be true
-                            favorite['liked'] = True
+                            favorite.liked= True
                     else:
                         # user want to unlike the list
                         if favoriteLiked == False:
@@ -259,7 +292,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
                             errors[Error_Code.duplicated_liked['error']] = "The listing is already disliked"
                         else:
                             # change the liked field to be false
-                            favorite['liked'] = False
+                            favorite.liked = False
 
                 if len(errors) != 0:
                     error_json = json.dumps(errors)
