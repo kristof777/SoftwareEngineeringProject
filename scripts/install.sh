@@ -31,6 +31,7 @@ lindroid_install(){
   #chrome_install
   webdriver-manager update
   ionic state restore
+  geckodriver_install
   bower update
 }
 
@@ -73,6 +74,12 @@ chrome_install(){
     npm install chromedriver
 }
 
+geckodriver_install(){
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0.tar.gz
+    tar -xvzf geckodriver*
+    chmod +x geckodriver
+    echo $PWD
+}
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
   ios_install
