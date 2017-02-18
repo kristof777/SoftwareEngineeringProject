@@ -150,6 +150,58 @@ class CreateListing(webapp2.RequestHandler):
                 self.response.write(json.dumps({"listingId": listing.listingId}))
                 self.response.set_status(Error_Code.success)
 
+class LikeDislikeListing(webapp2.RequestHandler):
+    def options(self, *args, **kwargs):
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers[
+            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+
+    def get(self):
+        template_values = {
+            # 'first_name': user2.first_name,
+            # 'last_name': user2.last_name
+        }
+        # test = json.dumps(template_values)
+        path = os.path.join(os.path.dirname(__file__), 'like_dislike_listing.html')
+        self.response.out.write(template.render(path, template_values))
+
+    def post(self):
+        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        errors = {}
+
+        requestUserId = int(self.request.POST.get('userId'))
+        # requestUserId = 5874690627207168
+        try:
+            user = User.get_by_id(requestUserId)
+            userId = requestUserId
+        except (KeyError) as e:
+            errors['api.error.invalid_user_id'] = "User id is not valid"
+
+        requestListingId = int(self.request.POST.get('listingId'))
+        # requestListingId = 311740673785856
+        try:
+            listing = Listing.get_by_id(requestListingId)
+            listingId = requestListingId
+        except (KeyError) as e:
+            errors['api.error.invalid_listing_id'] = "Listing Id not valid"
+        try:
+            liked = bool(self.request.POST.get('liked'))
+            # liked = True
+        except (KeyError) as e:
+            errors['api.error.missing_liked'] = "Liked or not liked not provided"
+
+        try:
+            if liked == False:  # move the listing to favorite
+                favorite = Favorite(listingId=listingId, userId=userId)
+                favorite.put()
+                self.response.write("success")
+            else:  # remove the listing from favorite
+                favorited = Favorite.query(Favorite.userId == userId, Favorite.listingId == listingId).get()
+                favorited.delete()
+        except (KeyError) as e:
+            errors['api.error.dislike_failed'] = "dislike listings failed"
+
 
 # All the listings that belongs to a specific user would bound with the user email.
 # (More fields in listing should be added later on.). The GET method currently get
