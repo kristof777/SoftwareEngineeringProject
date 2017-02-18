@@ -31,6 +31,7 @@ browser_build(){
     # dev_appserver.py 371server-gae/main.py
     # ionic serve --chrome@56.0.2924 & export IONIC_PID= $!
     # sudo du / | grep "geckodriver"
+    jasmine init
     webdriver-manager start &
     protractor e2e-tests.conf.js --troubleshoot 
     # kill -9 $IONIC_PID # should occure after tests
