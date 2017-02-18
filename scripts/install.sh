@@ -24,15 +24,15 @@ ios_install(){
 # you can find the versions inside the doc or posted at the end 
 # of the build log
 lindroid_install(){
-  sudo apt-get install oracle-java8-set-default
-  npm install -g bower protractor cordova ionic
+  #sudo apt-get install oracle-java8-set-default
+  #npm install -g bower protractor cordova ionic
   # installs packages specified in the ionic json
-  npm install
+  #npm install
   #chrome_install
-  webdriver-manager update
-  ionic state restore
+  #webdriver-manager update
+  #ionic state restore
   geckodriver_install
-  bower update
+  #bower update
 }
 
 # downloads and installs all the files required to run android
@@ -78,6 +78,8 @@ geckodriver_install(){
     wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
     tar -xvzf geckodriver*
     chmod +x geckodriver
+    ls
+    ls geckodriver-v0.14.0-linux64.tar.gz
     echo $PWD
 }
 
