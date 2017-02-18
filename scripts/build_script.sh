@@ -32,7 +32,7 @@ browser_build(){
     # ionic serve --chrome@56.0.2924 & export IONIC_PID= $!
     sudo du / | grep "chrome"
     webdriver-manager start &
-    protractor --troubleshoot e2e-tests.conf.js
+    protractor e2e-tests.conf.js --troubleshoot 
     # kill -9 $IONIC_PID # should occure after tests
     echo "${PYTHONPATH}"
     ls
