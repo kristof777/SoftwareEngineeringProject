@@ -66,7 +66,7 @@ gae_install(){
   # sudo du / | grep "google-cloud"
 }
 
-# downloads and installs chrome
+# downloads and installs chrome 
 chrome_install(){
     export CHROME_BIN=/usr/bin/google-chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
