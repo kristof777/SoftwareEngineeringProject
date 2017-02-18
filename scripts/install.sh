@@ -25,14 +25,13 @@ ios_install(){
 # of the build log
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default
-  npm install -g bower protractor cordova ionic jasmine jasmine-core
+  npm install -g protractor cordova ionic jasmine jasmine-core
   # installs packages specified in the ionic json
   npm install
-  #chrome_install
+  # chrome_install
   webdriver-manager update
-  ionic state restore
   geckodriver_install
-  bower update
+  # bower update
 }
 
 # downloads and installs all the files required to run android
@@ -98,6 +97,7 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
 else
   echo "got to install: android"
   #lindroid_install
+  ionic state restore
   #android_install
   mkdir www
 fi
