@@ -1,4 +1,3 @@
-dist: trusty
 
 notifications:
   email: false
@@ -12,10 +11,10 @@ branches:
   - build_dev
   
 matrix:
-  exclude:
+  include:
   - os: android
-  - os: osx
-    os_image: xCode7
+ # - os: osx
+ #   os_image: xCode7
     
 language: node_js
 cache:
