@@ -1,11 +1,28 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>
-            New Browse Page
-        </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="goToFilters()" id="goToFilters">
+                <ion-icon name="options"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
-
+    <ion-list>
+        <ion-slides initialSlide="1" (ionSlideDidChange)="onSlideChange(current)">
+            <ion-slide style="background-color: green;"></ion-slide>
+            <ion-slide>
+                <ion-img class="jumbotron" src="{{ listing.images[0] }}"></ion-img>
+                <span class="description">
+                    <p class="price">{{ listing.price }}</p>
+                    <p class="address">{{ listing.location.address }}</p>
+                    <p class="map">
+                        <button ion-button icon-only><ion-icon name="navigate"></ion-icon></button>
+                    </p>
+                </span>
+            </ion-slide>
+            <ion-slide style="background-color: red;"></ion-slide>
+        </ion-slides>
+    </ion-list>
 </ion-content>
