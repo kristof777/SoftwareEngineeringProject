@@ -1,3 +1,4 @@
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {Logger} from "angular2-logger/core";
@@ -15,13 +16,22 @@ import {UserService} from '../../app/providers/login-service'
     providers: [UserService]
 })
 export class SignInPage {
-    email: string;
-    password: string;
+    loginForm: FormGroup;
+    private emailAttempted: boolean;
+
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
                 private _logger: Logger,
+                public formBuilder: FormBuilder,
                 public loginService: UserService) {
+
+        this.emailAttempted = false;
+
+        this.loginForm = formBuilder.group({
+            email: ['', Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}"), Validators.required])],
+            password: ['', Validators.compose([Validators.required])],
+        });
     }
 
     /**
@@ -41,10 +51,12 @@ export class SignInPage {
         this._logger.debug("Sign In was clicked.");
 
         // "log in" if the email is set to "test"
-        if(this.email == "test") {
+        if(this.loginForm.value.email == "test") {
             this.navCtrl.setRoot(MainPage);
+        } else if(this.loginForm.valid){
+            this.loginService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
         } else {
-            this.loginService.login(this.email, this.password, this.signInCallback);
+            this._logger.error("Tried to submit when fields do not pass validation.");
         }
     }
 
@@ -55,5 +67,9 @@ export class SignInPage {
      */
     signInCallback(data: any): void{
         this.navCtrl.setRoot(MainPage);
+    }
+
+    attemptEmail(){
+        this.emailAttempted = true;
     }
 }
