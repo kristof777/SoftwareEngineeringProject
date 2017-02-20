@@ -1,7 +1,6 @@
 import json
 import os
 import unittest
-
 import Error_Code
 import Main
 import webapp2
@@ -23,14 +22,14 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_sign_in(self):
         database_entry1 = {"email": "student@usask.ca",
-                  "password": "AAaa1234",
+                  "password": "aaAA1234",
                   "firstName": "Student",
                   "lastName": "USASK",
                   "city": "Saskatoon",
                   "postalCode": "S7N 4P7",
                   "province": "Saskatchewan",
                   "phone1": 1111111111,
-                  "confirmedPassword": "AAaa1234" }
+                  "confirmedPassword": "aaAA1234" }
 
         request = webapp2.Request.blank('/createuser', POST=database_entry1)
         response = request.get_response(Main.app)
