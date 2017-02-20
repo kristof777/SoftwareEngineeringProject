@@ -29,14 +29,14 @@ class TestHandlers(unittest.TestCase):
 
         # first, we need to create a user as the owner of a listing
         owner = {"email": "student@usask.ca",
-                   "password": "123456",
+                   "password": "aaAA1234",
                    "firstName": "Student",
                    "lastName": "USASK",
                    "city": "Saskatoon",
                    "postalCode": "S7N 4P7",
                    "province": "Saskatchewan",
                    "phone1": 1111111111,
-                   "confirmedPassword": "123456"
+                   "confirmedPassword": "aaAA1234"
                  }
 
         request = webapp2.Request.blank('/createuser', POST=owner)  # api you need to test
@@ -76,14 +76,14 @@ class TestHandlers(unittest.TestCase):
 
         # now create a new user as a liker
         liker = {"email": "like@usask.ca",
-                   "password": "123456",
+                   "password": "aaAA1234",
                    "firstName": "like",
                    "lastName": "liker",
                    "city": "Saskatoon",
                    "postalCode": "S7N 4P7",
                    "province": "Saskatchewan",
                    "phone1": 2222222222,
-                   "confirmedPassword": "123456"
+                   "confirmedPassword": "aaAA1234"
                  }
 
         request = webapp2.Request.blank('/createuser', POST=liker)  # api you need to test
