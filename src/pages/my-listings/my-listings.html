@@ -1,14 +1,23 @@
 <ion-header>
-    <ion-navbar>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button ion-button icon-only id = "addButton" (click)="addListing()">
+                <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-buttons>
         <ion-title>
             My Listings
         </ion-title>
-    </ion-navbar>
+        <ion-buttons end>
+            <button ion-button icon-only>
+                <ion-icon name="briefcase"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
     <ion-list>
-        <button ion-button block color="blue" id = "addButton" (click)="addListing()">Add more listing</button>
         <ion-list-header>
             Published
         </ion-list-header>
