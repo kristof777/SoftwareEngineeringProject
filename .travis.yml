@@ -14,7 +14,7 @@ matrix:
   include:
   - os: android
   exclude:
-  - linux
+  - os: linux
  # - os: osx
  #   os_image: xCode7
   
