@@ -30,9 +30,12 @@ setup_git(){
 # then copying the files for deployment into it
 setup_deploy(){
   cd ${PUSH_FOLDER}
-  mkdir ${TRAVIS_BUILD_ID}
+  mkdir "${TRAVIS_BUILD_ID}"
   cd ${TRAVIS_BUILD_ID}
   cp -r ${BUILD_FOLDER} ${PUSH_FOLDER}/${TRAVIS_BUILD_ID}
+  cd ${TRAVIS_BUILD_ID}
+  ls 
+  cd ..
 }
 
 # moves compiled files to the right repo folder then pushes the files to the repo
