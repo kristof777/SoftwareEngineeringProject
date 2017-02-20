@@ -13,8 +13,11 @@ branches:
 matrix:
   include:
   - os: android
+  exclude:
+  - linux
  # - os: osx
  #   os_image: xCode7
+  
     
 language: node_js
 cache:
