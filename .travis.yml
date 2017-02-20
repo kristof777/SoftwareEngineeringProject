@@ -13,7 +13,6 @@ branches:
 matrix:
   include:
   - os: android
-  - os: linux
   exclude:
   - os: linux
  # - os: osx
