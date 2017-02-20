@@ -21,7 +21,7 @@ def user_required(handler):
     return check_sign_in
 
 
-class CreateUser(BaseHandler):
+class ChangePassword(BaseHandler):
     """
     Class used to handle get and post.
     Get:  is used to render an HTML page.
@@ -41,7 +41,7 @@ class CreateUser(BaseHandler):
                     object.
     """
     def get(self):
-        self.render_template('Chane_Password.html')
+        self.render_template('Change_Password.html')
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')

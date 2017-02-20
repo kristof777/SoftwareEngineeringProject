@@ -32,6 +32,7 @@ webapp_django_version = '0.96'
 from SignIn import SignIn
 from User_Auth import *
 from Listing_API import *
+from Change_Password import *
 
 
 
@@ -56,6 +57,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/signin', SignIn, name='signin'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
+    webapp2.Route('/changepassword', ChangePassword),
     webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
     webapp2.Route('/createlisting', CreateListing),
