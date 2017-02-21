@@ -61,7 +61,7 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(Error_Code.not_authorized['error'], error_message)
 
         # Test3: with correct e-mail and password
-        input2 = {"email": "student@usask.ca",
+        input3 = {"email": "student@usask.ca",
                   "password": "AAaa1234"}
 
         request = webapp2.Request.blank('/signin',
