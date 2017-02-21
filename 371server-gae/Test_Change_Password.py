@@ -60,25 +60,26 @@ class TestHandlerSignIn(unittest.TestCase):
                   "newpassword": "notImportant123",
                   "confirmedpassword": "notImportant123"}
 
-        request = webapp2.Request.blank('/changepassword', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/changepassword', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-
         self.assertEquals(Error_Code.not_authorized['error'], error_message)
 
-        input2 = {"oldpassword": "AAaa1234",
-                  "password": "AAaa1234" }
+        #Case4: Invalid Password
+        input3 = {"oldpassword": "Wrongpassword123",
+                  "newpassword": "notImportant123",
+                  "confirmedpassword": "notImportant123"}
 
-        request = webapp2.Request.blank('/signin', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/changepassword', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
 
-        #Case4: Invalid Password
+
 
         #Case5: Passwords do not match
 
