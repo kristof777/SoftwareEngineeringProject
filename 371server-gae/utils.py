@@ -91,7 +91,7 @@ def test_random_password():
         assert any(s.isdigit() for s in password)
 
 
-def provide_dummy_users(n):
+def create_dummy_users_for_testing(n):
     """
     Crates n Dummy Users with random valid password, email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
@@ -130,7 +130,7 @@ def provide_dummy_users(n):
     return users
 
 
-def provide_dummy_listings(num_listings, num_users=1):
+def create_dummy_listings_for_testing(num_listings, num_users=1):
     """
     Crates n Dummy Users and listings, where all data in listings is random but
     province which is saskatchewan.
@@ -143,7 +143,7 @@ def provide_dummy_listings(num_listings, num_users=1):
     assert num_listings > num_users
     assert num_users != 0
 
-    users = provide_dummy_users(num_users)
+    users = create_dummy_users_for_testing(num_users)
     assert len(users) == num_users
     for i in range(0, num_users):
         if i == num_users - 1 and num_listings % num_users != 0:
@@ -175,6 +175,52 @@ def provide_dummy_listings(num_listings, num_users=1):
             listings.append(random_listing_info)
 
     return listings, users
+
+
+def create_random_user():
+    """
+    :return: a random user with random field populated
+    """
+
+    password = get_random_password()
+    user = {"email": get_random_email(),
+            "password": password,
+            "firstName": get_random_string(),
+            "lastName": get_random_string(),
+            "city": get_random_string(),
+            "postalCode": get_random_string(3) + " " + get_random_string(3),
+            "province": "SK",
+            "phone1": get_random_string(10, numbers=10),
+            "phone2": get_random_string(10, numbers=10)
+            if random.randint(0, 1) else "", "confirmedPassword": password}
+    return user
+
+
+def create_random_listing(user_id):
+    """
+    :param user_id: User Id where listing belongs
+    :return: a random listing with random field populated
+    """
+    random_listing = { "userId": user_id,
+                      "bedrooms": str(random.randint(1,10)),
+                      "sqft": str(random.randint(200,2000)),
+                      "bathrooms": str(random.randint(1,10)),
+                      "price": str(random.randint(20000,20000000)),
+                      "description": " ".join(
+                          [get_random_string() for _ in
+                           range(random.randint(15, 45))]) + ".",
+                      "isPublished": str(bool(random.randint(0, 1))),
+                      "province": "SK",
+                      "city": get_random_string(),
+                      "address": get_random_string(),
+                      "thumbnailImageIndex": 0,
+                      "images": 'some images'
+                      }
+    return random_listing
+
+
+
+
 
 if __name__ == "__main__":
     test_random_email()
