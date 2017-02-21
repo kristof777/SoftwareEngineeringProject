@@ -40,7 +40,7 @@ from Change_Password import *
 config = {
     'webapp2_extras.auth': {
         'user_model': User,
-        'user_attributes': ['first_name', 'phone1', 'phone2', 'province', 'city']
+        'user_attributes': ['email', 'first_name', 'last_name', 'phone1', 'phone2', 'province', 'city']
     },
     'webapp2_extras.sessions':{
         'secret_key': 'YOUR_SECRET_KEY'

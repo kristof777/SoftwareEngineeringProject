@@ -5,6 +5,7 @@ import Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
+from models.User import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -25,7 +26,7 @@ class TestHandlerSignIn(unittest.TestCase):
                            "city": "Saskatoon",
                            "postalCode": "S7N 4P7",
                            "province": "Saskatchewan",
-                           "phone1": 1111111111,
+                           "phone1": "1111111111",
                            "confirmedPassword": "aaAA1234"}
 
         request = webapp2.Request.blank('/createuser', POST=database_entry1)
@@ -49,28 +50,37 @@ class TestHandlerSignIn(unittest.TestCase):
         # Test2: When incorrect password is entered
         input2 = {"email": "student@usask.ca",
                   "password": "notRighpassword123"}
-        request = webapp2.Request.blank('/signin',
-                                        POST=input2)  # api you need to test
+        request = webapp2.Request.blank('/signin', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-
         self.assertEquals(Error_Code.not_authorized['error'], error_message)
 
         # Test3: with correct e-mail and password
         input3 = {"email": "student@usask.ca",
-                  "password": "AAaa1234"}
+                  "password": "aaAA1234"}
 
-        request = webapp2.Request.blank('/signin',
-                                        POST=input2)  # api you need to test
+        request = webapp2.Request.blank('/signin', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
 
-        # Add testing for correct token retrival and storage later on
+        #Check output
+        output = json.loads(response.body)
+        self.assertTrue("token" in output)
+        self.assertTrue("userId" in output)
+        user_saved = User.get_by_id(int(output["userId"]))
+        self.assertEquals(user_saved.first_name, "Student")
+        self.assertEquals(user_saved.last_name, "USASK")
+        self.assertEquals(user_saved.city, "Saskatoon")
+        self.assertEquals(user_saved.postal_code, "S7N 4P7")
+        self.assertEquals(user_saved.email, "student@usask.ca")
+        self.assertEquals(int(user_saved.phone1), 1111111111)
+        self.assertEquals(user_saved.province, "Saskatchewan")
+
+
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
