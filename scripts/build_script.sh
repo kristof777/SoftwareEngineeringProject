@@ -30,7 +30,7 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    ionic serve --firefox@47.0.1 & export IONIC_PID= $! 
+    ionic serve --firefox@47.0.1 &
     # sudo du / | grep "geckodriver"
     # webdriver-manager start &
     protractor e2e-tests.conf.js --troubleshoot 
