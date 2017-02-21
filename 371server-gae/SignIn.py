@@ -44,7 +44,7 @@ class SignIn(BaseHandler):
                          'userId': user['user_id'],
                          'email': user_email,
                          'firstName': user['first_name'],
-                         #'lastName': user['last_name'],
+                         'lastName': user['last_name'],
                          'phone1': user['phone1'],
                          'phone2': user['phone2'],
                          'city': user['city'],
