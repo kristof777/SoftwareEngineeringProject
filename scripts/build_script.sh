@@ -31,7 +31,7 @@ browser_build(){
   else
     # dev_appserver.py 371server-gae/main.py
     export DISPLAY=:99.0
-    xvfb start
+    Xvfb start
     sleep 5
     screen -d -m -L ionic serve --firefox@47.0.1
     # sudo du / | grep "geckodriver"
