@@ -275,7 +275,6 @@ class TestHandlers(unittest.TestCase):
                   "images": 'some images'
                   }
         input["userId"] = output["userId"]
-        #FIXME
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
