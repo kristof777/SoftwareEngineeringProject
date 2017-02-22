@@ -92,7 +92,7 @@ class TestHandlerSignIn(unittest.TestCase):
             self.assertFalse()
         self.assertEquals(Error_Code.password_not_strong['error'], error_message)
 
-        #Case5: Success
+        #Case5: Success case
         input5 = {"oldpassword": "aaAA1234",
                   "newpassword": "newPass123",
                   "confirmedpassword": "newPass123"}
