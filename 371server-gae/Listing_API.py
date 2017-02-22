@@ -154,9 +154,10 @@ class CreateListing(webapp2.RequestHandler):
                 # all set
                 listing = Listing(userId=userId, bedrooms=bedrooms, sqft=sqft, bathrooms=bathrooms,
                                   price=price, description=description, isPublished=isPublished, province=province,
-                                  city=city, address=address, images=images, thumbnailImageIndex=thumbnailImageIndex)
+                                  city=city, address=address, images=images, thumbnailImageIndex=thumbnailImageIndex,listingId=0)
                 listing.put()
-                listing.listingId = listing.key.id()
+                # listing.listingId = listing.key.id()
+                listing.setProperty('listingId', listing.key.id())
                 self.response.write(json.dumps({"listingId": listing.listingId}))
                 self.response.set_status(Error_Code.success)
 
@@ -448,10 +449,14 @@ class GetFavoriteListing(webapp2.RequestHandler):
 
 
         favorites = Favorite.query(Favorite.userId == likerId, Favorite.liked == True).fetch()
+
         returnedArray = []
         for favorite in favorites:
-            listings = Listing.query(Listing.listingId == favorite.listingId, Listing.isPublished == True).fetch()
-            for listing in listings:
+
+            favListingId = favorite.listingId
+            listing = Listing.get_by_id(favListingId)
+
+            if listing.isPublished:
                 template_values = {
                     'listingId': listing.listingId,
                     'userId': listing.userId,

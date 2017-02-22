@@ -19,7 +19,7 @@ class Listing(ndb.Model):
     thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
     userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=True)
-    listingId = ndb.IntegerProperty()
+    listingId = ndb.IntegerProperty(required=True,default=0)
 
 
     def setProperty(self, key, value):
@@ -76,5 +76,11 @@ class Listing(ndb.Model):
             return errors
         if key == 'address':
             self.address = value
+            return errors
+        if key == 'listingId':
+            try:
+                self.listingId = int(value)
+            except:
+                errors[Error_Code.invalid_listing_id['error']] = "listingId not valid"
         return errors
 
