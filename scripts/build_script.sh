@@ -33,7 +33,7 @@ browser_build(){
     export DISPLAY=:99.0
     xvfb start
     sleep 5
-    ionic serve --firefox@47.0.1 &
+    screen -d -m -L ionic serve --firefox@47.0.1
     # sudo du / | grep "geckodriver"
     # webdriver-manager start &
     protractor e2e-tests.conf.js --troubleshoot 
