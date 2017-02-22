@@ -30,8 +30,6 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    Xvfb :1 -screen 0 800x600x16
-    sleep 5
     screen -d -m -L ionic serve --firefox@47.0.1
     # sudo du / | grep "geckodriver"
     # webdriver-manager start &
