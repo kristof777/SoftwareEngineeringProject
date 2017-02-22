@@ -30,8 +30,9 @@ from google.appengine.dist import use_library
 use_library('django', '0.96')
 webapp_django_version = '0.96'
 from SignIn import SignIn
-from User_Auth import *
+from Create_User import *
 from Listing_API import *
+from Change_Password import *
 
 
 
@@ -39,7 +40,7 @@ from Listing_API import *
 config = {
     'webapp2_extras.auth': {
         'user_model': User,
-        'user_attributes': ['first_name', 'phone1', 'phone2', 'province', 'city']
+        'user_attributes': ['email', 'first_name', 'last_name', 'phone1', 'phone2', 'province', 'city']
     },
     'webapp2_extras.sessions':{
         'secret_key': 'YOUR_SECRET_KEY'
@@ -56,8 +57,10 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/signin', SignIn, name='signin'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
+    webapp2.Route('/changepassword', ChangePassword),
     webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
     webapp2.Route('/createlisting', CreateListing),
+    webapp2.Route('/like', LikeDislikeListing)
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

@@ -14,6 +14,7 @@ import {Province} from "../../app/models/province";
     providers: [ListingProvider]
 })
 export class AddListingPage {
+    curListing: Listing;
     bathrooms: number;
     province: string;
     city: string;
@@ -39,22 +40,6 @@ export class AddListingPage {
     }
 
     /**
-     * Save the listing to the device and the server
-     */
-    save(){
-        let newListing: Listing = new Listing(
-            -1, -1, // listingId, listerId
-            new Location(Province.fromAbbr(this.province), this.city, this.address, this.postalCode,
-                0.0, 0.0), // longintude, latitude
-            this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
-            false, "0000-00-00", "0000-00-00", // isPublished, created, modified
-            this.images,
-        );
-
-        this.listingProvider.addListing(newListing);
-    }
-
-    /**
      * Display the UI to add the image
      */
     addImage(){
@@ -76,7 +61,28 @@ export class AddListingPage {
     }
 
     /**
+     * Save the listing to the device and the server
+     */
+    saveWithoutPublishing(){
+        let newListing: Listing = new Listing(
+            -1, -1, // listingId, listerId
+            new Location(Province.fromAbbr(this.province), this.city, this.address, this.postalCode,
+                0.0, 0.0), // longintude, latitude
+            this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
+            false, "0000-00-00", "0000-00-00", // isPublished, created, modified
+            this.images,
+        );
+
+        this.listingProvider.addListing(newListing);
+    }
+
+    /**
      * Set the listing to published
      */
-    publish(){}
+    saveAndPublish(){}
+
+    /**
+     * Set the listing to unpublished
+     */
+    unpublish(){}
 }

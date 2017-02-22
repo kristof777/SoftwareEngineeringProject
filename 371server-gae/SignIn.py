@@ -42,9 +42,9 @@ class SignIn(BaseHandler):
             #This should be changed later so that user email is in the database.
             user_dict = {'token': user['token'],
                          'userId': user['user_id'],
-                         'email': user_email,
+                         'email': user['email'],
                          'firstName': user['first_name'],
-                         #'lastName': user['last_name'],
+                         'lastName': user['last_name'],
                          'phone1': user['phone1'],
                          'phone2': user['phone2'],
                          'city': user['city'],

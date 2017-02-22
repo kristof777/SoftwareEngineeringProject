@@ -75,7 +75,6 @@ export class UserService {
      *          message     a message depicting how to raise the strength
      */
     checkPass(password: string): Object{
-        assert (password != null);
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
         let numeric = new RegExp("^(?=.*[0-9])");

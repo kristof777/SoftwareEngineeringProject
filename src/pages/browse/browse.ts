@@ -1,10 +1,10 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
-let assert = require('assert-plus');
-import {Component, ViewChild} from '@angular/core';
-import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
-import {FilterPage} from '../filter/filter';
+import {Component, ViewChild} from "@angular/core";
+import {NavController, ModalController, Slides} from "ionic-angular";
 import {Logger} from "angular2-logger/core";
+import {Listing} from "../../app/models/listing";
+import {FilterPage} from "../filter/filter";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-browse',
@@ -13,31 +13,31 @@ import {Logger} from "angular2-logger/core";
 })
 export class BrowsePage {
     @ViewChild(Slides) slides: Slides;
-    data: Listing[];
-    // The index of the page currently being displayed
-    cursor: number = 0;
+    listing: Listing;
 
     constructor(public navCtrl: NavController,
-                public toastCtrl: ToastController,
+                public listingProvider: ListingProvider,
                 public modalCtrl: ModalController,
-                public listings: ListingProvider,
-                private _logger: Logger,
-                public navParams: NavParams) {
-        if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
-            this.data = listings.data;
-        }
-        else {
-            this.data = navParams.get('data');
-            this.cursor = navParams.get('cursor');
+                private _logger: Logger,) {
+
+        this.listing = listingProvider.data[0];
+    }
+
+    onSlideChange(currentListing): void{
+        console.log("Slide changed");
+        if(this.slides.isBeginning()){
+            this.likeCurrent();
+        } else if(this.slides.isEnd()){
+            this.dislikeCurrent();
         }
     }
 
+    dislikeCurrent(): void{
+        this._logger.log("Disliking the current slide");
+    }
 
-    /**
-     * Navigate to the My Listings page.
-     */
-    goToFavourites(): void{
-        this._logger.info("Favourites was clicked");
+    likeCurrent(): void{
+        this._logger.log("Liking the current slide");
     }
 
     /**
@@ -52,46 +52,5 @@ export class BrowsePage {
         });
 
         filterModal.present();
-    }
-
-    /**
-     * Add the house to the users dislike list
-     */
-    unlike(): void{
-        this._logger.info("Unlike was clicked");
-    }
-
-    /**
-     * Add the house to the users favourites list
-     */
-    like(): void{
-        this._logger.info("Like was clicked.");
-    }
-
-    /**
-     * Return to the first image in the slides
-     */
-    goToFirstSlide(): void{
-        this.slides.slideTo(0, 0);
-    }
-
-    /**
-     * Display the next property
-     */
-    nextProperty(): void{
-        this.goToFirstSlide();
-        this._logger.info("Next Property was clicked");
-        if(this.cursor < (this.data.length - 1))
-            this.cursor += 1;
-    }
-
-    /**
-     * Display the previous property
-     */
-    previousProperty(): void{
-        this.goToFirstSlide();
-        this._logger.info("Previous Property was clicked");
-        if(this.cursor > 0)
-            this.cursor -= 1;
     }
 }

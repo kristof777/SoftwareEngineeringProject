@@ -1,8 +1,5 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>
-            Home
-        </ion-title>
         <ion-buttons end>
             <button ion-button icon-only (click)="goToFilters()" id="goToFilters">
                 <ion-icon name="options"></ion-icon>
@@ -12,90 +9,20 @@
 </ion-header>
 
 <ion-content>
-    <ion-toolbar>
-        <ion-item no-lines id="voteBar">
-            <button ion-button item-left clear icon-only (click)="unlike()" id="unlikeButton">
-                <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
-            </button>
-            <button ion-button item-right clear icon-only (click)="like()" id="likeButton">
-                <ion-icon ios="ios-heart-outline" md="md-heart-outline"></ion-icon>
-            </button>
-        </ion-item>
-
-        <ion-slides pager id="listingImages">
-            <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
-                <img src="{{ image }}" />
-            </ion-slide>
-        </ion-slides>
-    </ion-toolbar>
-
-    <ion-item>
-        <button ion-button item-left clear icon-only large (click)="previousProperty()" id="previousProperty">
-            <ion-icon ios="ios-arrow-dropleft-circle" md="md-arrow-dropleft-circle"></ion-icon>
-        </button>
-        <button ion-button item-right clear icon-only large (click)="nextProperty()" id="nextProperty">
-            <ion-icon ios="ios-arrow-dropright-circle" md="md-arrow-dropright-circle"></ion-icon>
-        </button>
-    </ion-item>
-
     <ion-list>
-        <ion-item>
-            <span item-left>
-                Location
-            </span>
-            <span item-right>
-                {{ data[cursor].location.city }}, {{ data[cursor].location.province.abbr }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Address
-            </span>
-            <span item-right>
-                {{ data[cursor].location.address }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Square Feet
-            </span>
-            <span item-right>
-                {{ data[cursor].squarefeet }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Price
-            </span>
-            <span item-right>
-                {{ data[cursor].price }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Bedroom
-            </span>
-            <span item-right>
-                {{ data[cursor].bedrooms }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Bathroom
-            </span>
-            <span item-right>
-                {{ data[cursor].bathrooms }}
-            </span>
-        </ion-item>
-        <ion-item>
-            <span item-left>
-                Description
-                <p id="description">{{ data[cursor].description }}</p>
-            </span>
-        </ion-item>
+        <ion-slides initialSlide="1" (ionSlideDidChange)="onSlideChange(current)">
+            <ion-slide style="background-color: green;"></ion-slide>
+            <ion-slide>
+                <ion-img class="jumbotron" src="{{ listing.images[0] }}"></ion-img>
+                <span class="description">
+                    <p class="price">{{ listing.price }}</p>
+                    <p class="address">{{ listing.location.address }}</p>
+                    <p class="map">
+                        <button ion-button icon-only><ion-icon name="navigate"></ion-icon></button>
+                    </p>
+                </span>
+            </ion-slide>
+            <ion-slide style="background-color: red;"></ion-slide>
+        </ion-slides>
     </ion-list>
 </ion-content>
-
-
-
-
