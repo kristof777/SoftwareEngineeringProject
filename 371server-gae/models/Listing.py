@@ -19,6 +19,7 @@ class Listing(ndb.Model):
     thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
     userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=True)
+    listingId = ndb.IntegerProperty()
 
 
     def setProperty(self, key, value):
