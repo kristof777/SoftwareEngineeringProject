@@ -8,7 +8,7 @@ exports.config = {
         },
         */
         'browserName': 'firefox',
-        SharedTestFiles: true,
+        shardTestFiles: true,
     },
     baseUrl: 'http://localhost:8100',
     specs: [
