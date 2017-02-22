@@ -1,14 +1,16 @@
-import unittest
+from __future__ import absolute_import
 import json
 import os
+import sys
+sys.path.append("../")
+import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import Error_Code
+import extras.Error_Code as Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
 from models.Listing import Listing
-from Create_User import *
-import utils
+from web_apis.Create_User import *
 
 
 class TestHandlers(unittest.TestCase):

@@ -1,9 +1,8 @@
+import sys
+sys.path.append("../")
 from google.appengine.ext import ndb
-
-
+import extras.Error_Code as Error_Code
 # Code from ID3
-import Error_Code
-
 
 class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""

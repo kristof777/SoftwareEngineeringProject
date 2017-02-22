@@ -1,7 +1,9 @@
+import sys
+sys.path.append("../")
 import json
 import os
 import unittest
-import Error_Code
+import extras.Error_Code as Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed

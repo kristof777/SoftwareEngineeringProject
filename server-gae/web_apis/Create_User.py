@@ -1,8 +1,11 @@
+import sys
+sys.path.append("../")
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import json
-import Error_Code
-from Base_Handler import *
-import Main
-import utils
+from extras.Base_Handler import BaseHandler
+import extras.Error_Code as Error_Code
+
 
 class CreateUser(BaseHandler):
     """
@@ -24,7 +27,7 @@ class CreateUser(BaseHandler):
                     object.
     """
     def get(self):
-        self.render_template('Create_User.html')
+        self.render_template('../webpages/Create_User.html')
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')

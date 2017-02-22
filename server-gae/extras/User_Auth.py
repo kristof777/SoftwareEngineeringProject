@@ -1,8 +1,7 @@
-import json
 import logging
-
-import Error_Code
 from Base_Handler import *
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 # We need to decide whether uses are allowed to
@@ -19,64 +18,6 @@ def user_required(handler):
         else:
             return handler(self, *args, **kwargs)
     return check_sign_in
-
-
-class ChangePassword(BaseHandler):
-    """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
-    Post:
-        @pre-cond: Expecting keys to be currentPassword,
-                   password, and confirmedPassword. If any of these is not
-                   present an appropriate error and status code 40 is returned.
-
-                   password and ConfirmedPassword are expected to be equal then
-                   if not then appropriate missing_invalid_parameter_error is
-                   returned.
-
-                   password must be 8 in length, and have at least one upercase,
-                   lowercase, and numeric character or it will return a
-                   missing_invalid_parameter_error.
-
-        @post-cond: An user with provided information is created in the
-                    database. Token and userId is returned as an response
-                    object.
-    """
-    def get(self):
-        self.render_template('Change_Password.html')
-
-    def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errors = {}
-        empty = u''
-
-        # For each required field, making sure it exists, is not empty
-        # and also has something else other than spaces
-
-        password = self.request.POST.get('password')
-        if password is None:
-            errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
-        elif password.isspace() or password is empty:
-            errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
-
-        confirmed_password = self.request.POST.get('newPassword')
-        if confirmed_password is None:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "New password not provided"
-        elif confirmed_password.isspace() or confirmed_password is empty:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "New password not provided"
-
-        confirmed_password = self.request.POST.get('confirmPassword')
-        if confirmed_password is None:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-        elif confirmed_password.isspace() or confirmed_password is empty:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-
 
 # when websites send us an activation link after a registration,
 # the url usually contain their equivalent of signup tokens.

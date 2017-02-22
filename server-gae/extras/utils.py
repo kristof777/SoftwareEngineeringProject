@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 import random
 import string
 import webapp2

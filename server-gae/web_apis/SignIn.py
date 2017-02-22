@@ -1,8 +1,10 @@
 import logging
 import json
+import sys
+sys.path.append("../")
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-from Base_Handler import BaseHandler
-from Error_Code import *
+from extras.Base_Handler import BaseHandler
+from extras.Error_Code import *
 
 
 class SignIn(BaseHandler):

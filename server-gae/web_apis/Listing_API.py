@@ -1,10 +1,10 @@
 import json
 import os
-
+import sys
+sys.path.append("../")
 import webapp2
 from google.appengine.ext.webapp import template
-
-import Error_Code
+import extras.Error_Code as Error_Code
 from models.Listing import Listing
 from models.User import User
 from models.Favorite import Favorite
@@ -27,7 +27,7 @@ class CreateListing(webapp2.RequestHandler):
             # 'last_name': user2.last_name
         }
         # test = json.dumps(template_values)
-        path = os.path.join(os.path.dirname(__file__), 'Create_Listing.html')
+        path = os.path.join(os.path.dirname(__file__), '../webpages/Create_Listing.html')
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
@@ -170,7 +170,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def get(self):
         template_values = {}
         # test = json.dumps(template_values)
-        path = os.path.join(os.path.dirname(__file__), 'Like_dislike_listing.html')
+        path = os.path.join(os.path.dirname(__file__), '../webpages/Like_dislike_listing.html')
         self.response.out.write(template.render(path, template_values))
 
     def post(self):
@@ -420,7 +420,7 @@ class ShowListings(webapp2.RequestHandler):
         #TODO: Remove testing account, should pass in user email as parameter
         user = User.query().get()
         listings = Listing.query(Listing.lister_email == user.email).fetch()
-        path = os.path.join(os.path.dirname(__file__), 'Show_Listings.html')
+        path = os.path.join(os.path.dirname(__file__), '../webpages/Show_Listings.html')
         for listing in listings:
             template_values = {
                 'lister_email': listing.lister_email,
