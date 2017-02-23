@@ -2,12 +2,12 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
 import {NavParams, NavController, ViewController, AlertController} from 'ionic-angular';
-import {UserService} from '../../app/providers/login-service'
+import {KasperService} from '../../app/providers/kasper-service'
 
 @Component({
     selector: 'page-change-password',
     templateUrl: 'change-password.html',
-    providers: [UserService]
+    providers: [KasperService]
 })
 export class ChangePasswordPage {
     currentPassword: string;
@@ -18,7 +18,7 @@ export class ChangePasswordPage {
                 params: NavParams,
                 private alertCtrl: AlertController,
                 private _logger: Logger,
-                private loginService: UserService) {
+                private loginService: KasperService) {
     }
 
     /**

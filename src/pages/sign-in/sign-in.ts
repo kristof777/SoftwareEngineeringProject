@@ -8,12 +8,12 @@ import {NavController, ToastController} from 'ionic-angular';
 import {SignUpPage} from '../sign-up/sign-up';
 import {MainPage} from "../main/main";
 
-import {UserService} from '../../app/providers/login-service'
+import {KasperService} from '../../app/providers/kasper-service'
 
 @Component({
     selector: 'page-sign-in',
     templateUrl: 'sign-in.html',
-    providers: [UserService]
+    providers: [KasperService]
 })
 export class SignInPage {
     loginForm: FormGroup;
@@ -24,7 +24,7 @@ export class SignInPage {
                 public toastCtrl: ToastController,
                 private _logger: Logger,
                 public formBuilder: FormBuilder,
-                public loginService: UserService) {
+                public loginService: KasperService) {
 
         this.emailAttempted = false;
 
@@ -65,7 +65,7 @@ export class SignInPage {
      *
      * @param data the response from the server
      */
-    signInCallback(data: any): void{
+    signInCallback(data: JSON): void{
         this.navCtrl.setRoot(MainPage);
     }
 
