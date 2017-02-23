@@ -13,7 +13,7 @@
         <ion-slides initialSlide="1" (ionSlideDidChange)="onSlideChange(current)">
             <ion-slide style="background-color: green;"></ion-slide>
             <ion-slide>
-                <ion-img class="jumbotron" src="{{ listing.images[0] }}"></ion-img>
+                <ion-img class="jumbotron" src="data:image/jpeg;base64,{{ listing.images[0] }}"></ion-img>
                 <span class="description">
                     <p class="price">{{ listing.price }}</p>
                     <p class="address">{{ listing.location.address }}</p>
