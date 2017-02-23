@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import json
 import os
 import sys
-sys.path.append("..")
+sys.path.append("../")
 import unittest
 import extras.Error_Code as Error_Code
 import Main
