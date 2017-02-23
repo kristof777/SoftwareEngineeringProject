@@ -91,8 +91,8 @@ export class AddListingPage {
     saveWithoutPublishing(){
         let newListing: Listing = new Listing(
             -1, -1, // listingId, listerId
-            new Location(Province.fromAbbr(this.province), this.city, this.address, this.postalCode,
-                0.0, 0.0), // longintude, latitude
+            new Location(((this.province) ? Province.fromAbbr(this.province) : null), this.city, this.address,
+                this.postalCode, 0.0, 0.0), // longintude, latitude
             this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
             false, "0000-00-00", "0000-00-00", // isPublished, created, modified
             this.images,
