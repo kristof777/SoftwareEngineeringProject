@@ -18,7 +18,7 @@ export class ChangePasswordPage {
                 params: NavParams,
                 private alertCtrl: AlertController,
                 private _logger: Logger,
-                private loginService: KasperService) {
+                private kasperService: KasperService) {
     }
 
     /**
@@ -40,7 +40,7 @@ export class ChangePasswordPage {
         }
 
         // Verify the new password is strong enough
-        let passwordCheck: any = this.loginService.checkPass(this.newPassword);
+        let passwordCheck: any = this.kasperService.checkPass(this.newPassword);
         if(passwordCheck.strength != 4){
             this.alert("Stronger Password Required", passwordCheck.message);
             return;

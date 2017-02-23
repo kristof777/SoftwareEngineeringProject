@@ -24,7 +24,7 @@ export class SignInPage {
                 public toastCtrl: ToastController,
                 private _logger: Logger,
                 public formBuilder: FormBuilder,
-                public loginService: KasperService) {
+                public kasperService: KasperService) {
 
         this.emailAttempted = false;
 
@@ -54,7 +54,7 @@ export class SignInPage {
         if(this.loginForm.value.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else if(this.loginForm.valid){
-            this.loginService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
+            this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
         } else {
             this._logger.error("Tried to submit when fields do not pass validation.");
         }
