@@ -5,6 +5,7 @@ import string
 import webapp2
 import json
 import Main
+from validate_email import validate_email
 
 
 def get_random_string(n=random.randint(10,20), lower_case=0, upper_case=0,
@@ -190,7 +191,6 @@ def create_random_user():
             "firstName": get_random_string(),
             "lastName": get_random_string(),
             "city": get_random_string(),
-            "postalCode": get_random_string(3) + " " + get_random_string(3),
             "province": "SK",
             "phone1": get_random_string(10, numbers=10),
             "phone2": get_random_string(10, numbers=10)
@@ -221,10 +221,79 @@ def create_random_listing(user_id):
     return random_listing
 
 
+def keys_validation(key_error_dict, post):
+    """
+    Example :
+    key_error_dict = {"password": "missingPassword",
+    "confirmedPassword": "missingConfirmedPassword"}
+    post = {}
+    then
+    error will be {"missingPassword": "Password is missing",
+    "missingConfirmedPassword": "confirmedPassowrd is missing"}
+    values = {}
+    :param key_error_dict: Takes a key error dictionary
+    :param post: Post request
+    :return: errors and post values converted to string
+    """
+    errors = {}
+    values = {}
+    empty = [u'', '', ""]
+    for key in key_error_dict:
+        error = key_error_dict[key]["error"]
+        value_in_response = post.get(key)
+        if value_in_response is None or str(value_in_response).isspace()\
+                or str(value_in_response) in empty:
+            errors[error] = str(key) + " is Missing"
+        else:
+            values[key] = str(value_in_response)
+    return errors, values
 
+
+def is_valid_phone(phone):
+    """
+
+    :param phone:
+    :return: true if phone number is Valid
+    """
+    assert phone != None
+    return len(phone) == 10 and phone.isnumeric()
+
+
+def is_valid_password(password):
+    """
+
+    :param password:
+    :return: true if password is valid
+    """
+    return len(password) < 8 or not any(s.islower() for s in password) or \
+           not any(s.isupper() for s in password) or \
+           not any(s.isdigit() for s in password)
+
+
+def is_valid_email(email):
+    """
+    :param email:
+    :return: True is email is valid
+    """
+    return validate_email(email)
+
+
+def test_keys_validation():
+    keys = ["key1", "key2", "key3"]
+    errors = ["error1", "error2", "error3"]
+    key_error_dict = dict(zip(keys,errors))
+    response = {"key1": "a", "key2": "b", "key3": u'    '}
+    print(keys_validation(key_error_dict, response))
+    response = {"key1": "a", "key2": "b", "key3": u''}
+    print(keys_validation(key_error_dict, response))
+    response = {"key1": "a", "key2": "", "key3": u''}
+    print(keys_validation(key_error_dict, response))
+    response = {"key1": "a", "key2": "", "key3": u'    '}
+    print(keys_validation(key_error_dict, response))
 
 
 if __name__ == "__main__":
     test_random_email()
     test_random_password()
+    test_keys_validation()
 

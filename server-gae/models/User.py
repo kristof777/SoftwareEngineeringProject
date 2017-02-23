@@ -13,7 +13,6 @@ class User(Webapp2User):
     phone2 = ndb.StringProperty(required=False)
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
-    postal_code = ndb.StringProperty(required=True)
 
     def set_password(self, raw_password):
         """Sets the password for the current user

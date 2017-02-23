@@ -4,7 +4,8 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import json
 from extras.Base_Handler import BaseHandler
-import extras.Error_Code as Error_Code
+from extras.Error_Code import *
+from extras.utils import *
 
 
 class CreateUser(BaseHandler):
@@ -31,86 +32,16 @@ class CreateUser(BaseHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errors = {}
-        empty = u''
 
-        #
-        # For each required field, making sure it exists, is not empty
-        # and also has something else other than spaces
-        #
+        error_keys = ['email', 'firstName', 'lastName', 'password',
+                      'confirmedPassword', 'phone1', 'province', 'city']
+        error_values = [missing_email, missing_first_name, missing_last_name,
+                        missing_password,missing_confirmed_password,
+                        missing_phone_number,missing_province, missing_city]
+        key_error_dict = dict(zip(error_keys, error_values))
 
-        email = self.request.POST.get('email')
-        if email is None:
-            errors[Error_Code.missing_email['error']] = "Email not provided"
-        elif email.isspace() or email is empty:
-            errors[Error_Code.missing_email['error']] = "Email not provided"
-        first_name = self.request.POST.get('firstName')
-        if first_name is None:
-            errors[Error_Code.missing_first_name['error']] \
-                = "First name not provided"
-        elif first_name.isspace() or first_name is empty:
-            errors[Error_Code.missing_first_name['error']] \
-                = "First name not provided"
-
-        last_name = self.request.POST.get('lastName')
-        if last_name is None:
-            errors[Error_Code.missing_last_name['error']] \
-                = "Last name not provided"
-        elif last_name.isspace() or last_name is empty:
-            errors[Error_Code.missing_last_name['error']] \
-                = "Last name not provided"
-
-        password = self.request.POST.get('password')
-        if password is None:
-            errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
-        elif password.isspace() or password is empty:
-            errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
-
-        confirmed_password = self.request.POST.get('confirmedPassword')
-        if confirmed_password is None:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-        elif confirmed_password.isspace() or confirmed_password is empty:
-            errors[Error_Code.missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-
-        phone1 = self.request.POST.get('phone1')
-        if phone1 is None:
-            errors[Error_Code.missing_phone_number['error']] \
-                = "Phone number 1 not provided"
-        elif phone1.isspace() or phone1 is empty:
-            errors[Error_Code.missing_phone_number['error']] \
-                = "Phone number 1 not provided"
-
-        province = self.request.POST.get('province')
-        if province is None:
-            errors[Error_Code.missing_province['error']] \
-                = "Province not provided"
-        elif province.isspace() or province is empty:
-            errors[Error_Code.missing_province['error']] \
-                = "Province not provided"
-
-        city = self.request.POST.get('city')
-        if city is None:
-            errors[Error_Code.missing_city['error']] = "City not provided"
-        elif city.isspace() or city is empty:
-            errors[Error_Code.missing_city['error']] = "City not provided"
-
-        postal_code = self.request.POST.get("postalCode")
-        if postal_code is None:
-            errors[Error_Code.missing_postal_code['error']] \
-                = "Postal code not provided"
-        elif postal_code.isspace() or postal_code is empty:
-            errors[Error_Code.missing_postal_code['error']] \
-                = "Postal code not provided"
-
-
-        #
-        # Done with required field checking
-        #
-
+        # validating if request has all required keys
+        errors, values = keys_validation(key_error_dict, self.request.POST)
         phone2 = self.request.POST.get('phone2')
 
         # If there exists error then return the response, and stop the function
@@ -118,50 +49,64 @@ class CreateUser(BaseHandler):
             error_json = json.dumps(errors)
             self.response.write(error_json)
             self.response.set_status(
-                Error_Code.missing_invalid_parameter_error)
+                missing_invalid_parameter_error)
             return
 
-        if password != confirmed_password:
-            error_json = json.dumps(
-                {Error_Code.password_mismatch
-                 ['error']: 'Password does not match confirmed password'})
+        invalid = {}
 
+        if not is_valid_phone(values['phone1']):
+            invalid[invalid_phone1['error']] = "Invalid phone number 1"
+        if phone2 is not None and not is_valid_phone(phone2):
+            invalid[invalid_phone2['error']] = "Invalid phone number 2"
+        if is_valid_email(values['email']):
+            invalid[invalid_email['error']] = "Invalid email address"
+
+
+        if len(invalid) != 0:
+            error_json = json.dumps(invalid)
             self.response.write(error_json)
-            self.response.set_status(Error_Code.missing_invalid_parameter_error)
+            self.response.set_status(
+                missing_invalid_parameter_error)
             return
 
-        password = str(password)
-        if len(password)  < 8 \
-            or not any(s.islower() for s in password) \
-            or not any(s.isupper() for s in password) \
-            or not any(s.isdigit() for s in password):
-            error_json = json.dumps(
-                {Error_Code.password_not_strong
-                 ['error']: 'Password not strong enough'})
+        if values['password'] != values['confirmedPassword']:
+            error_json = json.dumps({
+                password_mismatch['error']:
+                    'Password does not match confirmed password'})
             self.response.write(error_json)
-            self.response.set_status(Error_Code.missing_invalid_parameter_error)
+            self.response.set_status(missing_invalid_parameter_error)
             return
 
+        password = values['password']
+        if is_valid_password(password):
+            error_json = json.dumps({
+                password_not_strong['error']: 'Password not strong enough'})
+            self.response.write(error_json)
+            self.response.set_status(missing_invalid_parameter_error)
+            return
 
         unique_properties = ['email']
         user_data = self.user_model.create_user(
-            email, unique_properties, email=email, first_name=first_name,
-            password_raw=password, phone1=phone1, phone2=phone2,
-            province=province, city=city, last_name=last_name,
-            verified=False, postal_code=postal_code)
+            values['email'], unique_properties, email=values['email'],
+            first_name=values['firstName'],
+            password_raw=password, phone1=values['phone1'], phone2=phone2,
+            province=values['province'], city=values['city'],
+            last_name=values['lastName'],
+            verified=False)
 
-        if not user_data[0]:  # user_data is a tuple
-            error_json = json.dumps({Error_Code.email_alreadyExists['error']
+        # user_data[0] contains True if user was created successfully
+        if not user_data[0]:
+            error_json = json.dumps({email_alreadyExists['error']
                                     : 'Email already exists'})
             self.response.write(error_json)
-            self.response.set_status(Error_Code.missing_invalid_parameter_error)
+            self.response.set_status(missing_invalid_parameter_error)
             return
 
+        # user_data[1] contains Token if user was created successfully
         user = user_data[1]
         user_id = user.get_id()
         token = self.user_model.create_signup_token(user_id)
-
         self.response.write(json.dumps({'token': token, "userId": user_id}))
-        self.response.set_status(Error_Code.success)
+        self.response.set_status(success)
 
 

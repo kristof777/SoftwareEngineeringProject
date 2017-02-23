@@ -4,11 +4,12 @@ import os
 import sys
 sys.path.append("../")
 import unittest
-import extras.Error_Code as Error_Code
+from extras.Error_Code import *
 import Main
 import webapp2
 from google.appengine.ext import testbed
 from models.User import User
+from extras.utils import create_random_user
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -24,6 +25,17 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_memcache_stub()
 
     def test_create_user(self):
+        """
+        input1: different kinds of empty strings and Null values
+        input2: invalid phone number 1
+        input3: invalid phone number 2
+        input4: invalid email
+        input5: not strong password
+        input6: Everything valid
+        :return:
+        """
+
+
         input1 = {
             "email" : "  ",
             "lastName": ""
@@ -35,33 +47,24 @@ class TestHandlers(unittest.TestCase):
         # checking if all error codes are received, if empty code is sent
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_province['error'],
-                           Error_Code.missing_confirmed_password['error'],
-                           Error_Code.missing_password['error'],
-                           Error_Code.missing_last_name['error'],
-                           Error_Code.missing_phone_number['error'],
-                           Error_Code.missing_first_name['error'],
-                           Error_Code.missing_postal_code['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_email['error']]
+        errors_expected = [missing_province['error'],
+                           missing_confirmed_password['error'],
+                           missing_password['error'],
+                           missing_last_name['error'],
+                           missing_phone_number['error'],
+                           missing_first_name['error'],
+                           missing_city['error'],
+                           missing_email['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
+        print(error_keys)
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
-        input2 = {"email": "student@usask.ca",
-                  "password": "123456",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "654321"
-                  }
-
+        input2 = create_random_user()
+        input2['password'] = "123456"
         request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -74,12 +77,11 @@ class TestHandlers(unittest.TestCase):
 
         # test case 3 without strong password
 
-        input2 = {"email": "student@usask.ca",
+        input3 = {"email": "student@usask.ca",
                   "password": "123456",
                   "firstName": "Student",
                   "lastName": "USASK",
                   "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
                   "province": "Saskatchewan",
                   "phone1": 1111111111,
                   "confirmedPassword": "123456"
@@ -113,7 +115,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(user_saved.first_name,"Student")
         self.assertEquals(user_saved.last_name,"USASK")
         self.assertEquals(user_saved.city,"Saskatoon")
-        self.assertEquals(user_saved.postal_code,"S7N 4P7")
         self.assertEquals(user_saved.email,"student@usask.ca")
         self.assertEquals(int(user_saved.phone1),1111111111)
         self.assertEquals(user_saved.province,"Saskatchewan")

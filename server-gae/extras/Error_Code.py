@@ -15,6 +15,9 @@ nothing_requested_to_change = {"error": "nothingRequestedToChange",
                                "status": 400}
 unrecognized_key = {"error": "unrecognizedKey", "status": 403}
 invalid_user_id = {"error": "invalidUserId", "status": 403}
+invalid_phone1 = {"error": "invalidPhone1", "status": 403}
+invalid_phone2 = {"error": "invalidPhone2", "status": 403}
+invalid_email = {"error": "invalidEmail", "status" :403}
 missing_user_id = {"error": "missingUserId", "status": 400}
 missing_password = {"error": "missingPassword", "status": 400}
 missing_new_password = {"error": "missingNewPassword", "status": 400}
@@ -50,7 +53,6 @@ missing_image = {"error": "missingImage", "status": 400}
 missing_image_index = {"error": "missingImageIndex", "status": 400}
 un_auth_listing = {"error": "unAuthListing", "status": 401}
 missing_miss_match = {"error": "missingMissMatch", "status": 401}
-
 missing_invalid_parameter_error = 400
 unauthorized_access = 401
 processing_failed = 403
