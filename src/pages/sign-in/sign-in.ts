@@ -9,6 +9,9 @@ import {SignUpPage} from '../sign-up/sign-up';
 import {MainPage} from "../main/main";
 
 import {KasperService} from '../../app/providers/kasper-service'
+import {User} from "../../app/models/user";
+import {Location} from "../../app/models/location";
+import {Province} from "../../app/models/province";
 
 @Component({
     selector: 'page-sign-in',
@@ -65,7 +68,13 @@ export class SignInPage {
      *
      * @param data the response from the server
      */
-    signInCallback(data: JSON): void{
+    signInCallback(data: any): void{
+        this.kasperService.loginService.setUser(
+            new User(data.userId, data.email, data.firstName, data.lastName,  data.phone1, data.phone2,
+                new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
+        ));
+        this.kasperService.loginService.setToken(data.token);
+
         this.navCtrl.setRoot(MainPage);
     }
 

@@ -9,8 +9,6 @@ export class User{
     public phone1: string;
     public phone2: string;
     public location: Location;
-    public mode: number;
-    public token: string;
     public settings: UserSettings;
 
     /**
@@ -25,14 +23,13 @@ export class User{
      * @param location  the user's location
      */
     constructor(id: number, email: string, firstName: string, lastName: string, phone1: string,
-                phone2: string, mode: number, location: Location) {
+                phone2: string, location: Location) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone1 = phone1;
         this.phone2 = phone2;
-        this.mode = mode;
         this.location = location;
     }
 }

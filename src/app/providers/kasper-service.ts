@@ -17,11 +17,11 @@ export class KasperService {
     }
 
     getUserId(): number{
-        return this.loginService.user.id;
+        return this.loginService.getUserId();
     }
 
     getToken(): string{
-        return this.loginService.user.token;
+        return this.loginService.getToken();
     }
 
     /**
