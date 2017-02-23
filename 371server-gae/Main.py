@@ -62,6 +62,8 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
     webapp2.Route('/createlisting', CreateListing),
     webapp2.Route('/like', LikeDislikeListing),
-    webapp2.Route('/editListing', EditListing)
+    webapp2.Route('/editListing', EditListing),
+    webapp2.Route('/getFavoriteListing', GetFavoriteListing),
+    webapp2.Route('/getMyListing', GetMyListing)
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)
