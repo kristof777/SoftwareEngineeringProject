@@ -44,7 +44,7 @@ export class KasperService {
      * @param password  the password to sign in with
      * @param cbLogin   the callback for the data
      */
-    login(email: string, password: string, cbLogin: (data: JSON) => void): void{
+    login(email: string, password: string, cbLogin: (data: any) => void): void{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
@@ -67,7 +67,7 @@ export class KasperService {
      *
      * @param cbLogin   the callback for the data
      */
-    loginWithToken(cbLogin: (data: JSON) => void): void{
+    loginWithToken(cbLogin: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
 
@@ -104,7 +104,7 @@ export class KasperService {
      */
     signUp(email: string, password: string, confirmedPassword: string, firstName: string,
             lastName: string, phone1: string, phone2: string, city: string, province: string,
-            cbSignUp: (data: JSON) => void): void{
+            cbSignUp: (data: any) => void): void{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
@@ -131,7 +131,7 @@ export class KasperService {
      *                      firstName, lastName, phone1, phone2, city, province, email
      * @param cbEditAccount the callback for the data
      */
-    editUser(changeValues: JSON, cbEditAccount: (data: JSON) => void): void {
+    editUser(changeValues: JSON, cbEditAccount: (data: any) => void): void {
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
@@ -158,7 +158,7 @@ export class KasperService {
      * @param cbChangePassword      the callback for the data
      */
     changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string,
-                   cbChangePassword: (data: JSON) => void): void{
+                   cbChangePassword: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
@@ -183,7 +183,7 @@ export class KasperService {
      *
      * @param cbGetFavourites   the callback for the data
      */
-    getFavourites(cbGetFavourites: (data: JSON) => void): void{
+    getFavourites(cbGetFavourites: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
 
@@ -202,7 +202,7 @@ export class KasperService {
      * @param liked                 do they like it
      * @param cbLikeDislikeListing  the callback for the data
      */
-    likeDislikeListing(listingId: number, liked: boolean, cbLikeDislikeListing: (data: JSON) => void): void{
+    likeDislikeListing(listingId: number, liked: boolean, cbLikeDislikeListing: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
@@ -230,7 +230,7 @@ export class KasperService {
      * @param cbGetListing      the callback for the data
      */
     getListings(cursor: number, lastListingId: number, filter: Filter, cbGetListing:
-                (data: JSON) => void): void{
+                (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('cursor', cursor);
@@ -256,7 +256,7 @@ export class KasperService {
      * @param listing           the listing
      * @param cbCreateListing   the callback for the data
      */
-    createListings(listing: Listing, cbCreateListing: (data: JSON) => void): void{
+    createListings(listing: Listing, cbCreateListing: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('province', listing.location.province.abbr);
@@ -287,7 +287,7 @@ export class KasperService {
      *                      description, images, thumbnailImageIndex, isPublished
      * @param cbEditAccount the callback for the data
      */
-    editListing(changeValues: JSON, cbEditAccount: (data: JSON) => void): void {
+    editListing(changeValues: JSON, cbEditAccount: (data: any) => void): void {
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
@@ -313,7 +313,7 @@ export class KasperService {
      * @param listingId             the listing id
      * @param cbRequestContactInfo  the callback for the data
      */
-    requestContactInformation(listingId: number, cbRequestContactInfo: (data: JSON) => void): void{
+    requestContactInformation(listingId: number, cbRequestContactInfo: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
@@ -330,7 +330,7 @@ export class KasperService {
     /**
      * Appends required information for all calls
      */
-    appendAuthentication(body: FormData){
+    appendAuthentication(body: FormData): void{
         body.append('userId', this.getUserId());
         body.append('token', this.getToken);
     }
