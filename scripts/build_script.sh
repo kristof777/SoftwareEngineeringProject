@@ -29,7 +29,7 @@ browser_build(){
     ls
     #python 371server-gae/main.py
   else
-    # dev_appserver.py 371server-gae/main.py
+    dev_appserver.py 371server-gae/main.py
     screen -d -m -L ionic serve --firefox@47.0.1
     sleep 50
     # sudo du / | grep "geckodriver"
