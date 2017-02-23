@@ -24,9 +24,6 @@ ios_install(){
 # you can find the versions inside the doc or posted at the end 
 # of the build log
 lindroid_install(){
-  sudo rm -rf /var/lib/apt/lists/* && sudo apt-get update
-  sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install g++-4.8 oracle-java8-installer lib32stdc++6 lib32z1
-  
   sudo apt-get install oracle-java8-set-default screen xvfb
   npm install -g protractor cordova ionic jasmine jasmine-core
   # installs packages specified in the ionic json
