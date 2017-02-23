@@ -2,13 +2,13 @@ import {Component} from '@angular/core';
 import {Platform} from 'ionic-angular';
 import {StatusBar, Splashscreen} from 'ionic-native';
 
-import {MainPage} from '../pages/main/main';
+import {SignInPage} from '../pages/sign-in/sign-in';
 
 @Component({
     templateUrl: 'app.html'
 })
 export class MyApp {
-    rootPage = MainPage;
+    rootPage = SignInPage;
 
     constructor(platform: Platform) {
         platform.ready().then(() => {

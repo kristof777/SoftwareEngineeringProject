@@ -10,7 +10,7 @@
 
 <ion-content>
     <ion-list>
-        <ion-item-sliding (ionDrag)="logDrag($event)" *ngFor="let curListing of listings">
+        <ion-item-sliding (ionDrag)="onDrag($event)" *ngFor="let curListing of listings">
             <ion-item *ngIf="curListing != null">
                 <ion-label>
                     <ion-img src="{{ curListing.images[0] }}"></ion-img>

@@ -23,10 +23,10 @@ export class BrowsePage {
         this.listings = listingProvider.data;
     }
 
-    logDrag(event: ItemSliding){
-        if(event.getOpenAmount() < -70){
+    onDrag(event: ItemSliding){
+        if(event.getOpenAmount() < -100){
             this.likeListing(Number(event.item.id));
-        } else if (event.getOpenAmount() > 70){
+        } else if (event.getOpenAmount() > 100){
             this.dislikeListing(Number(event.item.id));
         }
     }
