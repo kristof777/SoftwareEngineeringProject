@@ -3,7 +3,6 @@ let assert = require('assert-plus');
 import {Component, ViewChild} from '@angular/core';
 import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
-import {FilterPage} from '../filter/filter';
 import {Logger} from "angular2-logger/core";
 
 @Component({
@@ -19,7 +18,6 @@ export class DetailPage {
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
-                public modalCtrl: ModalController,
                 public listings: ListingProvider,
                 private _logger: Logger,
                 public navParams: NavParams) {
@@ -38,20 +36,6 @@ export class DetailPage {
      */
     goToFavourites(): void{
         this._logger.info("Favourites was clicked");
-    }
-
-    /**
-     * Display the filters screen
-     */
-    goToFilters(): void{
-        this._logger.info("Filters was clicked");
-        let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
-
-        filterModal.onDidDismiss(data => {
-            this._logger.info("Filter Modal Data: " + JSON.stringify(data));
-        });
-
-        filterModal.present();
     }
 
     /**
