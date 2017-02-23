@@ -19,7 +19,7 @@
 
         <ion-slides pager id="listingImages">
             <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
-                <img src="data:image/jpeg;base64,{{ image }}" />
+                <img src="{{ image }}" />
             </ion-slide>
         </ion-slides>
     </ion-toolbar>
