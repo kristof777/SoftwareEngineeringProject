@@ -1,11 +1,10 @@
 let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, ModalController} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail"
-import {EditListingsPage} from "../edit-listings/edit-listings"
 import {AddListingPage} from "../add-listing/add-listing"
 
 @Component({
@@ -18,6 +17,7 @@ export class MyListingsPage {
     listings: Listing[];
 
     constructor(public navCtrl: NavController,
+                public modalCtrl: ModalController,
                 public listingProvider: ListingProvider,
                 private _logger: Logger) {
 
@@ -44,7 +44,7 @@ export class MyListingsPage {
      * @param listing: listing to be edited
      */
     editListing(listing:Listing){
-        this.navCtrl.push(EditListingsPage,{
+        this.navCtrl.push(AddListingPage,{
             data:listing
         });
         this._logger.debug("Trying to edit...")
@@ -64,8 +64,13 @@ export class MyListingsPage {
      * Takes you to listing page
      */
     addListing(){
-        // TODO switch to a modal
-        this.navCtrl.push(AddListingPage);
+        let addListingModal = this.modalCtrl.create(AddListingPage, {});
+
+        addListingModal.onDidDismiss(data => {
+            this._logger.info("Add Listing Modal Data: " + JSON.stringify(data));
+        });
+
+        addListingModal.present();
     }
 
     /**

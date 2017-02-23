@@ -10,19 +10,23 @@
 
 <ion-content>
     <ion-list>
-        <ion-slides initialSlide="1" (ionSlideDidChange)="onSlideChange(current)">
-            <ion-slide style="background-color: green;"></ion-slide>
-            <ion-slide>
-                <ion-img class="jumbotron" src="{{ listing.images[0] }}"></ion-img>
-                <span class="description">
-                    <p class="price">{{ listing.price }}</p>
-                    <p class="address">{{ listing.location.address }}</p>
-                    <p class="map">
-                        <button ion-button icon-only><ion-icon name="navigate"></ion-icon></button>
-                    </p>
-                </span>
-            </ion-slide>
-            <ion-slide style="background-color: red;"></ion-slide>
-        </ion-slides>
+        <ion-item-sliding (ionDrag)="onDrag($event)" *ngFor="let curListing of listings">
+            <ion-item *ngIf="curListing != null">
+                <ion-label>
+                    <ion-img src="{{ curListing.images[0] }}"></ion-img>
+                    <span class="description">
+                        <p class="price">{{ curListing.price | currency:'USD':true:'1.2-2' }}</p>
+                    </span>
+                </ion-label>
+            </ion-item>
+
+            <ion-item-options side="left">
+                <button ion-button>Like</button>
+            </ion-item-options>
+
+            <ion-item-options side="right">
+                <button ion-button>Dislike</button>
+            </ion-item-options>
+        </ion-item-sliding>
     </ion-list>
 </ion-content>
