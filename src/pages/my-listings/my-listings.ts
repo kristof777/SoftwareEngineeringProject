@@ -5,7 +5,6 @@ import {NavController, ModalController} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail"
-import {EditListingsPage} from "../edit-listings/edit-listings"
 import {AddListingPage} from "../add-listing/add-listing"
 
 @Component({
@@ -45,7 +44,7 @@ export class MyListingsPage {
      * @param listing: listing to be edited
      */
     editListing(listing:Listing){
-        this.navCtrl.push(EditListingsPage,{
+        this.navCtrl.push(AddListingPage,{
             data:listing
         });
         this._logger.debug("Trying to edit...")

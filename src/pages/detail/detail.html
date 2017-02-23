@@ -3,12 +3,17 @@
         <ion-title>
             Details
         </ion-title>
+        <ion-buttons end>
+            <button *ngIf="belongsToUser()" ion-button icon-only (click)="edit()">
+                <ion-icon name="create"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
     <ion-toolbar>
-        <ion-item no-lines id="voteBar">
+        <ion-item no-lines id="voteBar" *ngIf="!belongsToUser()">
             <button ion-button item-left clear icon-only (click)="unlike()" id="unlikeButton">
                 <ion-icon ios="ios-close-circle" md="md-close-circle"></ion-icon>
             </button>
@@ -25,10 +30,10 @@
     </ion-toolbar>
 
     <ion-item>
-        <button ion-button item-left clear icon-only large (click)="previousProperty()" id="previousProperty">
+        <button ion-button item-left clear icon-only large (click)="previousProperty()" *ngIf="isPreviousProperty()" id="previousProperty">
             <ion-icon ios="ios-arrow-dropleft-circle" md="md-arrow-dropleft-circle"></ion-icon>
         </button>
-        <button ion-button item-right clear icon-only large (click)="nextProperty()" id="nextProperty">
+        <button ion-button item-right clear icon-only large (click)="nextProperty()" *ngIf="isNextProperty()" id="nextProperty">
             <ion-icon ios="ios-arrow-dropright-circle" md="md-arrow-dropright-circle"></ion-icon>
         </button>
     </ion-item>

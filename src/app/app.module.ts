@@ -13,8 +13,6 @@ import {BrowsePage} from '../pages/browse/browse';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {FavouritesPage} from '../pages/favourites/favourites';
 import {MyProfilePage} from '../pages/my-profile/my-profile';
-
-import {EditListingsPage} from '../pages/edit-listings/edit-listings';
 import {AddListingPage} from '../pages/add-listing/add-listing';
 
 import {FilterPage} from '../pages/filter/filter';
@@ -28,7 +26,6 @@ import {LoginService} from "./providers/login-service";
         SignInPage,
         SignUpPage,
         AddListingPage,
-        EditListingsPage,
         FavouritesPage,
         FilterPage,
         ChangePasswordPage,
@@ -47,7 +44,6 @@ import {LoginService} from "./providers/login-service";
         SignInPage,
         SignUpPage,
         AddListingPage,
-        EditListingsPage,
         FavouritesPage,
         FilterPage,
         ChangePasswordPage,
