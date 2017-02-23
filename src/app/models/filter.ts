@@ -1,7 +1,7 @@
 import {Province} from "./province";
 import {Bound} from "./bound";
 
-export class Template{
+export class Filter{
     public provinces: Province[];
     public price: Bound;
     public squareFeet: Bound;

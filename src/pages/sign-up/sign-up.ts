@@ -3,13 +3,13 @@ import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 
 import {NavController, ToastController, Slides} from 'ionic-angular';
-import {UserService} from '../../app/providers/login-service'
+import {KasperService} from '../../app/providers/kasper-service'
 import {MainPage} from "../main/main";
 
 @Component({
     selector: 'page-sign-up',
     templateUrl: 'sign-up.html',
-    providers: [UserService]
+    providers: [KasperService]
 })
 export class SignUpPage {
     @ViewChild(Slides) slides: Slides;
@@ -29,12 +29,17 @@ export class SignUpPage {
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
                 public toastCtrl: ToastController,
-                public userService: UserService) {
+                public userService: KasperService) {
     }
 
     doRegister(): void{
-        this.userService.signUp(this.email,this.password, this.confirmPassword,this.firstName,this.lastName, this.phoneNumber, this.city);
+        this.userService.signUp(this.email,this.password, this.confirmPassword,this.firstName,
+            this.lastName, this.phoneNumber, "", this.city, this.province, this.registerCallback);
         this.navCtrl.setRoot(MainPage);
+    }
+
+    registerCallback(data: JSON){
+
     }
 
     /**
