@@ -25,7 +25,6 @@ export class LoginService {
 
             this.db.openDatabase(KasperConfig.DB_INFO)
                 .then(() => {
-                    this.createLoginTable();
                     this.loadSessionInfo();
                 }, error => {
                     this._logger.error("Could not access database: ");
@@ -78,18 +77,5 @@ export class LoginService {
         });
 
 
-    }
-
-    /**
-     * Creates the table containing the user's previous session info.
-     */
-    private createLoginTable(): void{
-        this.db.executeSql("CREATE TABLE IF NOT EXISTS " +
-            "session(userId INT, token VARCHAR(255), created_date DATETIME)", {}).then(() => {
-            // Don't do anything if it's created successfully or already exists.
-        }, error => {
-            this._logger.error("Could not create session table: ");
-            this._logger.error(error);
-        });
     }
 }
