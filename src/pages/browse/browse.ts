@@ -23,16 +23,16 @@ export class BrowsePage {
         this.listings = listingProvider.data;
     }
 
-    onDrag(event: ItemSliding){
+    onDrag(event: ItemSliding, index: number){
         if(event.getOpenAmount() < -100){
-            this.likeListing(Number(event.item.id));
+            this.likeListing(index);
         } else if (event.getOpenAmount() > 100){
-            this.dislikeListing(Number(event.item.id));
+            this.dislikeListing(index);
         }
     }
 
     dislikeListing(index: number): void{
-        this._logger.log("Disliking the current slide");
+        this._logger.log("Disliking slide at index " + index);
 
         this.toastCtrl.create({
             message: "Disliked the selected listing.",
@@ -44,7 +44,7 @@ export class BrowsePage {
     }
 
     likeListing(index: number): void{
-        this._logger.log("Liking the current slide");
+        this._logger.log("Liking slide at index " + index);
 
         this.toastCtrl.create({
             message: "Liked the selected listing.",
