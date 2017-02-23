@@ -1,7 +1,7 @@
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
@@ -15,6 +15,9 @@ import {Province} from "../../app/models/province";
 })
 export class AddListingPage {
     curListing: Listing;
+
+    private listingId;
+    private listerId;
     bathrooms: number;
     province: string;
     city: string;
@@ -28,8 +31,30 @@ export class AddListingPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public navParams: NavParams,
                 private _logger: Logger) {
         this.images = [];
+
+        if(this.navParams.get('listing')){
+            this.loadListingInfo(this.navParams.get('listing'));
+        }
+    }
+
+    loadListingInfo(listing: Listing): void{
+        assert.object(listing);
+
+        this.listingId = listing.listingId;
+        this.listerId = listing.listerId;
+        this.bathrooms = listing.bathrooms;
+        this.province = listing.location.province.abbr;
+        this.city = listing.location.city
+        this.bedrooms = listing.bedrooms;
+        this.squarefeet = listing.squarefeet;
+        this.price = listing.price;
+        this.address = listing.location.address;
+        this.postalCode = listing.location.postalCode;
+        this.description = listing.description;
+        this.images = listing.images;
     }
 
     /**

@@ -2,12 +2,13 @@ import {User} from "../../app/models/user";
 let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component, ViewChild} from '@angular/core';
-import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
+import {NavController, ModalController, NavParams, Slides} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {LoginService} from "../../app/providers/login-service";
 import {Province} from "../../app/models/province";
 import {Location} from "../../app/models/location";
+import {AddListingPage} from "../add-listing/add-listing";
 
 @Component({
     selector: 'page-detail',
@@ -21,9 +22,9 @@ export class DetailPage {
     cursor: number = 0;
 
     constructor(public navCtrl: NavController,
-                public toastCtrl: ToastController,
+                public modalCtrl: ModalController,
                 public listings: ListingProvider,
-                private _loginService: LoginService,
+                public loginService: LoginService,
                 private _logger: Logger,
                 public navParams: NavParams) {
         if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
@@ -42,7 +43,7 @@ export class DetailPage {
         let phone2: string = null;
         let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
 
-        this._loginService.setUser(new User(userID, email, firstName, lastName, phone1, phone2, location));
+        this.loginService.setUser(new User(userID, email, firstName, lastName, phone1, phone2, location));
     }
 
 
@@ -98,7 +99,13 @@ export class DetailPage {
      * Edit the current property
      */
     edit(): void{
+        let editListingModal = this.modalCtrl.create(AddListingPage, { listing: this.data[this.cursor] });
 
+        editListingModal.onDidDismiss(data => {
+            this._logger.info("Edit Listing Data: " + JSON.stringify(data));
+        });
+
+        editListingModal.present();
     }
 
     /**
@@ -125,6 +132,6 @@ export class DetailPage {
      * @returns {boolean}   true if it is their property
      */
     belongsToUser(): boolean{
-        return this._loginService.getUserId() == this.data[this.cursor].listerId;
+        return this.loginService.getUserId() == this.data[this.cursor].listerId;
     }
 }
