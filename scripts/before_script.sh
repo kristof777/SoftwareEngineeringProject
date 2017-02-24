@@ -10,11 +10,11 @@ if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
   echo "should be osx"
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux before_script"
-  export DISPLAY=:99.0
-  sh -e /etc/init.d/xvfb start
-  sleep 3
-  rackup
-  sleep 3
+  #export DISPLAY=:99.0
+  #sh -e /etc/init.d/xvfb start
+  #sleep 3
+  #rackup
+  #sleep 3
 else
   echo "should be andriod"
 fi
