@@ -78,7 +78,7 @@ class CreateUser(BaseHandler):
             return
 
         password = values['password']
-        if is_valid_password(password):
+        if is_invalid_password(password):
             error_json = json.dumps({
                 password_not_strong['error']: 'Password not strong enough'})
             self.response.write(error_json)
