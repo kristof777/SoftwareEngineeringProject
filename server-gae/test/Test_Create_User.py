@@ -73,7 +73,7 @@ class TestHandlers(unittest.TestCase):
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(Error_Code.password_mismatch['error'], errors_expected)
+        self.assertEquals(password_mismatch['error'], errors_expected)
 
         # test case 3 without strong password
 
