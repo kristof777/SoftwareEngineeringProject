@@ -77,12 +77,7 @@ class ChangePassword(BaseHandler):
             errors[Error_Code.missing_confirmed_password['error']] \
                 = "Confirmed password not provided"
 
-        error_keys = ['email', 'firstName', 'lastName', 'password',
-                     'confirmedPassword', 'phone1', 'province', 'city']
-        error_values = [missing_email, missing_first_name, missing_last_name,
-                        missing_password, missing_confirmed_password,
-                        missing_phone_number, missing_province, missing_city]
-        key_error_dict = dict(zip(error_keys, error_values))
+
 
 
 class SetPasswordHandler(BaseHandler):

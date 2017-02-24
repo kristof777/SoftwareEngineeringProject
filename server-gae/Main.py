@@ -32,10 +32,7 @@ from web_apis.Create_User import *
 from web_apis.Listing_API import *
 from web_apis.Change_Password import *
 from models.User import User
-from extras.User_Auth import MainHandler
-
-
-
+from extras.User_Auth import *
 
 # configuration
 config = {
@@ -54,7 +51,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name='home'),
     webapp2.Route('/createuser', CreateUser),
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
-      handler=VerificationHandler, name='verification'),
+    handler=VerificationHandler, name='verification'),
     webapp2.Route('/signin', SignIn, name='signin'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
