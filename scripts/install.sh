@@ -13,8 +13,6 @@ set -v
 ios_install(){
   brew update
   brew cask install java
-  java -version
-  echo $JAVA_HOME
   npm install -g grunt-cli cordova ionic
   npm install
   ionic state restore
@@ -24,24 +22,20 @@ ios_install(){
 # you can find the versions inside the doc or posted at the end 
 # of the build log
 lindroid_install(){
-  #sudo rm -rf /var/lib/apt/lists/* && sudo apt-get update
-  #sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install g++-4.8 oracle-java8-installer lib32stdc++6 lib32z1
- 
   sudo apt-get install oracle-java8-set-default screen xvfb
   npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core
   # installs packages specified in the ionic json
   npm install
-  # chrome_install
   webdriver-manager update
   # commented out for now, we could use chrome at some point and this might be needed for it
-  # geckodriver_install
-  # bower update
+  # chrome_install
 }
 
 # downloads and installs all the files required to run android
 # you can find the versions inside the doc or posted at the end 
 # of the build log
 android_install(){
+  ionic state restore
   wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
   tar -xf android-sdk_r24.4-linux.tgz
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter tools-25.2.5
@@ -99,15 +93,16 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   #echo "got to linux install"
   lindroid_install
+  
+  # prevent dialogue messages from appearing in gooogle app engine install
   export CLOUDSDK_INSTALL_DIR=/$HOME
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  
   gae_install
-  protractor --version
   mkdir www
 else
   echo "got to install: android"
   lindroid_install
-  ionic state restore
   android_install
   mkdir www
 fi
