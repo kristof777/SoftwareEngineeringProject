@@ -56,11 +56,13 @@ class CreateUser(BaseHandler):
 
         if not is_valid_phone(values['phone1']):
             invalid[invalid_phone1['error']] = "Invalid phone number 1"
-        if phone2 is not None and not is_valid_phone(phone2):
-            invalid[invalid_phone2['error']] = "Invalid phone number 2"
-        if is_valid_email(values['email']):
-            invalid[invalid_email['error']] = "Invalid email address"
 
+        if phone2 is not None and phone2 not in ["", u""] and \
+           not str(phone2).isspace() and not is_valid_phone(phone2):
+            invalid[invalid_phone2['error']] = "Invalid phone number 2"
+
+        if not is_valid_email(values['email']):
+            invalid[invalid_email['error']] = "Invalid email address"
 
         if len(invalid) != 0:
             error_json = json.dumps(invalid)

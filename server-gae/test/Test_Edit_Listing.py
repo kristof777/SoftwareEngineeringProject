@@ -72,7 +72,7 @@ class TestHandlers(unittest.TestCase):
                  "city": "Regina",
                  "postalCode": "R7N 4P7",
                  "province": "Saskatchewan",
-                 "phone1": 222222222222,
+                 "phone1": 2222222222,
                  "confirmedPassword": "Ycd245577"
                  }
 

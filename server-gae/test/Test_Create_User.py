@@ -31,7 +31,8 @@ class TestHandlers(unittest.TestCase):
         input3: invalid phone number 2
         input4: invalid email
         input5: not strong password
-        input6: Everything valid
+        inpput6: password not matching confirmedPassword
+        input7: Everything valid
         :return:
         """
 
@@ -43,8 +44,10 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
         response = request.get_response(Main.app)  # get response back
         # unit testing example checking if status is what we expected
+
         # test case 1
         # checking if all error codes are received, if empty code is sent
+
         self.assertEquals(response.status_int, 400)
 
         errors_expected = [missing_province['error'],
@@ -58,14 +61,78 @@ class TestHandlers(unittest.TestCase):
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
-        print(error_keys)
         # checking if there is a difference between error_keys and what we got
+
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
+        #test 2 with invalid phone 1
         input2 = create_random_user()
-        input2['password'] = "123456"
+        input2['phone1'] = "123456"
         request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, 400)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
+
+        self.assertEquals(invalid_phone1['error'], errors_expected)
+
+        # test case 3 with phone2 invalid
+
+        input3 = create_random_user()
+        input3['phone2'] = "123456"
+        request = webapp2.Request.blank('/createuser', POST=input3)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, 400)
+
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
+
+        self.assertEquals(invalid_phone2['error'], errors_expected)
+
+        # test case 4 invalid email
+
+        input4 = create_random_user()
+        input4['email'] = "gaa"
+        request = webapp2.Request.blank('/createuser',
+                                        POST=input4)  # api you need to test
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, 400)
+
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
+
+        self.assertEquals(invalid_email['error'], errors_expected)
+
+        # test case 5 strong password
+
+        input5 = create_random_user()
+        input5['password'] = "123456"
+        input5['confirmedPassword'] = "123456"
+        request = webapp2.Request.blank('/createuser',
+                                        POST=input5)  # api you need to test
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, 400)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
+
+        self.assertEquals(password_not_strong['error'], errors_expected)
+
+
+        # test case 6 password mismatch with confirmed password
+
+        input6 = create_random_user()
+        input6['password'] = "123456"
+        request = webapp2.Request.blank('/createuser',
+                                        POST=input6)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
         try:
@@ -75,49 +142,23 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(password_mismatch['error'], errors_expected)
 
-        # test case 3 without strong password
+        # test case 7 correct information
 
-        input3 = {"email": "student@usask.ca",
-                  "password": "123456",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "123456"
-                  }
-
-        request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 400)
-
-        # test case 4 without strong password
-
-        input3 = {"email": "student@usask.ca",
-                  "password": "ABab1234",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "ABab1234"
-                  }
-
+        input7 = create_random_user()
         request = webapp2.Request.blank('/createuser',
-                                        POST=input3)  # api you need to test
+                                        POST=input7)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
         self.assertTrue("token" in output)
         self.assertTrue("userId" in output)
         user_saved = User.get_by_id(int(output["userId"]))
-        self.assertEquals(user_saved.first_name,"Student")
-        self.assertEquals(user_saved.last_name,"USASK")
-        self.assertEquals(user_saved.city,"Saskatoon")
-        self.assertEquals(user_saved.email,"student@usask.ca")
-        self.assertEquals(int(user_saved.phone1),1111111111)
-        self.assertEquals(user_saved.province,"Saskatchewan")
+        self.assertEquals(user_saved.first_name,input7["firstName"])
+        self.assertEquals(user_saved.last_name,input7["lastName"])
+        self.assertEquals(user_saved.city,input7["city"])
+        self.assertEquals(user_saved.email,input7["email"])
+        self.assertEquals(user_saved.phone1,input7["phone1"])
+        self.assertEquals(user_saved.province,input7["province"])
 
 
 

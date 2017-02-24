@@ -54,7 +54,7 @@ def get_random_email():
     """
 
     return get_random_string(random.randint(6, 12)) + "@" \
-        + get_random_string(random.randint(4, 12)) + ".ca"
+        + get_random_string(random.randint(4, 6)) + ".ca"
 
 
 def get_random_password():
@@ -256,7 +256,7 @@ def is_valid_phone(phone):
     :return: true if phone number is Valid
     """
     assert phone != None
-    return len(phone) == 10 and unicode(phone,'utf-8').isnumeric()
+    return len(phone) == 10 and unicode(str(phone),'utf-8').isnumeric()
 
 
 def is_invalid_password(password):
@@ -274,8 +274,9 @@ def is_valid_email(email):
     """
     :param email:
     :return: True is email is valid
+
     """
-    return validate_email(email)
+    return validate_email(str(email))
 
 
 def test_keys_validation():
@@ -295,5 +296,4 @@ def test_keys_validation():
 if __name__ == "__main__":
     test_random_email()
     test_random_password()
-    test_keys_validation()
 

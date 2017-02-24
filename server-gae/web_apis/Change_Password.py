@@ -1,8 +1,11 @@
 import json
 import logging
 import sys
+
+from extras.utils import is_invalid_password
+
 sys.path.append("../")
-import extras.Error_Code as Error_Code
+from extras.Error_Code import *
 from extras.Base_Handler import BaseHandler
 
 
@@ -50,95 +53,49 @@ class ChangePassword(BaseHandler):
         errors = {}
         empty = u''
 
-        # For each required field, making sure it exists, is not empty
-        # and also has something else other than spaces
+        # For each required field, making sure it is non-null, non-empty
+        # and contains more than than space characters
 
         old_password = self.request.POST.get('password')
         if old_password is None:
-            errors[Error_Code.missing_password['error']] = \
+            errors[missing_password['error']] = \
                 "Old Password not provided"
         elif old_password.isspace() or old_password is empty:
-            errors[Error_Code.missing_password['error']] = \
+            errors[missing_password['error']] = \
                 "Old Password not provided"
 
         new_password = self.request.POST.get('newPassword')
         if new_password is None:
-            errors[Error_Code.missing_confirmed_password['error']] \
+            errors[missing_confirmed_password['error']] \
                 = "New password not provided"
         elif new_password.isspace() or new_password is empty:
-            errors[Error_Code.missing_confirmed_password['error']] \
+            errors[missing_confirmed_password['error']] \
                 = "New password not provided"
 
         confirmed_password = self.request.POST.get('confirmPassword')
         if confirmed_password is None:
-            errors[Error_Code.missing_confirmed_password['error']] \
+            errors[missing_confirmed_password['error']] \
                 = "Confirmed password not provided"
         elif confirmed_password.isspace() or confirmed_password is empty:
-            errors[Error_Code.missing_confirmed_password['error']] \
+            errors[missing_confirmed_password['error']] \
                 = "Confirmed password not provided"
 
-
-
-
-class SetPasswordHandler(BaseHandler):
-
-    @user_required
-    def post(self):
-        password = self.request.get('password')
-        old_token = self.request.get('t')
-
-        if not password or password != self.request.get('confirm_password'):
-            self.display_message('passwords do not match')
+        # If there was a missing or empty field, return error
+        if len(errors) != 0:
+            error_json = json.dumps(errors)
+            self.response.write(error_json)
+            self.response.set_status(missing_invalid_parameter_error['status'])
             return
 
-        user = self.user
-        user.set_password(password)
-        user.put()
-
-        # remove sign up token, we don't want user to come back with an old link
-        self.user_model.delete_signup_token(user.get_id(), old_token)
-        self.display_message('Password updated.')
-
-
-# @user_required need to be there to make sure that the user is logged in
-class AuthenticatedHandler(BaseHandler):
-  @user_required
-  def get(self):
-    self.render_template('../webpages/Authenticated.html')
-
-
-class LogoutHandler(BaseHandler):
-  def get(self):
-    self.auth.unset_session()
-    self.redirect(self.uri_for('home'))
-
-
-class ForgotPasswordHandler(BaseHandler):
-    def get(self):
-        self._serve_page()
-
-    def post(self):
-        email = self.request.get('email')
-        user = self.user_model.get_by_auth_id(email)
-        if not user:
-            logging.info('Could not find any user entry for email %s', email)
-            self._serve_page(not_found=True)
+        if is_invalid_password(new_password):
+            self.response.write(json.dumps(password_not_strong["error"]))
+            self.response.set_status(password_not_strong['status'])
             return
-        user_id = user.get_id()
-        token = self.user_model.create_signup_token(user_id)
 
-        verification_url = self.uri_for('verification', type='p', user_id=user_id,
-                                        signup_token=token, _full=True)
+        if new_password != confirmed_password:
+            self.response.write(json.dumps(password_mismatch["error"]))
+            self.response.set_status(password_mismatch['status'])
+            return
 
-        msg = 'Send an email to user in order to reset their password. \
-                  They will be able to do so by visiting <a href="{url}">{url}</a>'
+        
 
-        self.display_message(msg.format(url=verification_url))
-
-    def _serve_page(self, not_found=False):
-        username = self.request.get('username')
-        params = {
-            'username': username,
-            'not_found': not_found
-        }
-        self.render_template('../webpages/Forgot.html', params)
