@@ -256,7 +256,7 @@ def is_valid_phone(phone):
     :return: true if phone number is Valid
     """
     assert phone != None
-    return len(phone) == 10 and phone.isnumeric()
+    return len(phone) == 10 and unicode(phone,'utf-8').isnumeric()
 
 
 def is_invalid_password(password):
