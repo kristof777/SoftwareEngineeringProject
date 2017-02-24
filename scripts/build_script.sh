@@ -71,6 +71,8 @@ system_info(){
   java -version
   echo 'npm version:'
   npm -v
+  echo "Firefox version:"
+  firefox --version
   #ionic info
 }
 
