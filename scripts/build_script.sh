@@ -34,7 +34,7 @@ browser_build(){
     sleep 50
     # sudo du / | grep "geckodriver"
     # webdriver-manager start &
-    protractor e2e-tests.conf.js --troubleshoot 
+    /etc/init.d/xvfb-run protractor e2e-tests.conf.js --troubleshoot 
     # kill -9 $IONIC_PID # should occure after tests
     echo "${PYTHONPATH}"
     ls
