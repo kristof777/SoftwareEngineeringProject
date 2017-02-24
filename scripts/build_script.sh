@@ -50,27 +50,6 @@ android_build(){
   fi
 }
 
-# Displays versions of the main: sdks, tools and platforms used for the build
-system_info(){
-  echo "System info:"
-  echo $TRAVIS_OS_NAME
-  if [[ "${TRAVIS_OS_NAME}" == "android" ]]; then
-    echo 'SDK Platform Android 7.1.1, API 25, revision 3'
-    echo 'Android SDK Tools, revision 25.2.5'
-    echo 'Android SDK Build-tools, revision 25.0.1'
-    echo 'Android SDK Platform-tools, revision 25.0.3'
-    echo 'Google Repository, revision 42'
-    echo 'Android Support Repository, revision 42'
-  fi
-  
-  java -version
-  echo 'npm version:'
-  npm -v
-  firefox --version
-  #ionic info
-}
-
-
 
 if [[ "${TRAVIS_OS_NAME}" == 'osx' ]]; then
   echo 'got to build: osx'
@@ -84,4 +63,3 @@ else
   export JAVA_HOME=/usr/lib/jvm/java-8-oracle
   android_build
 fi
-system_info
