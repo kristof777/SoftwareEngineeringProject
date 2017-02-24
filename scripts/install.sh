@@ -33,7 +33,8 @@ lindroid_install(){
   npm install
   # chrome_install
   webdriver-manager update
-  geckodriver_install
+  # commented out for now, we could use chrome at some point and this might be needed for it
+  # geckodriver_install
   # bower update
 }
 
@@ -69,6 +70,9 @@ gae_install(){
 }
 
 # downloads and installs chrome 
+# DEPRICATED: 
+# this might not be needed anymore. adding google-chrome to sources
+# and google-chrome-stable to packages installs chrome now
 chrome_install(){
     export CHROME_BIN=/usr/bin/google-chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -76,6 +80,9 @@ chrome_install(){
     npm install chromedriver
 }
 
+# downloads and installs geckodriver to be used with our build
+# DEPRICATED: Probably doesn't need to be here anymore since ver 47.0.1 doesn't
+# use it
 geckodriver_install(){
     wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
     tar -xvzf geckodriver*
