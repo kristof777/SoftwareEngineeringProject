@@ -18,7 +18,9 @@ import {AddListingPage} from '../pages/add-listing/add-listing';
 import {FilterPage} from '../pages/filter/filter';
 import {ChangePasswordPage} from '../pages/change-password/change-password';
 import {SavedListingProvider} from "./providers/saved-listing-provider";
+
 import {LoginService} from "./providers/login-service";
+import {KasperService} from "./providers/kasper-service";
 
 @NgModule({
     declarations: [
@@ -57,6 +59,7 @@ import {LoginService} from "./providers/login-service";
         {provide: ErrorHandler, useClass: IonicErrorHandler},
         SavedListingProvider,
         LoginService,
+        KasperService,
         Logger,
         LOG_LOGGER_PROVIDERS]
 })
