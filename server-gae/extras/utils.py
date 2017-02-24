@@ -259,7 +259,7 @@ def is_valid_phone(phone):
     return len(phone) == 10 and phone.isnumeric()
 
 
-def is_valid_password(password):
+def is_invalid_password(password):
     """
 
     :param password:

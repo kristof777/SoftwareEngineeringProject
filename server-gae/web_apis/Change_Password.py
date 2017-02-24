@@ -27,20 +27,19 @@ class ChangePassword(BaseHandler):
     Class used to handle get and post.
     Get:  is used to render an HTML page.
     Post:
-        @pre-cond: Expecting keys to be currentPassword,
-                   password, and confirmedPassword. If any of these is not
+        @pre-cond: Expecting keys to be old_password,
+                   new_password, and confirmed_password. If any of these is not
                    present an appropriate error and status code 40 is returned.
 
-                   password and ConfirmedPassword are expected to be equal then
-                   if not then appropriate missing_invalid_parameter_error is
-                   returned.
+                   new_password and confirmed_password are expected to be equal
+                   then if not then appropriate missing_invalid_parameter_error
+                   is returned.
 
-                   password must be 8 in length, and have at least one upercase,
-                   lowercase, and numeric character or it will return a
-                   missing_invalid_parameter_error.
+                   new passwords must be 8 in length, and have at least one
+                   uppercase, lowercase, and numeric character or it will return
+                   a missing_invalid_parameter_error.
 
-        @post-cond: An user with provided information is created in the
-                    database. Token and userId is returned as an response
+        @post-cond: A users password is changed in the database. Token and userId is returned as an response
                     object.
     """
     def get(self):
@@ -54,19 +53,19 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it exists, is not empty
         # and also has something else other than spaces
 
-        password = self.request.POST.get('password')
-        if password is None:
+        old_password = self.request.POST.get('password')
+        if old_password is None:
             errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
-        elif password.isspace() or password is empty:
+                "Old Password not provided"
+        elif old_password.isspace() or old_password is empty:
             errors[Error_Code.missing_password['error']] = \
-                "Password not provided"
+                "Old Password not provided"
 
-        confirmed_password = self.request.POST.get('newPassword')
-        if confirmed_password is None:
+        new_password = self.request.POST.get('newPassword')
+        if new_password is None:
             errors[Error_Code.missing_confirmed_password['error']] \
                 = "New password not provided"
-        elif confirmed_password.isspace() or confirmed_password is empty:
+        elif new_password.isspace() or new_password is empty:
             errors[Error_Code.missing_confirmed_password['error']] \
                 = "New password not provided"
 
@@ -78,45 +77,12 @@ class ChangePassword(BaseHandler):
             errors[Error_Code.missing_confirmed_password['error']] \
                 = "Confirmed password not provided"
 
-
-# when websites send us an activation link after a registration,
-# the url usually contain their equivalent of signup tokens.
-class VerificationHandler(BaseHandler):
-    def get(self, *args, **kwargs):
-        user = None
-        user_id = kwargs['user_id']
-        signup_token = kwargs['signup_token']
-        verification_type = kwargs['type']
-
-        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
-
-        if not user:
-            logging.info('Could not find any user with id "%s" signup token "%s"',
-                         user_id, signup_token)
-            self.abort(404)
-
-        # store user data in the session
-        self.auth.set_session(self.auth.store.user_to_dict(user), remember=True)
-
-        if verification_type == 'v': #remove signup token, we don't want users to come back with an old link
-         self.user_model.delete_signup_token(user.get_id(), signup_token)
-
-        if not user.verified:
-            user.verified = True
-            user.put()
-
-            self.display_message('User email address has been verified.')
-            return
-        elif verification_type == 'p':
-            # supply user to the page
-            params = {
-                'user': user,
-                'token': signup_token
-            }
-            self.render_template('../webpages/Reset_Password.html', params)
-        else:
-            logging.info('verification type not supported.')
-            self.abort(404)
+        error_keys = ['email', 'firstName', 'lastName', 'password',
+                     'confirmedPassword', 'phone1', 'province', 'city']
+        error_values = [missing_email, missing_first_name, missing_last_name,
+                        missing_password, missing_confirmed_password,
+                        missing_phone_number, missing_province, missing_city]
+        key_error_dict = dict(zip(error_keys, error_values))
 
 
 class SetPasswordHandler(BaseHandler):
