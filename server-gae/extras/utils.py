@@ -301,7 +301,6 @@ def return_error(self,error_message, error_status):
     """
     self.response.write(json.dumps(error_message))
     self.response.set_status(error_status)
-    return
 
 
 if __name__ == "__main__":
