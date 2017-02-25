@@ -15,6 +15,7 @@ branches:
   - master
   - develop
   - build_dev
+  - id3
     
 language: node_js
 cache:
