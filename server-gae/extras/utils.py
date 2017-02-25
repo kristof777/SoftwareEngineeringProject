@@ -293,6 +293,17 @@ def test_keys_validation():
     print(keys_validation(key_error_dict, response))
 
 
+def returnError(self,errorMessage, errorStatus):
+    """
+    :param self: self object
+    :param errorMessage: the error message to be sent
+    :param errorStatus: Error status, eg: 200 for success
+    """
+    self.response.write(json.dumps(errorMessage))
+    self.response.set_status(errorStatus)
+    return
+
+
 if __name__ == "__main__":
     test_random_email()
     test_random_password()
