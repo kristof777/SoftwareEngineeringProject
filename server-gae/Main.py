@@ -22,19 +22,17 @@
 # admin server page: http://localhost:9000
 #############################################################################################
 
-
-
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
 use_library('django', '0.96')
 webapp_django_version = '0.96'
-from SignIn import SignIn
-from Create_User import *
-from Listing_API import *
-from Change_Password import *
-
-
+from web_apis.SignIn import SignIn
+from web_apis.Create_User import *
+from web_apis.Listing_API import *
+from web_apis.Change_Password import *
+from models.User import User
+from extras.User_Auth import *
 
 # configuration
 config = {
@@ -53,7 +51,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name='home'),
     webapp2.Route('/createuser', CreateUser),
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
-      handler=VerificationHandler, name='verification'),
+    handler=VerificationHandler, name='verification'),
     webapp2.Route('/signin', SignIn, name='signin'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
@@ -61,6 +59,9 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
     webapp2.Route('/createlisting', CreateListing),
-    webapp2.Route('/like', LikeDislikeListing)
+    webapp2.Route('/like', LikeDislikeListing),
+    webapp2.Route('/editListing', EditListing),
+    webapp2.Route('/getFavoriteListing', GetFavoriteListing),
+    webapp2.Route('/getMyListing', GetMyListing)
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

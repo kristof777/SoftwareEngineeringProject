@@ -1,10 +1,14 @@
-import {ListingProvider} from "../../app/providers/listing-provider";
+import {User} from "../../app/models/user";
 let assert = require('assert-plus');
+import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component, ViewChild} from '@angular/core';
-import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
+import {NavController, ModalController, NavParams, Slides} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
-import {FilterPage} from '../filter/filter';
 import {Logger} from "angular2-logger/core";
+import {LoginService} from "../../app/providers/login-service";
+import {Province} from "../../app/models/province";
+import {Location} from "../../app/models/location";
+import {AddListingPage} from "../add-listing/add-listing";
 
 @Component({
     selector: 'page-detail',
@@ -18,18 +22,28 @@ export class DetailPage {
     cursor: number = 0;
 
     constructor(public navCtrl: NavController,
-                public toastCtrl: ToastController,
                 public modalCtrl: ModalController,
                 public listings: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger,
                 public navParams: NavParams) {
         if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
             this.data = listings.data;
-        }
-        else {
+        } else {
             this.data = navParams.get('data');
             this.cursor = navParams.get('cursor');
         }
+
+        //TODO: Remove fake user account
+        let userID: number = 1;
+        let email: string = "john.doe@gmail.com";
+        let firstName: string = "John";
+        let lastName: string = "Doe";
+        let phone1: string = "3065555555";
+        let phone2: string = null;
+        let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
+
+        this.loginService.setUser(new User(userID, email, firstName, lastName, phone1, phone2, location));
     }
 
 
@@ -38,20 +52,6 @@ export class DetailPage {
      */
     goToFavourites(): void{
         this._logger.info("Favourites was clicked");
-    }
-
-    /**
-     * Display the filters screen
-     */
-    goToFilters(): void{
-        this._logger.info("Filters was clicked");
-        let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
-
-        filterModal.onDidDismiss(data => {
-            this._logger.info("Filter Modal Data: " + JSON.stringify(data));
-        });
-
-        filterModal.present();
     }
 
     /**
@@ -81,7 +81,7 @@ export class DetailPage {
     nextProperty(): void{
         this.goToFirstSlide();
         this._logger.info("Next Property was clicked");
-        if(this.cursor < (this.data.length - 1))
+        if(this.isNextProperty())
             this.cursor += 1;
     }
 
@@ -91,7 +91,47 @@ export class DetailPage {
     previousProperty(): void{
         this.goToFirstSlide();
         this._logger.info("Previous Property was clicked");
-        if(this.cursor > 0)
+        if(this.isPreviousProperty())
             this.cursor -= 1;
+    }
+
+    /**
+     * Edit the current property
+     */
+    edit(): void{
+        let editListingModal = this.modalCtrl.create(AddListingPage, { listing: this.data[this.cursor] });
+
+        editListingModal.onDidDismiss(data => {
+            this._logger.info("Edit Listing Data: " + JSON.stringify(data));
+        });
+
+        editListingModal.present();
+    }
+
+    /**
+     * Check if there is a property before the current.
+     *
+     * @returns {boolean}   true if there is a property before this one
+     */
+    isPreviousProperty(): boolean{
+        return this.cursor > 0;
+    }
+
+    /**
+     * Check if there is a property after the current.
+     *
+     * @returns {boolean}   true if there is a property afterhis one
+     */
+    isNextProperty(): boolean{
+        return this.cursor < (this.data.length - 1);
+    }
+
+    /**
+     * Check if the current property belongs to the logged in user
+     *
+     * @returns {boolean}   true if it is their property
+     */
+    belongsToUser(): boolean{
+        return this.loginService.getUserId() == this.data[this.cursor].listerId;
     }
 }

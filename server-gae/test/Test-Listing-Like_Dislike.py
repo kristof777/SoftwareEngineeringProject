@@ -1,12 +1,13 @@
+from __future__ import absolute_import
+import sys
+sys.path.append("../")
 import json
 import os
 import unittest
-
-import Error_Code
+import extras.Error_Code as Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
 from models.Listing import Listing
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'

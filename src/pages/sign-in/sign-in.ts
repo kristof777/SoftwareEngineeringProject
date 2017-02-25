@@ -8,12 +8,15 @@ import {NavController, ToastController} from 'ionic-angular';
 import {SignUpPage} from '../sign-up/sign-up';
 import {MainPage} from "../main/main";
 
-import {UserService} from '../../app/providers/login-service'
+import {KasperService} from '../../app/providers/kasper-service'
+import {User} from "../../app/models/user";
+import {Location} from "../../app/models/location";
+import {Province} from "../../app/models/province";
 
 @Component({
     selector: 'page-sign-in',
     templateUrl: 'sign-in.html',
-    providers: [UserService]
+    providers: [KasperService]
 })
 export class SignInPage {
     loginForm: FormGroup;
@@ -24,7 +27,7 @@ export class SignInPage {
                 public toastCtrl: ToastController,
                 private _logger: Logger,
                 public formBuilder: FormBuilder,
-                public loginService: UserService) {
+                public kasperService: KasperService) {
 
         this.emailAttempted = false;
 
@@ -54,7 +57,7 @@ export class SignInPage {
         if(this.loginForm.value.email == "test") {
             this.navCtrl.setRoot(MainPage);
         } else if(this.loginForm.valid){
-            this.loginService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
+            this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
         } else {
             this._logger.error("Tried to submit when fields do not pass validation.");
         }
@@ -66,6 +69,12 @@ export class SignInPage {
      * @param data the response from the server
      */
     signInCallback(data: any): void{
+        this.kasperService.loginService.setUser(
+            new User(data.userId, data.email, data.firstName, data.lastName,  data.phone1, data.phone2,
+                new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
+        ));
+        this.kasperService.loginService.setToken(data.token);
+
         this.navCtrl.setRoot(MainPage);
     }
 
