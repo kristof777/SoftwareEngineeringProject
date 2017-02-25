@@ -121,7 +121,7 @@ class CreateListing(webapp2.RequestHandler):
                     Error_Code.invalid_sqft['error']] = "Square feet not valid"
 
             try:
-                bathrooms = int(bathrooms)
+                bathrooms = float(bathrooms)
             except:
                 errors[Error_Code.invalid_bathrooms['error']] = "Number of bathrooms not valid"
 

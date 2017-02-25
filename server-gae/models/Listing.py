@@ -8,7 +8,7 @@ class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""
     bedrooms = ndb.IntegerProperty(required=True)
     sqft = ndb.IntegerProperty(required=True)
-    bathrooms = ndb.IntegerProperty(required=True)
+    bathrooms = ndb.FloatProperty(required=True)
     price = ndb.IntegerProperty(required=True)
     description = ndb.StringProperty(required=True)
     isPublished = ndb.BooleanProperty(required=True, default=False)
@@ -37,7 +37,7 @@ class Listing(ndb.Model):
             return errors
         if key == 'bathrooms':
             try:
-                self.bathrooms = int(value)
+                self.bathrooms = float(value)
             except:
                 errors[Error_Code.invalid_bathrooms['error']] = "Number of bathrooms not valid"
             return errors
