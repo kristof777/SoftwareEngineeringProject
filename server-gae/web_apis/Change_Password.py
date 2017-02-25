@@ -2,7 +2,7 @@ import json
 import logging
 import sys
 
-from extras.utils import is_invalid_password
+from extras.utils import *
 
 sys.path.append("../")
 from extras.Error_Code import *
@@ -50,52 +50,32 @@ class ChangePassword(BaseHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errors = {}
-        empty = u''
 
         # For each required field, making sure it is non-null, non-empty
         # and contains more than than space characters
 
-        old_password = self.request.POST.get('password')
-        if old_password is None:
-            errors[missing_password['error']] = \
-                "Old Password not provided"
-        elif old_password.isspace() or old_password is empty:
-            errors[missing_password['error']] = \
-                "Old Password not provided"
+        error_keys = ['oldPassword', 'new_password', 'confirmed_password']
+        error_values = [missing_password, missing_new_password, missing_new_password_confirmed]
+        key_error_dict = dict(zip(error_keys, error_values))
 
-        new_password = self.request.POST.get('newPassword')
-        if new_password is None:
-            errors[missing_confirmed_password['error']] \
-                = "New password not provided"
-        elif new_password.isspace() or new_password is empty:
-            errors[missing_confirmed_password['error']] \
-                = "New password not provided"
+        # validating if request has all required keys
+        errors, values = keys_validation(key_error_dict, self.request.POST)
 
-        confirmed_password = self.request.POST.get('confirmPassword')
-        if confirmed_password is None:
-            errors[missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-        elif confirmed_password.isspace() or confirmed_password is empty:
-            errors[missing_confirmed_password['error']] \
-                = "Confirmed password not provided"
-
-        # If there was a missing or empty field, return error
+        # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            error_json = json.dumps(errors)
-            self.response.write(error_json)
-            self.response.set_status(missing_invalid_parameter_error['status'])
+            return_error(self, errors, missing_invalid_parameter_error)
             return
 
-        if is_invalid_password(new_password):
-            self.response.write(json.dumps(password_not_strong["error"]))
-            self.response.set_status(password_not_strong['status'])
+        if is_invalid_password(values['new_password']):
+            return_error(self, password_not_strong['error'],
+                         password_not_strong['status'])
             return
 
-        if new_password != confirmed_password:
-            self.response.write(json.dumps(password_mismatch["error"]))
-            self.response.set_status(password_mismatch['status'])
+        if values['new_password'] != values['confirmed_password']:
+            return_error(self, password_mismatch["error"],
+                         password_mismatch['status'])
             return
 
-        
+
+
 
