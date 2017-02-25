@@ -1,6 +1,9 @@
 import logging
 import json
 import sys
+
+from extras.utils import *
+
 sys.path.append("../")
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.Base_Handler import BaseHandler
@@ -33,8 +36,8 @@ class SignIn(BaseHandler):
             message[missing_password["error"]] = "Missing password"
 
         if len(message.keys()) != 0:
-            self.response.write(json.dumps(message))
-            self.response.set_status(missing_invalid_parameter_error)
+            return_error(self, message,
+                         missing_invalid_parameter_error)
             return
 
         assert user_email is not None and password is not None
@@ -57,9 +60,7 @@ class SignIn(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          user_email, type(e))
-            error = json.dumps(not_authorized["error"])
-            self.response.write(error)
-            self.response.set_status(not_authorized['status'])
+            return_error(self, not_authorized["error"], not_authorized['status'])
 
     def _serve_page(self, failed=False):
         user_email = self.request.get('email')
