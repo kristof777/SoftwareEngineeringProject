@@ -23,16 +23,19 @@ setup_git(){
   git config --global user.email "clm972@mail.usask.ca"
   git config --global user.name "ChrisMykotaReid"
   git remote set-url origin git@github.com:CMPT371Team1/Project.git
-  git checkout develop
+  git checkout build_dev
 }
 
 # sets up the Travis environment for deployment by making the dir for the particular release
 # then copying the files for deployment into it
 setup_deploy(){
   cd ${PUSH_FOLDER}
-  mkdir ${TRAVIS_BUILD_ID}
+  mkdir "${TRAVIS_BUILD_ID}"
   cd ${TRAVIS_BUILD_ID}
   cp -r ${BUILD_FOLDER} ${PUSH_FOLDER}/${TRAVIS_BUILD_ID}
+  cd ${TRAVIS_BUILD_ID}
+  ls 
+  cd ..
 }
 
 # moves compiled files to the right repo folder then pushes the files to the repo
