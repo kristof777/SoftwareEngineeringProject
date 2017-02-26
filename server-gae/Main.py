@@ -23,6 +23,9 @@
 #############################################################################################
 
 import os
+
+from web_apis import SignInWithToken
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
 # use_library('django', '0.96')
@@ -54,6 +57,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
     handler=VerificationHandler, name='verification'),
     webapp2.Route('/signin', SignIn, name='signin'),
+    webapp2.Route('/signinwithtoken', SignInWithToken, name='signinwithtoken'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
     webapp2.Route('/changepassword', ChangePassword),
