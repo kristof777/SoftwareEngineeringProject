@@ -21,3 +21,4 @@ echo 'npm version:'
 npm -v
 firefox --version
 ionic info
+ 
