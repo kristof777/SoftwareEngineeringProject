@@ -25,14 +25,15 @@
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
-use_library('django', '0.96')
-webapp_django_version = '0.96'
+# use_library('django', '0.96')
+# webapp_django_version = '0.96'
 from web_apis.SignIn import SignIn
 from web_apis.Create_User import *
 from web_apis.Listing_API import *
 from web_apis.Change_Password import *
 from models.User import User
 from extras.User_Auth import *
+from web_apis.Edit_User import EditUser
 
 # configuration
 config = {
@@ -62,6 +63,8 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/like', LikeDislikeListing),
     webapp2.Route('/editListing', EditListing),
     webapp2.Route('/getFavoriteListing', GetFavoriteListing),
-    webapp2.Route('/getMyListing', GetMyListing)
+    webapp2.Route('/getMyListing', GetMyListing),
+    webapp2.Route('/editUser', EditUser)
+
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

@@ -56,15 +56,12 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it is non-null, non-empty
         # and contains more than than space characters
 
-        error_keys = ['old_password', 'new_password', 'confirmed_password']
-        error_values = [missing_password, missing_new_password, missing_new_password_confirmed]
-        key_error_dict = dict(zip(error_keys, error_values))
-
+        error_keys = ['old_password', 'new_password', 'new_passwordConfirmed']
         # validating if request has all required keys
-        errors, values = keys_validation(key_error_dict, self.request.POST)
+        errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            return_error(self, errors, missing_invalid_parameter_error)
+            write_error_to_response(self, errors, missing_invalid_parameter_error)
             return
 
         #attempt to get the current user by the old password. Will throw an exception if the password or e-mail are unrecognized.
@@ -74,17 +71,15 @@ class ChangePassword(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          self.user_model['email'], type(e))
-            return_error(self, not_authorized["error"], not_authorized['status'])
+            write_error_to_response(self, not_authorized["error"], not_authorized['status'])
             return
 
-        if is_invalid_password(values['new_password']):
-            return_error(self, password_not_strong['error'],
-                         password_not_strong['status'])
+        if not is_valid_password(values['new_password']):
+            write_error_to_response(self, password_not_strong['error'],                         password_not_strong['status'])
             return
 
         if values['new_password'] != values['confirmed_password']:
-            return_error(self, password_mismatch["error"],
-                         password_mismatch['status'])
+            write_error_to_response(self, password_mismatch["error"],                         password_mismatch['status'])
             return
 
         user.set_password(values['new_password'])
