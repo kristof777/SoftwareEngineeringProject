@@ -20,4 +20,6 @@ java -version
 echo 'npm version:'
 npm -v
 firefox --version
+echo "Protractor Version:"
+protractor --version
 ionic info
