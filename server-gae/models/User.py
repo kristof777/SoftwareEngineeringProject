@@ -14,6 +14,7 @@ class User(Webapp2User):
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
 
+
     def set_password(self, raw_password):
         """Sets the password for the current user
 
@@ -51,3 +52,42 @@ class User(Webapp2User):
             return user, timestamp
 
         return None, None
+
+    def set_phone1(self, phone1):
+        self.phone1 = phone1
+
+    def set_phone2(self, phone2):
+        self.phone2 = phone2
+
+    def set_email(self, email):
+        self.email = email
+        #TODO make verified false
+
+    def set_province(self, province):
+        self.province = province
+
+    def set_city(self, city):
+        self.city = city
+
+    def set_first_name(self, first_name):
+        self.first_name = first_name
+
+    def set_last_name(self, last_name):
+        self.last_name = last_name
+
+    _key_to_value = {
+        "email": set_email,
+        "firstName": set_first_name,
+        "lastName": set_last_name,
+        "phone1":set_phone1,
+        "phone2":set_phone2,
+        "province": set_province,
+        "city": set_city
+    }
+
+
+    def set_property(self, key, value):
+        self._key_to_value[key](self, str(value))
+
+
+

@@ -9,7 +9,7 @@ import Main
 import webapp2
 from google.appengine.ext import testbed
 from models.User import User
-from extras.utils import create_random_user
+from extras.utils import create_random_user, are_two_lists_same
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -61,8 +61,7 @@ class TestHandlers(unittest.TestCase):
 
         # checking if there is a difference between error_keys and what we got
 
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys,errors_expected ), True)
 
         #test 2 with invalid phone 1
         input2 = create_random_user()

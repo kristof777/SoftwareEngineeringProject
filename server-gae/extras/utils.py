@@ -346,17 +346,21 @@ def write_error_to_response(response, error_message, error_status):
     response.write(json.dumps(error_message))
     response.set_status(error_status)
 
+
 def write_success_to_response(response, success_dict):
     response.write(json.dumps(success_dict))
     response.set_status(success)
-
-
 
 
 def scale_province(province):
     if province.lower() in province_complete:
         province = province_abbr[province_complete.index(province.lower())]
     return province
+
+
+def are_two_lists_same(list1, list2):
+    return len(set(list1).difference(set(list2))) == 0
+
 
 
 if __name__ == "__main__":
