@@ -56,7 +56,7 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it is non-null, non-empty
         # and contains more than than space characters
 
-        error_keys = ['old_password', 'new_password', 'confirmed_password', 'user_id']
+        error_keys = ['oldPassword', 'newPassword', 'confirmedPassword', 'userId']
         error_values = [missing_password, missing_new_password, missing_new_password_confirmed, missing_user_id]
         key_error_dict = dict(zip(error_keys, error_values))
 
@@ -72,25 +72,27 @@ class ChangePassword(BaseHandler):
         # exception if the password or e-mail are unrecognized.
         try:
             user = self.auth.get_user_by_password(
-                values['user_id'], values['old_password'], remember=True, save_session=True)
+                values['userId'], values['oldPassword'], remember=True, save_session=True)
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             print type(e)
+            print values['userId']
+            print values['oldPassword']
             logging.info('Sign-in failed for user %s because of %s',
-                         values['user_id'], type(e))
+                         values['userId'], type(e))
             return_error(self, not_authorized["error"], not_authorized['status'])
             return
 
-        if is_invalid_password(values['new_password']):
+        if is_invalid_password(values['newPassword']):
             return_error(self, password_not_strong['error'],
                          password_not_strong['status'])
             return
 
-        if values['new_password'] != values['confirmed_password']:
+        if values['newPassword'] != values['confirmedPassword']:
             return_error(self, password_mismatch["error"],
                          password_mismatch['status'])
             return
 
-        user.set_password(values['new_password'])
+        user.set_password(values['newPassword'])
 
         self.auth.set_session(user, token=None, token_ts=None, cache_ts=None,
                     remember=True)
