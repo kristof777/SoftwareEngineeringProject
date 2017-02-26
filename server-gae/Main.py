@@ -24,7 +24,7 @@
 
 import os
 
-from web_apis import SignInWithToken
+
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
@@ -37,6 +37,7 @@ from web_apis.Change_Password import *
 from models.User import User
 from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
+from web_apis.SignInWithToken import *
 
 # configuration
 config = {
