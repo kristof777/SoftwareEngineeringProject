@@ -3,7 +3,7 @@ import logging
 import sys
 
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-from werkzeug.security import check_password_hash
+# from werkzeug.security import check_password_hash
 
 from extras.utils import *
 from models import User

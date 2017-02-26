@@ -37,7 +37,7 @@ from web_apis.Change_Password import *
 from models.User import User
 from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
-from web_apis.SignInWithToken import *
+# from web_apis.SignInWithToken import *
 
 # configuration
 config = {
@@ -58,7 +58,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
     handler=VerificationHandler, name='verification'),
     webapp2.Route('/signin', SignIn, name='signin'),
-    webapp2.Route('/signinwithtoken', SignInWithToken, name='signinwithtoken'),
+    # webapp2.Route('/signinwithtoken', SignInWithToken, name='signinwithtoken'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
     webapp2.Route('/changepassword', ChangePassword),

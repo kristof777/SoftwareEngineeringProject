@@ -6,7 +6,9 @@ sys.path.append("../")
 import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.ext import testbed
-from web_apis.Create_User import *
+from extras.utils import *
+from models.User import User
+import Main
 
 
 class TestHandlers(unittest.TestCase):
@@ -19,7 +21,7 @@ class TestHandlers(unittest.TestCase):
         # Next, declare which service stubs you want to use.
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
-        self.users = create_dummy_users_for_testing(10)
+        self.users = create_dummy_users_for_testing(10, Main)
 
     def test_edit_user(self):
         """
@@ -33,7 +35,6 @@ class TestHandlers(unittest.TestCase):
         Test case 8: 2 items changed
         Test case 9: many items changed
         """
-
         #Test case 2 : Nothing requested to change
 
         user_id = self.users[0]["userId"]
@@ -90,34 +91,42 @@ class TestHandlers(unittest.TestCase):
         self.assertTrue(password_cant_be_changed["error"] in res_value)
 
 
-        # # Test case 7: 1 item changed
-        #
-        # change_values = {"phone1" :"1234567891"}
-        #
-        # res_value, status = get_response(get_post_dictionary(user_id, token,
-        #                                                      change_values))
-        # self.assertEqual(status, password_cant_be_changed["status"])
-        # self.assertTrue(password_cant_be_changed["error"] in res_value)
-        #
-        # #TODO compare if user has it different
-        #
-        #
-        # # Test case 8: 2 items changed
-        #
-        # change_values = {"phone1": "1234567891", "firstName": "Hello"}
-        #
-        # res_value, status = get_response(get_post_dictionary(user_id, token,
-        #                                                      change_values))
-        # self.assertEqual(status, password_cant_be_changed["status"])
-        # self.assertTrue(password_cant_be_changed["error"] in res_value)
-        #
-        # # Test case 9: many items changed
-        #
-        # change_values = {"phone1": "1234567891", "firstName": "hello", "lastName": "world"}
-        # res_value, status = get_response(get_post_dictionary(user_id, token,
-        #                                                      change_values))
-        # self.assertEqual(status, password_cant_be_changed["status"])
-        # self.assertTrue(password_cant_be_changed["error"] in res_value)
+        # Test case 7: 1 item changed
+
+        change_values = {"phone1": "1234567891"}
+
+        res_value, status = get_response(get_post_dictionary(user_id, token,
+                                                             change_values))
+        self.assertEqual(status, success)
+
+        new_user = User.get_by_id(int(self.users[0]["userId"]))
+        self.assertEqual(new_user.phone1, change_values["phone1"])
+
+        # Test case 8: 2 items changed
+
+        user_id = self.users[1]["userId"]
+        token = self.users[1]["token"]
+        change_values = {"phone1": "1234567891", "firstName": "Hello"}
+        res_value, status = get_response(get_post_dictionary(user_id, token,
+                                                             change_values))
+        self.assertEqual(status, success)
+
+        new_user = User.get_by_id(int(self.users[1]["userId"]))
+        self.assertEqual(new_user.phone1, change_values["phone1"])
+        self.assertEqual(new_user.first_name, change_values["firstName"])
+
+        # Test case 9: many items changed
+
+        user_id = self.users[2]["userId"]
+        token = self.users[2]["token"]
+        change_values = {"phone1": "1234567891", "firstName": "hello",
+                         "lastName": "world"}
+        res_value, status = get_response(get_post_dictionary(user_id, token,
+                                                             change_values))
+        self.assertEqual(status, success)
+        new_user = User.get_by_id(int(self.users[2]["userId"]))
+        self.assertEqual(new_user.phone1, change_values["phone1"])
+        self.assertEqual(new_user.last_name, change_values["lastName"])
 
 
 

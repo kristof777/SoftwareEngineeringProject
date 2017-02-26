@@ -3,11 +3,9 @@ sys.path.append("../")
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
-from extras.Error_Code import *
 from extras.utils import *
 from models.User import User
-from extras.User_Auth import user_required
-from webapp2_extras import auth
+
 
 
 class EditUser(BaseHandler):
@@ -26,7 +24,8 @@ class EditUser(BaseHandler):
         errors, values = keys_missing(error_keys, self.request.POST)
 
         if len(errors) != 0:
-            write_error_to_response(self.response, errors, missing_invalid_parameter_error)
+            write_error_to_response(self.response,
+                                    errors, missing_invalid_parameter_error)
             return
 
         change_values = json.loads(values['changeValues'])

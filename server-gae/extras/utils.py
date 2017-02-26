@@ -1,13 +1,13 @@
 import sys
-
 sys.path.append("../")
 import random
 import string
 import webapp2
 import json
-import Main
+# import Main
 from validate_email import validate_email
 from Error_Code import *
+
 
 province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NW", "ON", "PE",
                  "QC", "SK", "YT"]
@@ -105,7 +105,7 @@ def test_random_password():
         assert any(s.isdigit() for s in password)
 
 
-def create_dummy_users_for_testing(n):
+def create_dummy_users_for_testing(n, Main):
     """
     Crates n Dummy Users with random valid password, email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
@@ -133,8 +133,7 @@ def create_dummy_users_for_testing(n):
                     "confirmedPassword": password
                     }
 
-        request = webapp2.Request.blank('/createuser',
-                                        POST=new_user)  # api you need to test
+        request = webapp2.Request.blank('/createuser', POST=new_user)
         response = request.get_response(Main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
@@ -188,7 +187,8 @@ def create_dummy_listings_for_testing(num_listings, num_users=1):
             request = webapp2.Request.blank('/createlisting',
                                             POST=random_listing_info)
             response = request.get_response(Main.app)
-            output = json.loads(response.body)
+            print(response.POST)
+            output = json.loads(response.POST)
             random_listing_info["listingId"] = output["listingId"]
             listings.append(random_listing_info)
 
@@ -328,7 +328,6 @@ def test_keys_validation():
 
 
 valid_check = {
-
     "phone1": is_valid_phone,
     "phone2": is_valid_phone,
     "email": is_valid_email,

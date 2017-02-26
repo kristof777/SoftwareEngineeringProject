@@ -2,9 +2,7 @@ import sys
 sys.path.append("../")
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import json
 from extras.Base_Handler import BaseHandler
-from extras.Error_Code import *
 from extras.utils import *
 
 
@@ -36,7 +34,7 @@ class CreateUser(BaseHandler):
         error_keys = ['email', 'firstName', 'password',
                       'confirmedPassword', 'phone1', 'province', 'city']
 
-        # validating if request has all required keys
+        # validating if request has all required key
         errors, values = keys_missing(error_keys, self.request.POST)
         phone2 = self.request.POST.get('phone2')
         if not is_missing(phone2):
