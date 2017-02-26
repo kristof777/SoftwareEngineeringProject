@@ -59,10 +59,10 @@ class TestHandlerSignIn(unittest.TestCase):
                               difference(set(error_keys))), 0)
 
         # Case 2: Incorrect old password
-        input2 = {"old_password": "Wrongpassword123",
-                  "new_password": "notImportant123",
-                  "confirmed_password": "notImportant123",
-                  "user_id": user_id}
+        input2 = {"oldPassword": "Wrongpassword123",
+                  "newPassword": "notImportant123",
+                  "confirmedPassword": "notImportant123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input2)
         response = request.get_response(Main.app)
@@ -74,10 +74,10 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(not_authorized['error'], error_message)
 
         # Case3: Passwords do not match
-        input3 = {"old_password": "aaAA1234",
-                  "new_password": "NotMatching123",
-                  "confirmed_password": "doesntMatch123",
-                  "user_id": user_id}
+        input3 = {"oldPassword": "aaAA1234",
+                  "newPassword": "NotMatching123",
+                  "confirmedPassword": "doesntMatch123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input3)
         response = request.get_response(Main.app)
@@ -89,10 +89,10 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(password_mismatch['error'], error_message)
 
         # Case4: new passwords match but are not strong
-        input4 = {"old_password": "aaAA1234",
-                  "new_password": "NotMatching123",
-                  "confirmed_password": "doesntMatch123",
-                  "user_id": user_id}
+        input4 = {"oldPassword": "aaAA1234",
+                  "newPassword": "NotMatching123",
+                  "confirmedPassword": "doesntMatch123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input4)
         response = request.get_response(Main.app)
@@ -104,10 +104,10 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(password_not_strong['error'], error_message)
 
         # Case5: Success case
-        input5 = {"old_password": "aaAA1234",
-                  "new_password": "newPass123",
-                  "confirmed_password": "newPass123",
-                  "user_id": user_id}
+        input5 = {"oldPassword": "aaAA1234",
+                  "newPassword": "newPass123",
+                  "confirmedPassword": "newPass123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input5)
         response = request.get_response(Main.app)
