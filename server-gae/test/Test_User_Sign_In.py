@@ -80,7 +80,7 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(user_saved.city, "Saskatoon")
         self.assertEquals(user_saved.email, "student@usask.ca")
         self.assertEquals(int(user_saved.phone1), 1111111111)
-        self.assertEquals(user_saved.province, "Saskatchewan")
+        self.assertEquals(user_saved.province, "SK")
 
 
 
