@@ -5,6 +5,7 @@ import sys
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 
 from extras.utils import *
+from models import User
 
 sys.path.append("../")
 from extras.Error_Code import *
@@ -71,8 +72,7 @@ class ChangePassword(BaseHandler):
         #attempt to get the current user by the old password. Will throw an
         # exception if the password or e-mail are unrecognized.
         try:
-            user = self.auth.get_user_by_password(
-                values['userId'], values['oldPassword'], remember=True, save_session=True)
+            User.get_by_id(int(values["userId"]))
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             print type(e)
             print values['userId']
@@ -92,12 +92,13 @@ class ChangePassword(BaseHandler):
                          password_mismatch['status'])
             return
 
+        user = self.auth.get_user_by_session()
         user.set_password(values['newPassword'])
 
         self.auth.set_session(user, token=None, token_ts=None, cache_ts=None,
                     remember=True)
 
-        user = self.auth.get_user_ny_session(session=True)
+        user = self.auth.get_user_by_session(session=True)
 
         self.response.write(json.dumps(user['token']))
         self.response.set_status(200)

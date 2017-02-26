@@ -14,14 +14,14 @@ from google.appengine.ext import testbed
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlerSignIn(unittest.TestCase):
+class TestHandlerChangePassword(unittest.TestCase):
     def setUp(self):
         self.testbed = testbed.Testbed()
         self.testbed.activate()
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
-    def test_sign_in(self):
+    def test_change_password(self):
         database_entry1 = {"email": "student@usask.ca",
                   "password": "aaAA1234",
                   "firstName": "Student",
@@ -81,7 +81,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         request = webapp2.Request.blank('/changepassword', POST=input3)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 401)
+        self.assertEquals(response.status_int, 403)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
@@ -90,8 +90,8 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Case4: new passwords match but are not strong
         input4 = {"oldPassword": "aaAA1234",
-                  "newPassword": "NotMatching123",
-                  "confirmedPassword": "doesntMatch123",
+                  "newPassword": "weakmatch",
+                  "confirmedPassword": "weakmatch",
                   "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input4)
