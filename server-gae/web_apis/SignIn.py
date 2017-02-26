@@ -36,13 +36,13 @@ class SignIn(BaseHandler):
             message[missing_password["error"]] = "Missing password"
 
         if len(message.keys()) != 0:
-            write_error_to_response(self, message,
-                         missing_invalid_parameter_error)
+            write_error_to_response(self.response, message,
+                                    missing_invalid_parameter_error)
             return
 
         assert user_email is not None and password is not None
         try:
-            #Todo This is all wrong. userId is supposed to be given, and not email.
+            # Todo This is all wrong. userId is supposed to be given, and not email.
             user = self.auth.get_user_by_password(
                 user_email, password, remember=True, save_session=True)
 
@@ -61,7 +61,8 @@ class SignIn(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          user_email, type(e))
-            write_error_to_response(self, not_authorized["error"], not_authorized['status'])
+            write_error_to_response(self.response, not_authorized["error"],
+                                    not_authorized['status'])
 
     def _serve_page(self, failed=False):
         user_email = self.request.get('email')
