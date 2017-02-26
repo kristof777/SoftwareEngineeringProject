@@ -42,6 +42,7 @@ class SignIn(BaseHandler):
 
         assert user_email is not None and password is not None
         try:
+            #Todo This is all wrong. userId is supposed to be given, and not email.
             user = self.auth.get_user_by_password(
                 user_email, password, remember=True, save_session=True)
             #This should be changed later so that user email is in the database.
