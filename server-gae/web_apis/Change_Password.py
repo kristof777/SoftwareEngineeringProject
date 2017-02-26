@@ -56,24 +56,27 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it is non-null, non-empty
         # and contains more than than space characters
 
-        error_keys = ['old_password', 'new_password', 'confirmed_password']
-        error_values = [missing_password, missing_new_password, missing_new_password_confirmed]
+        error_keys = ['old_password', 'new_password', 'confirmed_password', 'user_id']
+        error_values = [missing_password, missing_new_password, missing_new_password_confirmed, missing_user_id]
         key_error_dict = dict(zip(error_keys, error_values))
 
         # validating if request has all required keys
         errors, values = keys_validation(key_error_dict, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
+            print errors
             return_error(self, errors, missing_invalid_parameter_error)
             return
 
-        #attempt to get the current user by the old password. Will throw an exception if the password or e-mail are unrecognized.
+        #attempt to get the current user by the old password. Will throw an
+        # exception if the password or e-mail are unrecognized.
         try:
             user = self.auth.get_user_by_password(
-                self.user_model['email'], values['old_password'], remember=True, save_session=True)
+                values['user_id'], values['old_password'], remember=True, save_session=True)
         except (InvalidAuthIdError, InvalidPasswordError) as e:
+            print type(e)
             logging.info('Sign-in failed for user %s because of %s',
-                         self.user_model['email'], type(e))
+                         values['user_id'], type(e))
             return_error(self, not_authorized["error"], not_authorized['status'])
             return
 
@@ -96,5 +99,4 @@ class ChangePassword(BaseHandler):
 
         self.response.write(json.dumps(user['token']))
         self.response.set_status(200)
-
         return
