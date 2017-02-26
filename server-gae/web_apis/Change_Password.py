@@ -58,15 +58,15 @@ class ChangePassword(BaseHandler):
         # and contains more than than space characters
 
         error_keys = ['oldPassword', 'newPassword', 'confirmedPassword', 'userId']
-        error_values = [missing_password, missing_new_password, missing_new_password_confirmed, missing_user_id]
-        key_error_dict = dict(zip(error_keys, error_values))
 
         # validating if request has all required keys
-        errors, values = keys_validation(key_error_dict, self.request.POST)
+
+        errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
             print errors
-            return_error(self, errors, missing_invalid_parameter_error)
+            write_error_to_response(self.response, errors,
+                                    missing_invalid_parameter_error)
             return
 
         #attempt to get the current user by the old password. Will throw an
@@ -79,16 +79,17 @@ class ChangePassword(BaseHandler):
             print values['oldPassword']
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
-            return_error(self, not_authorized["error"], not_authorized['status'])
+            write_error_to_response(self.response, not_authorized["error"],
+                                    not_authorized['status'])
             return
 
-        if is_invalid_password(values['newPassword']):
-            return_error(self, password_not_strong['error'],
+        if not is_valid_password(values['newPassword']):
+            write_error_to_response(self.response, password_not_strong['error'],
                          password_not_strong['status'])
             return
 
         if values['newPassword'] != values['confirmedPassword']:
-            return_error(self, password_mismatch["error"],
+            write_error_to_response(self.response, password_mismatch["error"],
                          password_mismatch['status'])
             return
 

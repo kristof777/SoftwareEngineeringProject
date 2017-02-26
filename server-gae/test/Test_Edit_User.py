@@ -5,13 +5,8 @@ import sys
 sys.path.append("../")
 import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import extras.Error_Code as Error_Code
-import Main
-import webapp2
 from google.appengine.ext import testbed
-from models.Listing import Listing
 from web_apis.Create_User import *
-from models.User import User
 
 
 class TestHandlers(unittest.TestCase):
