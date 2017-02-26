@@ -3,6 +3,7 @@ import logging
 import sys
 
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
+from werkzeug.security import check_password_hash
 
 from extras.utils import *
 from models import User
@@ -72,7 +73,7 @@ class ChangePassword(BaseHandler):
         #attempt to get the current user by the old password. Will throw an
         # exception if the password or e-mail are unrecognized.
         try:
-            User.get_by_id(int(values["userId"]))
+            check_password_hash(int())
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             print type(e)
             print values['userId']

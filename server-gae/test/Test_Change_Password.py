@@ -52,9 +52,10 @@ class TestHandlerChangePassword(unittest.TestCase):
         self.assertEquals(response.status_int, 400)
         errors_expected = [missing_password['error'],
                            missing_new_password['error'],
-                           missing_new_password_confirmed['error'],
+                           missing_confirmed_password['error'],
                            missing_user_id['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
+        print set(errors_expected).difference(set(error_keys))
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
