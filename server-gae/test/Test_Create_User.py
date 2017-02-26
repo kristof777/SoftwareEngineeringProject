@@ -36,9 +36,8 @@ class TestHandlers(unittest.TestCase):
         :return:
         """
 
-
         input1 = {
-            "email" : "  ",
+            "email": "  ",
             "lastName": ""
         }  # Json object you need to send
         request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
@@ -53,7 +52,6 @@ class TestHandlers(unittest.TestCase):
         errors_expected = [missing_province['error'],
                            missing_confirmed_password['error'],
                            missing_password['error'],
-                           missing_last_name['error'],
                            missing_phone_number['error'],
                            missing_first_name['error'],
                            missing_city['error'],
@@ -140,13 +138,12 @@ class TestHandlers(unittest.TestCase):
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(password_mismatch['error'], errors_expected)
+        self.assertEquals(password_not_strong['error'], errors_expected)
 
         # test case 7 correct information
 
         input7 = create_random_user()
-        request = webapp2.Request.blank('/createuser',
-                                        POST=input7)  # api you need to test
+        request = webapp2.Request.blank('/createuser', POST=input7)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)

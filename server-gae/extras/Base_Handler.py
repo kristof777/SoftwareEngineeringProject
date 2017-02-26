@@ -72,7 +72,7 @@ class BaseHandler(webapp2.RequestHandler):
         params = {
             'message': message
         }
-        self.render_template('Message.html', params)
+        self.render_template('../webpages/Message.html', params)
 
     # this is needed for webapp2 sessions to work
     def dispatch(self):
@@ -90,7 +90,7 @@ class BaseHandler(webapp2.RequestHandler):
 # home page ( for browser testing only )
 class MainHandler(BaseHandler):
     def get(self):
-        self.render_template('Home.html')
+        self.render_template('../webpages/Home.html')
 
 
 # create_user is more of type POST, because we want to send all the

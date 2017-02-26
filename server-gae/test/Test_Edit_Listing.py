@@ -287,7 +287,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_changed.images, 'some images')
 
 
-
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
         # completed. If the testbed is not deactivated, the original

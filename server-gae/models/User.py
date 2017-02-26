@@ -8,7 +8,7 @@ from webapp2_extras.appengine.auth.models import User as Webapp2User
 class User(Webapp2User):
     email = ndb.StringProperty(required=True)
     first_name = ndb.StringProperty(required=True)
-    last_name = ndb.StringProperty(required=True)
+    last_name = ndb.StringProperty(required=False)
     phone1 = ndb.StringProperty(required=True)
     phone2 = ndb.StringProperty(required=False)
     province = ndb.StringProperty(required=True)
@@ -43,6 +43,7 @@ class User(Webapp2User):
 
         token_key = cls.token_model.get_key(user_id, subject, token)
         user_key = ndb.Key(cls, user_id)
+
         # Use get_multi() to save a RPC call
         valid_token, user = ndb.get_multi([token_key, user_key])
         if valid_token and user:

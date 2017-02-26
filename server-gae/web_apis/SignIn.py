@@ -36,7 +36,7 @@ class SignIn(BaseHandler):
             message[missing_password["error"]] = "Missing password"
 
         if len(message.keys()) != 0:
-            return_error(self, message,
+            write_error_to_response(self, message,
                          missing_invalid_parameter_error)
             return
 
@@ -45,7 +45,7 @@ class SignIn(BaseHandler):
             #Todo This is all wrong. userId is supposed to be given, and not email.
             user = self.auth.get_user_by_password(
                 user_email, password, remember=True, save_session=True)
-            #This should be changed later so that user email is in the database.
+
             user_dict = {'token': user['token'],
                          'userId': user['user_id'],
                          'email': user['email'],
@@ -61,7 +61,7 @@ class SignIn(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          user_email, type(e))
-            return_error(self, not_authorized["error"], not_authorized['status'])
+            write_error_to_response(self, not_authorized["error"], not_authorized['status'])
 
     def _serve_page(self, failed=False):
         user_email = self.request.get('email')
@@ -70,4 +70,4 @@ class SignIn(BaseHandler):
             'failed': failed
         }
         self.response.write("Failed")
-        self.render_template('Sign_In.html', params)
+        self.render_template('../webpages/Sign_In.html', params)
