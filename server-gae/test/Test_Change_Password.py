@@ -1,10 +1,12 @@
 from __future__ import absolute_import
 import sys
+
+from extras.Error_Code import *
+
 sys.path.append("../")
 import json
 import os
 import unittest
-import extras.Error_Code as Error_Code
 import Main
 import webapp2
 from google.appengine.ext import testbed
@@ -32,27 +34,35 @@ class TestHandlerSignIn(unittest.TestCase):
 
         request = webapp2.Request.blank('/createuser', POST=database_entry1)
         response = request.get_response(Main.app)
-        #If this assert fails then create user unit tests should be run
+
+        user = json.loads(response.body)
+        self.assertTrue("userId" in user)
+        user_id = user['userId']
+        print user_id
+
+        # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
 
 
-        #Case 1: They do not enter one or many fields.
+        # Case 1: They do not enter one or many fields.
         input1 = {}  # Json object to send
         request = webapp2.Request.blank('/changepassword', POST=input1)
         response = request.get_response(Main.app)  # get response back
 
         self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.missing_password['error'],
-                           Error_Code.missing_new_password['error'],
-                           Error_Code.missing_new_password_confirmed['error']]
+        errors_expected = [missing_password['error'],
+                           missing_new_password['error'],
+                           missing_new_password_confirmed['error'],
+                           missing_user_id['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
-        #Case 2: Incorrect old password
-        input2 = {"oldpassword": "Wrongpassword123",
-                  "newpassword": "notImportant123",
-                  "confirmedpassword": "notImportant123"}
+        # Case 2: Incorrect old password
+        input2 = {"oldPassword": "Wrongpassword123",
+                  "newPassword": "notImportant123",
+                  "confirmedPassword": "notImportant123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input2)
         response = request.get_response(Main.app)
@@ -61,26 +71,28 @@ class TestHandlerSignIn(unittest.TestCase):
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-        self.assertEquals(Error_Code.not_authorized['error'], error_message)
+        self.assertEquals(not_authorized['error'], error_message)
 
-        #Case3: Passwords do not match
-        input3 = {"oldpassword": "aaAA1234",
-                  "newpassword": "NotMatching123",
-                  "confirmedpassword": "doesntMatch123"}
+        # Case3: Passwords do not match
+        input3 = {"oldPassword": "aaAA1234",
+                  "newPassword": "NotMatching123",
+                  "confirmedPassword": "doesntMatch123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input3)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 403)
+        self.assertEquals(response.status_int, 401)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-        self.assertEquals(Error_Code.password_mismatch['error'], error_message)
+        self.assertEquals(password_mismatch['error'], error_message)
 
-        #Case4: new passwords match but are not strong
-        input4 = {"oldpassword": "aaAA1234",
-                  "newpassword": "NotMatching123",
-                  "confirmedpassword": "doesntMatch123"}
+        # Case4: new passwords match but are not strong
+        input4 = {"oldPassword": "aaAA1234",
+                  "newPassword": "NotMatching123",
+                  "confirmedPassword": "doesntMatch123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input4)
         response = request.get_response(Main.app)
@@ -89,12 +101,13 @@ class TestHandlerSignIn(unittest.TestCase):
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-        self.assertEquals(Error_Code.password_not_strong['error'], error_message)
+        self.assertEquals(password_not_strong['error'], error_message)
 
-        #Case5: Success case
-        input5 = {"oldpassword": "aaAA1234",
-                  "newpassword": "newPass123",
-                  "confirmedpassword": "newPass123"}
+        # Case5: Success case
+        input5 = {"oldPassword": "aaAA1234",
+                  "newPassword": "newPass123",
+                  "confirmedPassword": "newPass123",
+                  "userId": user_id}
 
         request = webapp2.Request.blank('/changepassword', POST=input5)
         response = request.get_response(Main.app)
