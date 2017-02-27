@@ -3,14 +3,12 @@ import logging
 import sys
 
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-# from werkzeug.security import check_password_hash
 
 from extras.utils import *
-from models import User
-
 sys.path.append("../")
 from extras.Error_Code import *
 from extras.Base_Handler import BaseHandler
+from models.User import *
 
 
 # We need to decide whether uses are allowed to
@@ -65,19 +63,21 @@ class ChangePassword(BaseHandler):
         errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            print errors
+            print (errors)
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter_error)
             return
 
+
         #attempt to get the current user by the old password. Will throw an
         # exception if the password or e-mail are unrecognized.
         try:
-            check_password_hash(int())
+            user = User.get_by_id(int(values["userId"]))
+            user_dict = self.auth.get_user_by_password(
+                user.email, values['oldPassword'], remember=True,
+                save_session=True)
+
         except (InvalidAuthIdError, InvalidPasswordError) as e:
-            print type(e)
-            print values['userId']
-            print values['oldPassword']
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
             write_error_to_response(self.response, not_authorized["error"],
@@ -94,14 +94,20 @@ class ChangePassword(BaseHandler):
                          password_mismatch['status'])
             return
 
-        user = self.auth.get_user_by_session()
-        user.set_password(values['newPassword'])
 
-        self.auth.set_session(user, token=None, token_ts=None, cache_ts=None,
-                    remember=True)
+        print type(user)
 
-        user = self.auth.get_user_by_session(session=True)
+        try:
+            User.set_password(user, values['newPassword'])
+            user_dict = self.auth.get_user_by_password(
+                user.email, values['newPassword'], remember=True,
+                save_session=True)
+        except:
+            assert(False)
 
-        self.response.write(json.dumps(user['token']))
+
+        #self.auth.store.delete_auth_token(user['userId'], user['token'])
+        user_dict = {'token': user_dict['token']}
+        self.response.write(json.dumps(user_dict['token']))
         self.response.set_status(200)
         return
