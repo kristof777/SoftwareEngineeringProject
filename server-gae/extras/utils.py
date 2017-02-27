@@ -145,7 +145,7 @@ def create_dummy_users_for_testing(n, Main):
     return users
 
 
-def create_dummy_listings_for_testing(num_listings, num_users=1):
+def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
     """
     Crates n Dummy Users and listings, where all data in listings is random but
     province which is saskatchewan.
