@@ -158,7 +158,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
     assert num_listings >= num_users
     assert num_users != 0
 
-    users = create_dummy_users_for_testing(num_users)
+    users = create_dummy_users_for_testing(num_users, Main)
     assert len(users) == num_users
     for i in range(0, num_users):
         if i == num_users - 1 and num_listings % num_users != 0:
