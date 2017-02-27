@@ -155,7 +155,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
     :return: a dictionary of listing with all listing data as keys and listingID
      """
     listings = []
-    assert num_listings > num_users
+    assert num_listings >= num_users
     assert num_users != 0
 
     users = create_dummy_users_for_testing(num_users, Main)
@@ -187,8 +187,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
             request = webapp2.Request.blank('/createlisting',
                                             POST=random_listing_info)
             response = request.get_response(Main.app)
-            print(response.POST)
-            output = json.loads(response.POST)
+            output = json.loads(response.body)
             random_listing_info["listingId"] = output["listingId"]
             listings.append(random_listing_info)
 
