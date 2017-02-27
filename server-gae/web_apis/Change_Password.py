@@ -108,6 +108,6 @@ class ChangePassword(BaseHandler):
 
         #self.auth.store.delete_auth_token(user['userId'], user['token'])
         user_dict = {'token': user_dict['token']}
-        self.response.write(json.dumps(user_dict['token']))
+        self.response.write(json.dumps(user_dict))
         self.response.set_status(200)
         return
