@@ -82,7 +82,7 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         request = webapp2.Request.blank('/changepassword', POST=input3)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 403)
+        self.assertEquals(response.status_int, 401)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
