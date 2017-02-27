@@ -187,8 +187,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
             request = webapp2.Request.blank('/createlisting',
                                             POST=random_listing_info)
             response = request.get_response(Main.app)
-            print(response.POST)
-            output = json.loads(response.POST)
+            output = json.loads(response.body)
             random_listing_info["listingId"] = output["listingId"]
             listings.append(random_listing_info)
 
