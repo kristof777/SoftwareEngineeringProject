@@ -272,6 +272,31 @@ def key_validation(dictionary):
     return invalid
 
 
+def is_valid_integer(input_string):
+    assert input_string != None
+    try:
+        int(input_string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_valid_float(input_string):
+    assert input_string != None
+    try:
+        float(input_string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_valid_bool(input_string):
+    assert input_string != None
+    if input_string == "True" or input_string == "False":
+        return True
+    else:
+        return False
+
 
 def is_valid_phone(phone):
     """
@@ -308,6 +333,7 @@ def is_valid_province(province):
     return province.lower() in province_complete or province  in province_abbr
 
 
+
 def is_missing(var):
     return var in ["", u'', '', None] or str(var).isspace()
 
@@ -332,7 +358,15 @@ valid_check = {
     "phone2": is_valid_phone,
     "email": is_valid_email,
     "password": is_valid_password,
-    "province": is_valid_province
+    "province": is_valid_province,
+    "userId": is_valid_integer,
+    "listingId": is_valid_integer,
+    "price": is_valid_integer,
+    "bathrooms": is_valid_float,
+    "bedrooms": is_valid_integer,
+    "sqft": is_valid_integer,
+    "isPublished": is_valid_bool,
+    "thumbnailImageIndex": is_valid_integer
 }
 
 
