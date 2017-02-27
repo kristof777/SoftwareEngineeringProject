@@ -258,7 +258,7 @@ class TestHandlers(unittest.TestCase):
         #           "images": 'some images'
         #           }
         # input["userId"] = output["userId"]
-        user, input = create_dummy_listings_for_testing(Main,1)
+        user, input = create_dummy_listings_for_testing(Main, 1)
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
