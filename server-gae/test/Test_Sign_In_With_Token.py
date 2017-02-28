@@ -55,7 +55,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Test2: When incorrect token
         input2 = {"userId": user_id,
-                  "token": "badToken"}
+                  "token": token}
         request = webapp2.Request.blank('/signinwithtoken', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
