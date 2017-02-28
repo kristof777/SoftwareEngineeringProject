@@ -47,9 +47,8 @@ class SignInWithToken(BaseHandler):
         assert token is not None
         try:
             #Todo This is all wrong.userId is supposed to be given, and not email.
-            user = User.get_by_auth_token(user_id, token, subject='auth')
-            print user
-            user_dict = {'token': user['token'],
+            user = User.get_by_auth_token(int(user_id), token, subject='auth')
+            user_dict = { 'token': user['token'],
                          'userId': user['user_id'],
                          'email': user['email'],
                          'firstName': user['first_name'],
@@ -57,7 +56,7 @@ class SignInWithToken(BaseHandler):
                          'phone1': user['phone1'],
                          'phone2': user['phone2'],
                          'city': user['city'],
-                         'province': user['province']}
+                         'province': user['province'] }
             self.response.out.write(json.dumps(user_dict))
             self.response.set_status(success)
 
