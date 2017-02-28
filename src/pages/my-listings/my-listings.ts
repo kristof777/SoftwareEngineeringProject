@@ -45,7 +45,7 @@ export class MyListingsPage {
      */
     editListing(listing:Listing){
         this.navCtrl.push(AddListingPage,{
-            data:listing
+            listing:listing
         });
         this._logger.debug("Trying to edit...")
 
@@ -64,13 +64,8 @@ export class MyListingsPage {
      * Takes you to listing page
      */
     addListing(){
-        let addListingModal = this.modalCtrl.create(AddListingPage, {});
 
-        addListingModal.onDidDismiss(data => {
-            this._logger.info("Add Listing Modal Data: " + JSON.stringify(data));
-        });
-
-        addListingModal.present();
+        this.navCtrl.push(AddListingPage);
     }
 
     /**

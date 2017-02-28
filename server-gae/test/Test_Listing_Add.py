@@ -33,26 +33,23 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_bedrooms['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_bathrooms['error'],
-                           Error_Code.missing_price['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_province['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_address['error'],
-                           Error_Code.missing_image['error'],
-                           Error_Code.missing_image_index['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_bedrooms['error'],
+                           missing_sqft['error'],
+                           missing_bathrooms['error'],
+                           missing_price['error'],
+                           missing_description['error'],
+                           missing_province['error'],
+                           missing_city['error'],
+                           missing_address['error'],
+                           missing_image['error'],
+                           missing_image_index['error'],
+                           missing_published['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
-
-
-
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
 
         #################################################################
@@ -78,23 +75,23 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_bedrooms['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_bathrooms['error'],
-                           Error_Code.missing_price['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_province['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_address['error'],
-                           Error_Code.missing_image['error'],
-                           Error_Code.missing_image_index['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_bedrooms['error'],
+                           missing_sqft['error'],
+                           missing_bathrooms['error'],
+                           missing_price['error'],
+                           missing_description['error'],
+                           missing_province['error'],
+                           missing_city['error'],
+                           missing_address['error'],
+                           missing_image['error'],
+                           missing_image_index['error'],
+                           missing_published['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
         #################################################################
         # test case 3
@@ -119,163 +116,102 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_bedrooms['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_bathrooms['error'],
-                           Error_Code.missing_price['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_province['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_address['error'],
-                           Error_Code.missing_image['error'],
-                           Error_Code.missing_image_index['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_bedrooms['error'],
+                           missing_sqft['error'],
+                           missing_bathrooms['error'],
+                           missing_price['error'],
+                           missing_description['error'],
+                           missing_province['error'],
+                           missing_city['error'],
+                           missing_address['error'],
+                           missing_image['error'],
+                           missing_image_index['error'],
+                           missing_published['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
         ###########################################################################
-
         # test case 4: there're some missing fields
-        input = {"userId": "",
-                 "bedrooms": "2",
-                 "sqft": "",
-                 "bathrooms": "2",
-                 "price": "200000",
-                 "description": "",
-                 "isPublished": "True",
-                 "province": "Saskatchewan",
-                 "city": "",
-                 "address": "91 Campus Dr.",
-                 "thumbnailImageIndex": 0,
-                 "images": ''
-                 }
+
+        input = create_random_listing("")
+        input['sqft'] = ""
+        input['description'] = ""
+        input['city'] = ""
+        input['images'] = ''
 
         request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_image['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_sqft['error'],
+                           missing_description['error'],
+                           missing_city['error'],
+                           missing_image['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
 
         ###########################################################################
         # test case 5
         # checking if all error codes are received, if there's a non-existing userId
-        input = {"userId": "1",
-                  "bedrooms": "2",
-                  "sqft": "1200",
-                  "bathrooms": "2",
-                  "price": "200000",
-                  "description": "This is a nice house",
-                  "isPublished": "True",
-                  "province": "Saskatchewan",
-                  "city": "Saskatoon",
-                  "address": "91 Campus Dr.",
-                  "thumbnailImageIndex": 0,
-                  "images": 'some images'
-                  }
+
+        input = create_random_listing("1111")
 
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.un_auth_listing['error']]
+        errors_expected = [un_auth_listing['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
 
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(un_auth_listing['error'], errors_expected)
 
         ###########################################################################
         # test case 6
         # checking if all error codes are received, if all numeric fields are invalid
-        input = {"userId": "supposed to be int",
-                 "bedrooms": "supposed to be int",
-                 "sqft": "supposed to be int",
-                 "bathrooms": "supposed to be int",
-                 "price": "supposed to be int",
-                 "description": "This is a nice house",
-                 "isPublished": "True",
-                 "province": "Saskatchewan",
-                 "city": "Saskatoon",
-                 "address": "91 Campus Dr.",
-                 "thumbnailImageIndex": "supposed to be int",
-                 "images": 'some images'
-                 }
+
+        input = create_random_listing("supposed to be int")
+        input['bedrooms'] = "supposed to be int"
+        input['sqft'] = "supposed to be int"
+        input['bathrooms'] = "supposed to be float"
+        input['price'] = "supposed to be int"
 
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.invalid_user_id['error'],
-                           Error_Code.un_auth_listing['error'],
-                           Error_Code.invalid_bedrooms['error'],
-                           Error_Code.invalid_sqft['error'],
-                           Error_Code.invalid_bathrooms['error'],
-                           Error_Code.invalid_price['error'],
-                           Error_Code.invalid_thumbnail_image_index['error']]
+        errors_expected = [invalid_user_id['error'],
+                           invalid_bedrooms['error'],
+                           invalid_sqft['error'],
+                           invalid_bathrooms['error'],
+                           invalid_price['error'],
+                           invalid_thumbnail_image_index['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
         #############################################################################
         # test case 7: correct input
-        # Note that the user along with the userId is created on melody's local host,
-        # so it shouldn't be working on other computer
 
-
-        # first, we need to create a user
-        newUser = {"email": "student@usask.ca",
-                  "password": "aaAA1234",
-                  "firstName": "Student",
-                  "lastName": "USASK",
-                  "city": "Saskatoon",
-                  "postalCode": "S7N 4P7",
-                  "province": "Saskatchewan",
-                  "phone1": 1111111111,
-                  "confirmedPassword": "aaAA1234"
-                  }
-
-        request = webapp2.Request.blank('/createuser', POST=newUser)  # api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        # now we can create a listing using the userId that just returned back from the new created user
-        input = {"userId": output['userId'],
-                  "bedrooms": "2",
-                  "sqft": "1200",
-                  "bathrooms": "2",
-                  "price": "200000",
-                  "description": "This is a nice house",
-                  "isPublished": "True",
-                  "province": "Saskatchewan",
-                  "city": "Saskatoon",
-                  "address": "91 Campus Dr.",
-                  "thumbnailImageIndex": 0,
-                  "images": 'some images'
-                  }
-        input["userId"] = output["userId"]
+        inputs, users = create_dummy_listings_for_testing(Main, 1)
+        input = inputs[0]
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
@@ -284,20 +220,18 @@ class TestHandlers(unittest.TestCase):
         output = json.loads(response.body)
         self.assertTrue("listingId" in output)
 
-        listing_created = Listing.get_by_id(output["listingId"])
-        self.assertEquals(listing_created.bedrooms, 2)
-        self.assertEquals(listing_created.sqft, 1200)
-        self.assertEquals(listing_created.bathrooms, 2)
-        self.assertEquals(listing_created.price, 200000)
-        self.assertEquals(listing_created.description, "This is a nice house")
-        self.assertEquals(listing_created.isPublished, True)
-        self.assertEquals(listing_created.province, "Saskatchewan")
-        self.assertEquals(listing_created.city, "Saskatoon")
-        self.assertEquals(listing_created.address, "91 Campus Dr.")
-        self.assertEquals(listing_created.thumbnailImageIndex, 0)
-        self.assertEquals(listing_created.images, 'some images')
-
-
+        listing_created = Listing.get_by_id(int(output["listingId"]))
+        self.assertEquals(listing_created.bedrooms, int(input['bedrooms']))
+        self.assertEquals(listing_created.sqft, int(input['sqft']))
+        self.assertEquals(listing_created.bathrooms, float(input['bathrooms']))
+        self.assertEquals(listing_created.price, int(input['price']))
+        self.assertEquals(listing_created.description, input['description'])
+        self.assertEquals(str(listing_created.isPublished), input['isPublished'])
+        self.assertEquals(listing_created.province, input['province'])
+        self.assertEquals(listing_created.city, input['city'])
+        self.assertEquals(listing_created.address, input['address'])
+        self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
+        self.assertEquals(listing_created.images, input['images'])
 
 
     def tearDown(self):

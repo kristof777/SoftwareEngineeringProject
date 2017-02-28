@@ -1,16 +1,12 @@
 from __future__ import absolute_import
+import unittest
+import Main
+from google.appengine.ext import testbed
+from web_apis.Like_Dislike_Listing import *
 import sys
 sys.path.append("../")
-import json
-import os
-import unittest
-import extras.Error_Code as Error_Code
-import Main
-import webapp2
-from google.appengine.ext import testbed
-from models.Listing import Listing
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
@@ -23,78 +19,23 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
-
-    def test_like_dislike_a_listing(self):
-
-
-
-        # first, we need to create a user as the owner of a listing
-        owner = {"email": "student@usask.ca",
-                   "password": "aaAA1234",
-                   "firstName": "Student",
-                   "lastName": "USASK",
-                   "city": "Saskatoon",
-                   "postalCode": "S7N 4P7",
-                   "province": "Saskatchewan",
-                   "phone1": 1111111111,
-                   "confirmedPassword": "aaAA1234"
-                 }
-
-        request = webapp2.Request.blank('/createuser', POST=owner)  # api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        ownerId = output["userId"]
-
-
-
-        # now we can create a listing using the userId that just returned back from the new created user
-        newListing = {"userId": "",
-                 "bedrooms": "2",
-                 "sqft": "1200",
-                 "bathrooms": "2",
-                 "price": "200000",
-                 "description": "This is a nice house",
-                 "isPublished": "True",
-                 "province": "Saskatchewan",
-                 "city": "Saskatoon",
-                 "address": "91 Campus Dr.",
-                 "thumbnailImageIndex": 0,
-                 "images": 'some images'
-                 }
-
-        newListing["userId"] = ownerId
-
-        request = webapp2.Request.blank('/createlisting', POST=newListing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        listingId = output["listingId"]
-
-
+        # create a user as well as a listing that the user owns
+        listings, users = create_dummy_listings_for_testing(Main, 1)
+        assert len(listings) == 1
+        assert len(users) == 1
+        owner = users[0]
+        listing = listings[0]
+        self.ownerId = owner['userId']
+        self.listingId = listing['listingId']
 
         # now create a new user as a liker
-        liker = {"email": "like@usask.ca",
-                   "password": "aaAA1234",
-                   "firstName": "like",
-                   "lastName": "liker",
-                   "city": "Saskatoon",
-                   "postalCode": "S7N 4P7",
-                   "province": "Saskatchewan",
-                   "phone1": 2222222222,
-                   "confirmedPassword": "aaAA1234"
-                 }
-
-        request = webapp2.Request.blank('/createuser', POST=liker)  # api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        likerId = output["userId"]
+        users = create_dummy_users_for_testing(1, Main)
+        assert len(users) == 1
+        liker = users[0]
+        self.likerId = liker['userId']
 
 
+    def test_like_dislike_a_listing(self):
 
 
         #########################################################################################################
@@ -102,109 +43,97 @@ class TestHandlers(unittest.TestCase):
 
         # now user want to like the listing
         likeTheListing = {
-            "userId": "",
-            "listingId": "",
+            "userId": self.ownerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
-
-        likeTheListing["userId"] = ownerId
-        likeTheListing["listingId"] = listingId
 
         request = webapp2.Request.blank('/like', POST=likeTheListing)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.unallowed_liked['error']]
-
-        error_keys = [str(x) for x in json.loads(response.body)]
+        errors_expected = [unallowed_liked['error']]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
 
+        self.assertEquals(unallowed_liked['error'], errors_expected)
 
         #####################################################################################################
         # test case 2: successful delivery (like the listing)
 
         likeTheListing = {
-            "userId": "",
-            "listingId": "",
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
-
-        likeTheListing["userId"] = likerId
-        likeTheListing["listingId"] = listingId
 
         request = webapp2.Request.blank('/like', POST=likeTheListing)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
 
 
-
         ########################################################################################################
         # test case 3: send a like request(liked==True) while the listing is already liked
         likeTheListing = {
-            "userId": "",
-            "listingId": "",
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
 
-        likeTheListing["userId"] = likerId
-        likeTheListing["listingId"] = listingId
+        # likeTheListing["userId"] = likerId
+        # likeTheListing["listingId"] = listingId
 
         request = webapp2.Request.blank('/like', POST=likeTheListing)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.duplicated_liked['error']]
-
-        error_keys = [str(x) for x in json.loads(response.body)]
+        errors_expected = [duplicated_liked['error']]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
 
+        self.assertEquals(duplicated_liked['error'], errors_expected)
 
         ########################################################################################################
         # test case 4: dislike this listing
         # should be a successful delivery
 
         dislikeTheListing = {
-            "userId": "",
-            "listingId": "",
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "False"
         }
-
-        dislikeTheListing["userId"] = likerId
-        dislikeTheListing["listingId"] = listingId
 
         request = webapp2.Request.blank('/like', POST=dislikeTheListing)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
 
-
-
         ########################################################################################################
         # test case 5: dislike this listing again
         dislikeTheListingAgain = {
-            "userId": "",
-            "listingId": "",
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "False"
         }
-
-        dislikeTheListingAgain["userId"] = likerId
-        dislikeTheListingAgain["listingId"] = listingId
 
         request = webapp2.Request.blank('/like', POST=dislikeTheListingAgain)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
         errors_expected = [Error_Code.duplicated_liked['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
-
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
 
+        self.assertEquals(duplicated_liked['error'], errors_expected)
 
         ########################################################################################################
         # test case 6: missing user input
@@ -218,16 +147,14 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/like', POST=likeWithMissingInput)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_listing_id['error'],
-                           Error_Code.missing_liked['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_listing_id['error'],
+                           missing_liked['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
-
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
         ########################################################################################################
         # test case 7: invalid user input
@@ -241,20 +168,14 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/like', POST=likeWithInvalidInput)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.invalid_user_id['error'],
-                           Error_Code.invalid_listing_id['error'],
-                           Error_Code.invalid_liked['error']]
+        errors_expected = [invalid_user_id['error'],
+                           invalid_listing_id['error'],
+                           invalid_liked['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
-
-
-
-
-
+        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are

@@ -43,6 +43,28 @@ export class AddListingPage {
     loadListingInfo(listing: Listing): void{
         assert.object(listing);
 
+        this.curListing = new Listing(
+            listing.listingId,
+            listing.listerId,
+            new Location(
+                Province.fromAbbr(listing.location.province.abbr),
+                listing.location.city,
+                listing.location.address,
+                listing.location.postalCode,
+                listing.location.latitude,
+                listing.location.longitude,
+            ),
+            listing.bedrooms,
+            listing.bathrooms,
+            listing.squarefeet,
+            listing.price,
+            listing.description,
+            listing.isPublished,
+            listing.createdDate,
+            listing.modifiedDate,
+            listing.images
+        );
+
         this.listingId = listing.listingId;
         this.listerId = listing.listerId;
         this.bathrooms = listing.bathrooms;

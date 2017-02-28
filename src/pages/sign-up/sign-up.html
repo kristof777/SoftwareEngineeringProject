@@ -32,10 +32,10 @@
         <ion-slide padding [formGroup]="signUpStep2">
             <ion-item>
                 <ion-label stacked>First Name</ion-label>
-                <ion-input type="text" formControlName="firstName" placeholder="Enter your first name here" id="signUpFirstName"></ion-input>
+                <ion-input type="text" (blur)="attemptFirstName()" formControlName="firstName" placeholder="Enter your first name here" id="signUpFirstName"></ion-input>
             </ion-item>
 
-            <ion-item no-lines class="invalid" *ngIf="!signUpStep2.controls.firstName.valid">
+            <ion-item no-lines class="invalid" *ngIf="firstNameAttempted && !signUpStep2.controls.firstName.valid">
                 A first name is required to register.
             </ion-item>
 
@@ -82,19 +82,6 @@
                 <ion-label stacked>City</ion-label>
                 <ion-input formControlName="city" type="text" placeholder="City" id="signUpCity"></ion-input>
             </ion-item>
-        </ion-slide>
-
-        <ion-slide id="buySellSlide">
-            <ion-grid>
-                <ion-row>
-                    <ion-col center id="buyMode">
-                        <button ion-button (click)="onModeSelect(0)">Buy Mode</button>
-                    </ion-col>
-                    <ion-col  center id="sellMode">
-                        <button ion-button (click)="onModeSelect(1)">Sell Mode</button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
         </ion-slide>
     </ion-slides>
 </ion-content>

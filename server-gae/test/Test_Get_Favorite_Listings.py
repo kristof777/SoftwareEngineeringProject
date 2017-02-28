@@ -1,15 +1,11 @@
 from __future__ import absolute_import
 import unittest
-import json
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import extras.Error_Code as Error_Code
 import Main
-import webapp2
 from google.appengine.ext import testbed
-from models.Listing import Listing
 from web_apis.Create_User import *
-import extras.utils as utils
 
 
 class TestHandlers(unittest.TestCase):
@@ -23,207 +19,63 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
+        # create 10 listings for one user
+        listings, users = create_dummy_listings_for_testing(Main, 10)
+        assert len(users) == 1
+        assert len(listings) == 10
+
+        # now create a new user as a liker, we'll use this person to send getFavorites request
+        users = create_dummy_users_for_testing(1, Main)
+        assert len(users) == 1
+        liker = users[0]
+        self.likerId = liker['userId']
+
+        # make the liker likes the first five of the listings
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[0]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[1]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[2]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[3]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[4]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        # the first five listings has been liked, so we create a list of those listings for future use
+        self.likedListings = listings[0:5]
 
     def test_get_fav_listings(self):
-
-
-        # first, we need to create a user as the owner of several listings
-        owner = {"email": "student@usask.ca",
-                 "password": "aaAA12345",
-                 "firstName": "Student",
-                 "lastName": "USASK",
-                 "city": "Saskatoon",
-                 "postalCode": "S7N 4P7",
-                 "province": "Saskatchewan",
-                 "phone1": 1111111111,
-                 "confirmedPassword": "aaAA12345"
-                 }
-
-        request = webapp2.Request.blank('/createuser', POST=owner)  # api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        ownerId = output["userId"]
-
-        # now we can create a few listings using the userId that just returned back from the new created user
-        newListing1 = {"userId": ownerId,
-                      "bedrooms": "2",
-                      "sqft": "1200",
-                      "bathrooms": "2",
-                      "price": "200000",
-                      "description": "This is a nice house",
-                      "isPublished": "True",
-                      "province": "Saskatchewan",
-                      "city": "Saskatoon",
-                      "address": "91 Campus Dr.",
-                      "thumbnailImageIndex": 0,
-                      "images": 'some images'
-                      }
-
-
-        request = webapp2.Request.blank('/createlisting', POST=newListing1)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        listingId1 = output["listingId"]
-
-
-        # listing 2
-        newListing2 = {"userId": ownerId,
-                      "bedrooms": "4",
-                      "sqft": "1000",
-                      "bathrooms": "4",
-                      "price": "250000",
-                      "description": "Get this nice house today!",
-                      "isPublished": "False",
-                      "province": "Saskatchewan",
-                      "city": "Regina",
-                      "address": "312 Summer Place",
-                      "thumbnailImageIndex": 0,
-                      "images": 'some images'
-                      }
-
-
-        request = webapp2.Request.blank('/createlisting', POST=newListing2)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        listingId2 = output["listingId"]
-
-        # listing 3
-        newListing3 = {"userId": ownerId,
-                       "bedrooms": "1",
-                       "sqft": "11000",
-                       "bathrooms": "1",
-                       "price": "1110000",
-                       "description": "Move in today!",
-                       "isPublished": "True",
-                       "province": "BC",
-                       "city": "Vancouver",
-                       "address": "32 Redeer St.",
-                       "thumbnailImageIndex": 0,
-                       "images": 'some images'
-                       }
-
-        request = webapp2.Request.blank('/createlisting', POST=newListing3)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        listingId3 = output["listingId"]
-
-
-
-        # now create a new user as a liker
-        liker = {"email": "like@usask.ca",
-                 "password": "aaAA1234",
-                 "firstName": "like",
-                 "lastName": "liker",
-                 "city": "Saskatoon",
-                 "postalCode": "S7N 4P7",
-                 "province": "Saskatchewan",
-                 "phone1": 2222222222,
-                 "confirmedPassword": "aaAA1234"
-                 }
-
-        request = webapp2.Request.blank('/createuser', POST=liker)  # api you need to test
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-        output = json.loads(response.body)
-
-        likerId = output["userId"]
-
-
-        # liker likes these three listings
-        likeTheListing = {
-            "userId": "",
-            "listingId": "",
-            "liked": "True"
-        }
-
-        likeTheListing["userId"] = likerId
-        likeTheListing["listingId"] = listingId1
-
-        request = webapp2.Request.blank('/like', POST=likeTheListing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-
-        likeTheListing = {
-            "userId": "",
-            "listingId": "",
-            "liked": "True"
-        }
-
-        likeTheListing["userId"] = likerId
-        likeTheListing["listingId"] = listingId2
-
-        request = webapp2.Request.blank('/like', POST=likeTheListing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-
-        likeTheListing = {
-            "userId": "",
-            "listingId": "",
-            "liked": "True"
-        }
-
-        likeTheListing["userId"] = likerId
-        likeTheListing["listingId"] = listingId3
-
-        request = webapp2.Request.blank('/like', POST=likeTheListing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-
 
         #######################################################################3
         # test case 1: successful get info
 
         getFavs = {
-            "userId": likerId
+            "userId": self.likerId
         }
 
         request = webapp2.Request.blank('/getFavoriteListing', POST=getFavs)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
 
-        self.assertEquals(len(output["listings"]),2)
+        # get the number of published listings
+        isPublishes = 0
+        for listing in self.likedListings:
+            if listing['isPublished'] == 'True':
+                isPublishes += 1
 
-        listing1 = output["listings"][0]
-
-        self.assertEquals(listing1['province'], newListing1['province'])
-        self.assertEquals(listing1['city'], newListing1['city'])
-        self.assertEquals(listing1['address'], newListing1['address'])
-        self.assertEquals(listing1['bathrooms'], int(newListing1['bathrooms']))
-        self.assertEquals(listing1['sqft'], int(newListing1['sqft']))
-        self.assertEquals(listing1['bedrooms'], int(newListing1['bedrooms']))
-        self.assertEquals(listing1['price'], int(newListing1['price']))
-        self.assertEquals(listing1['description'], newListing1['description'])
-        self.assertEquals(str(listing1['isPublished']), newListing1['isPublished'])
-        self.assertEquals(listing1['thumbnailImageIndex'], int(newListing1['thumbnailImageIndex']))
-        self.assertEquals(listing1['userId'], int(newListing1['userId']))
-        self.assertEquals(listing1['listingId'], int(listingId1))
-
-
-
-        listing2 = output["listings"][1]
-
-        self.assertEquals(listing2['province'], newListing3['province'])
-        self.assertEquals(listing2['city'], newListing3['city'])
-        self.assertEquals(listing2['address'], newListing3['address'])
-        self.assertEquals(listing2['bathrooms'], int(newListing3['bathrooms']))
-        self.assertEquals(listing2['sqft'], int(newListing3['sqft']))
-        self.assertEquals(listing2['bedrooms'], int(newListing3['bedrooms']))
-        self.assertEquals(listing2['price'], int(newListing3['price']))
-        self.assertEquals(listing2['description'], newListing3['description'])
-        self.assertEquals(str(listing2['isPublished']), newListing3['isPublished'])
-        self.assertEquals(listing2['thumbnailImageIndex'], int(newListing3['thumbnailImageIndex']))
-        self.assertEquals(listing2['userId'], int(newListing3['userId']))
-        self.assertEquals(listing2['listingId'], int(listingId3))
-
+        self.assertEquals(len(output["listings"]), isPublishes)
 
         #######################################################################3
         # test case 2: invalid userId
@@ -235,15 +87,17 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/getFavoriteListing', POST=invalidFavs)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter_error)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
-
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        try:
+            errors_expected = str(json.loads(response.body).keys()[0])
+        except IndexError as _:
+            self.assertFalse()
+
+        self.assertEquals(invalid_user_id['error'], errors_expected)
 
 
 
@@ -252,6 +106,21 @@ class TestHandlers(unittest.TestCase):
         # completed. If the testbed is not deactivated, the original
         # stubs will not be restored.
         self.testbed.deactivate()
+
+
+def get_like_post_dictionary(userId, listingId, liked):
+    return {"userId": userId, "listingId":
+        listingId, "liked": liked}
+
+
+def get_like_response(POST):
+    request = webapp2.Request.blank('/like', POST=POST)
+    response = request.get_response(Main.app)
+    if response.body:
+        return json.loads(response.body), response.status_int
+    else:
+        return None, response.status_int
+
 
 def run_tests():
     unittest.main()
