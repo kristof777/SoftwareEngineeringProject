@@ -23,10 +23,7 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
-
     def test_like_dislike_a_listing(self):
-
-
 
         # first, we need to create a user as the owner of a listing
         owner = {"email": "student@usask.ca",

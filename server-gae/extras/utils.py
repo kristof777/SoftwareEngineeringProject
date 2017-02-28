@@ -365,7 +365,8 @@ valid_check = {
     "bedrooms": is_valid_integer,
     "sqft": is_valid_integer,
     "isPublished": is_valid_bool,
-    "thumbnailImageIndex": is_valid_integer
+    "thumbnailImageIndex": is_valid_integer,
+    "liked": is_valid_bool
 }
 
 

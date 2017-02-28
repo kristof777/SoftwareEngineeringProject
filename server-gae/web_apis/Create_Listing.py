@@ -2,18 +2,12 @@ import json
 import os
 import sys
 sys.path.append("../")
-import webapp2
-from google.appengine.ext.webapp import template
-import extras.Error_Code as Error_Code
 from models.Listing import Listing
 from models.User import User
-from extras.utils import *
-from models.Favorite import Favorite
 import sys
 sys.path.append("../")
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.Base_Handler import BaseHandler
 from extras.utils import *
 
 
