@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
-import {Http, ResponseContentType} from '@angular/http';
+import {Injectable} from "@angular/core";
+import {Http, ResponseContentType} from "@angular/http";
 import {KasperConfig} from "../kasper-config";
-import 'rxjs/add/operator/map';
+import "rxjs/add/operator/map";
 import {Logger} from "angular2-logger/core";
 import {Filter} from "../models/filter";
 import {Listing} from "../models/listing";
 import {LoginService} from "./login-service";
+import {FormControl} from "@angular/forms";
 let assert = require('assert-plus');
 
 @Injectable()
@@ -187,7 +188,8 @@ export class KasperService {
         let body = new FormData();
         this.appendAuthentication(body);
 
-        this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body, ResponseContentType.Json)
+        this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
+            ResponseContentType.Json)
             .subscribe(data => {
                 cbGetFavourites(data.json());
             }, error => {
@@ -202,7 +204,8 @@ export class KasperService {
      * @param liked                 do they like it
      * @param cbLikeDislikeListing  the callback for the data
      */
-    likeDislikeListing(listingId: number, liked: boolean, cbLikeDislikeListing: (data: any) => void): void{
+    likeDislikeListing(listingId: number, liked: boolean,
+                       cbLikeDislikeListing: (data: any) => void): void{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
@@ -335,44 +338,77 @@ export class KasperService {
         body.append('token', this.getToken);
     }
 
-     /** Checks a password for validity.
-     *
-     * @param password  the password to check
-     * @precond         the password is not null
-     * @returns {strength, message}
-     *          strength    the strength of the password [0 to 4]
-     *          message     a message depicting how to raise the strength
-     */
-    checkPass(password: string): Object{
+    /**
+    * Checks a password for validity.
+    *
+    * @param c  the form control for the check
+    * @returns {strength, message}
+    *          strength  the strength of the password [0 to 4]
+    *          valid     whether it meets the minimum requirements
+    *          message   a message depicting how to raise the strength
+    */
+    checkPass(c: FormControl): any{
+        const requiredStrength: number = 4;
+
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
         let numeric = new RegExp("^(?=.*[0-9])");
         let length = new RegExp("^(?=.{7,})");
 
-        if(!lowerCase.test(password)){
-            return {
-                strength: 0,
-                message: "Password must include at least one lower case letter"
+        if(!lowerCase.test(c.value)){
+            return (0 == requiredStrength) ? null : {
+                checkPass: {
+                    strength: 0,
+                    message: "Password must include at least one lower case letter"
+                }
             };
-        } else if(!upperCase.test(password)){
-            return {
-                strength: 1,
-                message: "Password must include at least one upper case letter"
+        } else if(!upperCase.test(c.value)){
+            return (1 == requiredStrength) ? null : {
+                checkPass: {
+                    strength: 1,
+                    message: "Password must include at least one upper case letter"
+                }
             };
-        } else if(!numeric.test(password)){
-            return {
-                strength: 2,
-                message: "Password must include at least one number"
+        } else if(!numeric.test(c.value)){
+            return (2 == requiredStrength) ? null : {
+                checkPass: {
+                    strength: 2,
+                    message: "Password must include at least one number"
+                }
             };
-        } else if(!length.test(password)){
-            return {
-                strength: 3,
-                message: "Password must include at least 7 characters long"
+        } else if(!length.test(c.value)){
+            return (3 == requiredStrength) ? null : {
+                checkPass: {
+                    strength: 3,
+                    message: "Password must include at least 7 characters long"
+                }
             };
         } else {
-            return {
-                strength: 4
+            return (4 == requiredStrength) ? null : {
+                checkPass: {
+                    strength: 4,
+                }
             };
         }
+    }
+
+    /**
+     * Check whether a phone number is valid.
+     *
+     * @param c the form control for the check
+     * @returns null if it is valid or falsey
+     *          object otherwise
+     */
+    checkPhone(c: FormControl): any{
+        const numberRegex = new RegExp("^[0-9]{10,10}");
+
+        if(!c.value) return null;
+        let input = c.value.replace(/[^0-9]*/g, "");
+
+        if(!numberRegex.test(input)){
+            return { checkPhone: { valid: false }};
+        }
+
+        return null;
     }
 }

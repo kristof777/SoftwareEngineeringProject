@@ -3,6 +3,7 @@ import json
 import sys
 
 from extras.utils import *
+from models.User import *
 
 sys.path.append("../")
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
@@ -29,24 +30,25 @@ class SignInWithToken(BaseHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         message = {}
         token = self.request.POST.get('token')
+        print token
+        print "hi"
         if token is None:
             message[missing_token['error']] = "Missing user token"
 
         user_id = self.request.POST.get('userId')
         if user_id is None:
             message[missing_user_id['error']] = "Missing user id"
-
+        print user_id
         if len(message.keys()) != 0:
-            write_error_to_response(self, message,
+            write_error_to_response(self.response, message,
                          missing_invalid_parameter_error)
             return
 
         assert token is not None
         try:
             #Todo This is all wrong.userId is supposed to be given, and not email.
-            user = self.get_by_auth_token(user_id, token, subject='auth')
-
-            user_dict = {'token': user['token'],
+            user = User.get_by_auth_token(int(user_id), token, subject='auth')
+            user_dict = { 'token': user['token'],
                          'userId': user['user_id'],
                          'email': user['email'],
                          'firstName': user['first_name'],
@@ -54,13 +56,13 @@ class SignInWithToken(BaseHandler):
                          'phone1': user['phone1'],
                          'phone2': user['phone2'],
                          'city': user['city'],
-                         'province': user['province']}
+                         'province': user['province'] }
             self.response.out.write(json.dumps(user_dict))
             self.response.set_status(success)
 
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in-with-token failed for user %s because of %s',
-                         user_email, type(e))
+                         user_id, type(e))
             write_error_to_response(self, not_authorized["error"], not_authorized['status'])
 
     def _serve_page(self, failed=False):

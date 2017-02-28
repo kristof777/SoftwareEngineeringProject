@@ -6,11 +6,9 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
-    <img class="logo" src="http://placehold.it/50x50" />
-
-    <ion-list inset>
+<ion-content>
+    <ion-list>
+        <ion-list-header>PROFILE</ion-list-header>
         <ion-item>
             <ion-label stacked>Email</ion-label>
             <ion-input [(ngModel)]="email" type="text" placeholder="{{ currentUser.email }}" id="settingsEmail"></ion-input>
@@ -48,8 +46,10 @@
             <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}" id="settingsCity"></ion-input>
         </ion-item>
 
+        <ion-list-header>Setting</ion-list-header>
+
         <ion-item>
-            <ion-label>Notification</ion-label>
+            <ion-label staked>Notification</ion-label>
             <ion-toggle [(ngModel)]="notificationsEnabled"></ion-toggle>
         </ion-item>
 

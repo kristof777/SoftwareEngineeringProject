@@ -29,6 +29,7 @@ class SignIn(BaseHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         message = {}
         user_email = self.request.POST.get('email')
+
         if user_email is None:
             message[missing_email['error']] = "Missing user email"
         password = self.request.POST.get('password')

@@ -24,13 +24,11 @@
 
 import os
 
-
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
 # use_library('django', '0.96')
 # webapp_django_version = '0.96'
-from web_apis.SignIn import SignIn
+from web_apis.Sign_In import SignIn
 from web_apis.Create_User import *
 from web_apis.Create_Listing import *
 from web_apis.Get_My_Listings import *
@@ -38,6 +36,7 @@ from web_apis.Like_Dislike_Listing import *
 from web_apis.Edit_Listing import *
 from web_apis.Get_Favorite_Listings import *
 from web_apis.Change_Password import *
+from web_apis.Sign_In_With_Token import *
 from models.User import User
 from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
@@ -62,7 +61,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
     handler=VerificationHandler, name='verification'),
     webapp2.Route('/signin', SignIn, name='signin'),
-    # webapp2.Route('/signinwithtoken', SignInWithToken, name='signinwithtoken'),
+    webapp2.Route('/signinwithtoken', SignInWithToken, name='signinwithtoken'),
     webapp2.Route('/logout', LogoutHandler, name='logout'),
     webapp2.Route('/password', SetPasswordHandler),
     webapp2.Route('/changepassword', ChangePassword),
