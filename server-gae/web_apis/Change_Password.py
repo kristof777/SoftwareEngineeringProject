@@ -99,10 +99,12 @@ class ChangePassword(BaseHandler):
 
         try:
             User.set_password(user, values['newPassword'])
+            #This will throw an exception if the password is wrong, which will only happen if set_password failed.
             user_dict = self.auth.get_user_by_password(
                 user.email, values['newPassword'], remember=True,
                 save_session=True)
         except:
+            #set_password failed. This should never happen
             assert(False)
 
 
