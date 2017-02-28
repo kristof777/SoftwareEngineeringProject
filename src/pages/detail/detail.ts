@@ -99,13 +99,9 @@ export class DetailPage {
      * Edit the current property
      */
     edit(): void{
-        let editListingModal = this.modalCtrl.create(AddListingPage, { listing: this.data[this.cursor] });
-
-        editListingModal.onDidDismiss(data => {
-            this._logger.info("Edit Listing Data: " + JSON.stringify(data));
-        });
-
-        editListingModal.present();
+        this.navCtrl.push(
+            AddListingPage, { listing: this.data[this.cursor] }
+        );
     }
 
     /**
