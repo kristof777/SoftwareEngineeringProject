@@ -61,7 +61,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, missing_invalid_parameter_error)
             return
 
-        listing = Listing.get_by_id(values['listingId'])
+        listing = Listing.get_by_id(int(values['listingId']))
         if listing is None:
             error = {
                 un_auth_listing['error']: 'Listing not authorized'

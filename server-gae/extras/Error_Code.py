@@ -67,7 +67,8 @@ invalids = {
     "bathrooms": invalid_bathrooms,
     "sqft": invalid_sqft,
     "isPublished": invalid_published,
-    "thumbnailImageIndex": invalid_thumbnail_image_index
+    "thumbnailImageIndex": invalid_thumbnail_image_index,
+    "liked": invalid_liked
 }
 
 missing = {
@@ -94,7 +95,8 @@ missing = {
     "thumbnailImageIndex": missing_image_index,
     "images": missing_image,
     "description": missing_description,
-    "address": missing_address
+    "address": missing_address,
+    "liked": missing_liked
 }
 
 missing_invalid_parameter_error = 400

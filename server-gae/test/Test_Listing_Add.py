@@ -52,9 +52,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
 
-
-
-
         #################################################################
         # test case 2
         # checking if all error codes are received, if empty code is sent
@@ -80,16 +77,16 @@ class TestHandlers(unittest.TestCase):
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_bathrooms['error'],
-                           Error_Code.missing_price['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_province['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_address['error'],
-                           Error_Code.missing_image['error'],
-                           Error_Code.missing_image_index['error'],
-                           Error_Code.missing_published['error']]
+                           missing_sqft['error'],
+                           missing_bathrooms['error'],
+                           missing_price['error'],
+                           missing_description['error'],
+                           missing_province['error'],
+                           missing_city['error'],
+                           missing_address['error'],
+                           missing_image['error'],
+                           missing_image_index['error'],
+                           missing_published['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -119,18 +116,18 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_bedrooms['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_bathrooms['error'],
-                           Error_Code.missing_price['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_province['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_address['error'],
-                           Error_Code.missing_image['error'],
-                           Error_Code.missing_image_index['error'],
-                           Error_Code.missing_published['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_bedrooms['error'],
+                           missing_sqft['error'],
+                           missing_bathrooms['error'],
+                           missing_price['error'],
+                           missing_description['error'],
+                           missing_province['error'],
+                           missing_city['error'],
+                           missing_address['error'],
+                           missing_image['error'],
+                           missing_image_index['error'],
+                           missing_published['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -151,11 +148,11 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(response.status_int, 400)
 
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_sqft['error'],
-                           Error_Code.missing_description['error'],
-                           Error_Code.missing_city['error'],
-                           Error_Code.missing_image['error']]
+        errors_expected = [missing_user_id['error'],
+                           missing_sqft['error'],
+                           missing_description['error'],
+                           missing_city['error'],
+                           missing_image['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -186,19 +183,6 @@ class TestHandlers(unittest.TestCase):
         ###########################################################################
         # test case 6
         # checking if all error codes are received, if all numeric fields are invalid
-        # input = {"userId": "supposed to be int",
-        #          "bedrooms": "supposed to be int",
-        #          "sqft": "supposed to be int",
-        #          "bathrooms": "supposed to be float",
-        #          "price": "supposed to be int",
-        #          "description": "This is a nice house",
-        #          "isPublished": "True",
-        #          "province": "Saskatchewan",
-        #          "city": "Saskatoon",
-        #          "address": "91 Campus Dr.",
-        #          "thumbnailImageIndex": "supposed to be int",
-        #          "images": 'some images'
-        #          }
 
         input = create_random_listing("supposed to be int")
         input['bedrooms'] = "supposed to be int"
