@@ -66,7 +66,7 @@ class TestHandlers(unittest.TestCase):
 
         request = webapp2.Request.blank('/getFavoriteListing', POST=getFavs)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
 
         # get the number of published listings
@@ -87,7 +87,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/getFavoriteListing', POST=invalidFavs)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter_error)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 

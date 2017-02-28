@@ -1,12 +1,11 @@
 from models.Listing import Listing
 from models.User import User
-from models.Favorite import Favorite
 from extras.utils import *
 import sys
 sys.path.append("../")
 
 
-class GetFavoriteListing(webapp2.RequestHandler):
+class GetMyListing(webapp2.RequestHandler):
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -47,30 +46,27 @@ class GetFavoriteListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, not_authorized)
             return
 
-        favorites = Favorite.query(Favorite.userId == int(values['userId']), Favorite.liked == True).fetch()
+        ownerId = int(values['userId'])
 
+        my_listings = Listing.query(Listing.userId == ownerId).fetch()
         returned_array = []
-        for favorite in favorites:
 
-            fav_listingId = favorite.listingId
-            listing = Listing.get_by_id(fav_listingId)
+        for listing in my_listings:
+            template_values = {
+                'listingId': listing.listingId,
+                'userId': listing.userId,
+                'bedrooms': listing.bedrooms,
+                'sqft': listing.sqft,
+                'bathrooms': listing.bathrooms,
+                'price': listing.price,
+                'description': listing.description,
+                'isPublished': listing.isPublished,
+                'province': listing.province,
+                'city': listing.city,
+                'address': listing.address,
+                'images': listing.images,
+                'thumbnailImageIndex': listing.thumbnailImageIndex
+            }
+            returned_array.append(template_values)
 
-            if listing.isPublished:
-                template_values = {
-                    'listingId': listing.listingId,
-                    'userId': listing.userId,
-                    'bedrooms': listing.bedrooms,
-                    'sqft': listing.sqft,
-                    'bathrooms': listing.bathrooms,
-                    'price': listing.price,
-                    'description': listing.description,
-                    'isPublished': listing.isPublished,
-                    'province': listing.province,
-                    'city': listing.city,
-                    'address': listing.address,
-                    'images': listing.images,
-                    'thumbnailImageIndex': listing.thumbnailImageIndex
-                }
-                returned_array.append(template_values)
-
-        write_success_to_response(self.response, {"listings": returned_array})
+        write_success_to_response(self.response, {"myListings": returned_array})
