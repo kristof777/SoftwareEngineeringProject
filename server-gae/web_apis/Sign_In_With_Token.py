@@ -45,25 +45,29 @@ class SignInWithToken(BaseHandler):
             return
 
         assert token is not None
-        try:
-            #Todo This is all wrong.userId is supposed to be given, and not email.
-            user = User.get_by_auth_token(int(user_id), token, subject='auth')
-            user_dict = { 'token': user['token'],
-                         'userId': user['user_id'],
-                         'email': user['email'],
-                         'firstName': user['first_name'],
-                         'lastName': user['last_name'],
-                         'phone1': user['phone1'],
-                         'phone2': user['phone2'],
-                         'city': user['city'],
-                         'province': user['province'] }
-            self.response.out.write(json.dumps(user_dict))
-            self.response.set_status(success)
+        #Todo This is all wrong.userId is supposed to be given, and not email.
+        user = (User.get_by_auth_token(int(user_id), token, subject='auth'))[0]
 
-        except (InvalidAuthIdError, InvalidPasswordError) as e:
-            logging.info('Sign-in-with-token failed for user %s because of %s',
-                         user_id, type(e))
-            write_error_to_response(self, not_authorized["error"], not_authorized['status'])
+        if user is None:
+            write_error_to_response(self.response, not_authorized["error"],
+                                        not_authorized['status'])
+            logging.info(
+                'Sign-in-with-token failed for user %s because of %s',
+                user_id)
+            return
+
+        token = self.user_model.create_auth_token(user_id)
+        user_dict = {'token': token,
+                    'userId': user.get_id(),
+                    'email': user.email,
+                    'firstName': user.first_name,
+                    'lastName': user.last_name,
+                    'phone1': user.phone1,
+                    'phone2': user.phone2,
+                    'city': user.city,
+                    'province': user.province }
+        self.response.out.write(json.dumps(user_dict))
+        self.response.set_status(success)
 
     def _serve_page(self, failed=False):
         params = {
