@@ -68,7 +68,7 @@
                 Price
             </span>
             <span item-right>
-                {{ data[cursor].price }}
+                {{ data[cursor].price | currency:'USD':true:'1.2-2' }}
             </span>
         </ion-item>
         <ion-item>
