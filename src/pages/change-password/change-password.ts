@@ -40,11 +40,12 @@ export class ChangePasswordPage {
         }
 
         // Verify the new password is strong enough
-        let passwordCheck: any = this.kasperService.checkPass(this.newPassword);
-        if(passwordCheck.strength != 4){
-            this.alert("Stronger Password Required", passwordCheck.message);
-            return;
-        }
+        // TODO Update to form control
+        // let passwordCheck: any = this.kasperService.checkPass(this.newPassword);
+        // if(passwordCheck.strength != 4){
+        //     this.alert("Stronger Password Required", passwordCheck.message);
+        //     return;
+        // }
 
         // Create the data to send back to the other page to be submitted
         let data = {

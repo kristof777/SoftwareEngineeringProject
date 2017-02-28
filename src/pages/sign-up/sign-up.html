@@ -1,39 +1,63 @@
 <ion-content>
     <ion-slides effect="flip">
-        <ion-slide padding>
+        <ion-slide padding [formGroup]="signUpStep1">
             <ion-item>
                 <ion-label stacked>Email</ion-label>
-                <ion-input type="text" [(ngModel)]="email" placeholder="Enter your email here" id="signUpEmail"></ion-input>
+                <ion-input type="text" formControlName="email" (blur)="attemptEmail()" placeholder="Enter your email here" id="signUpEmail"></ion-input>
             </ion-item>
+
+            <ion-item no-lines class="invalid" *ngIf="emailAttempted && !signUpStep1.controls.email.valid">
+                The email you entered is invalid.
+            </ion-item>
+
             <ion-item>
                 <ion-label stacked>Password</ion-label>
-                <ion-input type="text" [(ngModel)]="password" placeholder="Enter your password here" id="signUpPassword"></ion-input>
+                <ion-input type="text" (blur)="attemptPassword()" formControlName="password" placeholder="Enter your password here" id="signUpPassword"></ion-input>
             </ion-item>
+
+            <ion-item no-lines class="invalid"  *ngIf="passwordAttempted && !signUpStep1.controls.password.valid">
+                {{ signUpStep1.controls.password.errors.checkPass.message }}
+            </ion-item>
+
             <ion-item>
                 <ion-label stacked>Confirm Password</ion-label>
-                <ion-input type="text" [(ngModel)]="confirmPassword" placeholder="Enter your password again" id="signUpConfirmPassword"></ion-input>
+                <ion-input type="text" (focus)="attemptConfirmPassword()" formControlName="confirmPassword" placeholder="Enter your password again" id="signUpConfirmPassword"></ion-input>
+            </ion-item>
+
+            <ion-item no-lines class="invalid"  *ngIf="confirmPasswordAttempted && (signUpStep1.value.password != signUpStep1.value.confirmPassword)">
+                Passwords do not match
             </ion-item>
         </ion-slide>
 
-        <ion-slide padding>
+        <ion-slide padding [formGroup]="signUpStep2">
             <ion-item>
                 <ion-label stacked>First Name</ion-label>
-                <ion-input type="text" [(ngModel)]="firstName" placeholder="Enter your first name here" id="signUpFirstName"></ion-input>
+                <ion-input type="text" formControlName="firstName" placeholder="Enter your first name here" id="signUpFirstName"></ion-input>
             </ion-item>
+
+            <ion-item no-lines class="invalid" *ngIf="!signUpStep2.controls.firstName.valid">
+                A first name is required to register.
+            </ion-item>
+
             <ion-item>
                 <ion-label stacked>Last Name</ion-label>
-                <ion-input type="text" [(ngModel)]="lastName" placeholder="Enter your last name here" id="signUpLastName"></ion-input>
+                <ion-input type="text" formControlName="lastName" placeholder="Enter your last name here" id="signUpLastName"></ion-input>
             </ion-item>
+
             <ion-item>
                 <ion-label stacked>10-digit Phone Number</ion-label>
-                <ion-input type="tel" maxlength="10" [(ngModel)]="phoneNumber" placeholder="Enter your phone number here" id="signUpPhoneNumber"></ion-input>
+                <ion-input type="tel" formControlName="phoneNumber" placeholder="Enter your phone number here" id="signUpPhoneNumber"></ion-input>
+            </ion-item>
+
+            <ion-item no-lines class="invalid" *ngIf="!signUpStep2.controls.phoneNumber.valid">
+                Invalid phone number
             </ion-item>
         </ion-slide>
 
-        <ion-slide padding>
+        <ion-slide padding [formGroup]="signUpStep3">
             <ion-item>
                 <ion-label stacked>Province</ion-label>
-                <ion-select [(ngModel)]="province" id="signUpProvinceSelect">
+                <ion-select formControlName="province" id="signUpProvinceSelect">
                     <ion-option value="AB">Alberta</ion-option>
                     <ion-option value="BC" id="signUpBC">British Columbia</ion-option>
                     <ion-option value="MB">Manitoba</ion-option>
@@ -50,9 +74,13 @@
                 </ion-select>
             </ion-item>
 
+            <ion-item no-lines class="invalid"  *ngIf="!signUpStep3.controls.province.valid">
+                Province is required
+            </ion-item>
+
             <ion-item>
                 <ion-label stacked>City</ion-label>
-                <ion-input [(ngModel)]="city" type="text" placeholder="City" id="signUpCity"></ion-input>
+                <ion-input formControlName="city" type="text" placeholder="City" id="signUpCity"></ion-input>
             </ion-item>
         </ion-slide>
 

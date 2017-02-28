@@ -20,16 +20,13 @@ import {Province} from "../../app/models/province";
 })
 export class SignInPage {
     loginForm: FormGroup;
-    private emailAttempted: boolean;
-
+    private emailAttempted: boolean = false;
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
                 private _logger: Logger,
                 public formBuilder: FormBuilder,
                 public kasperService: KasperService) {
-
-        this.emailAttempted = false;
 
         this.loginForm = formBuilder.group({
             email: ['', Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}"), Validators.required])],
