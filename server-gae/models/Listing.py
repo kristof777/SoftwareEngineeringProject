@@ -21,65 +21,45 @@ class Listing(ndb.Model):
     listingId = ndb.IntegerProperty(required=True,default=0)
 
 
-    def setProperty(self, key, value):
-        errors = {}
+    def set_property(self, key, value):
         if key == 'bedrooms':
-            try:
-                self.bedrooms = int(value)
-            except:
-                errors[Error_Code.invalid_bedrooms['error']] = "Number of bedrooms not valid"
-            return errors
+            self.bedrooms = int(value)
+            return
         if key == 'sqft':
-            try:
-                self.sqft = int(value)
-            except:
-                errors[Error_Code.invalid_sqft['error']] = "Square feet not valid"
-            return errors
+            self.sqft = int(value)
+            return
         if key == 'bathrooms':
-            try:
-                self.bathrooms = float(value)
-            except:
-                errors[Error_Code.invalid_bathrooms['error']] = "Number of bathrooms not valid"
-            return errors
+            self.bathrooms = float(value)
+            return
         if key == 'price':
-            try:
-                self.price = int(value)
-            except:
-                errors[Error_Code.invalid_price['error']] = "Price not valid"
-            return errors
+            self.price = int(value)
+            return
         if key == 'description':
             self.description = value
-            return errors
+            return
         if key == 'isPublished':
             if value == 'False':
                 self.isPublished = False
-            elif value == 'True':
-                self.isPublished = True
             else:
-                errors[Error_Code.invalid_published['error']] = "isPublished not valid"
-            return errors
+                self.isPublished = True
+            return
         if key == 'province':
             self.province = value
-            return errors
+            return
         if key == 'city':
             self.city = value
-            return errors
+            return
         if key == 'images':
             self.images = value
-            return errors
+            return
         if key == 'thumbnailImageIndex':
-            try:
-                self.thumbnailImageIndex = int(value)
-            except:
-                errors[Error_Code.invalid_thumbnail_image_index['error']] = "Thumbnail image index not valid"
-            return errors
+            self.thumbnailImageIndex = int(value)
+            return
         if key == 'address':
             self.address = value
-            return errors
+            return
         if key == 'listingId':
-            try:
-                self.listingId = int(value)
-            except:
-                errors[Error_Code.invalid_listing_id['error']] = "listingId not valid"
-        return errors
+            self.listingId = int(value)
+        return
+
 

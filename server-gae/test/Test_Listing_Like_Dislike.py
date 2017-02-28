@@ -1,8 +1,8 @@
+from __future__ import absolute_import
 import unittest
 import Main
 from google.appengine.ext import testbed
 from web_apis.Like_Dislike_Listing import *
-from __future__ import absolute_import
 import sys
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -19,30 +19,32 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
 
-    def test_like_dislike_a_listing(self):
-
         # create a user as well as a listing that the user owns
         listings, users = create_dummy_listings_for_testing(Main, 1)
         assert len(listings) == 1
         assert len(users) == 1
         owner = users[0]
         listing = listings[0]
-        ownerId = owner['userId']
-        listingId = listing['listingId']
+        self.ownerId = owner['userId']
+        self.listingId = listing['listingId']
 
         # now create a new user as a liker
         users = create_dummy_users_for_testing(1, Main)
         assert len(users) == 1
         liker = users[0]
-        likerId = liker['userId']
+        self.likerId = liker['userId']
+
+
+    def test_like_dislike_a_listing(self):
+
 
         #########################################################################################################
         # test case 1: the owner can't like their listings
 
         # now user want to like the listing
         likeTheListing = {
-            "userId": ownerId,
-            "listingId": listingId,
+            "userId": self.ownerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
 
@@ -64,8 +66,8 @@ class TestHandlers(unittest.TestCase):
         # test case 2: successful delivery (like the listing)
 
         likeTheListing = {
-            "userId": likerId,
-            "listingId": listingId,
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
 
@@ -77,8 +79,8 @@ class TestHandlers(unittest.TestCase):
         ########################################################################################################
         # test case 3: send a like request(liked==True) while the listing is already liked
         likeTheListing = {
-            "userId": likerId,
-            "listingId": listingId,
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "True"
         }
 
@@ -103,8 +105,8 @@ class TestHandlers(unittest.TestCase):
         # should be a successful delivery
 
         dislikeTheListing = {
-            "userId": likerId,
-            "listingId": listingId,
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "False"
         }
 
@@ -115,8 +117,8 @@ class TestHandlers(unittest.TestCase):
         ########################################################################################################
         # test case 5: dislike this listing again
         dislikeTheListingAgain = {
-            "userId": likerId,
-            "listingId": listingId,
+            "userId": self.likerId,
+            "listingId": self.listingId,
             "liked": "False"
         }
 
