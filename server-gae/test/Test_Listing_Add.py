@@ -226,39 +226,8 @@ class TestHandlers(unittest.TestCase):
         #############################################################################
         # test case 7: correct input
 
-        # # first, we need to create a user
-        # newUser = {"email": "student@usask.ca",
-        #           "password": "aaAA1234",
-        #           "firstName": "Student",
-        #           "lastName": "USASK",
-        #           "city": "Saskatoon",
-        #           "postalCode": "S7N 4P7",
-        #           "province": "Saskatchewan",
-        #           "phone1": 1111111111,
-        #           "confirmedPassword": "aaAA1234"
-        #           }
-        #
-        # request = webapp2.Request.blank('/createuser', POST=newUser)  # api you need to test
-        # response = request.get_response(Main.app)
-        # self.assertEquals(response.status_int, 200)
-        # output = json.loads(response.body)
-        #
-        # # now we can create a listing using the userId that just returned back from the new created user
-        # input = {"userId": output['userId'],
-        #           "bedrooms": "2",
-        #           "sqft": "1200",
-        #           "bathrooms": "2",
-        #           "price": "200000",
-        #           "description": "This is a nice house",
-        #           "isPublished": "True",
-        #           "province": "Saskatchewan",
-        #           "city": "Saskatoon",
-        #           "address": "91 Campus Dr.",
-        #           "thumbnailImageIndex": 0,
-        #           "images": 'some images'
-        #           }
-        # input["userId"] = output["userId"]
-        user, input = create_dummy_listings_for_testing(Main, 1)
+        inputs, users = create_dummy_listings_for_testing(Main, 1)
+        input = inputs[0]
         request = webapp2.Request.blank('/createlisting', POST=input)
         response = request.get_response(Main.app)
 
@@ -267,20 +236,18 @@ class TestHandlers(unittest.TestCase):
         output = json.loads(response.body)
         self.assertTrue("listingId" in output)
 
-        listing_created = Listing.get_by_id(output["listingId"])
-        self.assertEquals(listing_created.bedrooms, 2)
-        self.assertEquals(listing_created.sqft, 1200)
-        self.assertEquals(listing_created.bathrooms, 2)
-        self.assertEquals(listing_created.price, 200000)
-        self.assertEquals(listing_created.description, "This is a nice house")
-        self.assertEquals(listing_created.isPublished, True)
-        self.assertEquals(listing_created.province, "SK")
-        self.assertEquals(listing_created.city, "Saskatoon")
-        self.assertEquals(listing_created.address, "91 Campus Dr.")
-        self.assertEquals(listing_created.thumbnailImageIndex, 0)
-        self.assertEquals(listing_created.images, 'some images')
-
-
+        listing_created = Listing.get_by_id(int(output["listingId"]))
+        self.assertEquals(listing_created.bedrooms, int(input['bedrooms']))
+        self.assertEquals(listing_created.sqft, int(input['sqft']))
+        self.assertEquals(listing_created.bathrooms, float(input['bathrooms']))
+        self.assertEquals(listing_created.price, int(input['price']))
+        self.assertEquals(listing_created.description, input['description'])
+        self.assertEquals(str(listing_created.isPublished), input['isPublished'])
+        self.assertEquals(listing_created.province, input['province'])
+        self.assertEquals(listing_created.city, input['city'])
+        self.assertEquals(listing_created.address, input['address'])
+        self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
+        self.assertEquals(listing_created.images, input['images'])
 
 
     def tearDown(self):
