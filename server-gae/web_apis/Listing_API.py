@@ -119,69 +119,69 @@ from models.Favorite import Favorite
 #
 
 
-class GetFavoriteListing(webapp2.RequestHandler):
-    def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
-
-    def get(self):
-        self.response.out.write()
-
-    def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errors = {}
-        emptyData = u''
-
-        likerId = self.request.POST.get('userId')
-        if likerId is emptyData or likerId is None or likerId.isspace():
-            errors[Error_Code.missing_user_id['error']] = "UserId not provided"
-        if len(errors) != 0:
-            error_json = json.dumps(errors)
-            self.response.write(error_json)
-            self.response.set_status(Error_Code.missing_invalid_parameter_error)
-            return
-
-        try:
-            likerId = int(likerId)
-        except:
-            errors[Error_Code.invalid_user_id['error']] = "UserId not valid"
-        if len(errors) != 0:
-            error_json = json.dumps(errors)
-            self.response.write(error_json)
-            self.response.set_status(Error_Code.missing_invalid_parameter_error)
-            return
-
-
-        favorites = Favorite.query(Favorite.userId == likerId, Favorite.liked == True).fetch()
-
-        returnedArray = []
-        for favorite in favorites:
-
-            favListingId = favorite.listingId
-            listing = Listing.get_by_id(favListingId)
-
-            if listing.isPublished:
-                template_values = {
-                    'listingId': listing.listingId,
-                    'userId': listing.userId,
-                    'bedrooms': listing.bedrooms,
-                    'sqft': listing.sqft,
-                    'bathrooms': listing.bathrooms,
-                    'price': listing.price,
-                    'description': listing.description,
-                    'isPublished': listing.isPublished,
-                    'province': listing.province,
-                    'city': listing.city,
-                    'address': listing.address,
-                    'images': listing.images,
-                    'thumbnailImageIndex': listing.thumbnailImageIndex
-                }
-                returnedArray.append(template_values)
-
-        self.response.write(json.dumps({"listings": returnedArray}))
-        self.response.set_status(Error_Code.success)
+# class GetFavoriteListing(webapp2.RequestHandler):
+#     def options(self, *args, **kwargs):
+#         self.response.headers['Access-Control-Allow-Origin'] = '*'
+#         self.response.headers[
+#             'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+#         self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+#
+#     def get(self):
+#         self.response.out.write()
+#
+#     def post(self):
+#         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+#         errors = {}
+#         emptyData = u''
+#
+#         likerId = self.request.POST.get('userId')
+#         if likerId is emptyData or likerId is None or likerId.isspace():
+#             errors[Error_Code.missing_user_id['error']] = "UserId not provided"
+#         if len(errors) != 0:
+#             error_json = json.dumps(errors)
+#             self.response.write(error_json)
+#             self.response.set_status(Error_Code.missing_invalid_parameter_error)
+#             return
+#
+#         try:
+#             likerId = int(likerId)
+#         except:
+#             errors[Error_Code.invalid_user_id['error']] = "UserId not valid"
+#         if len(errors) != 0:
+#             error_json = json.dumps(errors)
+#             self.response.write(error_json)
+#             self.response.set_status(Error_Code.missing_invalid_parameter_error)
+#             return
+#
+#
+#         favorites = Favorite.query(Favorite.userId == likerId, Favorite.liked == True).fetch()
+#
+#         returnedArray = []
+#         for favorite in favorites:
+#
+#             favListingId = favorite.listingId
+#             listing = Listing.get_by_id(favListingId)
+#
+#             if listing.isPublished:
+#                 template_values = {
+#                     'listingId': listing.listingId,
+#                     'userId': listing.userId,
+#                     'bedrooms': listing.bedrooms,
+#                     'sqft': listing.sqft,
+#                     'bathrooms': listing.bathrooms,
+#                     'price': listing.price,
+#                     'description': listing.description,
+#                     'isPublished': listing.isPublished,
+#                     'province': listing.province,
+#                     'city': listing.city,
+#                     'address': listing.address,
+#                     'images': listing.images,
+#                     'thumbnailImageIndex': listing.thumbnailImageIndex
+#                 }
+#                 returnedArray.append(template_values)
+#
+#         self.response.write(json.dumps({"listings": returnedArray}))
+#         self.response.set_status(Error_Code.success)
 
 
 class GetMyListing(webapp2.RequestHandler):
