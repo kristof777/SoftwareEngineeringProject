@@ -400,7 +400,7 @@ export class KasperService {
      *          object otherwise
      */
     checkPhone(c: FormControl): any{
-        const numberRegex = new RegExp("^[0-9]{10,10}");
+        const numberRegex = new RegExp("^[0-9]{10}$");
 
         if(!c.value) return null;
         let input = c.value.replace(/[^0-9]*/g, "");

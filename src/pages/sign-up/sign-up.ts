@@ -17,11 +17,14 @@ export class SignUpPage {
 
     // Form validation
     signUpStep1: FormGroup;
-    signUpStep2: FormGroup;
-    signUpStep3: FormGroup;
     private emailAttempted: boolean = false;
     private passwordAttempted: boolean = false;
     private confirmPasswordAttempted: boolean = false;
+
+    signUpStep2: FormGroup;
+    private firstNameAttempted: boolean = false;
+
+    signUpStep3: FormGroup;
 
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
@@ -81,9 +84,13 @@ export class SignUpPage {
      */
     nextStep(): void{
         if(this.confirmStep()){
-            this.slides.lockSwipes(false);
-            this.slides.slideTo(this.slides.getActiveIndex() + 1);
-            this.slides.lockSwipes(true);
+            if(this.slides.getActiveIndex() != 2) {
+                this.slides.lockSwipes(false);
+                this.slides.slideTo(this.slides.getActiveIndex() + 1);
+                this.slides.lockSwipes(true);
+            } else {
+                this.doRegister();
+            }
         } else {
             this.attemptAll();
             this.toastCtrl.create({
@@ -108,27 +115,16 @@ export class SignUpPage {
      * @returns {boolean}   true if the fields are valid
      *                      false otherwise
      */
-    confirmStep(): boolean{
-        switch(this.slides.getActiveIndex()){
+    confirmStep(): boolean {
+        switch (this.slides.getActiveIndex()) {
             case 0:
-                return this.signUpStep1.valid;
+                return (this.signUpStep1.valid &&
+                this.signUpStep1.value.password == this.signUpStep1.value.confirmPassword);
             case 1:
                 return this.signUpStep2.valid;
             case 2:
                 return this.signUpStep3.valid;
         }
-    }
-
-    onModeSelect (mode: number): void{
-        if(mode == 0){
-            document.getElementById("buyMode").removeAttribute("width-25");
-            document.getElementById("buyMode").setAttribute("width-75", "true");
-        } else {
-            document.getElementById("buyMode").removeAttribute("width-75");
-            document.getElementById("buyMode").setAttribute("width-25", "true");
-        }
-
-        this.selectedMode = mode;
     }
 
     /////////////////////////////
@@ -140,7 +136,7 @@ export class SignUpPage {
             this.attemptPassword();
             this.attemptConfirmPassword();
         } else if (this.slides.getActiveIndex() == 1){
-
+            this.attemptFirstName();
         } else if (this.slides.getActiveIndex() == 2){
 
         }
@@ -156,5 +152,9 @@ export class SignUpPage {
 
     attemptConfirmPassword(){
         this.confirmPasswordAttempted = true;
+    }
+
+    attemptFirstName(){
+        this.firstNameAttempted = true;
     }
 }
