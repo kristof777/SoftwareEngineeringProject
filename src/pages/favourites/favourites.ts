@@ -21,8 +21,9 @@ export class FavouritesPage {
                 public loginService: LoginService,
                 private _logger: Logger) {
 
-        let data = listingProvider.savedListings.favListings;
-        this.listings = Object.keys(data).map(key => data[key]);
+        this.listings = Array();
+        // let data = listingProvider.savedListings.favListings;
+        // this.listings = Object.keys(data).map(key => data[key]);
     }
 
     /**
