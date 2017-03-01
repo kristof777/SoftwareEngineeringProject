@@ -69,6 +69,8 @@ export class SignInPage {
         }
     }
 
+    facebookLogin(): void{}
+
     /**
      * Handle data from the login request
      *
