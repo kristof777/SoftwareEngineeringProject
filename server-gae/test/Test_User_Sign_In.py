@@ -32,14 +32,14 @@ class TestHandlerSignIn(unittest.TestCase):
                            "phone1": "1111111111",
                            "confirmedPassword": "aaAA1234"}
 
-        request = webapp2.Request.blank('/createuser', POST=database_entry1)
+        request = webapp2.Request.blank('/createUser', POST=database_entry1)
         response = request.get_response(Main.app)
         # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
 
         # Test1: when no paramaters are given
         input1 = {}  # Json object to send
-        request = webapp2.Request.blank('/signin', POST=input1)
+        request = webapp2.Request.blank('/signIn', POST=input1)
         response = request.get_response(Main.app)  # get response back
         self.assertEquals(response.status_int, 400)
         errors_expected = [Error_Code.missing_password['error'],
@@ -53,7 +53,7 @@ class TestHandlerSignIn(unittest.TestCase):
         # Test2: When incorrect password is entered
         input2 = {"email": "student@usask.ca",
                   "password": "notRighpassword123"}
-        request = webapp2.Request.blank('/signin', POST=input2)
+        request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
@@ -66,7 +66,7 @@ class TestHandlerSignIn(unittest.TestCase):
         input3 = {"email": "student@usask.ca",
                   "password": "aaAA1234"}
 
-        request = webapp2.Request.blank('/signin', POST=input3)
+        request = webapp2.Request.blank('/signIn', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
 

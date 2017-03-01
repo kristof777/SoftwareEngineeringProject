@@ -32,7 +32,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "phone1": 1111111111,
                   "confirmedPassword": "aaAA1234" }
 
-        request = webapp2.Request.blank('/createuser', POST=database_entry1)
+        request = webapp2.Request.blank('/createUser', POST=database_entry1)
         response = request.get_response(Main.app)
 
         user = json.loads(response.body)
@@ -46,7 +46,7 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         # Case 1: They do not enter one or many fields.
         input1 = {}  # Json object to send
-        request = webapp2.Request.blank('/changepassword', POST=input1)
+        request = webapp2.Request.blank('/changePassword', POST=input1)
         response = request.get_response(Main.app)  # get response back
 
         self.assertEquals(response.status_int, 400)
@@ -65,7 +65,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "notImportant123",
                   "userId": user_id}
 
-        request = webapp2.Request.blank('/changepassword', POST=input2)
+        request = webapp2.Request.blank('/changePassword', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
@@ -80,7 +80,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "doesntMatch123",
                   "userId": user_id}
 
-        request = webapp2.Request.blank('/changepassword', POST=input3)
+        request = webapp2.Request.blank('/changePassword', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
         try:
@@ -95,7 +95,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "weakmatch",
                   "userId": user_id}
 
-        request = webapp2.Request.blank('/changepassword', POST=input4)
+        request = webapp2.Request.blank('/changePassword', POST=input4)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 403)
         try:
@@ -110,7 +110,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "newPass123",
                   "userId": user_id}
 
-        request = webapp2.Request.blank('/changepassword', POST=input5)
+        request = webapp2.Request.blank('/changePassword', POST=input5)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
 

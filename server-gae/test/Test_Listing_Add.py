@@ -28,7 +28,7 @@ class TestHandlers(unittest.TestCase):
         # test case 1: empty object as input
         input = {}
 
-        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -70,7 +70,7 @@ class TestHandlers(unittest.TestCase):
                  "images": ''
                  }
 
-        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -111,7 +111,7 @@ class TestHandlers(unittest.TestCase):
                  "images": '    '
                  }
 
-        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -143,7 +143,7 @@ class TestHandlers(unittest.TestCase):
         input['city'] = ""
         input['images'] = ''
 
-        request = webapp2.Request.blank('/createlisting', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -166,7 +166,7 @@ class TestHandlers(unittest.TestCase):
 
         input = create_random_listing("1111")
 
-        request = webapp2.Request.blank('/createlisting', POST=input)
+        request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -190,7 +190,7 @@ class TestHandlers(unittest.TestCase):
         input['bathrooms'] = "supposed to be float"
         input['price'] = "supposed to be int"
 
-        request = webapp2.Request.blank('/createlisting', POST=input)
+        request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 400)
@@ -212,7 +212,7 @@ class TestHandlers(unittest.TestCase):
 
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         input = inputs[0]
-        request = webapp2.Request.blank('/createlisting', POST=input)
+        request = webapp2.Request.blank('/creatListing', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, 200)

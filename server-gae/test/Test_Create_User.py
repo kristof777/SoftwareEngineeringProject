@@ -40,7 +40,7 @@ class TestHandlers(unittest.TestCase):
             "email": "  ",
             "lastName": ""
         }  # Json object you need to send
-        request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
+        request = webapp2.Request.blank('/createUser', POST=input1)  # api you need to test
         response = request.get_response(Main.app)  # get response back
         # unit testing example checking if status is what we expected
 
@@ -66,7 +66,7 @@ class TestHandlers(unittest.TestCase):
         #test 2 with invalid phone 1
         input2 = create_random_user()
         input2['phone1'] = "123456"
-        request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/createUser', POST=input2)  #   api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
         try:
@@ -80,7 +80,7 @@ class TestHandlers(unittest.TestCase):
 
         input3 = create_random_user()
         input3['phone2'] = "123456"
-        request = webapp2.Request.blank('/createuser', POST=input3)
+        request = webapp2.Request.blank('/createUser', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
 
@@ -95,7 +95,7 @@ class TestHandlers(unittest.TestCase):
 
         input4 = create_random_user()
         input4['email'] = "gaa"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input4)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -112,7 +112,7 @@ class TestHandlers(unittest.TestCase):
         input5 = create_random_user()
         input5['password'] = "123456"
         input5['confirmedPassword'] = "123456"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input5)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -128,7 +128,7 @@ class TestHandlers(unittest.TestCase):
 
         input6 = create_random_user()
         input6['password'] = "123456"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input6)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -142,7 +142,7 @@ class TestHandlers(unittest.TestCase):
         # test case 7 correct information
 
         input7 = create_random_user()
-        request = webapp2.Request.blank('/createuser', POST=input7)
+        request = webapp2.Request.blank('/createUser', POST=input7)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)
