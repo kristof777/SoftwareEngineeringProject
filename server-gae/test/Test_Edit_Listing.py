@@ -171,9 +171,7 @@ class TestHandlers(unittest.TestCase):
                          }
 
         res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
-
         self.assertEquals(status, success)
-
         listing_changed = Listing.get_by_id(self.listingId)
         self.assertEquals(listing_changed.bedrooms, int(change_values['bedrooms']))
         self.assertEquals(listing_changed.sqft, int(change_values['sqft']))

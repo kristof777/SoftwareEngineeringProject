@@ -125,7 +125,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/like', POST=dislikeTheListingAgain)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.duplicated_liked['error']]
+        errors_expected = [duplicated_liked['error']]
 
         # checking if there is a difference between error_keys and what we got
         try:
