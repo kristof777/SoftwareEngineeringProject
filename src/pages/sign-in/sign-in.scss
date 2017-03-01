@@ -31,4 +31,18 @@ page-sign-in {
         font-size: 10pt;
         min-height: 0;
     }
+
+    .facebookLogin{
+        margin-top: 15px;
+
+        p{
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            ion-icon{
+                font-size: 18pt;
+                color: #0c60ee;
+            }
+        }
+    }
 }
