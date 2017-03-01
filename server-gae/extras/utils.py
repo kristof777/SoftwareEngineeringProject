@@ -132,7 +132,7 @@ def create_dummy_users_for_testing(n, Main):
                     "confirmedPassword": password
                     }
 
-        request = webapp2.Request.blank('/createuser', POST=new_user)
+        request = webapp2.Request.blank('/createUser', POST=new_user)
         response = request.get_response(Main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
@@ -183,7 +183,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
                                    "thumbnailImageIndex": 0,
                                    "images": 'some images'
                                    }
-            request = webapp2.Request.blank('/createlisting',
+            request = webapp2.Request.blank('/createListing',
                                             POST=random_listing_info)
             response = request.get_response(Main.app)
             output = json.loads(response.body)

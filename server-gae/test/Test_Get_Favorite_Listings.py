@@ -24,7 +24,7 @@ class TestHandlers(unittest.TestCase):
         assert len(users) == 1
         assert len(listings) == 10
 
-        # now create a new user as a liker, we'll use this person to send getFavorites request
+        # now create a new user as a liker, we'll use this person to send GetFavourites request
         users = create_dummy_users_for_testing(1, Main)
         assert len(users) == 1
         liker = users[0]
@@ -64,7 +64,7 @@ class TestHandlers(unittest.TestCase):
             "userId": self.likerId
         }
 
-        request = webapp2.Request.blank('/getFavoriteListing', POST=getFavs)
+        request = webapp2.Request.blank('/GetFavourites', POST=getFavs)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
@@ -84,7 +84,7 @@ class TestHandlers(unittest.TestCase):
             "userId": "blablabla"
         }
 
-        request = webapp2.Request.blank('/getFavoriteListing', POST=invalidFavs)
+        request = webapp2.Request.blank('/GetFavourites', POST=invalidFavs)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter_error)
