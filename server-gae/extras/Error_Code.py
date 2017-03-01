@@ -41,6 +41,7 @@ invalid_city = {"error": "invalidCity", "status": 403}
 invalid_published = {"error": "invalidPublished", "status": 403}
 invalid_province = {"error": "invalidProvince", "status": 403}
 invalid_address = {"error": "invalidAddress", "status": 403}
+invalid_filter_bound = {"error": "invalidFilterBound", "status": 403}
 missing_address = {"error": "missingAddress", "status": 400}
 missing_price = {"error": "missingPrice", "status": 400}
 missing_sqft = {"error": "missingSqft", "status": 400}
@@ -52,6 +53,7 @@ missing_image = {"error": "missingImage", "status": 400}
 missing_image_index = {"error": "missingImageIndex", "status": 400}
 un_auth_listing = {"error": "unAuthListing", "status": 401}
 password_mismatch = {"error": "passwordMismatch", "status": 401}
+invalid_xor_condition = {"error": "missingXorCondition", "status": 403}
 
 
 invalids = {
@@ -68,7 +70,8 @@ invalids = {
     "sqft": invalid_sqft,
     "isPublished": invalid_published,
     "thumbnailImageIndex": invalid_thumbnail_image_index,
-    "liked": invalid_liked
+    "liked": invalid_liked,
+    "filter": invalid_filter_bound
 }
 
 missing = {

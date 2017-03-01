@@ -40,6 +40,7 @@ from web_apis.Sign_In_With_Token import *
 from models.User import User
 from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
+from web_apis.Get_Listings import GetListing
 # from web_apis.SignInWithToken import *
 
 # configuration
@@ -72,7 +73,9 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/editListing', EditListing),
     webapp2.Route('/getFavoriteListing', GetFavoriteListing),
     webapp2.Route('/getMyListing', GetMyListing),
-    webapp2.Route('/editUser', EditUser)
+    webapp2.Route('/editUser', EditUser),
+    webapp2.Route('/getListings', GetListing)
+
 
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)
