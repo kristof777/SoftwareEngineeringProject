@@ -6,8 +6,11 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list>
+        <ion-item no-lines color="danger" text-wrap *ngIf="!loginService.isLoggedIn()">
+            You must be signed in to add listings!
+        </ion-item>
         <ion-item-sliding *ngFor="let cur of listings">
             <ion-item (click)="selectListing(cur)">
                 <ion-thumbnail item-left>

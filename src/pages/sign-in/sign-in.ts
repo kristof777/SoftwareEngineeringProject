@@ -1,17 +1,14 @@
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-let assert = require('assert-plus');
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
-
-import {NavController, ToastController} from 'ionic-angular';
-
-import {SignUpPage} from '../sign-up/sign-up';
-import {MainPage} from "../main/main";
-
-import {KasperService} from '../../app/providers/kasper-service'
+import {NavController, ToastController, ViewController} from "ionic-angular";
+import {SignUpPage} from "../sign-up/sign-up";
+import {KasperService} from "../../app/providers/kasper-service";
 import {User} from "../../app/models/user";
 import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
+import {MyProfilePage} from "../my-profile/my-profile";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-sign-in',
@@ -26,6 +23,7 @@ export class SignInPage {
                 public toastCtrl: ToastController,
                 private _logger: Logger,
                 public formBuilder: FormBuilder,
+                public viewCtrl: ViewController,
                 public kasperService: KasperService) {
 
         this.loginForm = formBuilder.group({
@@ -50,9 +48,20 @@ export class SignInPage {
     doSignIn(): void{
         this._logger.debug("Sign In was clicked.");
 
-        // "log in" if the email is set to "test"
         if(this.loginForm.value.email == "test") {
-            this.navCtrl.setRoot(MainPage);
+            let userID: number = 1;
+            let email: string = "john.doe@gmail.com";
+            let firstName: string = "John";
+            let lastName: string = "Doe";
+            let phone1: string = "3065555555";
+            let phone2: string = null;
+            let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
+
+            let testUser = new User(userID, email, firstName, lastName, phone1, phone2, location);
+
+            this.kasperService.loginService.setUser(testUser);
+
+            this.navCtrl.setRoot(MyProfilePage);
         } else if(this.loginForm.valid){
             this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
         } else {
@@ -71,8 +80,6 @@ export class SignInPage {
                 new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
         ));
         this.kasperService.loginService.setToken(data.token);
-
-        this.navCtrl.setRoot(MainPage);
     }
 
     attemptEmail(){
