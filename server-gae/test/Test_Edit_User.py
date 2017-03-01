@@ -21,7 +21,7 @@ class TestHandlers(unittest.TestCase):
         # Next, declare which service stubs you want to use.
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
-        self.users = create_dummy_users_for_testing(10, Main)
+        self.users = create_dummy_users_for_testing(3, Main)
 
     def test_edit_user(self):
         """
@@ -127,16 +127,6 @@ class TestHandlers(unittest.TestCase):
         new_user = User.get_by_id(int(self.users[2]["userId"]))
         self.assertEqual(new_user.phone1, change_values["phone1"])
         self.assertEqual(new_user.last_name, change_values["lastName"])
-
-
-
-
-
-
-
-
-
-
 
 
 

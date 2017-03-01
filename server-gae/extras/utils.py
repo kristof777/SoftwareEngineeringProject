@@ -4,9 +4,8 @@ import random
 import string
 import webapp2
 import json
-# import Main
-from validate_email import validate_email
 from Error_Code import *
+import validate_email
 
 
 province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NW", "ON", "PE",

@@ -66,7 +66,7 @@ class EditUser(BaseHandler):
         user = User.get_by_id(int(values["userId"]))
         for key in change_values:
             user.set_property(key, change_values[key])
-
+        user.put()
         write_success_to_response(self.response, {})
 
 
