@@ -21,7 +21,7 @@ class GetListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        errors, values = keys_missing([], self.request.POST)
+        errors, values = keys_missing({}, self.request.POST)
         # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
         #  and boolean field (isPublished)
         invalid = key_validation(values)
@@ -47,19 +47,16 @@ class GetListing(webapp2.RequestHandler):
         if "listingIdList" in values and not is_missing(values['listingIdList']):
             listing_info_list = []
             for listingId in values["listingIdList"]:
+
                 listingId = int(listingId)
                 listing_object = Listing.get_by_id(listingId)
-                if listing_object is not None:
-                    listing_dict = {}
 
-                    for key in values["valuesRequired"]:
-                        listing_dict[key] = listing_object.get_value_from_key(key)
-                    listing_info_list.append(listing_dict)
+                if listing_object is not None:
+                    listing_info_list.append(create_returned_values_dict(listing_object, values))
 
             write_success_to_response(self.response, listing_info_list)
             return
         if "filter" in values and not is_missing(values["filter"]):
-
 
             filter = values["filter"]
 
@@ -97,12 +94,9 @@ class GetListing(webapp2.RequestHandler):
                 # now seenListings contains all the listings that are in the favorites table
                 # we want the listings that are not in the favorite table
                 filtered_listings = Listing.query(Listing not in seen_listings).fetch()
+                # after this, filtered_listings contains all the listings that are not in the favorite table
 
-                # now filtered_listings contains all the listings that are not in the favorite table
-
-
-            # now we want "maxLimit" number of items that haven't been seen, aka haven't been
-            # put into favorites
+            # now we want max number of items that haven't been seen to return
             maxLimit = DEFAULT_MAX_LIMIT
 
             if "maxLimit" in values and not is_missing(values["maxLimit"]):
@@ -111,21 +105,30 @@ class GetListing(webapp2.RequestHandler):
             if len(filtered_listings) >= maxLimit:
                 filtered_listings = filtered_listings[0: maxLimit + 1]
 
-            listing_dict = {}
-            returned_listingIds = []
-            # if valuesRequired is not present or it's empty, then only return listingIds
-            if "valueRequired" not in values or \
-                    ("valueRequired" in values and is_missing(values['valueRequired'])):
+            listing_info_list = []
 
-                for listing in filtered_listings:
-                    returned_listingIds.append(listing.listingId)
+            for listing_object in filtered_listings:
+                if listing_object is not None:
+                    listing_info_list.append(create_returned_values_dict(listing_object, values))
 
-                listing_dict["listingId"] = returned_listingIds
-                write_success_to_response(self.response, listing_dict)
-                return
+            write_success_to_response(self.response, listing_info_list)
+            return
 
-            else:
-                
+
+def create_returned_values_dict(listing_object, values_dict):
+    listing_dict = {}
+    if "valuesRequired" in values_dict and not is_missing(values_dict['valuesRequired']):
+        # valuesRequired is not missing
+        for key in values_dict["valuesRequired"]:
+            listing_dict[key] = listing_object.get_value_from_key(key)
+    else:
+        # only returns listingIds
+        listing_dict["listingId"] = listing_object.listingId
+
+    return listing_dict
+
+
+
 
 
 

@@ -251,6 +251,12 @@ def keys_missing(dictionary, post):
     """
     errors = {}
     values = {}
+
+    if dictionary == {}:
+        for key in post:
+            values[key] = post.get(key)
+        return errors, values
+
     for key in dictionary:
         error = missing[key]['error']
         value_in_response = post.get(key)
@@ -322,10 +328,17 @@ def is_valid_string_list(list):
     return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"] for key in list)
+    # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
+    #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
+
 
 
 def is_valid_integer_list(any_list):
     return not any(not is_valid_integer(str(listing_id)) for listing_id in any_list)
+    # for item in list(any_list):
+    #     if not is_valid_integer(item):
+    #         return False
+    # return True
 
 
 

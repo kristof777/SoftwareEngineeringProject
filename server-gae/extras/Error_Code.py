@@ -54,6 +54,7 @@ missing_image_index = {"error": "missingImageIndex", "status": 400}
 un_auth_listing = {"error": "unAuthListing", "status": 401}
 password_mismatch = {"error": "passwordMismatch", "status": 401}
 invalid_xor_condition = {"error": "missingXorCondition", "status": 403}
+invalid_values_required = {"error": "invalidValuesRequired", "status": 403}
 
 
 invalids = {
@@ -71,7 +72,8 @@ invalids = {
     "isPublished": invalid_published,
     "thumbnailImageIndex": invalid_thumbnail_image_index,
     "liked": invalid_liked,
-    "filter": invalid_filter_bound
+    "filter": invalid_filter_bound,
+    "valuesRequired": invalid_values_required
 }
 
 missing = {
