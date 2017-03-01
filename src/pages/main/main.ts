@@ -7,7 +7,7 @@ import {FavouritesPage} from "../favourites/favourites";
 
 @Component({
     template:
-        `<ion-tabs>
+        `<ion-tabs color="primary">
             <ion-tab [root]="tab1Root" tabTitle="Browse" tabIcon="search"></ion-tab>
             <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart"></ion-tab>
             <ion-tab [root]="tab3Root" tabTitle="My Profile" tabIcon="person"></ion-tab>
