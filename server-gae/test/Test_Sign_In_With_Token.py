@@ -55,7 +55,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Test2: When incorrect token
         input2 = {"userId": user_id,
-                  "token": token}
+                  "token": "ThisTokenIsNoGood"}
         request = webapp2.Request.blank('/signinwithtoken', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
@@ -79,7 +79,7 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertTrue("userId" in output)
 
         #should be a different token.
-        self.assertFalse(output['token'], token)
+        self.assertNotEqual(output['token'], token)
 
         user_saved = User.get_by_id(int(output["userId"]))
         self.assertEquals(user_saved.first_name, "Student")
@@ -87,7 +87,7 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(user_saved.city, "Saskatoon")
         self.assertEquals(user_saved.email, "student@usask.ca")
         self.assertEquals(int(user_saved.phone1), 1111111111)
-        self.assertEquals(user_saved.province, "Saskatchewan")
+        self.assertEquals(user_saved.province, "SK")
 
 
 

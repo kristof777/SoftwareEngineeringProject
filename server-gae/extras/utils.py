@@ -251,6 +251,12 @@ def keys_missing(dictionary, post):
     """
     errors = {}
     values = {}
+
+    if dictionary == {}:
+        for key in post:
+            values[key] = post.get(key)
+        return errors, values
+
     for key in dictionary:
         error = missing[key]['error']
         value_in_response = post.get(key)
@@ -305,8 +311,7 @@ def is_valid_phone(phone):
     """
     assert phone != None
     phone = str(phone)
-    return len(phone) == 10 and unicode(phone, 'utf-8').isnumeric()
-
+    return len(phone) == 10 and is_valid_integer(phone)
 
 def is_valid_password(password):
     """
@@ -317,6 +322,24 @@ def is_valid_password(password):
     return len(password) >= 8 and any(s.islower() for s in password) and \
            any(s.isupper() for s in password) and \
            any(s.isdigit() for s in password)
+
+
+def is_valid_string_list(list):
+    return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+                       "province", "address", "description", "isPublished", "images",
+                       "thumbnailImageIndex"] for key in list)
+    # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
+    #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
+
+
+
+def is_valid_integer_list(any_list):
+    return not any(not is_valid_integer(str(listing_id)) for listing_id in any_list)
+    # for item in list(any_list):
+    #     if not is_valid_integer(item):
+    #         return False
+    # return True
+
 
 
 def is_valid_email(email):
@@ -331,10 +354,26 @@ def is_valid_email(email):
 def is_valid_province(province):
     return province.lower() in province_complete or province  in province_abbr
 
+def is_valid_xor(dictionary, key1, key2):
+    if key1 in dictionary and key2 in dictionary:
+        return is_missing(dictionary[key1]) or is_missing(dictionary[key2])
+    else:
+        return True
 
 
 def is_missing(var):
-    return var in ["", u'', '', None] or str(var).isspace()
+    return var in ["", u'', '', None, [], {}] or str(var).isspace()
+
+
+# def is_valid_filter(filter):
+#     if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+#                        "province", "address", "description", "isPublished", "images",
+#                        "thumbnailImageIndex"] for key in filter):
+#         return False
+#     for key in filter:
+#         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
+#             if any(bound not in ["lower", "upper"] for bound in key):
+#                 return False
 
 
 
@@ -366,7 +405,12 @@ valid_check = {
     "sqft": is_valid_integer,
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
-    "liked": is_valid_bool
+    "liked": is_valid_bool,
+    "valuesRequired": is_valid_string_list,
+    "maxLimit": is_valid_integer,
+    "listingIdList": is_valid_integer_list,
+    "lower": is_valid_integer,
+    "upper": is_valid_integer
 }
 
 
@@ -399,3 +443,5 @@ def are_two_lists_same(list1, list2):
 if __name__ == "__main__":
     test_random_email()
     test_random_password()
+
+
