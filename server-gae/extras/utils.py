@@ -132,7 +132,7 @@ def create_dummy_users_for_testing(n, Main):
                     "confirmedPassword": password
                     }
 
-        request = webapp2.Request.blank('/createuser', POST=new_user)
+        request = webapp2.Request.blank('/createUser', POST=new_user)
         response = request.get_response(Main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
@@ -183,7 +183,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
                                    "thumbnailImageIndex": 0,
                                    "images": 'some images'
                                    }
-            request = webapp2.Request.blank('/createlisting',
+            request = webapp2.Request.blank('/createListing',
                                             POST=random_listing_info)
             response = request.get_response(Main.app)
             output = json.loads(response.body)
@@ -324,16 +324,22 @@ def is_valid_password(password):
 
 
 def is_valid_string_list(list):
-    return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-                       "province", "address", "description", "isPublished", "images",
-                       "thumbnailImageIndex"] for key in list)
+    # return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+    #                    "province", "address", "description", "isPublished", "images",
+    #                    "thumbnailImageIndex"] for key in list)
     # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
     #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
+    list_object = json.loads(list)
+    return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+                               "province", "address", "description", "isPublished", "images",
+                               "thumbnailImageIndex"] for key in list_object)
+
 
 
 
 def is_valid_integer_list(any_list):
-    return not any(not is_valid_integer(str(listing_id)) for listing_id in any_list)
+    list_object = json.loads(any_list)
+    return not any(not is_valid_integer(str(listing_id)) for listing_id in list_object)
     # for item in list(any_list):
     #     if not is_valid_integer(item):
     #         return False

@@ -45,8 +45,9 @@ class GetListing(webapp2.RequestHandler):
         #
 
         if "listingIdList" in values and not is_missing(values['listingIdList']):
+            listingId_list = json.loads(values["listingIdList"])
             listing_info_list = []
-            for listingId in values["listingIdList"]:
+            for listingId in listingId_list:
 
                 listingId = int(listingId)
                 listing_object = Listing.get_by_id(listingId)
@@ -56,9 +57,10 @@ class GetListing(webapp2.RequestHandler):
 
             write_success_to_response(self.response, listing_info_list)
             return
+
         if "filter" in values and not is_missing(values["filter"]):
 
-            filter = values["filter"]
+            filter = json.loads(values["filter"])
 
             # set default searchable listings to be all the listings
             filtered_listings = Listing.query().fetch()
@@ -72,8 +74,8 @@ class GetListing(webapp2.RequestHandler):
                     if "upper" in filter[key]:
                         upper = filter[key]["upper"]
                     filtered_listings = Listing.query(Listing in filtered_listings,
-                                                 Listing.get_value_from_key(key) >= lower,
-                                                 Listing.get_value_from_key(key) <= upper).fetch()
+                                                      Listing.get_value_from_key(key) >= lower,
+                                                      Listing.get_value_from_key(key) <= upper).fetch()
                 else: # not numeric key
                     filtered_listings = Listing.query(Listing in filtered_listings,
                                                       Listing.get_value_from_key(key) == filter[key]).fetch()
@@ -82,7 +84,7 @@ class GetListing(webapp2.RequestHandler):
             # we want to get listings that are not in favorites table (only if user signed in)
             # if user not sign in, we don't need to care about this favorite part
             if "userId" in values and not is_missing(values["userId"]):
-                userId = int(values["userId"])
+                userId = int(json.loads(values["userId"]))
                 favorites = Favorite.query(Favorite.userId == userId)
                 seen_listings = []
                 for favorite in favorites:
@@ -119,7 +121,8 @@ def create_returned_values_dict(listing_object, values_dict):
     listing_dict = {}
     if "valuesRequired" in values_dict and not is_missing(values_dict['valuesRequired']):
         # valuesRequired is not missing
-        for key in values_dict["valuesRequired"]:
+        values_required = json.loads(values_dict["valuesRequired"])
+        for key in values_required:
             listing_dict[key] = listing_object.get_value_from_key(key)
     else:
         # only returns listingIds
@@ -139,12 +142,12 @@ def create_returned_values_dict(listing_object, values_dict):
 
 
 def is_valid_filter(filter):
-
+    filter_object = json.loads(filter)
     if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
-                       "thumbnailImageIndex"] for key in filter):
+                       "thumbnailImageIndex"] for key in filter_object):
         return unrecognized_key['error']
-    for key in filter:
+    for key in filter_object:
         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
             if any(bound not in ["lower", "upper"] for bound in key):
                 return invalid_filter_bound['error']
