@@ -5,6 +5,7 @@ import {NavController} from 'ionic-angular';
 import {Listing} from '../../app/models/listing';
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail"
+import {LoginService} from "../../app/providers/login-service";
 
 @Component({
     selector: 'page-favourites',
@@ -17,6 +18,7 @@ export class FavouritesPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger) {
 
         let data = listingProvider.savedListings.favListings;

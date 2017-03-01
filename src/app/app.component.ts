@@ -1,16 +1,15 @@
-import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
-import {StatusBar, Splashscreen, SQLite} from 'ionic-native';
-
-import {SignInPage} from '../pages/sign-in/sign-in';
+import {Component} from "@angular/core";
+import {Platform} from "ionic-angular";
+import {StatusBar, Splashscreen, SQLite} from "ionic-native";
 import {KasperConfig} from "./kasper-config";
 import {Logger} from "angular2-logger/core";
+import {MainPage} from "../pages/main/main";
 
 @Component({
     templateUrl: 'app.html'
 })
 export class MyApp {
-    rootPage = SignInPage;
+    rootPage = MainPage;
 
     constructor(platform: Platform,
                 private _logger: Logger) {
@@ -50,8 +49,7 @@ export class MyApp {
     }
 
     /**
-     * Creates the table containing the listings and another containing the
-     * images for the listings
+     * Creates the table containing the listings and another containing the images for the listings
      *
      * @param db  an open SQLite connection
      */

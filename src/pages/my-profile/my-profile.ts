@@ -6,13 +6,18 @@ import {Logger} from "angular2-logger/core";
 import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
 
-import {NavController, ModalController} from 'ionic-angular';
+import {NavController, ModalController, Platform} from 'ionic-angular';
+import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {LoginService} from "../../app/providers/login-service";
+import {SignInPage} from "../sign-in/sign-in";
 
 @Component({
     selector: 'page-my-profile',
     templateUrl: 'my-profile.html'
 })
 export class MyProfilePage {
+    profileGroup: FormGroup;
+
     private provinces: Province[];
     /** the user currently logged in to this device */
     currentUser: User;
@@ -27,18 +32,31 @@ export class MyProfilePage {
 
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
+                public formBuilder: FormBuilder,
+                public loginService: LoginService,
+                public platform: Platform,
                 private _logger: Logger) {
-        this.provinces = Province.asArray;
-        //TODO: Remove fake user account
-        let userID: number = 1;
-        let email: string = "john.doe@gmail.com";
-        let firstName: string = "John";
-        let lastName: string = "Doe";
-        let phone1: string = "3065555555";
-        let phone2: string = null;
-        let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
+        if(!this.loginService.isLoggedIn()){
+            navCtrl.setRoot(SignInPage);
+        } else {
+            this.loadUser();
+        }
 
-        this.currentUser = new User(userID, email, firstName, lastName, phone1, phone2, location);
+        this.profileGroup = this.formBuilder.group({
+            email: [null, Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}")])],
+            firstName: [null, Validators.compose([])],
+            lastName: [null, Validators.compose([])],
+            phone1: [null, Validators.compose([])],
+            phone2: [null, Validators.compose([])],
+            province: [null, Validators.compose([])],
+            city: [null, Validators.compose([])],
+            notificationsEnabled: [null, Validators.compose([])],
+        });
+    }
+
+    loadUser(): void{
+        this.provinces = Province.asArray;
+        this.currentUser = LoginService.user;
     }
 
     /**

@@ -4,6 +4,7 @@ import {NavController, ToastController, Slides, Platform} from "ionic-angular";
 import {KasperService} from "../../app/providers/kasper-service";
 import {MainPage} from "../main/main";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {MyProfilePage} from "../my-profile/my-profile";
 let assert = require('assert-plus');
 
 @Component({
@@ -72,11 +73,11 @@ export class SignUpPage {
                                 this.signUpStep3.value.city,
                                 this.signUpStep3.value.province,
                                 this.registerCallback);
-        this.navCtrl.setRoot(MainPage);
     }
 
     registerCallback(data: JSON){
-
+        // TODO Attempt to register and act accordingly
+        this.navCtrl.setRoot(MyProfilePage);
     }
 
     /**
