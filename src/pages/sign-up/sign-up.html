@@ -1,3 +1,11 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Sign Up
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
 <ion-content>
     <ion-slides effect="flip">
         <ion-slide padding [formGroup]="signUpStep1">
@@ -89,7 +97,7 @@
 <ion-footer>
     <ion-item no-lines>
         <button *ngIf="slides.getActiveIndex() > 0" item-left ion-button (click)="previousStep()">Back</button>
-        <button *ngIf="slides.getActiveIndex() < 3" item-right ion-button (click)="nextStep()">Next</button>
-        <button *ngIf="slides.getActiveIndex() == 3 && selectedMode != null" item-right ion-button (click)="doRegister()" id="signUpRegister">Confirm Selection</button>
+        <button *ngIf="slides.getActiveIndex() < 2" item-right ion-button (click)="nextStep()">Next</button>
+        <button *ngIf="slides.getActiveIndex() == 2" item-right ion-button (click)="doRegister()" id="signUpRegister">Finish</button>
     </ion-item>
 </ion-footer>

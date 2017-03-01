@@ -16,7 +16,7 @@ export class LoginService {
     private token: string;
 
     // The user object returned after logging in
-    private static user: User;
+    public static user: User;
 
     constructor(private _logger: Logger,
                 private platform: Platform) {
@@ -75,7 +75,10 @@ export class LoginService {
             this._logger.error("Error selecting session from SQLite database: ");
             this._logger.error(error);
         });
+    }
 
+    public isLoggedIn(): boolean{
+        return !!LoginService.user;
 
     }
 }

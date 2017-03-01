@@ -1,3 +1,4 @@
+import {LoginService} from "../../app/providers/login-service";
 let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from '@angular/core';
@@ -19,6 +20,7 @@ export class MyListingsPage {
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public listingProvider: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger) {
 
         let data = listingProvider.savedListings.myListings;

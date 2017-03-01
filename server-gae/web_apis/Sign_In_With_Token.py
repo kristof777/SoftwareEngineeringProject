@@ -52,7 +52,7 @@ class SignInWithToken(BaseHandler):
                 'Sign-in-with-token failed for user %s because of %s',
                 user_id)
             return
-
+        self.user_model.delete_auth_token(user_id,token)
         token = self.user_model.create_auth_token(user_id)
         user_dict = {'token': token,
                     'userId': user.get_id(),
