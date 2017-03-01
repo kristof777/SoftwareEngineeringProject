@@ -5,7 +5,7 @@ import string
 import webapp2
 import json
 from Error_Code import *
-import validate_email
+from validate_email import validate_email
 
 
 province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NW", "ON", "PE",
