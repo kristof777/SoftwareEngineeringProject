@@ -4,6 +4,7 @@ import {NavController, ModalController, ItemSliding, ToastController} from "ioni
 import {Logger} from "angular2-logger/core";
 import {Listing} from "../../app/models/listing";
 import {FilterPage} from "../filter/filter";
+import {DetailPage} from "../detail/detail";
 let assert = require('assert-plus');
 
 @Component({
@@ -67,5 +68,9 @@ export class BrowsePage {
         });
 
         filterModal.present();
+    }
+
+    goToDetails(index): void{
+        this.navCtrl.push(DetailPage, {data: this.listings, cursor: index});
     }
 }

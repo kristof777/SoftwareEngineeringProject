@@ -9,6 +9,7 @@ import {LoginService} from "../../app/providers/login-service";
 import {Province} from "../../app/models/province";
 import {Location} from "../../app/models/location";
 import {AddListingPage} from "../add-listing/add-listing";
+import {ContactPage} from "../contact/contact";
 
 @Component({
     selector: 'page-detail',
@@ -129,5 +130,9 @@ export class DetailPage {
      */
     belongsToUser(): boolean{
         return this.loginService.getUserId() == this.data[this.cursor].listerId;
+    }
+
+    goToContact(): void{
+        this.navCtrl.push(ContactPage, {listingId: this.data[this.cursor].listingId});
     }
 }

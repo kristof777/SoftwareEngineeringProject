@@ -13,7 +13,7 @@
         <ion-item-sliding *ngFor="let curListing of listings; let i=index" (ionDrag)="onDrag($event, i)">
             <ion-item *ngIf="curListing != null">
                 <ion-label>
-                    <ion-img src="{{ curListing.images[0] }}"></ion-img>
+                    <ion-img src="{{ curListing.images[0] }}" (click)="goToDetails(i)"></ion-img>
                     <span class="description">
                         <p class="price">{{ curListing.price | currency:'USD':true:'1.2-2' }}</p>
                     </span>
