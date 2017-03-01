@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-navbar color="primary">
         <ion-buttons start *ngIf="loginService.isLoggedIn()">
             <button ion-button icon-only id = "addButton" (click)="addListing()">
                 <ion-icon name="add"></ion-icon>
@@ -13,7 +13,7 @@
                 <ion-icon name="create"></ion-icon>
             </button>
         </ion-buttons>
-    </ion-toolbar>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>

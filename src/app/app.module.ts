@@ -17,7 +17,6 @@ import {AddListingPage} from '../pages/add-listing/add-listing';
 
 import {FilterPage} from '../pages/filter/filter';
 import {ChangePasswordPage} from '../pages/change-password/change-password';
-import {SavedListingProvider} from "./providers/saved-listing-provider";
 
 import {LoginService} from "./providers/login-service";
 import {KasperService} from "./providers/kasper-service";
@@ -57,7 +56,6 @@ import {KasperService} from "./providers/kasper-service";
     ],
     providers: [
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        SavedListingProvider,
         LoginService,
         KasperService,
         Logger,

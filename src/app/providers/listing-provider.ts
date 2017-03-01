@@ -5,7 +5,6 @@ import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
 import {Http, ResponseContentType} from '@angular/http';
-import {SavedListingProvider} from "./saved-listing-provider";
 import {KasperService} from "./kasper-service";
 
 @Injectable()
@@ -13,7 +12,6 @@ export class ListingProvider {
     data: Listing[];
 
     constructor(public http: Http,
-                public savedListings: SavedListingProvider,
                 public kasperService: KasperService,
                 private _logger: Logger) {
         this.data = [
@@ -31,7 +29,6 @@ export class ListingProvider {
      */
     addListing(newListing: Listing){
         // TODO add the listing to the device
-        // this.savedListings.addListing(newListing);
         this.kasperService.createListings(newListing, this.addListingCallback);
     }
 
