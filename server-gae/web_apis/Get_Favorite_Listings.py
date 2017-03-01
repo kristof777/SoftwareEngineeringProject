@@ -6,7 +6,7 @@ import sys
 sys.path.append("../")
 
 
-class GetFavoriteListing(webapp2.RequestHandler):
+class GetFavourites(webapp2.RequestHandler):
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
