@@ -33,32 +33,64 @@ class TestHandlers(unittest.TestCase):
     def test_get_listings(self):
 
         #######################################################################3
-        # test case 1:
-
-        valuesRequired = ["bedrooms", "bathrooms", "address"]
-        maxLimit = 8
-        listingIdList = [self.listings[0]['listingId'],
-                         self.listings[1]['listingId'],
-                         self.listings[2]['listingId'],
-                         self.listings[3]['listingId'],
-                         self.listings[4]['listingId'],
-                         self.listings[5]['listingId'],
-                         self.listings[6]['listingId']]
-
+        # test case 1: get get listings with listingIdList
 
         get_listings = {
-            "valuesRequired": ["bedrooms", "bathrooms", "address"],
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address"]),
             "maxLimit": 8,
-            "listingIdList": [self.listings[0]['listingId'],
-                              self.listings[1]['listingId']]
-                              # self.listings[2]['listingId']
-                              # self.listings[3]['listingId'],
-                              # self.listings[4]['listingId'],
-                              # self.listings[5]['listingId'],
-                              # self.listings[6]['listingId']]
+            "listingIdList": json.dumps([self.listings[0]['listingId'],
+                                         self.listings[1]['listingId'],
+                                         self.listings[2]['listingId'],
+                                         self.listings[3]['listingId'],
+                                         self.listings[4]['listingId'],
+                                         self.listings[5]['listingId'],
+                                         self.listings[6]['listingId']])
         }
 
-        request = webapp2.Request.blank('/getListings', POST=get_listings)
-        response = request.get_response(Main.app)
-        print json.loads(response.body)
-        print response.status_int
+        res_value, status = get_listing_response(get_listings)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), 7)
+
+        #######################################################################3
+        # test case 2: get listings with filter
+
+        get_filter_listings = {
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address"]),
+            "maxLimit": 8,
+            "filter": json.dumps({
+                "price": {
+                    "lower": 100,
+                    "upper": 999999999
+                },
+                "bedrooms": {
+                    "lower": 1,
+                    "upper": 1000
+                },
+                "bathrooms": {
+                    "lower": 1.0,
+                    "upper": 200
+                },
+                "province": "Saskathewan",
+                "city": "Saskatoon"
+            })
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        # self.assertEqual(status, success)
+        # self.assertEquals(len(res_value), 7)
+
+
+
+
+
+
+
+
+
+def get_listing_response(POST):
+    request = webapp2.Request.blank('/getListings', POST=POST)
+    response = request.get_response(Main.app)
+    if response.body:
+        return json.loads(response.body), response.status_int
+    else:
+        return None, response.status_int
