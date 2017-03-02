@@ -4,17 +4,22 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+
+
+set -ev
+
 # executes the commands to run our smoke tests
-# above set -ev so if one fails the second will get ran (if this works lol)
+# want both smoke tests to run even if there is failure in one
 smoke_tests(){
+  # allows for failure
+  set +e
   python -m unittest discover -s server-gae/ -p 'Test*.py'
   screen -d -m -L ionic serve --firefox@47.0.1
   # have to give some time for ionic to start up before running tests on it
   sleep 50
   xvfb-run protractor e2e-tests.conf.js
+  set -e
 }
-
-set -ev
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
 # builds and emulates the app for testing.
