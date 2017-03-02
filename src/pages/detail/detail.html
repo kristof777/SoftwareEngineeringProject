@@ -14,11 +14,11 @@
 <ion-content>
     <ion-toolbar>
         <ion-item no-lines id="voteBar" *ngIf="!belongsToUser()">
-            <button ion-button item-left clear icon-only (click)="unlike()" id="unlikeButton">
+            <button ion-button item-left color="second" clear icon-only (click)="unlike()" id="unlikeButton">
                 <ion-icon ios="ios-thumbs-down" md="md-thumbs-down"></ion-icon>
             </button>
-            <button ion-button item-right clear icon-only (click)="like()" id="likeButton">
-                <ion-icon ios="ios-heart-outline" md="md-heart-outline"></ion-icon>
+            <button ion-button item-right color="danger" clear icon-only (click)="like()" id="likeButton">
+                <ion-icon ios="ios-heart" md="md-heart"></ion-icon>
             </button>
         </ion-item>
 
@@ -39,6 +39,9 @@
     </ion-item>
 
     <ion-list>
+        <button ion-item detail-push (click)="goToContact()">
+                Contact
+        </button>
         <ion-item>
             <span item-left>
                 Location

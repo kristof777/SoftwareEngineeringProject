@@ -1,14 +1,15 @@
 import {User} from "../../app/models/user";
-let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Component, ViewChild} from '@angular/core';
-import {NavController, ModalController, NavParams, Slides} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component, ViewChild} from "@angular/core";
+import {NavController, ModalController, NavParams, Slides} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {LoginService} from "../../app/providers/login-service";
 import {Province} from "../../app/models/province";
 import {Location} from "../../app/models/location";
 import {AddListingPage} from "../add-listing/add-listing";
+import {ContactPage} from "../contact/contact";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-detail',
@@ -129,5 +130,9 @@ export class DetailPage {
      */
     belongsToUser(): boolean{
         return this.loginService.getUserId() == this.data[this.cursor].listerId;
+    }
+
+    goToContact(): void{
+        this.navCtrl.push(ContactPage, {listingId: this.data[this.cursor].listingId});
     }
 }

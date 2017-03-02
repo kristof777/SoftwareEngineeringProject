@@ -63,7 +63,6 @@ class ChangePassword(BaseHandler):
         errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            print (errors)
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter_error)
             return
@@ -84,6 +83,19 @@ class ChangePassword(BaseHandler):
                                     not_authorized['status'])
             return
 
+        if user is None:
+            write_error_to_response(self.response, not_authorized["error"],
+                                        not_authorized['status'])
+            logging.info(
+                'Sign-in-with-token failed for user %s because of %s',
+                int(values["userId"]))
+            return
+
+        #Get a new token
+        token =  user_dict['token']
+        self.user_model.delete_auth_token((values["userId"]),token)
+        token = self.user_model.create_auth_token((values["userId"]))
+
         if not is_valid_password(values['newPassword']):
             write_error_to_response(self.response, password_not_strong['error'],
                          password_not_strong['status'])
@@ -93,9 +105,6 @@ class ChangePassword(BaseHandler):
             write_error_to_response(self.response, password_mismatch["error"],
                          password_mismatch['status'])
             return
-
-
-        print type(user)
 
         try:
             User.set_password(user, values['newPassword'])
@@ -109,7 +118,7 @@ class ChangePassword(BaseHandler):
 
 
         #self.auth.store.delete_auth_token(user['userId'], user['token'])
-        user_dict = {'token': user_dict['token']}
+        user_dict = {'token': token}
         self.response.write(json.dumps(user_dict))
         self.response.set_status(200)
         return

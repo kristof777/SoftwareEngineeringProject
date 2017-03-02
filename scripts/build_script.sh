@@ -28,6 +28,7 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
+    python -m unittest discover -s server-gae/ -p 'Test*.py'
     screen -d -m -L ionic serve --firefox@47.0.1
     sleep 50
     xvfb-run protractor e2e-tests.conf.js

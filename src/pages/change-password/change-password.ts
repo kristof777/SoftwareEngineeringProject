@@ -1,8 +1,8 @@
 import {Logger} from "angular2-logger/core";
+import {Component} from "@angular/core";
+import {NavParams, ViewController, AlertController} from "ionic-angular";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
-import {Component} from '@angular/core';
-import {NavParams, NavController, ViewController, AlertController} from 'ionic-angular';
-import {KasperService} from '../../app/providers/kasper-service'
 
 @Component({
     selector: 'page-change-password',

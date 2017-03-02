@@ -17,14 +17,6 @@ export class KasperService {
                 private _logger: Logger) {
     }
 
-    getUserId(): number{
-        return this.loginService.getUserId();
-    }
-
-    getToken(): string{
-        return this.loginService.getToken();
-    }
-
     /**
      * Send a login request to the server
      *
@@ -43,19 +35,14 @@ export class KasperService {
      *
      * @param email     the email to sign in with
      * @param password  the password to sign in with
-     * @param cbLogin   the callback for the data
      */
-    login(email: string, password: string, cbLogin: (data: any) => void): void{
+    login(email: string, password: string): any{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
 
-        this.http.post(KasperConfig.API_URL + "/signIn", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbLogin(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/signIn", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -65,23 +52,18 @@ export class KasperService {
      * {
      *      token: string
      * }
-     *
-     * @param cbLogin   the callback for the data
      */
-    loginWithToken(cbLogin: (data: any) => void): void{
+    loginWithToken(): any{
         let body = new FormData();
         this.appendAuthentication(body);
 
-        this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbLogin(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
-    // TODO
-    confirmEmail(): void{}
+    confirmEmail(): any{
+        this._logger.error("KasperService.confirmEmail is not implemented.");
+    }
 
     /**
      * Send a request to register the user in the database, then log them in
@@ -101,11 +83,9 @@ export class KasperService {
      * @param phone2            secondary phone number
      * @param city              the city of the user
      * @param province          abbreviation of province
-     * @param cbSignUp          the callback for the data
      */
     signUp(email: string, password: string, confirmedPassword: string, firstName: string,
-            lastName: string, phone1: string, phone2: string, city: string, province: string,
-            cbSignUp: (data: any) => void): void{
+            lastName: string, phone1: string, phone2: string, city: string, province: string): any{
         let body = new FormData();
         body.append('email', email);
         body.append('password', password);
@@ -117,12 +97,8 @@ export class KasperService {
         body.append('city', city);
         body.append('province', province);
 
-        this.http.post(KasperConfig.API_URL + "/createUser", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbSignUp(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/createUser", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -130,19 +106,14 @@ export class KasperService {
      *
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      firstName, lastName, phone1, phone2, city, province, email
-     * @param cbEditAccount the callback for the data
      */
-    editUser(changeValues: JSON, cbEditAccount: (data: any) => void): void {
+    editUser(changeValues: JSON): any {
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
-        this.http.post(KasperConfig.API_URL + "/editUser", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbEditAccount(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/editUser", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -156,22 +127,16 @@ export class KasperService {
      * @param oldPassword           the current password of the user
      * @param newPassword           the new password for the user
      * @param newPasswordConfirmed  the new password for the user
-     * @param cbChangePassword      the callback for the data
      */
-    changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string,
-                   cbChangePassword: (data: any) => void): void{
+    changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
         body.append('newPassword', newPassword);
         body.append('newPasswordConfirmed', newPasswordConfirmed);
 
-        this.http.post(KasperConfig.API_URL + "/changePassword", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbChangePassword(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/changePassword", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -181,20 +146,14 @@ export class KasperService {
      * {
      *      listings: Listing[]
      * }
-     *
-     * @param cbGetFavourites   the callback for the data
      */
-    getFavourites(cbGetFavourites: (data: any) => void): void{
+    getFavourites(): any{
         let body = new FormData();
         this.appendAuthentication(body);
 
-        this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
+        return this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
             ResponseContentType.Json)
-            .subscribe(data => {
-                cbGetFavourites(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+            .map(response => response.json());
     }
 
     /**
@@ -202,21 +161,15 @@ export class KasperService {
      *
      * @param listingId             the listing id
      * @param liked                 do they like it
-     * @param cbLikeDislikeListing  the callback for the data
      */
-    likeDislikeListing(listingId: number, liked: boolean,
-                       cbLikeDislikeListing: (data: any) => void): void{
+    likeDislikeListing(listingId: number, liked: boolean): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
         body.append('liked', liked);
 
-        this.http.post(KasperConfig.API_URL + "/likeDislikeListing", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbLikeDislikeListing(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/likeDislikeListing", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -227,25 +180,15 @@ export class KasperService {
      *      listings: Listing[]
      * }
      *
-     * @param cursor            the index of the last loaded listing
-     * @param lastListingId     the last listing ID received
      * @param filter            the filter to apply
-     * @param cbGetListing      the callback for the data
      */
-    getListings(cursor: number, lastListingId: number, filter: Filter, cbGetListing:
-                (data: any) => void): void{
+    getListings(filter: Filter): any{
         let body = new FormData();
         this.appendAuthentication(body);
-        body.append('cursor', cursor);
-        body.append('lastListingId', lastListingId);
         body.append('filter', JSON.stringify(filter));
 
-        this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbGetListing(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -257,9 +200,8 @@ export class KasperService {
      * }
      *
      * @param listing           the listing
-     * @param cbCreateListing   the callback for the data
      */
-    createListings(listing: Listing, cbCreateListing: (data: any) => void): void{
+    createListings(listing: Listing): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('province', listing.location.province.abbr);
@@ -274,12 +216,8 @@ export class KasperService {
         body.append('thumbnailImageIndex', 0);
         body.append('isPublished', listing.isPublished);
 
-        this.http.post(KasperConfig.API_URL + "/createListing", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbCreateListing(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/createListing", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -288,19 +226,14 @@ export class KasperService {
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      province, city, address, price, sqft, bedrooms, bathrooms,
      *                      description, images, thumbnailImageIndex, isPublished
-     * @param cbEditAccount the callback for the data
      */
-    editListing(changeValues: JSON, cbEditAccount: (data: any) => void): void {
+    editListing(changeValues: JSON): any {
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
-        this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbEditAccount(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+        return this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -314,28 +247,23 @@ export class KasperService {
      * }
      *
      * @param listingId             the listing id
-     * @param cbRequestContactInfo  the callback for the data
      */
-    requestContactInformation(listingId: number, cbRequestContactInfo: (data: any) => void): void{
+    requestContactInformation(listingId: number): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
 
-        this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
+        return this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
             , ResponseContentType.Json)
-            .subscribe(data => {
-                cbRequestContactInfo(data.json());
-            }, error => {
-                this._logger.log(error);
-            });
+            .map(response => response.json());
     }
 
     /**
      * Appends required information for all calls
      */
     appendAuthentication(body: FormData): void{
-        body.append('userId', this.getUserId());
-        body.append('token', this.getToken);
+        body.append('userId', this.loginService.getUserId());
+        body.append('token', this.loginService.getToken());
     }
 
     /**

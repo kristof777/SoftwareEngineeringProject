@@ -25,7 +25,6 @@ export class SignInPage {
                 public formBuilder: FormBuilder,
                 public viewCtrl: ViewController,
                 public kasperService: KasperService) {
-
         this.loginForm = formBuilder.group({
             email: ['', Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}"), Validators.required])],
             password: ['', Validators.compose([Validators.required])],
@@ -63,7 +62,8 @@ export class SignInPage {
 
             this.navCtrl.setRoot(MyProfilePage);
         } else if(this.loginForm.valid){
-            this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password, this.signInCallback);
+            let test = this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password);
+            this.signInCallback(test);
         } else {
             this._logger.error("Tried to submit when fields do not pass validation.");
         }
@@ -74,14 +74,19 @@ export class SignInPage {
     /**
      * Handle data from the login request
      *
-     * @param data the response from the server
+     * @param result the response from the server
      */
-    signInCallback(data: any): void{
-        this.kasperService.loginService.setUser(
-            new User(data.userId, data.email, data.firstName, data.lastName,  data.phone1, data.phone2,
-                new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
-        ));
-        this.kasperService.loginService.setToken(data.token);
+    signInCallback(result: any): void{
+        result.subscribe(data => {
+            this.kasperService.loginService.setUser(
+                new User(data.userId, data.email, data.firstName, data.lastName,  data.phone1, data.phone2,
+                    new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
+                ));
+            this.kasperService.loginService.setToken(data.token);
+            this.navCtrl.setRoot(MyProfilePage);
+            }, error => {
+                this._logger.log(error);
+            });
     }
 
     attemptEmail(){
