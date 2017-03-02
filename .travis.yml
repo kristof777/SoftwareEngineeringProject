@@ -62,7 +62,7 @@ after_failure:
 deploy:
  provider: script
  script: "scripts/deploy_script.sh"
- skip_cleanup: true
+ skip_cleanup: false
  on:
    branch: develop  
 
