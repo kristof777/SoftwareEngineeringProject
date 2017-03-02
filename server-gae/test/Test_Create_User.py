@@ -9,7 +9,7 @@ import Main
 import webapp2
 from google.appengine.ext import testbed
 from models.User import User
-from extras.utils import create_random_user
+from extras.utils import create_random_user, are_two_lists_same
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -36,12 +36,11 @@ class TestHandlers(unittest.TestCase):
         :return:
         """
 
-
         input1 = {
-            "email" : "  ",
+            "email": "  ",
             "lastName": ""
         }  # Json object you need to send
-        request = webapp2.Request.blank('/createuser', POST=input1)  # api you need to test
+        request = webapp2.Request.blank('/createUser', POST=input1)  # api you need to test
         response = request.get_response(Main.app)  # get response back
         # unit testing example checking if status is what we expected
 
@@ -53,7 +52,6 @@ class TestHandlers(unittest.TestCase):
         errors_expected = [missing_province['error'],
                            missing_confirmed_password['error'],
                            missing_password['error'],
-                           missing_last_name['error'],
                            missing_phone_number['error'],
                            missing_first_name['error'],
                            missing_city['error'],
@@ -63,13 +61,12 @@ class TestHandlers(unittest.TestCase):
 
         # checking if there is a difference between error_keys and what we got
 
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertEquals(are_two_lists_same(error_keys,errors_expected ), True)
 
         #test 2 with invalid phone 1
         input2 = create_random_user()
         input2['phone1'] = "123456"
-        request = webapp2.Request.blank('/createuser', POST=input2)  #   api you need to test
+        request = webapp2.Request.blank('/createUser', POST=input2)  #   api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
         try:
@@ -83,7 +80,7 @@ class TestHandlers(unittest.TestCase):
 
         input3 = create_random_user()
         input3['phone2'] = "123456"
-        request = webapp2.Request.blank('/createuser', POST=input3)
+        request = webapp2.Request.blank('/createUser', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
 
@@ -98,7 +95,7 @@ class TestHandlers(unittest.TestCase):
 
         input4 = create_random_user()
         input4['email'] = "gaa"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input4)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -115,7 +112,7 @@ class TestHandlers(unittest.TestCase):
         input5 = create_random_user()
         input5['password'] = "123456"
         input5['confirmedPassword'] = "123456"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input5)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -131,7 +128,7 @@ class TestHandlers(unittest.TestCase):
 
         input6 = create_random_user()
         input6['password'] = "123456"
-        request = webapp2.Request.blank('/createuser',
+        request = webapp2.Request.blank('/createUser',
                                         POST=input6)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 400)
@@ -140,13 +137,12 @@ class TestHandlers(unittest.TestCase):
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(password_mismatch['error'], errors_expected)
+        self.assertEquals(password_not_strong['error'], errors_expected)
 
         # test case 7 correct information
 
         input7 = create_random_user()
-        request = webapp2.Request.blank('/createuser',
-                                        POST=input7)  # api you need to test
+        request = webapp2.Request.blank('/createUser', POST=input7)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
         output = json.loads(response.body)

@@ -1,11 +1,12 @@
-let assert = require('assert-plus');
+import {LoginService} from "../../app/providers/login-service";
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Component} from '@angular/core';
-import {NavController, ModalController} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component} from "@angular/core";
+import {NavController, ModalController} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
-import {DetailPage} from "../detail/detail"
-import {AddListingPage} from "../add-listing/add-listing"
+import {DetailPage} from "../detail/detail";
+import {AddListingPage} from "../add-listing/add-listing";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-my-listings',
@@ -19,10 +20,12 @@ export class MyListingsPage {
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public listingProvider: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger) {
 
-        let data = listingProvider.savedListings.myListings;
-        this.listings = Object.keys(data).map(key => data[key]);
+        this.listings = Array();
+        // let data = listingProvider.savedListings.myListings;
+        // this.listings = Object.keys(data).map(key => data[key]);
     }
 
     /**
@@ -45,7 +48,7 @@ export class MyListingsPage {
      */
     editListing(listing:Listing){
         this.navCtrl.push(AddListingPage,{
-            data:listing
+            listing:listing
         });
         this._logger.debug("Trying to edit...")
 
@@ -64,13 +67,8 @@ export class MyListingsPage {
      * Takes you to listing page
      */
     addListing(){
-        let addListingModal = this.modalCtrl.create(AddListingPage, {});
 
-        addListingModal.onDidDismiss(data => {
-            this._logger.info("Add Listing Modal Data: " + JSON.stringify(data));
-        });
-
-        addListingModal.present();
+        this.navCtrl.push(AddListingPage);
     }
 
     /**

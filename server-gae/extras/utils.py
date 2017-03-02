@@ -4,11 +4,20 @@ import random
 import string
 import webapp2
 import json
-import Main
+from Error_Code import *
 from validate_email import validate_email
 
 
-def get_random_string(n=random.randint(10,20), lower_case=0, upper_case=0,
+province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NW", "ON", "PE",
+                 "QC", "SK", "YT"]
+
+province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
+                     "newfoundland and labrador", "nova scotia", "nunavut",
+                     "north west territories", "ontario",
+                     "prince edward island", "quebec", "saskatchewan", "yukon"]
+
+
+def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
     """
     Function takes the integer, and return a random string of that length, which
@@ -23,8 +32,9 @@ def get_random_string(n=random.randint(10,20), lower_case=0, upper_case=0,
     s = ""
     if lower_case == upper_case == numbers == 0:
         s = ''.join(random.SystemRandom().choice(
-            string.ascii_uppercase + string.digits + string.ascii_lowercase) for _
-                in range(n))
+            string.ascii_uppercase + string.digits + string.ascii_lowercase) for
+                    _
+                    in range(n))
     else:
         new_n = n - lower_case - upper_case - numbers
         if new_n > 0:
@@ -33,8 +43,8 @@ def get_random_string(n=random.randint(10,20), lower_case=0, upper_case=0,
                         for _
                         in range(new_n))
         s += ''.join(random.SystemRandom().choice(string.ascii_lowercase)
-                        for _
-                        in range(lower_case))
+                     for _
+                     in range(lower_case))
         s += ''.join(random.SystemRandom().choice(string.ascii_uppercase)
                      for _
                      in range(upper_case))
@@ -54,7 +64,7 @@ def get_random_email():
     """
 
     return get_random_string(random.randint(6, 12)) + "@" \
-        + get_random_string(random.randint(4, 6)) + ".ca"
+           + get_random_string(random.randint(4, 6)) + ".ca"
 
 
 def get_random_password():
@@ -94,7 +104,7 @@ def test_random_password():
         assert any(s.isdigit() for s in password)
 
 
-def create_dummy_users_for_testing(n):
+def create_dummy_users_for_testing(n, Main):
     """
     Crates n Dummy Users with random valid password, email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
@@ -109,19 +119,20 @@ def create_dummy_users_for_testing(n):
     while n > 0:
         password = get_random_password()
         new_user = {"email": get_random_email(),
-                  "password": password ,
-                  "firstName": get_random_string(),
-                  "lastName": get_random_string(),
-                  "city": get_random_string(),
-                  "postalCode": get_random_string(3)+" "+get_random_string(3),
-                  "province": "SK",
-                  "phone1": get_random_string(10, numbers=10),
-                   "phone2": get_random_string(10, numbers=10)
-                   if random.randint(0,1) else "",
-                  "confirmedPassword": password
-                  }
+                    "password": password,
+                    "firstName": get_random_string(),
+                    "lastName": get_random_string(),
+                    "city": get_random_string(),
+                    "postalCode": get_random_string(
+                        3) + " " + get_random_string(3),
+                    "province": "SK",
+                    "phone1": get_random_string(10, numbers=10),
+                    "phone2": get_random_string(10, numbers=10)
+                    if random.randint(0, 1) else "",
+                    "confirmedPassword": password
+                    }
 
-        request = webapp2.Request.blank('/createuser', POST=new_user)  # api you need to test
+        request = webapp2.Request.blank('/createUser', POST=new_user)
         response = request.get_response(Main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
@@ -133,7 +144,7 @@ def create_dummy_users_for_testing(n):
     return users
 
 
-def create_dummy_listings_for_testing(num_listings, num_users=1):
+def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
     """
     Crates n Dummy Users and listings, where all data in listings is random but
     province which is saskatchewan.
@@ -143,10 +154,10 @@ def create_dummy_listings_for_testing(num_listings, num_users=1):
     :return: a dictionary of listing with all listing data as keys and listingID
      """
     listings = []
-    assert num_listings > num_users
+    assert num_listings >= num_users
     assert num_users != 0
 
-    users = create_dummy_users_for_testing(num_users)
+    users = create_dummy_users_for_testing(num_users, Main)
     assert len(users) == num_users
     for i in range(0, num_users):
         if i == num_users - 1 and num_listings % num_users != 0:
@@ -155,23 +166,25 @@ def create_dummy_listings_for_testing(num_listings, num_users=1):
             distribution = num_listings // num_users
         user = users[i]
         for j in range(0, distribution):
-            random_listing_info = { "userId": user["userId"],
-                      "bedrooms": str(random.randint(1,10)),
-                      "sqft": str(random.randint(200,2000)),
-                      "bathrooms": str(random.randint(1,10)),
-                      "price": str(random.randint(20000,20000000)),
-                      "description": " ".join(
-                          [get_random_string() for _ in
-                           range(random.randint(15, 45))]) + ".",
-                      "isPublished": str(bool(random.randint(0, 1))),
-                      "province": "SK",
-                      "city": get_random_string(),
-                      "address": get_random_string(),
-                      "thumbnailImageIndex": 0,
-                      "images": 'some images'
-                      }
-            request = webapp2.Request.blank('/createlisting',
-                                        POST=random_listing_info)
+            random_listing_info = {"userId": user["userId"],
+                                   "bedrooms": str(random.randint(1, 10)),
+                                   "sqft": str(random.randint(200, 2000)),
+                                   "bathrooms": str(random.randint(1, 10)),
+                                   "price": str(
+                                       random.randint(20000, 20000000)),
+                                   "description": " ".join(
+                                       [get_random_string() for _ in
+                                        range(random.randint(15, 45))]) + ".",
+                                   "isPublished": str(
+                                       bool(random.randint(0, 1))),
+                                   "province": "SK",
+                                   "city": get_random_string(),
+                                   "address": get_random_string(),
+                                   "thumbnailImageIndex": 0,
+                                   "images": 'some images'
+                                   }
+            request = webapp2.Request.blank('/createListing',
+                                            POST=random_listing_info)
             response = request.get_response(Main.app)
             output = json.loads(response.body)
             random_listing_info["listingId"] = output["listingId"]
@@ -203,11 +216,11 @@ def create_random_listing(user_id):
     :param user_id: User Id where listing belongs
     :return: a random listing with random field populated
     """
-    random_listing = { "userId": user_id,
-                      "bedrooms": str(random.randint(1,10)),
-                      "sqft": str(random.randint(200,2000)),
-                      "bathrooms": str(random.randint(1,10)),
-                      "price": str(random.randint(20000,20000000)),
+    random_listing = {"userId": user_id,
+                      "bedrooms": str(random.randint(1, 10)),
+                      "sqft": str(random.randint(200, 2000)),
+                      "bathrooms": str(random.randint(1, 10)),
+                      "price": str(random.randint(20000, 20000000)),
                       "description": " ".join(
                           [get_random_string() for _ in
                            range(random.randint(15, 45))]) + ".",
@@ -221,7 +234,7 @@ def create_random_listing(user_id):
     return random_listing
 
 
-def keys_validation(key_error_dict, post):
+def keys_missing(dictionary, post):
     """
     Example :
     key_error_dict = {"password": "missingPassword",
@@ -237,16 +250,56 @@ def keys_validation(key_error_dict, post):
     """
     errors = {}
     values = {}
-    empty = [u'', '', ""]
-    for key in key_error_dict:
-        error = key_error_dict[key]["error"]
+
+    if dictionary == {}:
+        for key in post:
+            values[key] = post.get(key)
+        return errors, values
+
+    for key in dictionary:
+        error = missing[key]['error']
         value_in_response = post.get(key)
-        if value_in_response is None or str(value_in_response).isspace()\
-                or str(value_in_response) in empty:
+        if is_missing(value_in_response):
             errors[error] = str(key) + " is Missing"
         else:
             values[key] = str(value_in_response)
     return errors, values
+
+
+def key_validation(dictionary):
+    invalid = {}
+    for key in dictionary:
+        value = dictionary[key]
+        if key in valid_check:
+            if not valid_check[key](value):
+                invalid[invalids[key]["error"]] = key + " is invalid"
+    return invalid
+
+
+def is_valid_integer(input_string):
+    assert input_string != None
+    try:
+        int(input_string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_valid_float(input_string):
+    assert input_string != None
+    try:
+        float(input_string)
+        return True
+    except ValueError:
+        return False
+
+
+def is_valid_bool(input_string):
+    assert input_string != None
+    if input_string == "True" or input_string == "False":
+        return True
+    else:
+        return False
 
 
 def is_valid_phone(phone):
@@ -256,18 +309,42 @@ def is_valid_phone(phone):
     :return: true if phone number is Valid
     """
     assert phone != None
-    return len(phone) == 10 and unicode(str(phone),'utf-8').isnumeric()
+    phone = str(phone)
+    return len(phone) == 10 and is_valid_integer(phone)
 
-
-def is_invalid_password(password):
+def is_valid_password(password):
     """
 
     :param password:
     :return: true if password is valid
     """
-    return len(password) < 8 or not any(s.islower() for s in password) or \
-           not any(s.isupper() for s in password) or \
-           not any(s.isdigit() for s in password)
+    return len(password) >= 8 and any(s.islower() for s in password) and \
+           any(s.isupper() for s in password) and \
+           any(s.isdigit() for s in password)
+
+
+def is_valid_string_list(list):
+    # return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+    #                    "province", "address", "description", "isPublished", "images",
+    #                    "thumbnailImageIndex"] for key in list)
+    # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
+    #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
+    list_object = json.loads(list)
+    return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+                               "province", "address", "description", "isPublished", "images",
+                               "thumbnailImageIndex"] for key in list_object)
+
+
+
+
+def is_valid_integer_list(any_list):
+    list_object = json.loads(any_list)
+    return not any(not is_valid_integer(str(listing_id)) for listing_id in list_object)
+    # for item in list(any_list):
+    #     if not is_valid_integer(item):
+    #         return False
+    # return True
+
 
 
 def is_valid_email(email):
@@ -279,32 +356,97 @@ def is_valid_email(email):
     return validate_email(str(email))
 
 
+def is_valid_province(province):
+    return province.lower() in province_complete or province  in province_abbr
+
+def is_valid_xor(dictionary, key1, key2):
+    if key1 in dictionary and key2 in dictionary:
+        return is_missing(dictionary[key1]) or is_missing(dictionary[key2])
+    else:
+        return True
+
+
+def is_missing(var):
+    return var in ["", u'', '', None, [], {}] or str(var).isspace()
+
+
+# def is_valid_filter(filter):
+#     if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+#                        "province", "address", "description", "isPublished", "images",
+#                        "thumbnailImageIndex"] for key in filter):
+#         return False
+#     for key in filter:
+#         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
+#             if any(bound not in ["lower", "upper"] for bound in key):
+#                 return False
+
+
+
 def test_keys_validation():
     keys = ["key1", "key2", "key3"]
     errors = ["error1", "error2", "error3"]
-    key_error_dict = dict(zip(keys,errors))
+    key_error_dict = dict(zip(keys, errors))
     response = {"key1": "a", "key2": "b", "key3": u'    '}
-    print(keys_validation(key_error_dict, response))
+    print(keys_missing(key_error_dict, response))
     response = {"key1": "a", "key2": "b", "key3": u''}
-    print(keys_validation(key_error_dict, response))
+    print(keys_missing(key_error_dict, response))
     response = {"key1": "a", "key2": "", "key3": u''}
-    print(keys_validation(key_error_dict, response))
+    print(keys_missing(key_error_dict, response))
     response = {"key1": "a", "key2": "", "key3": u'    '}
-    print(keys_validation(key_error_dict, response))
+    print(keys_missing(key_error_dict, response))
 
 
-def return_error(self,error_message, error_status):
+valid_check = {
+    "phone1": is_valid_phone,
+    "phone2": is_valid_phone,
+    "email": is_valid_email,
+    "password": is_valid_password,
+    "province": is_valid_province,
+    "userId": is_valid_integer,
+    "listingId": is_valid_integer,
+    "price": is_valid_integer,
+    "bathrooms": is_valid_float,
+    "bedrooms": is_valid_integer,
+    "sqft": is_valid_integer,
+    "isPublished": is_valid_bool,
+    "thumbnailImageIndex": is_valid_integer,
+    "liked": is_valid_bool,
+    "valuesRequired": is_valid_string_list,
+    "maxLimit": is_valid_integer,
+    "listingIdList": is_valid_integer_list,
+    "lower": is_valid_integer,
+    "upper": is_valid_integer
+}
+
+
+def write_error_to_response(response, error_message, error_status):
     """
     :param self: self object
     :param errorMessage: the error message to be sent
     :param errorStatus: Error status, eg: 200 for success
     """
-    self.response.write(json.dumps(error_message))
-    self.response.set_status(error_status)
-    return
+    response.write(json.dumps(error_message))
+    response.set_status(error_status)
+
+
+def write_success_to_response(response, success_dict):
+    response.write(json.dumps(success_dict))
+    response.set_status(success)
+
+
+def scale_province(province):
+    if province.lower() in province_complete:
+        province = province_abbr[province_complete.index(province.lower())]
+    return province
+
+
+def are_two_lists_same(list1, list2):
+    return len(set(list1).difference(set(list2))) == 0
+
 
 
 if __name__ == "__main__":
     test_random_email()
     test_random_password()
+
 

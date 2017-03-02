@@ -2,6 +2,9 @@ import logging
 from Base_Handler import *
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.utils import *
+from extras.Error_Code import *
+
 
 
 # We need to decide whether uses are allowed to
@@ -14,7 +17,9 @@ def user_required(handler):
     def check_sign_in(self, *args, **kwargs):
         auth = self.auth
         if not auth.get_user_by_session():
-            self.redirect(self.uri_for('signin'), abort=True)
+            write_error_to_response(self, {not_authorized['error']:
+                                    "not authorized to chnage user"},
+                                    not_authorized['status'])
         else:
             return handler(self, *args, **kwargs)
     return check_sign_in
@@ -83,7 +88,7 @@ class SetPasswordHandler(BaseHandler):
 class AuthenticatedHandler(BaseHandler):
   @user_required
   def get(self):
-    self.render_template('Authenticated.html')
+    self.render_template('../webpages/Authenticated.html')
 
 
 class LogoutHandler(BaseHandler):
@@ -120,4 +125,4 @@ class ForgotPasswordHandler(BaseHandler):
             'username': username,
             'not_found': not_found
         }
-        self.render_template('Forgot.html', params)
+        self.render_template('../webpages/Forgot.html', params)

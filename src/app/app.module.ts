@@ -14,10 +14,10 @@ import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {FavouritesPage} from '../pages/favourites/favourites';
 import {MyProfilePage} from '../pages/my-profile/my-profile';
 import {AddListingPage} from '../pages/add-listing/add-listing';
+import {ContactPage} from '../pages/contact/contact';
 
 import {FilterPage} from '../pages/filter/filter';
 import {ChangePasswordPage} from '../pages/change-password/change-password';
-import {SavedListingProvider} from "./providers/saved-listing-provider";
 
 import {LoginService} from "./providers/login-service";
 import {KasperService} from "./providers/kasper-service";
@@ -35,7 +35,8 @@ import {KasperService} from "./providers/kasper-service";
         MyListingsPage,
         MyProfilePage,
         DetailPage,
-        BrowsePage
+        BrowsePage,
+        ContactPage
     ],
     imports: [
         IonicModule.forRoot(MyApp, {tabsPlacement: 'bottom'})
@@ -53,11 +54,11 @@ import {KasperService} from "./providers/kasper-service";
         MyListingsPage,
         MyProfilePage,
         DetailPage,
-        BrowsePage
+        BrowsePage,
+        ContactPage
     ],
     providers: [
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        SavedListingProvider,
         LoginService,
         KasperService,
         Logger,

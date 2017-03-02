@@ -2,11 +2,13 @@ import json
 import logging
 import sys
 
-from extras.utils import *
+from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 
+from extras.utils import *
 sys.path.append("../")
 from extras.Error_Code import *
 from extras.Base_Handler import BaseHandler
+from models.User import *
 
 
 # We need to decide whether uses are allowed to
@@ -19,7 +21,7 @@ def user_required(handler):
     def check_sign_in(self, *args, **kwargs):
         auth = self.auth
         if not auth.get_user_by_session():
-            self.redirect(self.uri_for('signin'), abort=True)
+            self.redirect(self.uri_for('signIn'), abort=True)
         else:
             return handler(self, *args, **kwargs)
     return check_sign_in
@@ -54,28 +56,69 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it is non-null, non-empty
         # and contains more than than space characters
 
-        error_keys = ['oldPassword', 'new_password', 'confirmed_password']
-        error_values = [missing_password, missing_new_password, missing_new_password_confirmed]
-        key_error_dict = dict(zip(error_keys, error_values))
+        error_keys = ['oldPassword', 'newPassword', 'confirmedPassword', 'userId']
 
         # validating if request has all required keys
-        errors, values = keys_validation(key_error_dict, self.request.POST)
 
+        errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            return_error(self, errors, missing_invalid_parameter_error)
+            write_error_to_response(self.response, errors,
+                                    missing_invalid_parameter_error)
             return
 
-        if is_invalid_password(values['new_password']):
-            return_error(self, password_not_strong['error'],
+
+        #attempt to get the current user by the old password. Will throw an
+        # exception if the password or e-mail are unrecognized.
+        try:
+            user = User.get_by_id(int(values["userId"]))
+            user_dict = self.auth.get_user_by_password(
+                user.email, values['oldPassword'], remember=True,
+                save_session=True)
+
+        except (InvalidAuthIdError, InvalidPasswordError) as e:
+            logging.info('Sign-in failed for user %s because of %s',
+                         values['userId'], type(e))
+            write_error_to_response(self.response, not_authorized["error"],
+                                    not_authorized['status'])
+            return
+
+        if user is None:
+            write_error_to_response(self.response, not_authorized["error"],
+                                        not_authorized['status'])
+            logging.info(
+                'Sign-in-with-token failed for user %s because of %s',
+                int(values["userId"]))
+            return
+
+        #Get a new token
+        token =  user_dict['token']
+        self.user_model.delete_auth_token((values["userId"]),token)
+        token = self.user_model.create_auth_token((values["userId"]))
+
+        if not is_valid_password(values['newPassword']):
+            write_error_to_response(self.response, password_not_strong['error'],
                          password_not_strong['status'])
             return
 
-        if values['new_password'] != values['confirmed_password']:
-            return_error(self, password_mismatch["error"],
+        if values['newPassword'] != values['confirmedPassword']:
+            write_error_to_response(self.response, password_mismatch["error"],
                          password_mismatch['status'])
             return
 
+        try:
+            User.set_password(user, values['newPassword'])
+            #This will throw an exception if the password is wrong, which will only happen if set_password failed.
+            user_dict = self.auth.get_user_by_password(
+                user.email, values['newPassword'], remember=True,
+                save_session=True)
+        except:
+            #set_password failed. This should never happen
+            assert(False)
 
 
-
+        #self.auth.store.delete_auth_token(user['userId'], user['token'])
+        user_dict = {'token': token}
+        self.response.write(json.dumps(user_dict))
+        self.response.set_status(200)
+        return

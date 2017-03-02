@@ -1,3 +1,11 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            Sign In
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
 <ion-content padding>
     <img class="logo" src="http://placehold.it/300x300" />
 
@@ -25,4 +33,13 @@
         <p>Need an account?</p>
         <p><a href="#" (click)="pushRegister()">Register Here</a></p>
     </div>
+
+    <div class="facebookLogin">
+        <p>Login with Facebook
+            <button ion-button item-left clear icon-only id = "facebook" (click)="facebookLogin()">
+                <ion-icon name = "logo-facebook"></ion-icon>
+            </button>
+        </p>
+    </div>
+
 </ion-content>

@@ -1,12 +1,15 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>
+    <ion-navbar color="primary">
+        <ion-title *ngIf="curListing == null">
             Add Listing
+        </ion-title>
+        <ion-title *ngIf="curListing != null">
+            Edit Listing
         </ion-title>
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Province</ion-label>
@@ -73,7 +76,7 @@
 
         <ion-item>
             <button ion-button block (click)="saveWithoutPublishing()" id="alSave">Save without Publishing</button>
-            <button ion-button block (click)="saveAndPublish()" id="alPublish">Publish</button>
+            <button *ngIf="curListing == null || ((curListing != null) && !curListing.isPublished)" ion-button block (click)="saveAndPublish()" id="alPublish">Publish</button>
             <button *ngIf="(curListing != null) && curListing.isPublished" ion-button block (click)="unpublish()" id="alUnpublish">Unpublish</button>
         </ion-item>
     </ion-list>

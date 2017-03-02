@@ -5,15 +5,14 @@ import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
 import {Http, ResponseContentType} from '@angular/http';
-import {SavedListingProvider} from "./saved-listing-provider";
 import {KasperService} from "./kasper-service";
+import {Filter} from "../models/filter";
 
 @Injectable()
 export class ListingProvider {
     data: Listing[];
 
     constructor(public http: Http,
-                public savedListings: SavedListingProvider,
                 public kasperService: KasperService,
                 private _logger: Logger) {
         this.data = [
@@ -30,9 +29,7 @@ export class ListingProvider {
      * Add a listing to the database
      */
     addListing(newListing: Listing){
-        // TODO add the listing to the device
-        // this.savedListings.addListing(newListing);
-        this.kasperService.createListings(newListing, this.addListingCallback);
+        this._logger.error("ListingProvider.addListing is not implemented.");
     }
 
     addListingCallback(data: any){}
@@ -63,7 +60,7 @@ export class ListingProvider {
      */
     dislike(listingID : number){
         this._logger.error("ListingProvider.dislike is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, false, this.likeDislikeCallback);
+        // this.kasperService.likeDislikeListing(listingID, false);
     }
 
     likeDislikeCallback(){}
@@ -75,7 +72,7 @@ export class ListingProvider {
      */
     addToFavourites(listingID : number){
         this._logger.error("ListingProvider.addToFavourites is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, true, this.likeDislikeCallback);
+        // this.kasperService.likeDislikeListing(listingID, true);
     }
 
     /**
@@ -94,7 +91,7 @@ export class ListingProvider {
      *
      * @return an array of listingIDs
      */
-    search(filter : any) : number[] {
+    search(filter : Filter) : any{
         this._logger.error("ListingProvider.search is not implemented.");
         return null;
     }

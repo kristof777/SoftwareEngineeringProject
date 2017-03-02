@@ -23,16 +23,25 @@
 #############################################################################################
 
 import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
-use_library('django', '0.96')
-webapp_django_version = '0.96'
-from web_apis.SignIn import SignIn
+# use_library('django', '0.96')
+# webapp_django_version = '0.96'
+from web_apis.Sign_In import SignIn
 from web_apis.Create_User import *
-from web_apis.Listing_API import *
+from web_apis.Create_Listing import *
+from web_apis.Get_My_Listings import *
+from web_apis.Like_Dislike_Listing import *
+from web_apis.Edit_Listing import *
+from web_apis.Get_Favorite_Listings import *
 from web_apis.Change_Password import *
+from web_apis.Sign_In_With_Token import *
 from models.User import User
 from extras.User_Auth import *
+from web_apis.Edit_User import EditUser
+from web_apis.Get_Listings import GetListing
+# from web_apis.SignInWithToken import *
 
 # configuration
 config = {
@@ -49,19 +58,24 @@ config = {
 # All API endpoints we are currently using
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name='home'),
-    webapp2.Route('/createuser', CreateUser),
+    webapp2.Route('/createUser', CreateUser),
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
     handler=VerificationHandler, name='verification'),
-    webapp2.Route('/signin', SignIn, name='signin'),
-    webapp2.Route('/logout', LogoutHandler, name='logout'),
+    webapp2.Route('/signIn', SignIn, name='signIn'),
+    webapp2.Route('/signInWithToken', SignInWithToken, name='signInWithToken'),
+    webapp2.Route('/signOut', LogoutHandler, name='signOut'),
     webapp2.Route('/password', SetPasswordHandler),
-    webapp2.Route('/changepassword', ChangePassword),
+    webapp2.Route('/changePassword', ChangePassword),
     webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
     webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
-    webapp2.Route('/createlisting', CreateListing),
+    webapp2.Route('/createListing', CreateListing),
     webapp2.Route('/like', LikeDislikeListing),
     webapp2.Route('/editListing', EditListing),
-    webapp2.Route('/getFavoriteListing', GetFavoriteListing),
-    webapp2.Route('/getMyListing', GetMyListing)
+    webapp2.Route('/getFavourites', GetFavourites),
+    webapp2.Route('/getMyListing', GetMyListing),
+    webapp2.Route('/editUser', EditUser),
+    webapp2.Route('/getListings', GetListing)
+
+
     # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

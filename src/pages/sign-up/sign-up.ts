@@ -1,10 +1,13 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from "@angular/core";
 import {Logger} from "angular2-logger/core";
+import {NavController, ToastController, Slides, Platform} from "ionic-angular";
+import {KasperService} from "../../app/providers/kasper-service";
+import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {MyProfilePage} from "../my-profile/my-profile";
+import {Province} from "../../app/models/province";
+import {Location} from "../../app/models/location";
+import {User} from "../../app/models/user";
 let assert = require('assert-plus');
-
-import {NavController, ToastController, Slides} from 'ionic-angular';
-import {KasperService} from '../../app/providers/kasper-service'
-import {MainPage} from "../main/main";
 
 @Component({
     selector: 'page-sign-up',
@@ -13,33 +16,81 @@ import {MainPage} from "../main/main";
 })
 export class SignUpPage {
     @ViewChild(Slides) slides: Slides;
-    email: string = "test@mail.com";
-    password: string = "Password1";
-    confirmPassword: string = "Password1";
-
-    firstName: string = "aa";
-    lastName: string ="aa";
-    phoneNumber: string ="1234567890";
-
-    province: string = "SK";
-    city: string = "Saskatoon";
-
     selectedMode: number;
+
+    // Form validation
+    signUpStep1: FormGroup;
+    private emailAttempted: boolean = false;
+    private passwordAttempted: boolean = false;
+    private confirmPasswordAttempted: boolean = false;
+
+    signUpStep2: FormGroup;
+    private firstNameAttempted: boolean = false;
+
+    signUpStep3: FormGroup;
 
     constructor(public navCtrl: NavController,
                 private _logger: Logger,
+                public formBuilder: FormBuilder,
                 public toastCtrl: ToastController,
-                public userService: KasperService) {
+                public kasperService: KasperService,
+                public platform: Platform) {
+
+        // Create validation for step 1
+        this.signUpStep1 = formBuilder.group({
+            email: [null, Validators.compose([Validators.required,
+                Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}")])],
+            password: [null, Validators.compose([Validators.required, kasperService.checkPass])],
+            confirmPassword: [null, Validators.compose([Validators.required])],
+        });
+
+        // Create validation for step 2
+        this.signUpStep2 = formBuilder.group({
+            firstName: [null, Validators.compose([Validators.required])],
+            lastName: ['', Validators.compose([])],
+            phoneNumber: ['', Validators.compose([kasperService.checkPhone])],
+        });
+
+        // Create validation for step 3
+        this.signUpStep3 = formBuilder.group({
+            province: ['', Validators.compose([Validators.required])],
+            city: ['', Validators.compose([])],
+        });
+
+        // Disable swiping (has to be done after page load)
+        platform.ready().then(() => {
+            this.slides.lockSwipes(true);
+        });
     }
 
     doRegister(): void{
-        this.userService.signUp(this.email,this.password, this.confirmPassword,this.firstName,
-            this.lastName, this.phoneNumber, "", this.city, this.province, this.registerCallback);
-        this.navCtrl.setRoot(MainPage);
+        let result = this.kasperService.signUp(this.signUpStep1.value.email,
+                                this.signUpStep1.value.password,
+                                this.signUpStep1.value.confirmPassword,
+                                this.signUpStep2.value.firstName,
+                                this.signUpStep2.value.lastName,
+                                this.signUpStep2.value.phoneNumber,
+                                "", // phone2
+                                this.signUpStep3.value.city,
+                                this.signUpStep3.value.province);
+
+        let user: User = new User(-1, this.signUpStep1.value.email, this.signUpStep2.value.firstName,
+            this.signUpStep2.value.lastName, this.signUpStep2.value.phoneNumber, "",
+            new Location(Province.fromAbbr(this.signUpStep3.value.province),
+            this.signUpStep3.value.city, "", "", 0.0, 0.0));
+
+        this.registerCallback(result, user);
     }
 
-    registerCallback(data: JSON){
+    registerCallback(data: any, user: User){
+        data.subscribe(data => {
+            user.id = data.userId;
+            this.kasperService.loginService.setUser(user);
+            this.kasperService.loginService.setToken(data.token);
+            this.navCtrl.setRoot(MyProfilePage);
+        }, error => {
 
+        });
     }
 
     /**
@@ -47,15 +98,29 @@ export class SignUpPage {
      */
     nextStep(): void{
         if(this.confirmStep()){
-            this.slides.slideTo(this.slides.getActiveIndex() + 1);
+            if(this.slides.getActiveIndex() != 2) {
+                this.slides.lockSwipes(false);
+                this.slides.slideTo(this.slides.getActiveIndex() + 1);
+                this.slides.lockSwipes(true);
+            } else {
+                this.doRegister();
+            }
         } else {
-            this._logger.error("Confirm step was false");
+            this.attemptAll();
+            this.toastCtrl.create({
+                message: "Please validate fields before continuing.",
+                duration: 3000,
+                position: 'top'
+            }).present();
         }
     }
 
     previousStep(): void{
-        if(this.slides.getActiveIndex() != 0)
+        if(this.slides.getActiveIndex() != 0) {
+            this.slides.lockSwipes(false);
             this.slides.slideTo(this.slides.getActiveIndex() - 1);
+            this.slides.lockSwipes(true);
+        }
     }
 
     /**
@@ -64,111 +129,46 @@ export class SignUpPage {
      * @returns {boolean}   true if the fields are valid
      *                      false otherwise
      */
-    confirmStep(): boolean{
-        this._logger.error(this.slides.getActiveIndex());
-        switch(this.slides.getActiveIndex()){
+    confirmStep(): boolean {
+        switch (this.slides.getActiveIndex()) {
             case 0:
-                return this.confirmStepOne();
+                return (this.signUpStep1.valid &&
+                this.signUpStep1.value.password == this.signUpStep1.value.confirmPassword);
             case 1:
-                return this.confirmStepTwo();
+                return this.signUpStep2.valid;
             case 2:
-                return this.confirmStepThree();
+                return this.signUpStep3.valid;
         }
     }
 
-    /**
-     * Confirm the validity of step one
-     *
-     * @returns {boolean}   true if the fields are valid
-     *                      false otherwise
-     */
-    confirmStepOne(): boolean{
-        let checkPw: any = this.userService.checkPass(this.password);
-        let error: string = null;
+    /////////////////////////////
+    // Form Validation Helpers
 
-        if(!this.email || !this.password || !this.confirmPassword) {
-            error = "Please fill in all required fields.";
-        } else if(!this.checkEmail(this.email)) {
-            error = "Please enter a valid e-mail address";
-        } else if(checkPw.strengh != 4) {
-            error = checkPw.message;
-        } else if (this.password != this.confirmPassword){
-            error = "The passwords you provided do not match.";
+    attemptAll(){
+        if(this.slides.getActiveIndex() == 0) {
+            this.attemptEmail();
+            this.attemptPassword();
+            this.attemptConfirmPassword();
+        } else if (this.slides.getActiveIndex() == 1){
+            this.attemptFirstName();
+        } else if (this.slides.getActiveIndex() == 2){
+
         }
-
-        if(error) {
-            this.toastCtrl.create({
-                message: error,
-                duration: 3000,
-                position: 'top'
-            }).present();
-        }
-
-        return !error;
     }
 
-    confirmStepTwo(): boolean{
-        let error: string = null;
-
-        if(!this.firstName || !this.lastName || !this.phoneNumber){
-            error = "Please fill in all required fields.";
-        } else if (this.phoneNumber.length != 10 || !Number(this.phoneNumber)){
-            error = "Please enter a valid phone number.";
-        }
-
-        if(error) {
-            this.toastCtrl.create({
-                message: error,
-                duration: 3000,
-                position: 'top'
-            }).present();
-        }
-
-        return !error;
+    attemptEmail(){
+        this.emailAttempted = true;
     }
 
-    confirmStepThree(): boolean{
-        let error: string = null;
-
-        if(!this.province || !this.city){
-            error = "Please fill in all required fields.";
-        }
-        // TODO verify the city
-
-        if(error) {
-            this.toastCtrl.create({
-                message: error,
-                duration: 3000,
-                position: 'top'
-            }).present();
-        }
-
-        return !error;
+    attemptPassword(){
+        this.passwordAttempted = true;
     }
 
-    onModeSelect (mode: number): void{
-        if(mode == 0){
-            document.getElementById("buyMode").removeAttribute("width-25");
-            document.getElementById("buyMode").setAttribute("width-75", "true");
-        } else {
-            document.getElementById("buyMode").removeAttribute("width-75");
-            document.getElementById("buyMode").setAttribute("width-25", "true");
-        }
-
-        this.selectedMode = mode;
+    attemptConfirmPassword(){
+        this.confirmPasswordAttempted = true;
     }
-    /**
-     * Checks the input with an e-mail regex
-     *
-     * @param email the email to check
-     * @returns {boolean} true if it was accepted by the regex, false otherwise
-     */
-    checkEmail(email: string): boolean{
-        if (!email)
-            return false;
 
-        let regExp = new RegExp("^(.+)@(.+){2,}\.(.+){2,}");
-
-        return (regExp.test(email));
+    attemptFirstName(){
+        this.firstNameAttempted = true;
     }
 }

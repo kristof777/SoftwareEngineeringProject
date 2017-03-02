@@ -1,6 +1,6 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons start>
+    <ion-navbar color="primary">
+        <ion-buttons start *ngIf="loginService.isLoggedIn()">
             <button ion-button icon-only id = "addButton" (click)="addListing()">
                 <ion-icon name="add"></ion-icon>
             </button>
@@ -8,16 +8,19 @@
         <ion-title>
             My Listings
         </ion-title>
-        <ion-buttons end>
+        <ion-buttons end *ngIf="listings.length != 0">
             <button ion-button icon-only>
                 <ion-icon name="create"></ion-icon>
             </button>
         </ion-buttons>
-    </ion-toolbar>
+    </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list>
+        <ion-item no-lines color="danger" text-wrap *ngIf="!loginService.isLoggedIn()">
+            You must be signed in to add listings!
+        </ion-item>
         <ion-list-header>
             Published
         </ion-list-header>

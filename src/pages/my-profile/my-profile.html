@@ -1,56 +1,59 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="primary">
         <ion-title>
             My Profile
         </ion-title>
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
-    <img class="logo" src="http://placehold.it/50x50" />
-
-    <ion-list inset>
+<ion-content>
+    <ion-list [formGroup]="profileGroup">
+        <ion-item no-lines color="danger" text-wrap *ngIf="currentUser == null">
+            You are not logged in.
+        </ion-item>
+        <ion-list-header>PROFILE</ion-list-header>
         <ion-item>
             <ion-label stacked>Email</ion-label>
-            <ion-input [(ngModel)]="email" type="text" placeholder="{{ currentUser.email }}" id="settingsEmail"></ion-input>
+            <ion-input formControlName="email" type="text" placeholder="{{ currentUser?.email }}" id="settingsEmail"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>First Name</ion-label>
-            <ion-input [(ngModel)]="firstName" type="text" placeholder="{{ currentUser.firstName }}" id="settingsFirstName"></ion-input>
+            <ion-input formControlName="firstName" type="text" placeholder="{{ currentUser?.firstName }}" id="settingsFirstName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Last Name</ion-label>
-            <ion-input [(ngModel)]="lastName" type="text" placeholder="{{ currentUser.lastName }}" id="settingsLastName"></ion-input>
+            <ion-input formControlName="lastName" type="text" placeholder="{{ currentUser?.lastName }}" id="settingsLastName"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Primary Phone</ion-label>
-            <ion-input [(ngModel)]="phoneNumber" type="text" placeholder="{{ currentUser.phone1 }}" id="settingsPhoneNumber"></ion-input>
+            <ion-input formControlName="phone1" type="tel" placeholder="{{ currentUser?.phone1 }}" id="settingsPhoneNumber"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Secondary Phone</ion-label>
-            <ion-input [(ngModel)]="phone2" type="tel" placeholder="{{ currentUser.phone2 }}"></ion-input>
+            <ion-input formControlName="phone2" type="tel" placeholder="{{ currentUser?.phone2 }}"></ion-input>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province" placeholder="{{ currentUser.location.province.name }}" id="settingsProvince">
+            <ion-select formControlName="province" placeholder="{{ currentUser?.location.province.name }}" id="settingsProvince">
                 <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
             </ion-select>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>City</ion-label>
-            <ion-input [(ngModel)]="city" type="text" placeholder="{{ currentUser.location.city }}" id="settingsCity"></ion-input>
+            <ion-input formControlName="city" type="text" placeholder="{{ currentUser?.location.city }}" id="settingsCity"></ion-input>
         </ion-item>
 
+        <ion-list-header>Setting</ion-list-header>
+
         <ion-item>
-            <ion-label>Notification</ion-label>
-            <ion-toggle [(ngModel)]="notificationsEnabled"></ion-toggle>
+            <ion-label staked>Notification</ion-label>
+            <ion-toggle formControlName="notificationsEnabled"></ion-toggle>
         </ion-item>
 
         <ion-item>

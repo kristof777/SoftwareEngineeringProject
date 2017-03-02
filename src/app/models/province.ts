@@ -48,12 +48,10 @@ export class Province{
      * Returns a Province from the abbreviation provided
      *
      * @param abbr          the abbreviation of the province
-     * @returns {Province}  the province with the specivied abbreviation
+     * @returns {Province}  the province with the specified abbreviation
      * @returns null        if the abbreviation provided was not valid
      */
     static fromAbbr(abbr: string): Province{
-        assert.string(abbr);
-
         let provinces: Province[] = Province.asArray;
 
         for(let i=0; i<provinces.length; i++){

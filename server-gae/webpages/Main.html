@@ -23,7 +23,7 @@
       <hr/>
       <p>
         {% if not user %}
-          <a href="/signin">Sign in (and forgot password)</a>
+          <a href="/signIn">Sign in (and forgot password)</a>
         {% else %}
           Signed in as <span style="background-color: OldLace">{{ user.first_name }}</span> | <a href="/logout">Logout</a>
         {% endif %}
@@ -34,7 +34,7 @@
         |
         <a href="/like">Like and Dislike</a>
         |
-        <a href="/createuser">New user</a>
+        <a href="/createUser">New user</a>
         |
         <a href="/authenticated">Secured page</a> (you can see this after login)
       </p>

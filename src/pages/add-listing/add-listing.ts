@@ -43,11 +43,33 @@ export class AddListingPage {
     loadListingInfo(listing: Listing): void{
         assert.object(listing);
 
+        this.curListing = new Listing(
+            listing.listingId,
+            listing.listerId,
+            new Location(
+                Province.fromAbbr(listing.location.province.abbr),
+                listing.location.city,
+                listing.location.address,
+                listing.location.postalCode,
+                listing.location.latitude,
+                listing.location.longitude,
+            ),
+            listing.bedrooms,
+            listing.bathrooms,
+            listing.squarefeet,
+            listing.price,
+            listing.description,
+            listing.isPublished,
+            listing.createdDate,
+            listing.modifiedDate,
+            listing.images
+        );
+
         this.listingId = listing.listingId;
         this.listerId = listing.listerId;
         this.bathrooms = listing.bathrooms;
         this.province = listing.location.province.abbr;
-        this.city = listing.location.city
+        this.city = listing.location.city;
         this.bedrooms = listing.bedrooms;
         this.squarefeet = listing.squarefeet;
         this.price = listing.price;
@@ -55,13 +77,6 @@ export class AddListingPage {
         this.postalCode = listing.location.postalCode;
         this.description = listing.description;
         this.images = listing.images;
-    }
-
-    /**
-     * Returns true if all of the required fields are present
-     */
-    verifyFields(): boolean{
-        return false;
     }
 
     /**
@@ -88,18 +103,7 @@ export class AddListingPage {
     /**
      * Save the listing to the device and the server
      */
-    saveWithoutPublishing(){
-        let newListing: Listing = new Listing(
-            -1, -1, // listingId, listerId
-            new Location(((this.province) ? Province.fromAbbr(this.province) : null), this.city, this.address,
-                this.postalCode, 0.0, 0.0), // longintude, latitude
-            this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
-            false, "0000-00-00", "0000-00-00", // isPublished, created, modified
-            this.images,
-        );
-
-        this.listingProvider.addListing(newListing);
-    }
+    saveWithoutPublishing(){}
 
     /**
      * Set the listing to published
