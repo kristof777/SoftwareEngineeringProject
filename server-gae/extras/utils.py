@@ -308,7 +308,7 @@ def is_valid_bool(input_string):
     :return: True if boolean, otherwise false
     """
     assert input_string is not None
-    if input_string == "True" or input_string == "False":
+    if input_string in ['true', "True", "TRUE", '1', "t", "y", "yes", "false", "False", "FALSE", "0", "n", "no", "N"]:
         return True
     else:
         return False
