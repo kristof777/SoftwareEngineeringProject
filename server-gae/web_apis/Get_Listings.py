@@ -115,33 +115,39 @@ class GetListing(webapp2.RequestHandler):
 
         # all numeric queries
         # google datastore doesn't allow more than two inequality conditions in one query, so creating multiple
-        # queries is the best option
+        # queries and get their common set is the best option
 
+        # query all the listings in db that satisfies the bedroom bound condition, only fetch their key(listingId)
         bedroom_query = Listing.query().filter(Listing.bedrooms >= bedrooms_min, Listing.bedrooms <= bedrooms_max)
         bedrooms_keys = bedroom_query.fetch(keys_only=True)
         bedrooms_keys_len = len(bedrooms_keys)
 
+        # query all the listings in db that satisfies the sqft bound condition, only fetch their key(listingId)
         sqft_query = Listing.query().filter(Listing.sqft >= sqft_min, Listing.sqft <= sqft_max)
         sqft_keys = sqft_query.fetch(keys_only=True)
         sqft_keys_len = len(sqft_keys)
 
+        # query all the listings in db that satisfies the price bound condition, only fetch their key(listingId)
         price_query = Listing.query().filter(Listing.price >= price_min, Listing.price <= price_max)
         price_keys = price_query.fetch(keys_only=True)
         price_keys_len = len(price_keys)
 
+        # query all the listings in db that satisfies the price bound condition, only fetch their key(listingId)
         bathrooms_query = Listing.query().filter(Listing.bathrooms >= bathrooms_min, Listing.bathrooms <= bathrooms_max)
         bathrooms_keys = bathrooms_query.fetch(keys_only=True)
         bathrooms_keys_len = len(bathrooms_keys)
 
-        # Get the common set of these two key(listingId) sets
+        # Get the common set of the first two key(listingId) sets
         valid_bd_sqft_keys = list(set(bedrooms_keys) & set(sqft_keys))
         assert len(valid_bd_sqft_keys) == min(bedrooms_keys_len, sqft_keys_len)
         bd_sqft_keys_len = len(valid_bd_sqft_keys)
 
+        # Get the common set of the next two key(listingId) sets
         valid_bt_pr_keys = list(set(price_keys) & set(bathrooms_keys))
         assert len(valid_bt_pr_keys) == min(price_keys_len, bathrooms_keys_len)
         bt_pr_keys_len = len(valid_bt_pr_keys)
 
+        # Get the common set of the two key(listingId) sets from above, this is the final common set we need
         final_valid_keys = list(set(valid_bd_sqft_keys) & set(valid_bt_pr_keys))
         assert len(final_valid_keys) == min(bd_sqft_keys_len, bt_pr_keys_len)
 
@@ -219,13 +225,6 @@ def create_returned_values_dict(listing_object, values_dict):
         listing_dict["listingId"] = listing_object.listingId
 
     return listing_dict
-
-def get_listing_ids(listings):
-    return_list = []
-    for listing in listings:
-        return_list.append(listing.listingId)
-    return return_list
-
 
 
 def is_valid_filter(filter):
