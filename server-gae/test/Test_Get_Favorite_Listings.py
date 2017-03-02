@@ -64,7 +64,7 @@ class TestHandlers(unittest.TestCase):
             "userId": self.likerId
         }
 
-        request = webapp2.Request.blank('/GetFavourites', POST=getFavs)
+        request = webapp2.Request.blank('/getFavourites', POST=getFavs)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
@@ -84,7 +84,7 @@ class TestHandlers(unittest.TestCase):
             "userId": "blablabla"
         }
 
-        request = webapp2.Request.blank('/GetFavourites', POST=invalidFavs)
+        request = webapp2.Request.blank('/getFavourites', POST=invalidFavs)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
