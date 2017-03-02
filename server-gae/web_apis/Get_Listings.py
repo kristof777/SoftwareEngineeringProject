@@ -243,7 +243,7 @@ def decode_filter(filterJson):
                 # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
                     BATHROOM_MIN = float(filter_object[key]["lower"])
-                if "upper" in filter[key]:
+                if "upper" in filter_object[key]:
                     BATHROOM_MIN = float(filter_object[key]["upper"])
 
         else:  # if key is not numeric
