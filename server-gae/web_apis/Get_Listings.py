@@ -68,6 +68,7 @@ class GetListing(webapp2.RequestHandler):
             write_success_to_response(self.response, listing_info_list)
             return
 
+        # set default value for upper and lower bounds
         bedrooms_max = DEFAULT_BEDROOMS_MAX
         bedrooms_min = DEFAULT_BEDROOMS_MIN
         bathrooms_max = DEFAULT_BATHROOMS_MAX
@@ -76,14 +77,6 @@ class GetListing(webapp2.RequestHandler):
         sqft_min = DEFAULT_SQFT_MIN
         price_max = DEFAULT_PRICE_MAX
         price_min = DEFAULT_PRICE_MIN
-
-        province = ""
-        description = ""
-        isPublished = ""
-        city = ""
-        address = ""
-
-        query = Listing.query()
 
         if "filter" in values and not is_missing(values["filter"]):
 
@@ -116,49 +109,48 @@ class GetListing(webapp2.RequestHandler):
 
                 else: # not numeric key
                     if key == "province":
-                        province = scale_province(filter[key])
-                        non_numeric_dict.update({"province": province})
-                        # query = query.filter(Listing.province == province)
+                        non_numeric_dict.update({"province": scale_province(filter[key])})
                     elif key == "city":
-                        city = filter[key]
-                        non_numeric_dict.update({"city": city})
+                        non_numeric_dict.update({"city": filter[key]})
                     elif key == "address":
-                        address = filter[key]
-                        non_numeric_dict.update({"address": address})
+                        non_numeric_dict.update({"address": filter[key]})
                     elif key == "isPublished":
-                        isPublished = filter[key]
-                        non_numeric_dict.update({"isPublished": isPublished})
+                        non_numeric_dict.update({"isPublished": filter[key]})
                     elif key == "description":
-                        description = filter[key]
-                        non_numeric_dict.update({"description": description})
+                        non_numeric_dict.update({"description": filter[key]})
 
 
         # all numeric queries
         # google datastore doesn't allow more than two inequality conditions in one query
 
         bedroom_query = Listing.query().filter(Listing.bedrooms >= bedrooms_min, Listing.bedrooms <= bedrooms_max)
-
         bedrooms_keys = bedroom_query.fetch(keys_only=True)
+        bedrooms_keys_len = len(bedrooms_keys)
 
         sqft_query = Listing.query().filter(Listing.sqft >= sqft_min, Listing.sqft <= sqft_max)
-
         sqft_keys = sqft_query.fetch(keys_only=True)
+        sqft_keys_len = len(sqft_keys)
 
         price_query = Listing.query().filter(Listing.price >= price_min, Listing.price <= price_max)
-
         price_keys = price_query.fetch(keys_only=True)
+        price_keys_len = len(price_keys)
 
         bathrooms_query = Listing.query().filter(Listing.bathrooms >= bathrooms_min, Listing.bathrooms <= bathrooms_max)
-
         bathrooms_keys = bathrooms_query.fetch(keys_only=True)
+        bathrooms_keys_len = len(bathrooms_keys)
 
         valid_bd_sqft_keys = list(set(bedrooms_keys) & set(sqft_keys))
+        assert len(valid_bd_sqft_keys) == min(bedrooms_keys_len, sqft_keys_len)
+        bd_sqft_keys_len = len(valid_bd_sqft_keys)
 
         valid_bt_pr_keys = list(set(price_keys) & set(bathrooms_keys))
+        assert len(valid_bt_pr_keys) == min(price_keys_len, bathrooms_keys_len)
+        bt_pr_keys_len = len(valid_bt_pr_keys)
 
         final_valid_keys = list(set(valid_bd_sqft_keys) & set(valid_bt_pr_keys))
+        assert len(final_valid_keys) == min(bd_sqft_keys_len, bt_pr_keys_len)
 
-        returned_listings = []
+        returned_listing_ids = []
 
         # check un_numeric_fields
         for key in final_valid_keys:
@@ -170,7 +162,7 @@ class GetListing(webapp2.RequestHandler):
                     matched = False
                     break
             if matched:
-                returned_listings.append(listing)
+                returned_listing_ids.append(listing.listingId)
 
 
         # so returned_listings contains all the listings that fits the filter..omg
@@ -180,18 +172,27 @@ class GetListing(webapp2.RequestHandler):
         # if user not sign in, we don't need to care about this favorite part
         if "userId" in values and not is_missing(values["userId"]):
             userId = int(json.loads(values["userId"]))
-            favorites = Favorite.query(Favorite.userId == userId)
-            seen_listings = []
+            favorites = Favorite.query(Favorite.userId == userId).fetch()
+            seen_listing_ids = []
             for favorite in favorites:
                 seen_listingId = favorite.listingId
                 seen_listing = Listing.get_by_id(seen_listingId)
                 if seen_listing is not None:
-                    seen_listings.append(seen_listing)
+                    seen_listing_ids.append(seen_listing.listingId)
 
-            # now seenListings contains all the listings that are in the favorites table
+            # now seenListingIds contains all the listings' ids that are in the favorites table
             # we want the listings that are not in the favorite table
-            filtered_listings = Listing.query(Listing not in seen_listings).fetch()
-            # after this, filtered_listings contains all the listings that are not in the favorite table
+            # so we have returned_listing_ids which contains the superset of listingIds,
+            # we wanna delete those listingIds which are in the seen_listing_ids
+            filtered_listing_ids = returned_listing_ids
+            for seen_listing_id in seen_listing_ids:
+                if seen_listing_id in returned_listing_ids:
+                    filtered_listing_ids.remove(seen_listing_id)
+
+            returned_listing_ids = filtered_listing_ids
+
+        # after this, returned_listing_ids contains all the listings' ids that
+        # are satisfying filter conditions and not in the favorite table
 
         # now we want max number of items that haven't been seen to return
         maxLimit = DEFAULT_MAX_LIMIT
@@ -199,12 +200,13 @@ class GetListing(webapp2.RequestHandler):
         if "maxLimit" in values and not is_missing(values["maxLimit"]):
             maxLimit = int(values["maxLimit"])
 
-        if len(filtered_listings) >= maxLimit:
-            filtered_listings = filtered_listings[0: maxLimit + 1]
+        if len(returned_listing_ids) >= maxLimit:
+            returned_listing_ids = returned_listing_ids[0: maxLimit + 1]
 
         listing_info_list = []
 
-        for listing_object in filtered_listings:
+        for listing_object_id in returned_listing_ids:
+            listing_object = Listing.get_by_id(listing_object_id)
             if listing_object is not None:
                 listing_info_list.append(create_returned_values_dict(listing_object, values))
 

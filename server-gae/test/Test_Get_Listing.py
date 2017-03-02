@@ -24,11 +24,36 @@ class TestHandlers(unittest.TestCase):
         self.testbed.init_memcache_stub()
 
         # create 10 listings for one user
-        self.listings, users = create_dummy_listings_for_testing(Main, 10)
+        self.listings, users = create_dummy_listings_for_testing(Main, 20)
         assert len(users) == 1
-        assert len(self.listings) == 10
+        assert len(self.listings) == 20
         self.ownerId = users[0]['userId']
 
+
+        users = create_dummy_users_for_testing(1, Main)
+        assert len(users) == 1
+        self.userId = users[0]['userId']
+
+        # make the user like a few listings
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[0]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[1]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[2]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[3]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
+
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[4]['listingId'], "True"))
+        self.assertEqual(status, success)
+        self.assertEquals(res_value, None)
 
     def test_get_listings(self):
 
@@ -52,11 +77,12 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(len(res_value), 7)
 
         #######################################################################3
-        # test case 2: get listings with filter
+        # test case 2: get listings with filter and userid
 
         get_filter_listings = {
-            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address"]),
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
             "maxLimit": 8,
+            "userId": self.userId,
             "filter": json.dumps({
                 "price": {
                     "lower": 100,
@@ -70,14 +96,30 @@ class TestHandlers(unittest.TestCase):
                     "lower": 1.0,
                     "upper": 200
                 },
-                "province": "Saskatchewan",
-                "city": "Saskatoon"
+                "province": "Saskatchewan"
             })
         }
 
         res_value, status = get_listing_response(get_filter_listings)
-        # self.assertEqual(status, success)
-        # self.assertEquals(len(res_value), 7)
+        self.assertEqual(status, success)
+        for value in res_value:
+            assert len(value) == 4
+            assert int(value['price']) <= int(json.loads(get_filter_listings['filter'])['price']['upper'])
+            assert int(value['price']) >= int(json.loads(get_filter_listings['filter'])['price']['lower'])
+            assert int(value['bedrooms']) <= int(json.loads(get_filter_listings['filter'])['bedrooms']['upper'])
+            assert int(value['bedrooms']) >= int(json.loads(get_filter_listings['filter'])['bedrooms']['lower'])
+            assert float(value['bathrooms']) <= float(json.loads(get_filter_listings['filter'])['bathrooms']['upper'])
+            assert float(value['bathrooms']) >= float(json.loads(get_filter_listings['filter'])['bathrooms']['lower'])
+
+        #######################################################################3
+        # test case 3: unrecognized key in valuesRequired
+
+        get_filter_listings = {
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price", "what_the_heck"]),
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, success)
 
 
 
@@ -85,6 +127,18 @@ class TestHandlers(unittest.TestCase):
 
 
 
+def get_like_post_dictionary(userId, listingId, liked):
+    return {"userId": userId, "listingId":
+        listingId, "liked": liked}
+
+
+def get_like_response(POST):
+    request = webapp2.Request.blank('/like', POST=POST)
+    response = request.get_response(Main.app)
+    if response.body:
+        return json.loads(response.body), response.status_int
+    else:
+        return None, response.status_int
 
 
 def get_listing_response(POST):
