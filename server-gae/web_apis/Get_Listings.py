@@ -34,21 +34,21 @@ class GetListing(webapp2.RequestHandler):
 
         invalid = key_validation(values)
         if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
+            write_error_to_response(self.response, invalid, missing_invalid_parameter)
             return
 
         if "filter" in values:
             invalid.update(is_valid_filter(values["filter"]))
             if len(invalid) != 0:
-                write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
+                write_error_to_response(self.response, invalid, missing_invalid_parameter)
                 return
 
         if not is_valid_xor(values, "listingIdList", "filter"):
             invalid[invalid_xor_condition['error']] = "ListingIdList and filter can't show up together"
-            write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
+            write_error_to_response(self.response, invalid, missing_invalid_parameter)
             return
 
-        if "listingIdList" in values and not is_missing(values['listingIdList']):
+        if "listingIdList" in values and not is_empty(values['listingIdList']):
             listingId_list = json.loads(values["listingIdList"])
             listing_info_list = []
             for listingId in listingId_list:
@@ -73,7 +73,7 @@ class GetListing(webapp2.RequestHandler):
         price_min = DEFAULT_PRICE_MIN
         non_numeric_dict = {}
 
-        if "filter" in values and not is_missing(values["filter"]):
+        if "filter" in values and not is_empty(values["filter"]):
 
             filter = json.loads(values["filter"])
 
@@ -170,7 +170,7 @@ class GetListing(webapp2.RequestHandler):
         # now returned_listings contain all the listings that satisfy the filter conditions
         # we want to get listings that are not in favorites table (only if user signed in)
         # if user not sign in, we don't need to care about this favorite part
-        if "userId" in values and not is_missing(values["userId"]):
+        if "userId" in values and not is_empty(values["userId"]):
             userId = int(json.loads(values["userId"]))
             favorites = Favorite.query(Favorite.userId == userId).fetch()
             seen_listing_ids = []
@@ -197,7 +197,7 @@ class GetListing(webapp2.RequestHandler):
         # now we want max number of items that haven't been seen to return
         maxLimit = DEFAULT_MAX_LIMIT
 
-        if "maxLimit" in values and not is_missing(values["maxLimit"]):
+        if "maxLimit" in values and not is_empty(values["maxLimit"]):
             maxLimit = int(values["maxLimit"])
 
         if len(returned_listing_ids) >= maxLimit:
@@ -215,7 +215,7 @@ class GetListing(webapp2.RequestHandler):
 
 def create_returned_values_dict(listing_object, values_dict):
     listing_dict = {}
-    if "valuesRequired" in values_dict and not is_missing(values_dict['valuesRequired']):
+    if "valuesRequired" in values_dict and not is_empty(values_dict['valuesRequired']):
         # valuesRequired is not missing
         values_required = json.loads(values_dict["valuesRequired"])
         for key in values_required:
