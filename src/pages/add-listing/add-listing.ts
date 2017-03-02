@@ -41,7 +41,7 @@ export class AddListingPage {
     }
 
     loadListingInfo(listing: Listing): void{
-        assert.object(listing);
+        assert.object(listing, "listing should never be null");
 
         this.curListing = new Listing(
             listing.listingId,
@@ -96,22 +96,29 @@ export class AddListingPage {
         Camera.getPicture(options).then((data) => {
             this.images[this.images.length] = data;
         }, (error) => {
-            this._logger.log(error);
+            this._logger.error("An error occurred while selecting an image.");
+            this._logger.error(error);
         });
     }
 
     /**
      * Save the listing to the device and the server
      */
-    saveWithoutPublishing(){}
+    saveWithoutPublishing(){
+        this._logger.error("AddListingPage.saveWithoutPublishing is not implemented yet");
+    }
 
     /**
      * Set the listing to published
      */
-    saveAndPublish(){}
+    saveAndPublish(){
+        this._logger.error("AddListingPage.saveAndPublish is not implemented yet");
+    }
 
     /**
      * Set the listing to unpublished
      */
-    unpublish(){}
+    unpublish(){
+        this._logger.error("AddListingPage.unpublish is not implemented yet");
+    }
 }

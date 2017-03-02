@@ -72,6 +72,6 @@ export class FilterPage {
      * Close this modal and don't pass data back
      */
     cancel(): void{
-        this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss(null);
     }
 }

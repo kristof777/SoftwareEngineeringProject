@@ -14,10 +14,10 @@ let assert = require('assert-plus');
     templateUrl: 'my-profile.html'
 })
 export class MyProfilePage {
+    private provinces: Province[];
+
     profileGroup: FormGroup;
 
-    private provinces: Province[];
-    /** the user currently logged in to this device */
     currentUser: User;
 
     email: string;
@@ -40,6 +40,8 @@ export class MyProfilePage {
             this.loadUser();
         }
 
+        this.provinces = Province.asArray;
+
         this.profileGroup = this.formBuilder.group({
             email: [null, Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}")])],
             firstName: [null, Validators.compose([])],
@@ -53,7 +55,8 @@ export class MyProfilePage {
     }
 
     loadUser(): void{
-        this.provinces = Province.asArray;
+        assert.object(LoginService.user, "Tried to load a user but no user was logged in.");
+
         this.currentUser = LoginService.user;
     }
 
