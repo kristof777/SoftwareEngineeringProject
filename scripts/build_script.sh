@@ -20,7 +20,6 @@ ios_build(){
 }
 
 # Builds the browser version of our app 
-# TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
     ionic build
@@ -28,7 +27,7 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    sh ./test_script.sh
+    sh /test_script.sh
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests
   fi
