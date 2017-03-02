@@ -324,18 +324,17 @@ def is_valid_password(password):
 
 
 def is_valid_string_list(list):
+    if len(list) == 0:
+        return True
     list_object = json.loads(list)
     return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                                "province", "address", "description", "isPublished", "images",
                                "thumbnailImageIndex"] for key in list_object)
 
 
-
-
 def is_valid_integer_list(any_list):
     list_object = json.loads(any_list)
     return not any(not is_valid_integer(str(listing_id)) for listing_id in list_object)
-
 
 
 def is_valid_email(email):
@@ -350,6 +349,7 @@ def is_valid_email(email):
 def is_valid_province(province):
     return province.lower() in province_complete or province  in province_abbr
 
+
 def is_valid_xor(dictionary, key1, key2):
     if key1 in dictionary and key2 in dictionary:
         return is_missing(dictionary[key1]) or is_missing(dictionary[key2])
@@ -359,18 +359,6 @@ def is_valid_xor(dictionary, key1, key2):
 
 def is_missing(var):
     return var in ["", u'', '', None, [], {}] or str(var).isspace()
-
-
-# def is_valid_filter(filter):
-#     if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-#                        "province", "address", "description", "isPublished", "images",
-#                        "thumbnailImageIndex"] for key in filter):
-#         return False
-#     for key in filter:
-#         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
-#             if any(bound not in ["lower", "upper"] for bound in key):
-#                 return False
-
 
 
 def test_keys_validation():

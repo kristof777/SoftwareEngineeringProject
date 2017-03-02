@@ -31,8 +31,7 @@ class GetListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         errors, values = keys_missing({}, self.request.POST)
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
+
         invalid = key_validation(values)
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
@@ -48,11 +47,6 @@ class GetListing(webapp2.RequestHandler):
             invalid[invalid_xor_condition['error']] = "ListingIdList and filter can't show up together"
             write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
             return
-
-        # Set default values
-        # if max-limit = 100
-        # if valuesRequired is not present = ["listingId"]
-        #
 
         if "listingIdList" in values and not is_missing(values['listingIdList']):
             listingId_list = json.loads(values["listingIdList"])
@@ -77,12 +71,11 @@ class GetListing(webapp2.RequestHandler):
         sqft_min = DEFAULT_SQFT_MIN
         price_max = DEFAULT_PRICE_MAX
         price_min = DEFAULT_PRICE_MIN
+        non_numeric_dict = {}
 
         if "filter" in values and not is_missing(values["filter"]):
 
             filter = json.loads(values["filter"])
-
-            non_numeric_dict = {}
 
             for key in filter:
                 if key in ["bedrooms", "sqft", "price", "bathrooms"]:
@@ -121,7 +114,8 @@ class GetListing(webapp2.RequestHandler):
 
 
         # all numeric queries
-        # google datastore doesn't allow more than two inequality conditions in one query
+        # google datastore doesn't allow more than two inequality conditions in one query, so creating multiple
+        # queries is the best option
 
         bedroom_query = Listing.query().filter(Listing.bedrooms >= bedrooms_min, Listing.bedrooms <= bedrooms_max)
         bedrooms_keys = bedroom_query.fetch(keys_only=True)
@@ -139,6 +133,7 @@ class GetListing(webapp2.RequestHandler):
         bathrooms_keys = bathrooms_query.fetch(keys_only=True)
         bathrooms_keys_len = len(bathrooms_keys)
 
+        # Get the common set of these two key(listingId) sets
         valid_bd_sqft_keys = list(set(bedrooms_keys) & set(sqft_keys))
         assert len(valid_bd_sqft_keys) == min(bedrooms_keys_len, sqft_keys_len)
         bd_sqft_keys_len = len(valid_bd_sqft_keys)
@@ -163,7 +158,6 @@ class GetListing(webapp2.RequestHandler):
                     break
             if matched:
                 returned_listing_ids.append(listing.listingId)
-
 
         # so returned_listings contains all the listings that fits the filter..omg
 
@@ -235,23 +229,22 @@ def get_listing_ids(listings):
 
 
 def is_valid_filter(filter):
+    if len(filter) == 0:
+        return {}
 
     filter = json.loads(filter)
-    # invalid = {}
-    # if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-    #                    "province", "address", "description", "isPublished", "images",
-    #                    "thumbnailImageIndex"] for key in filter_object):
-    #     return unrecognized_key['error']
+    invalid = {}
 
     for key in filter:
         if key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"]:
-            return unrecognized_key['error']
+            invalid[unrecognized_key['error']] = "Unrecognized key " + key
+            break
         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
             if any(bound not in ["lower", "upper"] for bound in filter[key]):
-                return invalid_filter_bound['error']
-            invalid = {}
+                invalid[invalid_filter_bound['error']] = str(key) + " upper/lower bound invalid"
+                break
             if key == "bathrooms":
                 if "lower" in filter[key]:
                     if not is_valid_float(filter[key]["lower"]):

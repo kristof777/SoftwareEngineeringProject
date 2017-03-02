@@ -29,7 +29,6 @@ class TestHandlers(unittest.TestCase):
         assert len(self.listings) == 20
         self.ownerId = users[0]['userId']
 
-
         users = create_dummy_users_for_testing(1, Main)
         assert len(users) == 1
         self.userId = users[0]['userId']
@@ -56,9 +55,108 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(res_value, None)
 
     def test_get_listings(self):
+        #######################################################################3
+        # test case 1: empty input, only return listingIds
+
+        get_filter_listings = {}
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), len(self.listings))
+        for value in res_value:
+            self.assertTrue("listingId" in value)
+        #######################################################################3
+        # test case 2: empty filer and valuesRequired, only return listingIds
+
+        get_filter_listings = {
+            "valuesRequired": "",
+            "filter": ""
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), len(self.listings))
+        for value in res_value:
+            self.assertTrue("listingId" in value)
+        #######################################################################3
+        # test case 3: unrecognized key in filter
+
+        get_filter_listings = {
+            "valuesRequired":"",
+            "userId": "",
+            "filter": ""
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, missing_invalid_parameter_error)
+        error_expected = invalid_user_id['error']
+
+        self.assertTrue(error_expected in res_value)
 
         #######################################################################3
-        # test case 1: get get listings with listingIdList
+        # test case 4: unrecognized key in filter
+
+        get_filter_listings = {
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
+            "maxLimit": 8,
+            "userId": self.userId,
+            "filter": json.dumps({
+                "price": {
+                    "lower": 100,
+                    "upper": 8000000,
+                    "what": "is_this"
+                },
+                "bedrooms": {
+                    "lower": 1,
+                    "upper": 1000
+                },
+                "bathrooms": {
+                    "lower": 1.0,
+                    "upper": 200
+                },
+                "province": "Saskatchewan"
+            })
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, missing_invalid_parameter_error)
+        error_expected = invalid_filter_bound['error']
+
+        self.assertTrue(error_expected in res_value)
+
+        #######################################################################3
+        # test case 5: unrecognized key in filter
+
+        get_filter_listings = {
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
+            "maxLimit": 8,
+            "userId": self.userId,
+            "filter": json.dumps({
+                "price": {
+                    "lower": 100,
+                    "upper": 8000000
+                },
+                "bedrooms": {
+                    "lower": 1,
+                    "upper": 1000
+                },
+                "bathrooms": {
+                    "lower": 1.0,
+                    "upper": 200
+                },
+                "province": "Saskatchewan",
+                "what_the_heck": "is_this"
+            })
+        }
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, missing_invalid_parameter_error)
+        error_expected = unrecognized_key['error']
+
+        self.assertTrue(error_expected in res_value)
+
+        #######################################################################3
+        # test case 6: get get listings with listingIdList
 
         get_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address"]),
@@ -77,7 +175,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(len(res_value), 7)
 
         #######################################################################3
-        # test case 2: get listings with filter and userid
+        # test case 7: get listings with filter and userid
 
         get_filter_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
@@ -112,19 +210,17 @@ class TestHandlers(unittest.TestCase):
             assert float(value['bathrooms']) >= float(json.loads(get_filter_listings['filter'])['bathrooms']['lower'])
 
         #######################################################################3
-        # test case 3: unrecognized key in valuesRequired
+        # test case 8: invalid key in valuesRequired
 
         get_filter_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price", "what_the_heck"]),
         }
 
         res_value, status = get_listing_response(get_filter_listings)
-        self.assertEqual(status, success)
+        self.assertEqual(status, missing_invalid_parameter_error)
+        error_expected = invalid_values_required['error']
 
-
-
-
-
+        self.assertTrue(error_expected in res_value)
 
 
 def get_like_post_dictionary(userId, listingId, liked):
