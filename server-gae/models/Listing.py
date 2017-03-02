@@ -27,7 +27,7 @@ class Listing(ndb.Model):
         self.bathrooms = float(bathrooms)
 
     def set_price(self, price):
-        self.set_price(int(price))
+        self.price = int(price)
 
     def set_description(self, description):
         self.description = description
@@ -54,7 +54,7 @@ class Listing(ndb.Model):
         self.listingId = listing_id
 
     def set_sqft(self, sqft):
-        self.sqft = float(sqft)
+        self.sqft = int(sqft)
 
 
 
@@ -71,17 +71,17 @@ class Listing(ndb.Model):
             "address": self.set_address,
             "thumbnailImageIndex": self.set_thumbnail_index,
             "images": self.set_images,
-            "listingId": self.set_listing_id
+            "listingId": self.set_listing_id,
+            "city": self.set_city
         }
         _key_to_set[key](value)
-
-
 
 
 
     def get_value_from_key(self, key):
         _key_to_get_value = {
             "price": self.price,
+            "city": self.city,
             "sqft": self.sqft,
             "bathrooms": self.bathrooms,
             "bedrooms": self.bedrooms,
@@ -95,5 +95,32 @@ class Listing(ndb.Model):
             "listingId": self.listingId
         }
         return _key_to_get_value[key]
+
+    @classmethod
+    def get_key(cls, key):
+        if key == 'bedrooms':
+            return cls.bedrooms
+        if key == 'sqft':
+            return cls.sqft
+        if key == 'bathrooms':
+            return cls.bathrooms
+        if key == 'price':
+            return cls.price
+        if key == 'description':
+            return cls.description
+        if key == 'isPublished':
+           return cls.isPublished
+        if key == 'province':
+            return cls.province
+        if key == 'city':
+            return cls.city
+        if key == 'images':
+            return cls.images
+        if key == 'thumbnailImageIndex':
+            return cls.thumbnailImageIndex
+        if key == 'address':
+            return cls.address
+        if key == 'listingId':
+           return cls.listingId
 
 

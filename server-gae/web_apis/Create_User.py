@@ -41,9 +41,7 @@ class CreateUser(BaseHandler):
             return
 
         phone2 = self.request.POST.get('phone2')
-        print(phone2 + "is a phone number")
         if not is_empty(phone2):
-            print(str(phone2) + " is not empty")
             values['phone2'] = phone2
 
         last_name = self.request.POST.get('lastName')

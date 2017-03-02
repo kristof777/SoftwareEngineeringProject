@@ -143,7 +143,6 @@ class TestHandlers(unittest.TestCase):
 
 
         input7 = create_random_user()
-        print("phone2" + input7["phone2"])
         request = webapp2.Request.blank('/createUser', POST=input7)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)

@@ -25,10 +25,12 @@ class EditUser(BaseHandler):
         error_keys = ['changeValues', 'userId', 'authToken']
         errors, values = keys_missing(error_keys, self.request.POST)
 
+
         if len(errors) != 0:
             write_error_to_response(self.response,
                                     errors, missing_invalid_parameter)
             return
+
 
         change_values = json.loads(values['changeValues'])
         if len(change_values) == 0:

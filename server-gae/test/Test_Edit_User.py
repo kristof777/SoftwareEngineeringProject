@@ -44,7 +44,7 @@ class TestHandlers(unittest.TestCase):
         res_value, status = get_response(get_post_dictionary(user_id, token,
                                                              change_values))
 
-        self.assertEqual(status, missing_invalid_parameter)
+        self.assertEqual(status, nothing_requested_to_change["status"])
         self.assertTrue(nothing_requested_to_change["error"] in res_value)
 
         #  Test case 3: unrecognized key
