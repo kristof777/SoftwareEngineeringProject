@@ -29,7 +29,7 @@ export class ListingProvider {
      */
     addListing(newListing: Listing){
         // TODO add the listing to the device
-        this.kasperService.createListings(newListing, this.addListingCallback);
+        this.kasperService.createListings(newListing);
     }
 
     addListingCallback(data: any){}
@@ -60,7 +60,7 @@ export class ListingProvider {
      */
     dislike(listingID : number){
         this._logger.error("ListingProvider.dislike is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, false, this.likeDislikeCallback);
+        this.kasperService.likeDislikeListing(listingID, false);
     }
 
     likeDislikeCallback(){}
@@ -72,7 +72,7 @@ export class ListingProvider {
      */
     addToFavourites(listingID : number){
         this._logger.error("ListingProvider.addToFavourites is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, true, this.likeDislikeCallback);
+        this.kasperService.likeDislikeListing(listingID, true);
     }
 
     /**

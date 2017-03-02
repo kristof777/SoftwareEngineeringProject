@@ -2,9 +2,11 @@ import {Component, ViewChild} from "@angular/core";
 import {Logger} from "angular2-logger/core";
 import {NavController, ToastController, Slides, Platform} from "ionic-angular";
 import {KasperService} from "../../app/providers/kasper-service";
-import {MainPage} from "../main/main";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {MyProfilePage} from "../my-profile/my-profile";
+import {Province} from "../../app/models/province";
+import {Location} from "../../app/models/location";
+import {User} from "../../app/models/user";
 let assert = require('assert-plus');
 
 @Component({
@@ -46,7 +48,6 @@ export class SignUpPage {
         this.signUpStep2 = formBuilder.group({
             firstName: [null, Validators.compose([Validators.required])],
             lastName: ['', Validators.compose([])],
-            // TODO validate phoneNumber
             phoneNumber: ['', Validators.compose([kasperService.checkPhone])],
         });
 
@@ -63,21 +64,33 @@ export class SignUpPage {
     }
 
     doRegister(): void{
-        this.kasperService.signUp(this.signUpStep1.value.email,
+        let result = this.kasperService.signUp(this.signUpStep1.value.email,
                                 this.signUpStep1.value.password,
                                 this.signUpStep1.value.confirmPassword,
                                 this.signUpStep2.value.firstName,
                                 this.signUpStep2.value.lastName,
-                                this.signUpStep3.value.phoneNumber,
+                                this.signUpStep2.value.phoneNumber,
                                 "", // phone2
                                 this.signUpStep3.value.city,
-                                this.signUpStep3.value.province,
-                                this.registerCallback);
+                                this.signUpStep3.value.province);
+
+        let user: User = new User(-1, this.signUpStep1.value.email, this.signUpStep2.value.firstName,
+            this.signUpStep2.value.lastName, this.signUpStep2.value.phoneNumber, "",
+            new Location(Province.fromAbbr(this.signUpStep3.value.province),
+            this.signUpStep3.value.city, "", "", 0.0, 0.0));
+
+        this.registerCallback(result, user);
     }
 
-    registerCallback(data: JSON){
-        // TODO Attempt to register and act accordingly
-        this.navCtrl.setRoot(MyProfilePage);
+    registerCallback(data: any, user: User){
+        data.subscribe(data => {
+            user.id = data.userId;
+            this.kasperService.loginService.setUser(user);
+            this.kasperService.loginService.setToken(data.token);
+            this.navCtrl.setRoot(MyProfilePage);
+        }, error => {
+
+        });
     }
 
     /**

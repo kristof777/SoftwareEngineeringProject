@@ -47,49 +47,4 @@ export class MyApp {
                 this._logger.error(error);
             });
     }
-
-    /**
-     * Creates the table containing the listings and another containing the images for the listings
-     *
-     * @param db  an open SQLite connection
-     */
-    private createListingTables(db: SQLite): void {
-        db.executeSql(
-            "CREATE TABLE IF NOT EXISTS listings ( " +
-            "listingId    INT PRIMARY KEY, " +
-            "listerId     INT, " +
-            "bedrooms     INT, " +
-            "bathrooms    INT, " +
-            "squarefeet   INT, " +
-            "price        INT, " +
-            "description  TEXT, " +
-            "isPublished  BOOLEAN, " +
-            "createdDate  DATE, " +
-            "modifiedDate DATE, " +
-            // Location data
-            "province     TEXT, " +
-            "city         TEXT, " +
-            "address      TEXT, " +
-            "postalCode   TEXT, " +
-            "longitude    REAL, " +
-            "latitude     REAL);", {})
-            .then(() => {
-            // Don't do anything if it's created successfully or already exists.
-        }, (error) => {
-            this._logger.error("Could not create listings table: ");
-            this._logger.error(error);
-        });
-
-        db.executeSql(
-            "CREATE TABLE IF NOT EXISTS listing_images ( " +
-            "listingId INT PRIMARY KEY, " +
-            "sortOrder INT, " +
-            "data      TEXT);", {})
-            .then(() => {
-                // Don't do anything if it's created successfully or already exists.
-            }, (error) => {
-                this._logger.error("Could not create listings_images table: ");
-                this._logger.error(error);
-        });
-    }
 }
