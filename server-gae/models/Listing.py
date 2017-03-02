@@ -77,11 +77,10 @@ class Listing(ndb.Model):
 
 
 
-
-
     def get_value_from_key(self, key):
         _key_to_get_value = {
             "price": self.price,
+            "city": self.city,
             "sqft": self.sqft,
             "bathrooms": self.bathrooms,
             "bedrooms": self.bedrooms,
@@ -95,5 +94,32 @@ class Listing(ndb.Model):
             "listingId": self.listingId
         }
         return _key_to_get_value[key]
+
+    @classmethod
+    def get_key(cls, key):
+        if key == 'bedrooms':
+            return cls.bedrooms
+        if key == 'sqft':
+            return cls.sqft
+        if key == 'bathrooms':
+            return cls.bathrooms
+        if key == 'price':
+            return cls.price
+        if key == 'description':
+            return cls.description
+        if key == 'isPublished':
+           return cls.isPublished
+        if key == 'province':
+            return cls.province
+        if key == 'city':
+            return cls.city
+        if key == 'images':
+            return cls.images
+        if key == 'thumbnailImageIndex':
+            return cls.thumbnailImageIndex
+        if key == 'address':
+            return cls.address
+        if key == 'listingId':
+           return cls.listingId
 
 
