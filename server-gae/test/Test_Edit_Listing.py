@@ -1,16 +1,14 @@
 from __future__ import absolute_import
-import json
-import os
-import sys
-sys.path.append("../")
-import unittest
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import extras.Error_Code as Error_Code
 import Main
-import webapp2
 from google.appengine.ext import testbed
 from models.Listing import Listing
 from web_apis.Create_User import *
+import os
+import sys
+import unittest
+sys.path.append("../")
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
@@ -182,9 +180,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_changed.address, change_values['address'])
         self.assertEquals(listing_changed.thumbnailImageIndex, int(change_values['thumbnailImageIndex']))
 
-
-
-
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
         # completed. If the testbed is not deactivated, the original
@@ -201,6 +196,7 @@ def get_response(POST):
     request = webapp2.Request.blank('/editListing', POST=POST)
     response = request.get_response(Main.app)
     return json.loads(response.body), response.status_int
+
 
 def run_tests():
     unittest.main()

@@ -1,13 +1,18 @@
 import sys
-
 from extras.utils import *
 from models.Listing import Listing
 from models.User import User
-
 sys.path.append("../")
 
 
 class GetMyListing(webapp2.RequestHandler):
+    """
+    Class used to handle get and post.
+    Get:  do nothing
+    Post:
+        @pre-cond: Expecting keys to be userId
+        @post-cond: all my listings
+    """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -23,18 +28,16 @@ class GetMyListing(webapp2.RequestHandler):
         error_keys = ['userId']
 
         # check if there's any missing field, if so, just return to the user what all is missing
-        # if not, then go ahead and check validity
-
         errors, values = keys_missing(error_keys, self.request.POST)
 
         # If there exists error then return the response, and stop the function
+        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
+        # check validity for integer fields (userId)
         invalid = key_validation(values)
 
         if len(invalid) != 0:
@@ -51,9 +54,9 @@ class GetMyListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, not_authorized)
             return
 
-        ownerId = int(values['userId'])
+        owner_id = int(values['userId'])
 
-        my_listings = Listing.query(Listing.userId == ownerId).fetch()
+        my_listings = Listing.query(Listing.userId == owner_id).fetch()
         returned_array = []
 
         for listing in my_listings:

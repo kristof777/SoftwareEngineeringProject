@@ -1,19 +1,23 @@
-import sys
-
-sys.path.append("../")
+from extras.utils import *
+import datetime
 from models.Listing import Listing
 from models.User import User
 import sys
-
-sys.path.append("../")
 import os
-
+sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import *
-import datetime
 
 
 class EditListing(webapp2.RequestHandler):
+    """
+    Class used to handle get and post.
+    Get:  is used to render an HTML page.
+    Post:
+        @pre-cond: the listing object should exist
+                   listingId and userId are supposed to be integers,
+                   valuesRequired should be a dictionary
+        @post-cond: a timestamp of modified date should be returned
+    """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -27,26 +31,30 @@ class EditListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
+        # check if there's any missing field, if so, just return to the user what all is missing
         error_keys = ['changeValues', 'userId', 'listingId']
         errors, values = keys_missing(error_keys, self.request.POST)
 
+        # If there exists error then return the response, and stop the function
         if len(errors) != 0:
             write_error_to_response(self.response,
                                     errors, missing_invalid_parameter)
             return
 
-        change_values = json.loads(values['changeValues'])
-        if len(change_values) == 0:
+        # check if "changeValues" is empty
+        if len(values['changeValues']) == 0:
             write_error_to_response(self.response,
                                     {nothing_requested_to_change['error']:
                                          "Nothing requested to change"},
                                     nothing_requested_to_change['status'])
             return
 
+        change_values = json.loads(values['changeValues'])
+
+        # check if there's any unrecognized key presented in changeValues
         if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                            "province", "address", "description", "isPublished",
-                           "images",
-                           "thumbnailImageIndex"] for key in
+                           "images","thumbnailImageIndex"] for key in
                change_values.keys()):
             write_error_to_response(self.response, {unrecognized_key['error']:
                                                         "Unrecognized key found"},
@@ -65,6 +73,7 @@ class EditListing(webapp2.RequestHandler):
         #     "userId": "",
         #     "listingId": ""
         # }
+        # we need to go through each field in the dictionary
         change_error_keys = []
         for change_key in change_values:
             change_error_keys.append(change_key)
@@ -77,7 +86,6 @@ class EditListing(webapp2.RequestHandler):
             return
 
         # check invalidity
-
         invalid = key_validation(values)  # the whole dictionary
         invalid.update(
             key_validation(change_values))  # the change_values dictionary
@@ -103,11 +111,11 @@ class EditListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, unauthorized_access)
             return
 
-        userId = int(values['userId'])
+        user_id = int(values['userId'])
 
         # make sure that the userId is the owner id of the listing
-        listingOwnerId = listing.userId
-        if listingOwnerId != userId:
+        listing_owner_id = listing.userId
+        if listing_owner_id != user_id:
             error = {
                 not_authorized[
                     'error']: "Provided user ID doesn't match the owner id of the listing"
