@@ -89,7 +89,7 @@ export class SignUpPage {
             this.navCtrl.setRoot(MyProfilePage);
         }, error => {
             this._logger.error("There was an error registering: ");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 

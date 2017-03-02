@@ -32,7 +32,7 @@ export class LoginService {
                     this.loadSessionInfo();
                 }, error => {
                     this._logger.error("Could not access database: ");
-                    this._logger.error(error);
+                    this._logger.error(JSON.stringify(error));
                 });
         });
     }
@@ -96,7 +96,7 @@ export class LoginService {
             this._logger.debug("New session token was saved successfully.");
         }, error => {
             this._logger.error("Could not insert new session token: ");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 
@@ -117,7 +117,7 @@ export class LoginService {
             }
         }, error => {
             this._logger.error("Error selecting session from SQLite database: ");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 

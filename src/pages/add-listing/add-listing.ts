@@ -97,7 +97,7 @@ export class AddListingPage {
             this.images[this.images.length] = data;
         }, (error) => {
             this._logger.error("An error occurred while selecting an image.");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 

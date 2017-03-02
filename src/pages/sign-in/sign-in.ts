@@ -85,7 +85,8 @@ export class SignInPage {
             this.kasperService.loginService.setToken(data.token);
             this.navCtrl.setRoot(MyProfilePage);
             }, error => {
-                this._logger.error(error);
+                this._logger.error("Error ")
+                this._logger.error(JSON.stringify(error));
             });
     }
 
