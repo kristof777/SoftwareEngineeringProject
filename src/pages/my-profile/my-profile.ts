@@ -1,15 +1,13 @@
 import {User} from "../../app/models/user";
-let assert = require('assert-plus');
 import {ChangePasswordPage} from "../change-password/change-password";
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
-import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
-
-import {NavController, ModalController, Platform} from 'ionic-angular';
+import {NavController, ModalController, Platform} from "ionic-angular";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {LoginService} from "../../app/providers/login-service";
 import {SignInPage} from "../sign-in/sign-in";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-my-profile',

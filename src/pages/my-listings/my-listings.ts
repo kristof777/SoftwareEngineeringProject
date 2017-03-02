@@ -1,12 +1,12 @@
 import {LoginService} from "../../app/providers/login-service";
-let assert = require('assert-plus');
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Component} from '@angular/core';
-import {NavController, ModalController} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component} from "@angular/core";
+import {NavController, ModalController} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
-import {DetailPage} from "../detail/detail"
-import {AddListingPage} from "../add-listing/add-listing"
+import {DetailPage} from "../detail/detail";
+import {AddListingPage} from "../add-listing/add-listing";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-my-listings',

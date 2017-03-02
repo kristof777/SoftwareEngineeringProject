@@ -1,8 +1,7 @@
 let assert = require('assert-plus');
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
-
-import {NavController} from 'ionic-angular';
+import {NavController} from "ionic-angular";
 
 @Component({
     selector: 'page-contact',

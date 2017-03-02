@@ -1,5 +1,5 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Component, ViewChild} from "@angular/core";
+import {Component} from "@angular/core";
 import {NavController, ModalController, ItemSliding, ToastController} from "ionic-angular";
 import {Logger} from "angular2-logger/core";
 import {Listing} from "../../app/models/listing";
@@ -24,6 +24,12 @@ export class BrowsePage {
         this.listings = listingProvider.data;
     }
 
+    /**
+     * Called when the user drags a listing
+     *
+     * @param event the drag event
+     * @param index the index of the listing being dragged
+     */
     onDrag(event: ItemSliding, index: number){
         if(event.getOpenAmount() < -100){
             this.likeListing(index);
@@ -32,6 +38,11 @@ export class BrowsePage {
         }
     }
 
+    /**
+     * Send request to dislike a listing
+     *
+     * @param index the index of the listing
+     */
     dislikeListing(index: number): void{
         this._logger.log("Disliking slide at index " + index);
 
@@ -44,6 +55,11 @@ export class BrowsePage {
         delete this.listings[index];
     }
 
+    /**
+     * Send request to like a listing
+     *
+     * @param index the index of the listing
+     */
     likeListing(index: number): void{
         this._logger.log("Liking slide at index " + index);
 
@@ -70,6 +86,10 @@ export class BrowsePage {
         filterModal.present();
     }
 
+    /**
+     * Open the detailed page of a listing
+     * @param index the index of the listing
+     */
     goToDetails(index): void{
         this.navCtrl.push(DetailPage, {data: this.listings, cursor: index});
     }
