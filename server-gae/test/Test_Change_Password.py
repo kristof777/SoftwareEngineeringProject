@@ -38,7 +38,6 @@ class TestHandlerChangePassword(unittest.TestCase):
         user = json.loads(response.body)
         self.assertTrue("userId" in user)
         user_id = user['userId']
-        print user_id
 
         # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
@@ -55,7 +54,6 @@ class TestHandlerChangePassword(unittest.TestCase):
                            missing_confirmed_password['error'],
                            missing_user_id['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
-        print set(errors_expected).difference(set(error_keys))
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
