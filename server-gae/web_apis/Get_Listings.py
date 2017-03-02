@@ -103,14 +103,8 @@ class GetListing(webapp2.RequestHandler):
                 else: # not numeric key
                     if key == "province":
                         non_numeric_dict.update({"province": scale_province(filter[key])})
-                    elif key == "city":
-                        non_numeric_dict.update({"city": filter[key]})
-                    elif key == "address":
-                        non_numeric_dict.update({"address": filter[key]})
-                    elif key == "isPublished":
-                        non_numeric_dict.update({"isPublished": filter[key]})
-                    elif key == "description":
-                        non_numeric_dict.update({"description": filter[key]})
+                    else:
+                        non_numeric_dict.update({key: filter[key]})
 
 
         # all numeric queries
