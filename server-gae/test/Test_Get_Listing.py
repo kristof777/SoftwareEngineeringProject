@@ -90,6 +90,7 @@ class TestHandlers(unittest.TestCase):
 def get_listing_response(POST):
     request = webapp2.Request.blank('/getListings', POST=POST)
     response = request.get_response(Main.app)
+    print(response.body)
     if response.body:
         return json.loads(response.body), response.status_int
     else:

@@ -34,7 +34,7 @@ class TestHandlers(unittest.TestCase):
         self.listingId = listing['listingId']
 
         # now create a new user as an editor
-        users = create_dummy_users_for_testing(1, Main)
+        users = create_dummy_users_for_testing(Main, 1)
         assert len(users) == 1
         editors = users[0]
         self.editorId = editors['userId']
@@ -46,7 +46,7 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_response(get_post_dictionary("", "", {}))
 
-        self.assertEqual(status, missing_invalid_parameter_error)
+        self.assertEqual(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.missing_user_id['error'],
                            Error_Code.missing_listing_id['error']]
@@ -65,7 +65,7 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
 
-        self.assertEqual(status, missing_invalid_parameter_error)
+        self.assertEqual(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.missing_province['error'],
                            Error_Code.missing_city['error'],
@@ -108,7 +108,7 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_response(get_post_dictionary("blabla", "blabla", change_values))
 
-        self.assertEquals(status, missing_invalid_parameter_error)
+        self.assertEquals(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error'],
                            Error_Code.invalid_listing_id['error']]
@@ -144,7 +144,7 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
 
-        self.assertEquals(status, missing_invalid_parameter_error)
+        self.assertEquals(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_bedrooms['error'],
                            Error_Code.invalid_sqft['error'],

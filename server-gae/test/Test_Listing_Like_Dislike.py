@@ -29,7 +29,7 @@ class TestHandlers(unittest.TestCase):
         self.listingId = listing['listingId']
 
         # now create a new user as a liker
-        users = create_dummy_users_for_testing(1, Main)
+        users = create_dummy_users_for_testing(Main, 1)
         assert len(users) == 1
         liker = users[0]
         self.likerId = liker['userId']

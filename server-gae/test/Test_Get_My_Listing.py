@@ -55,7 +55,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/getMyListing', POST=invalid_my_listings)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter_error)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 

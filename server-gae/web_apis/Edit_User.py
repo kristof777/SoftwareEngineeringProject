@@ -1,11 +1,12 @@
 import sys
+
 sys.path.append("../")
 import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
 from extras.utils import *
 from models.User import User
-
 
 
 class EditUser(BaseHandler):
@@ -14,6 +15,7 @@ class EditUser(BaseHandler):
     Get:  is used to render an HTML page.
     Post:
     """
+
     def get(self):
         self.render_template('../webpages/Edit_User.html')
 
@@ -25,34 +27,37 @@ class EditUser(BaseHandler):
 
         if len(errors) != 0:
             write_error_to_response(self.response,
-                                    errors, missing_invalid_parameter_error)
+                                    errors, missing_invalid_parameter)
             return
 
         change_values = json.loads(values['changeValues'])
         if len(change_values) == 0:
-
-            write_error_to_response(self.response, {nothing_requested_to_change['error']:
-                                            "Nothing requested to change"},
+            write_error_to_response(self.response,
+                                    {nothing_requested_to_change['error']:
+                                         "Nothing requested to change"},
                                     nothing_requested_to_change['status'])
             return
-        valid_user = self.user_model.validate_token(int(values["userId"]),"auth",
-                                        values["authToken"])
+        valid_user = self.user_model.validate_token(int(values["userId"]),
+                                                    "auth",
+                                                    values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
-                                    "not authorized to chnage user"},
+                                                        "not authorized to chnage user"},
                                     not_authorized['status'])
             return
 
         if "password" in change_values.keys():
-            write_error_to_response(self.response, {password_cant_be_changed['error']:
-                                "Please don't change password using edit user"},
+            write_error_to_response(self.response,
+                                    {password_cant_be_changed['error']:
+                                         "Please don't change password using edit user"},
                                     password_cant_be_changed['status'])
             return
 
         if any(key not in ["phone1", "phone2", "email", "province", "city",
-                "firstName", "lastName"] for key in change_values.keys()):
+                           "firstName", "lastName"] for key in
+               change_values.keys()):
             write_error_to_response(self.response, {unrecognized_key['error']:
-                                    "Unrecognized key found"},
+                                                        "Unrecognized key found"},
                                     unrecognized_key['status'])
             return
 
@@ -60,7 +65,7 @@ class EditUser(BaseHandler):
 
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter_error)
+                                    missing_invalid_parameter)
             return
 
         user = User.get_by_id(int(values["userId"]))
@@ -68,20 +73,3 @@ class EditUser(BaseHandler):
             user.set_property(key, change_values[key])
         user.put()
         write_success_to_response(self.response, {})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

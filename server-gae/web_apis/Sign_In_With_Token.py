@@ -1,12 +1,9 @@
 import logging
-import json
-import sys
 
 from extras.utils import *
 from models.User import *
-
+import sys
 sys.path.append("../")
-from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.Base_Handler import BaseHandler
 from extras.Error_Code import *
 
@@ -38,31 +35,31 @@ class SignInWithToken(BaseHandler):
             message[missing_user_id['error']] = "Missing user id"
         if len(message.keys()) != 0:
             write_error_to_response(self.response, message,
-                         missing_invalid_parameter_error)
+                                    missing_invalid_parameter)
             return
 
         assert token is not None
-        #Todo This is all wrong.userId is supposed to be given, and not email.
+        # Todo This is all wrong.userId is supposed to be given, and not email.
         user = (User.get_by_auth_token(int(user_id), token, subject='auth'))[0]
 
         if user is None:
             write_error_to_response(self.response, not_authorized["error"],
-                                        not_authorized['status'])
+                                    not_authorized['status'])
             logging.info(
                 'Sign-in-with-token failed for user %s because of %s',
                 user_id)
             return
-        self.user_model.delete_auth_token(user_id,token)
+        self.user_model.delete_auth_token(user_id, token)
         token = self.user_model.create_auth_token(user_id)
         user_dict = {'token': token,
-                    'userId': user.get_id(),
-                    'email': user.email,
-                    'firstName': user.first_name,
-                    'lastName': user.last_name,
-                    'phone1': user.phone1,
-                    'phone2': user.phone2,
-                    'city': user.city,
-                    'province': user.province }
+                     'userId': user.get_id(),
+                     'email': user.email,
+                     'firstName': user.first_name,
+                     'lastName': user.last_name,
+                     'phone1': user.phone1,
+                     'phone2': user.phone2,
+                     'city': user.city,
+                     'province': user.province}
         self.response.out.write(json.dumps(user_dict))
         self.response.set_status(success)
 

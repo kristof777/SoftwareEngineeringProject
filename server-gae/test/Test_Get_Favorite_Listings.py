@@ -25,7 +25,7 @@ class TestHandlers(unittest.TestCase):
         assert len(listings) == 10
 
         # now create a new user as a liker, we'll use this person to send GetFavourites request
-        users = create_dummy_users_for_testing(1, Main)
+        users = create_dummy_users_for_testing(Main, 1)
         assert len(users) == 1
         liker = users[0]
         self.likerId = liker['userId']
@@ -87,7 +87,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/GetFavourites', POST=invalidFavs)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter_error)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 

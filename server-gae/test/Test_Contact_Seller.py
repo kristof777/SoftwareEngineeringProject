@@ -16,10 +16,10 @@ from web_apis.Create_User import *
 class TestHandlers(unittest.TestCase):
     def setUp(self):
         self.testbed = testbed.Testbed()
-        self.testbed.activate() 
+        self.testbed.activate()
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
-        self.user_buyer = create_dummy_users_for_testing(1, Main)
+        self.user_buyer = create_dummy_users_for_testing(Main, 1)
         self.user_seller, self.listing = create_dummy_listings_for_testing(Main,
                                                                            1)
 

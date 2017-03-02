@@ -1,8 +1,10 @@
+import sys
+
+from extras.utils import *
+from models.Favorite import Favorite
 from models.Listing import Listing
 from models.User import User
-from models.Favorite import Favorite
-from extras.utils import *
-import sys
+
 sys.path.append("../")
 
 
@@ -11,7 +13,8 @@ class GetFavourites(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
             'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        self.response.headers[
+            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
         self.response.out.write()
@@ -27,7 +30,8 @@ class GetFavourites(webapp2.RequestHandler):
 
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            write_error_to_response(self.response, errors, missing_invalid_parameter_error)
+            write_error_to_response(self.response, errors,
+                                    missing_invalid_parameter)
             return
 
         # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
@@ -35,7 +39,8 @@ class GetFavourites(webapp2.RequestHandler):
         invalid = key_validation(values)
 
         if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
+            write_error_to_response(self.response, invalid,
+                                    missing_invalid_parameter)
             return
 
         # find the correct user with userId
@@ -47,7 +52,8 @@ class GetFavourites(webapp2.RequestHandler):
             write_error_to_response(self.response, error, not_authorized)
             return
 
-        favorites = Favorite.query(Favorite.userId == int(values['userId']), Favorite.liked == True).fetch()
+        favorites = Favorite.query(Favorite.userId == int(values['userId']),
+                                   Favorite.liked == True).fetch()
 
         returned_array = []
         for favorite in favorites:

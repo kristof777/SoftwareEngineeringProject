@@ -1,7 +1,9 @@
+import sys
+
+from extras.utils import *
 from models.Listing import Listing
 from models.User import User
-from extras.utils import *
-import sys
+
 sys.path.append("../")
 
 
@@ -10,7 +12,8 @@ class GetMyListing(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
             'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        self.response.headers[
+            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
         self.response.out.write()
@@ -26,7 +29,8 @@ class GetMyListing(webapp2.RequestHandler):
 
         # If there exists error then return the response, and stop the function
         if len(errors) != 0:
-            write_error_to_response(self.response, errors, missing_invalid_parameter_error)
+            write_error_to_response(self.response, errors,
+                                    missing_invalid_parameter)
             return
 
         # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
@@ -34,7 +38,8 @@ class GetMyListing(webapp2.RequestHandler):
         invalid = key_validation(values)
 
         if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter_error)
+            write_error_to_response(self.response, invalid,
+                                    missing_invalid_parameter)
             return
 
         # find the correct user with userId
