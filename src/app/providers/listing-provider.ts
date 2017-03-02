@@ -6,6 +6,7 @@ import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
 import {Http, ResponseContentType} from '@angular/http';
 import {KasperService} from "./kasper-service";
+import {Filter} from "../models/filter";
 
 @Injectable()
 export class ListingProvider {
@@ -28,8 +29,7 @@ export class ListingProvider {
      * Add a listing to the database
      */
     addListing(newListing: Listing){
-        // TODO add the listing to the device
-        this.kasperService.createListings(newListing);
+        this._logger.error("ListingProvider.addListing is not implemented.");
     }
 
     addListingCallback(data: any){}
@@ -60,7 +60,7 @@ export class ListingProvider {
      */
     dislike(listingID : number){
         this._logger.error("ListingProvider.dislike is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, false);
+        // this.kasperService.likeDislikeListing(listingID, false);
     }
 
     likeDislikeCallback(){}
@@ -72,7 +72,7 @@ export class ListingProvider {
      */
     addToFavourites(listingID : number){
         this._logger.error("ListingProvider.addToFavourites is not implemented.");
-        this.kasperService.likeDislikeListing(listingID, true);
+        // this.kasperService.likeDislikeListing(listingID, true);
     }
 
     /**
@@ -91,7 +91,7 @@ export class ListingProvider {
      *
      * @return an array of listingIDs
      */
-    search(filter : any) : number[] {
+    search(filter : Filter) : any{
         this._logger.error("ListingProvider.search is not implemented.");
         return null;
     }

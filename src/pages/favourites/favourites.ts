@@ -1,11 +1,11 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
-let assert = require('assert-plus');
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component} from "@angular/core";
+import {NavController} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
-import {DetailPage} from "../detail/detail"
+import {DetailPage} from "../detail/detail";
 import {LoginService} from "../../app/providers/login-service";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-favourites',

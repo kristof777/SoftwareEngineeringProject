@@ -1,6 +1,9 @@
 import {Province} from "./province";
 import {Bound} from "./bound";
 
+/**
+ * Outlines a basic filter object
+ */
 export class Filter{
     public provinces: Province[];
     public price: Bound;

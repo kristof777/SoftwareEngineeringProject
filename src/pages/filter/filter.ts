@@ -1,11 +1,10 @@
 import {Logger} from "angular2-logger/core";
-let assert = require('assert-plus');
-import {Component} from '@angular/core';
-
-import {NavParams, NavController, ViewController} from 'ionic-angular';
+import {Component} from "@angular/core";
+import {NavParams, ViewController} from "ionic-angular";
 import {Filter} from "../../app/models/filter";
 import {Bound} from "../../app/models/bound";
 import {Province} from "../../app/models/province";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-filter',

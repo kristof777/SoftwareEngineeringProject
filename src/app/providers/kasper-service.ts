@@ -17,14 +17,6 @@ export class KasperService {
                 private _logger: Logger) {
     }
 
-    getUserId(): number{
-        return this.loginService.getUserId();
-    }
-
-    getToken(): string{
-        return this.loginService.getToken();
-    }
-
     /**
      * Send a login request to the server
      *
@@ -69,8 +61,9 @@ export class KasperService {
             .map(response => response.json());
     }
 
-    // TODO
-    confirmEmail(): any{}
+    confirmEmail(): any{
+        this._logger.error("KasperService.confirmEmail is not implemented.");
+    }
 
     /**
      * Send a request to register the user in the database, then log them in
@@ -187,8 +180,6 @@ export class KasperService {
      *      listings: Listing[]
      * }
      *
-     * @param cursor            the index of the last loaded listing
-     * @param lastListingId     the last listing ID received
      * @param filter            the filter to apply
      */
     getListings(filter: Filter): any{
@@ -271,8 +262,8 @@ export class KasperService {
      * Appends required information for all calls
      */
     appendAuthentication(body: FormData): void{
-        body.append('userId', this.getUserId());
-        body.append('token', this.getToken);
+        body.append('userId', this.loginService.getUserId());
+        body.append('token', this.loginService.getToken());
     }
 
     /**
