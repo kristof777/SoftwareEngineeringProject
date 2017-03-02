@@ -28,6 +28,7 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
+    ls
     ./scripts/test_script.sh
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests
