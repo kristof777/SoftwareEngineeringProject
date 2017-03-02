@@ -4,6 +4,7 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+
 set -ev
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
@@ -20,7 +21,6 @@ ios_build(){
 }
 
 # Builds the browser version of our app 
-# TODO: THIS PROBABLY ISN'T WORKING PROPERLY BUT I DUNNO, LOOK INTO MORE
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
     ionic build
@@ -28,10 +28,8 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    python -m unittest discover -s server-gae/ -p 'Test*.py'
-    screen -d -m -L ionic serve --firefox@47.0.1
-    sleep 50
-    xvfb-run protractor e2e-tests.conf.js
+    ls
+    ./scripts/test_script.sh
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests
   fi
