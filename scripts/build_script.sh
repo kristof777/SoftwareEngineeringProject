@@ -4,6 +4,16 @@
 # This script calls the commands required to compile (TODO: TESTING)
 # and emulate our program
 
+# executes the commands to run our smoke tests
+# above set -ev so if one fails the second will get ran (if this works lol)
+smoke_tests(){
+  python -m unittest discover -s server-gae/ -p 'Test*.py'
+  screen -d -m -L ionic serve --firefox@47.0.1
+  # have to give some time for ionic to start up before running tests on it
+  sleep 50
+  xvfb-run protractor e2e-tests.conf.js
+}
+
 set -ev
 
 # Builds the ios app.  If we are deploying builds a release version, otherwise
@@ -27,7 +37,7 @@ browser_build(){
     #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    sh /test_script.sh
+    smoke_tests
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests
   fi
