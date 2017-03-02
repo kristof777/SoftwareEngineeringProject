@@ -324,11 +324,6 @@ def is_valid_password(password):
 
 
 def is_valid_string_list(list):
-    # return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-    #                    "province", "address", "description", "isPublished", "images",
-    #                    "thumbnailImageIndex"] for key in list)
-    # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
-    #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
     list_object = json.loads(list)
     return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
                                "province", "address", "description", "isPublished", "images",
@@ -340,10 +335,6 @@ def is_valid_string_list(list):
 def is_valid_integer_list(any_list):
     list_object = json.loads(any_list)
     return not any(not is_valid_integer(str(listing_id)) for listing_id in list_object)
-    # for item in list(any_list):
-    #     if not is_valid_integer(item):
-    #         return False
-    # return True
 
 
 

@@ -60,7 +60,7 @@ class TestHandlers(unittest.TestCase):
             "filter": json.dumps({
                 "price": {
                     "lower": 100,
-                    "upper": 999999999
+                    "upper": 8000000
                 },
                 "bedrooms": {
                     "lower": 1,
@@ -70,7 +70,7 @@ class TestHandlers(unittest.TestCase):
                     "lower": 1.0,
                     "upper": 200
                 },
-                "province": "Saskathewan",
+                "province": "Saskatchewan",
                 "city": "Saskatoon"
             })
         }
