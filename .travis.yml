@@ -55,6 +55,7 @@ script:
   
 after_success:
   - "./scripts/systeminfo_script.sh"
+  - "./scripts/teststage_script.sh"
   
 after_failure:
   - "./scripts/systeminfo_script.sh"
