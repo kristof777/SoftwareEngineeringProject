@@ -10,7 +10,6 @@ import unittest
 import Main
 import webapp2
 from google.appengine.ext import testbed
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 

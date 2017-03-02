@@ -141,6 +141,7 @@ class TestHandlers(unittest.TestCase):
 
         # test case 7 correct information
 
+
         input7 = create_random_user()
         request = webapp2.Request.blank('/createUser', POST=input7)
         response = request.get_response(Main.app)

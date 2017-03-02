@@ -1,9 +1,7 @@
 import logging
-import json
-import sys
 
 from extras.utils import *
-
+import sys
 sys.path.append("../")
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.Base_Handler import BaseHandler
@@ -38,7 +36,7 @@ class SignIn(BaseHandler):
 
         if len(message.keys()) != 0:
             write_error_to_response(self.response, message,
-                                    missing_invalid_parameter_error)
+                                    missing_invalid_parameter)
             return
 
         assert user_email is not None and password is not None

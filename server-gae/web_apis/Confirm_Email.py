@@ -1,7 +1,7 @@
 # when websites send us an activation link after a registration,
 # the url usually contain their equivalent of signup tokens.
-from extras.Base_Handler import BaseHandler
 import logging
+from extras.Base_Handler import BaseHandler
 
 
 class VerificationHandler(BaseHandler):
@@ -10,17 +10,20 @@ class VerificationHandler(BaseHandler):
         user_id = kwargs['user_id']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
-        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
+        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token,
+                                                     'signup')
         if not user:
-            logging.info('Could not find any user with id "%s" signup token "%s"',
-                         user_id, signup_token)
+            logging.info(
+                'Could not find any user with id "%s" signup token "%s"',
+                user_id, signup_token)
             self.abort(404)
 
         # store user data in the session
         self.auth.set_session(self.auth.store.user_to_dict(user), remember=True)
 
-        if verification_type == 'v': #remove signup token, we don't want users to come back with an old link
-         self.user_model.delete_signup_token(user.get_id(), signup_token)
+        if verification_type == 'v':  # remove signup token, we don't want users
+            # to come back with an old link
+            self.user_model.delete_signup_token(user.get_id(), signup_token)
 
         if not user.verified:
             user.verified = True

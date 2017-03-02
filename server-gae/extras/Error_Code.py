@@ -1,61 +1,168 @@
-missing_province = {"error": "missingProvince", "status": 400}
-missing_city = {"error": "missingCity", "status": 400}
-missing_email = {"error": "missingEmail", "status": 400}
-not_authorized = {"error": "notAuthorized", "status": 401}
-email_alreadyExists = {"error": "emailAlreadyExists", "status": 403}
-password_not_strong = {"error": "passwordNotStrong", "status": 403}
-missing_confirmed_password = {"error": "missingConfirmedPassword","status": 400}
-missing_first_name = {"error": "missingFirstName", "status": 400}
-missing_last_name = {"error": "missingLastName", "status": 400}
-missing_phone_number = {"error": "missingPhoneNumber", "status": 400}
-missing_postal_code = {"error": "missingPostalCode", "status": 400}
-nothing_requested_to_change = {"error": "nothingRequestedToChange","status":400}
-missing_token = {"error": "missingToken", "status": 400}
-unrecognized_key = {"error": "unrecognizedKey", "status": 403}
-password_cant_be_changed = {"error": "passwordCantBeChanged", "status": 403}
-invalid_user_id = {"error": "invalidUserId", "status": 403}
-invalid_phone1 = {"error": "invalidPhone1", "status": 403}
-invalid_phone2 = {"error": "invalidPhone2", "status": 403}
-invalid_email = {"error": "invalidEmail", "status" :403}
-missing_user_id = {"error": "missingUserId", "status": 400}
-missing_password = {"error": "missingPassword", "status": 400}
-missing_new_password = {"error": "missingNewPassword", "status": 400}
-missing_new_password_confirmed = {"error": "missingNewPasswordConfirmed",
-                                  "status": "400"}
-no_favourite_listing = {"error": "noFavouriteListing", "status": 403}
-invalid_listing_id = {"error": "invalidListingId", "status": 403}
-missing_listing_id = {"error": "missingListingId", "status": 400}
-missing_liked = {"error": "missingLiked", "status": 400}
-duplicated_liked = {"error": "duplicatedLiked", "status": 403}
-invalid_liked = {"error": "invalidLiked", "status": 403}
-unallowed_liked = {"error": "unallowedLiked", "status": 403}
-no_listings_left = {"error": "noListingsLeft", "status": 403}
-missing_cursor = {"error": "missingCursor", "status": 400}
-missing_last_listing_id = {"error": "missingLastListingId", "status": 400}
-invalid_bedrooms = {"error": "invalidNumberOfBedrooms", "status": 403}
-invalid_sqft = {"error":"invalidSquareFeet","status": 403}
-invalid_bathrooms = {"error":"invalidNumberOfBathrooms", "status": 403}
-invalid_price = {"error":"invalidPrice", "status": 403}
-invalid_thumbnail_image_index = {"error":"invalidThumbnailImageIndex", "status": 403}
-invalid_city = {"error": "invalidCity", "status": 403}
-invalid_published = {"error": "invalidPublished", "status": 403}
-invalid_province = {"error": "invalidProvince", "status": 403}
-invalid_address = {"error": "invalidAddress", "status": 403}
-invalid_filter_bound = {"error": "invalidFilterBound", "status": 403}
-missing_address = {"error": "missingAddress", "status": 400}
-missing_price = {"error": "missingPrice", "status": 400}
-missing_sqft = {"error": "missingSqft", "status": 400}
-missing_bedrooms = {"error": "missingBedrooms", "status": 400}
-missing_published = {"error": "missingPublished", "status": 400}
-missing_bathrooms = {"error": "missingBathrooms", "status": 400}
-missing_description = {"error": "missingDescription", "status": 400}
-missing_image = {"error": "missingImage", "status": 400}
-missing_image_index = {"error": "missingImageIndex", "status": 400}
-un_auth_listing = {"error": "unAuthListing", "status": 401}
-password_mismatch = {"error": "passwordMismatch", "status": 401}
-invalid_xor_condition = {"error": "missingXorCondition", "status": 403}
-invalid_values_required = {"error": "invalidValuesRequired", "status": 403}
+missing_invalid_parameter = 400
+unauthorized_access = 401
+processing_failed = 403
+success = 200
+missing_province = {"error": "missingProvince",
+                    "status": missing_invalid_parameter}
 
+missing_city = {"error": "missingCity",
+                "status": missing_invalid_parameter}
+
+missing_email = {"error": "missingEmail",
+                 "status": missing_invalid_parameter}
+
+not_authorized = {"error": "notAuthorized",
+                  "status": unauthorized_access}
+
+email_alreadyExists = {"error": "emailAlreadyExists",
+                       "status": processing_failed}
+
+password_not_strong = {"error": "passwordNotStrong",
+                       "status": processing_failed}
+
+missing_confirmed_password = {"error": "missingConfirmedPassword",
+                              "status": missing_invalid_parameter}
+
+missing_first_name = {"error": "missingFirstName",
+                      "status": missing_invalid_parameter}
+
+missing_last_name = {"error": "missingLastName",
+                     "status": missing_invalid_parameter}
+
+missing_phone_number = {"error": "missingPhoneNumber",
+                        "status": missing_invalid_parameter}
+
+missing_postal_code = {"error": "missingPostalCode",
+                       "status": missing_invalid_parameter}
+
+nothing_requested_to_change = {"error": "nothingRequestedToChange",
+                               "status": processing_failed}
+
+missing_token = {"error": "missingToken",
+                 "status": unauthorized_access}
+
+unrecognized_key = {"error": "unrecognizedKey",
+                    "status": processing_failed}
+
+password_cant_be_changed = {"error": "passwordCantBeChanged",
+                            "status": processing_failed}
+
+invalid_user_id = {"error": "invalidUserId",
+                   "status": missing_invalid_parameter}
+
+invalid_phone1 = {"error": "invalidPhone1",
+                  "status": missing_invalid_parameter}
+
+invalid_phone2 = {"error": "invalidPhone2",
+                  "status": missing_invalid_parameter}
+
+invalid_email = {"error": "invalidEmail",
+                 "status": missing_invalid_parameter}
+
+missing_user_id = {"error": "missingUserId",
+                   "status": missing_invalid_parameter}
+
+missing_password = {"error": "missingPassword",
+                    "status": missing_invalid_parameter}
+
+missing_new_password = {"error": "missingNewPassword",
+                        "status": missing_invalid_parameter}
+
+missing_new_password_confirmed = {"error": "missingNewPasswordConfirmed",
+                                  "status": missing_invalid_parameter}
+
+no_favourite_listing = {"error": "noFavouriteListing",
+                        "status": processing_failed}
+
+invalid_listing_id = {"error": "invalidListingId",
+                      "status": missing_invalid_parameter}
+
+missing_listing_id = {"error": "missingListingId",
+                      "status": missing_invalid_parameter}
+
+missing_liked = {"error": "missingLiked",
+                 "status": missing_invalid_parameter}
+
+duplicated_liked = {"error": "duplicatedLiked",
+                    "status": processing_failed}
+
+invalid_liked = {"error": "invalidLiked",
+                 "status": missing_invalid_parameter}
+
+unallowed_liked = {"error": "unallowedLiked",
+                   "status": processing_failed}
+
+no_listings_left = {"error": "noListingsLeft",
+                    "status": processing_failed}
+
+invalid_bedrooms = {"error": "invalidNumberOfBedrooms",
+                    "status": missing_invalid_parameter}
+
+invalid_sqft = {"error": "invalidSquareFeet",
+                "status": missing_invalid_parameter}
+
+invalid_bathrooms = {"error": "invalidNumberOfBathrooms",
+                     "status": missing_invalid_parameter}
+
+invalid_price = {"error": "invalidPrice",
+                 "status": missing_invalid_parameter}
+
+invalid_thumbnail_image_index = {"error": "invalidThumbnailImageIndex",
+                                 "status": missing_invalid_parameter}
+
+invalid_city = {"error": "invalidCity",
+                "status": missing_invalid_parameter}
+
+invalid_published = {"error": "invalidPublished",
+                     "status": missing_invalid_parameter}
+
+invalid_province = {"error": "invalidProvince",
+                    "status": missing_invalid_parameter}
+
+invalid_address = {"error": "invalidAddress",
+                   "status": missing_invalid_parameter}
+
+invalid_filter_bound = {"error": "invalidFilterBound",
+                        "status": missing_invalid_parameter}
+
+missing_address = {"error": "missingAddress",
+                   "status": missing_invalid_parameter}
+
+missing_price = {"error": "missingPrice",
+                 "status": missing_invalid_parameter}
+
+missing_sqft = {"error": "missingSqft",
+                "status": missing_invalid_parameter}
+
+missing_bedrooms = {"error": "missingBedrooms",
+                    "status": missing_invalid_parameter}
+
+missing_published = {"error": "missingPublished",
+                     "status": missing_invalid_parameter}
+
+missing_bathrooms = {"error": "missingBathrooms",
+                     "status": missing_invalid_parameter}
+
+missing_description = {"error": "missingDescription",
+                       "status": missing_invalid_parameter}
+
+missing_image = {"error": "missingImage",
+                 "status": missing_invalid_parameter}
+
+missing_image_index = {"error": "missingImageIndex",
+                       "status": missing_invalid_parameter}
+
+un_auth_listing = {"error": "unAuthListing",
+                   "status": missing_invalid_parameter}
+
+password_mismatch = {"error": "passwordMismatch",
+                     "status": unauthorized_access}
+
+invalid_xor_condition = {"error": "missingXorCondition",
+                         "status": missing_invalid_parameter}
+
+invalid_values_required = {"error": "invalidValuesRequired",
+                           "status": missing_invalid_parameter}
 
 invalids = {
     "phone1": invalid_phone1,
@@ -103,8 +210,3 @@ missing = {
     "address": missing_address,
     "liked": missing_liked
 }
-
-missing_invalid_parameter_error = 400
-unauthorized_access = 401
-processing_failed = 403
-success = 200

@@ -19,7 +19,7 @@ class TestHandlers(unittest.TestCase):
         self.testbed.activate()
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
-        self.users = create_dummy_users_for_testing(1, Main)
+        self.users = create_dummy_users_for_testing(Main, 1)
 
     def test_sign_out(self):
         """

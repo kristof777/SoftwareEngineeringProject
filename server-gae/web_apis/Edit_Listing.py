@@ -1,10 +1,13 @@
 import sys
+
 sys.path.append("../")
 from models.Listing import Listing
 from models.User import User
 import sys
+
 sys.path.append("../")
 import os
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *
 import datetime
@@ -15,7 +18,8 @@ class EditListing(webapp2.RequestHandler):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
             'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        self.response.headers[
+            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
         self.response.out.write()
@@ -28,22 +32,24 @@ class EditListing(webapp2.RequestHandler):
 
         if len(errors) != 0:
             write_error_to_response(self.response,
-                                    errors, missing_invalid_parameter_error)
+                                    errors, missing_invalid_parameter)
             return
 
         change_values = json.loads(values['changeValues'])
         if len(change_values) == 0:
-            write_error_to_response(self.response, {nothing_requested_to_change['error']:
-                                                        "Nothing requested to change"},
-                                                 nothing_requested_to_change['status'])
+            write_error_to_response(self.response,
+                                    {nothing_requested_to_change['error']:
+                                         "Nothing requested to change"},
+                                    nothing_requested_to_change['status'])
             return
 
-
         if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-                "province", "address", "description", "isPublished", "images",
-                "thumbnailImageIndex"] for key in change_values.keys()):
+                           "province", "address", "description", "isPublished",
+                           "images",
+                           "thumbnailImageIndex"] for key in
+               change_values.keys()):
             write_error_to_response(self.response, {unrecognized_key['error']:
-                                    "Unrecognized key found"},
+                                                        "Unrecognized key found"},
                                     unrecognized_key['status'])
             return
 
@@ -62,21 +68,23 @@ class EditListing(webapp2.RequestHandler):
         change_error_keys = []
         for change_key in change_values:
             change_error_keys.append(change_key)
-        change_errors, change_fields = keys_missing(change_error_keys, change_values)
+        change_errors, change_fields = keys_missing(change_error_keys,
+                                                    change_values)
         if len(change_errors) != 0:
             write_error_to_response(self.response,
-                                    change_errors, missing_invalid_parameter_error)
+                                    change_errors,
+                                    missing_invalid_parameter)
             return
 
         # check invalidity
 
-        invalid = key_validation(values)    # the whole dictionary
-        invalid.update(key_validation(change_values))   # the change_values dictionary
-
+        invalid = key_validation(values)  # the whole dictionary
+        invalid.update(
+            key_validation(change_values))  # the change_values dictionary
 
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter_error)
+                                    missing_invalid_parameter)
             return
 
         user = User.get_by_id(int(values['userId']))
@@ -101,7 +109,8 @@ class EditListing(webapp2.RequestHandler):
         listingOwnerId = listing.userId
         if listingOwnerId != userId:
             error = {
-                not_authorized['error']: "Provided user ID doesn't match the owner id of the listing"
+                not_authorized[
+                    'error']: "Provided user ID doesn't match the owner id of the listing"
             }
             write_error_to_response(self.response, error, unauthorized_access)
             return
@@ -109,9 +118,5 @@ class EditListing(webapp2.RequestHandler):
         for key in change_values:
             listing.set_property(key, change_values[key])
 
-        write_success_to_response(self.response, {'modifiedDate': str(datetime.datetime.now())})
-
-
-
-
-
+        write_success_to_response(self.response, {
+            'modifiedDate': str(datetime.datetime.now())})

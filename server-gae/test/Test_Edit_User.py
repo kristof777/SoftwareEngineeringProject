@@ -21,7 +21,7 @@ class TestHandlers(unittest.TestCase):
         # Next, declare which service stubs you want to use.
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
-        self.users = create_dummy_users_for_testing(3, Main)
+        self.users = create_dummy_users_for_testing(Main, 3)
 
     def test_edit_user(self):
         """
@@ -44,7 +44,7 @@ class TestHandlers(unittest.TestCase):
         res_value, status = get_response(get_post_dictionary(user_id, token,
                                                              change_values))
 
-        self.assertEqual(status, missing_invalid_parameter_error)
+        self.assertEqual(status, nothing_requested_to_change["status"])
         self.assertTrue(nothing_requested_to_change["error"] in res_value)
 
         #  Test case 3: unrecognized key
