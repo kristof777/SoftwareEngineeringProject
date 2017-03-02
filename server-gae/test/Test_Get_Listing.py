@@ -88,10 +88,10 @@ class TestHandlers(unittest.TestCase):
         }
 
         res_value, status = get_listing_response(get_filter_listings)
-        self.assertEqual(status, missing_invalid_parameter)
-        error_expected = invalid_user_id['error']
-
-        self.assertTrue(error_expected in res_value)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), len(self.listings))
+        for value in res_value:
+            self.assertTrue("listingId" in value)
 
         #######################################################################3
         # test case 4: unrecognized key in filter
@@ -240,7 +240,6 @@ def get_like_response(POST):
 def get_listing_response(POST):
     request = webapp2.Request.blank('/getListings', POST=POST)
     response = request.get_response(Main.app)
-    print(response.body)
     if response.body:
         return json.loads(response.body), response.status_int
     else:

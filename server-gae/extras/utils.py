@@ -345,6 +345,8 @@ def is_valid_string_listing(listing):
     :param listing: a listing dictionary
     :return: true if listing dictionary has all valid keys, otherwise false
     """
+    if len(listing) == 0:
+        return True
     list_object = json.loads(listing)
     return not any(key not in listing_keys
                    for key in list_object)
