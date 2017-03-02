@@ -1,16 +1,13 @@
 from __future__ import absolute_import
-import json
 import os
 import unittest
 import sys
-sys.path.append("../")
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import extras.Error_Code as Error_Code
 import Main
-import webapp2
 from google.appengine.ext import testbed
 from models.Listing import Listing
 from web_apis.Create_User import *
+sys.path.append("../")
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
@@ -31,7 +28,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
@@ -73,7 +70,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
@@ -114,7 +111,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
@@ -146,7 +143,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_sqft['error'],
@@ -169,16 +166,16 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, unauthorized_access)
 
-        errors_expected = [un_auth_listing['error']]
+        errors_expected = [not_authorized['error']]
 
         try:
             errors_expected = str(json.loads(response.body).keys()[0])
         except IndexError as _:
             self.assertFalse()
 
-        self.assertEquals(un_auth_listing['error'], errors_expected)
+        self.assertEquals(not_authorized['error'], errors_expected)
 
         ###########################################################################
         # test case 6
@@ -189,11 +186,12 @@ class TestHandlers(unittest.TestCase):
         input['sqft'] = "supposed to be int"
         input['bathrooms'] = "supposed to be float"
         input['price'] = "supposed to be int"
+        input['thumbnailImageIndex'] = 'supposed to be int'
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [invalid_user_id['error'],
                            invalid_bedrooms['error'],
@@ -212,10 +210,10 @@ class TestHandlers(unittest.TestCase):
 
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         input = inputs[0]
-        request = webapp2.Request.blank('/creatListing', POST=input)
+        request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.status_int, success)
 
         output = json.loads(response.body)
         self.assertTrue("listingId" in output)

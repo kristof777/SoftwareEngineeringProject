@@ -1,22 +1,28 @@
-import sys
-
-sys.path.append("../")
+import os
+from extras.utils import *
 from models.Favorite import Favorite
-import sys
-
-sys.path.append("../")
 from models.Listing import Listing
 from models.User import User
 import sys
-
 sys.path.append("../")
-import os
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import *
 
 
 class LikeDislikeListing(webapp2.RequestHandler):
+    """
+    Class used to handle get and post.
+    Get:  is used to render an HTML page.
+    Post:
+        @pre-cond: Expecting keys to be listingId, userId and liked. If any
+                   of these is not present an appropriate error and
+                   status code 400 is returned.
+
+                   listingId and userId are supposed to be integers, and liked
+                   is either "True" or "False".
+        @post-cond: A favorite object with provided listingId and userId is created in the
+                    database if it doesn't exist before, or update the liked field if it exists.
+                    Return nothing.
+    """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -34,18 +40,16 @@ class LikeDislikeListing(webapp2.RequestHandler):
         error_keys = ['userId', 'listingId', 'liked']
 
         # check if there's any missing field, if so, just return to the user what all is missing
-        # if not, then go ahead and check validity
-
         errors, values = keys_missing(error_keys, self.request.POST)
 
         # If there exists error then return the response, and stop the function
+        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
+        # check validity for integer fields (userId and listingId) and a boolean field (isPublished)
         invalid = key_validation(values)
 
         if len(invalid) != 0:
@@ -60,7 +64,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
                 not_authorized['error']: 'User not authorized'
             }
             write_error_to_response(self.response, error,
-                                    missing_invalid_parameter)
+                                    unauthorized_access)
             return
 
         listing = Listing.get_by_id(int(values['listingId']))
@@ -69,25 +73,22 @@ class LikeDislikeListing(webapp2.RequestHandler):
                 un_auth_listing['error']: 'Listing not authorized'
             }
             write_error_to_response(self.response, error,
-                                    missing_invalid_parameter)
+                                    unauthorized_access)
             return
 
-        if values['liked'] == "True":
-            liked = True
-        else:
-            liked = False
+        liked = True if values['liked'] in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
 
-        userId = int(values['userId'])
-        listingId = int(values['listingId'])
+        user_id = int(values['userId'])
+        listing_id = int(values['listingId'])
 
         # make sure that the owner can't like his/her own listing
-        listingOwnerId = listing.userId
-        if listingOwnerId == userId:
+        listing_owner_id = listing.userId
+        if listing_owner_id == user_id:
             error = {
                 unallowed_liked['error']: 'Listing can\'t be liked by owner'
             }
             write_error_to_response(self.response, error,
-                                    missing_invalid_parameter)
+                                    processing_failed)
             return
 
         # Next, check if the favorite object already exists
@@ -101,26 +102,24 @@ class LikeDislikeListing(webapp2.RequestHandler):
         # if the favorite object doesn't exist
         #   create a new favorite object with liked input value
 
-
         # check if the favorite object exists
-        favorite = Favorite.query(Favorite.userId == userId,
-                                  Favorite.listingId == listingId).get()
+        favorite = Favorite.query(Favorite.userId == user_id,
+                                  Favorite.listingId == listing_id).get()
         if favorite is None:
             # TODO: do we need to make sure that the liked input is true when creating the favorite object?
-            favorite = Favorite(userId=userId, listingId=listingId, liked=liked)
+            favorite = Favorite(userId=user_id, listingId=listing_id, liked=liked)
             favorite.put()
         else:  # if the favorite object does exist
-            favoriteLiked = favorite.liked
+            favorite_liked = favorite.liked
             if liked:
                 # user want to like the list
-                if favoriteLiked:
+                if favorite_liked:
                     # return duplicate error
                     error = {
-                        duplicated_liked[
-                            'error']: 'The listing is already liked'
+                        duplicated_liked['error']: 'The listing is already liked'
                     }
                     write_error_to_response(self.response, error,
-                                            missing_invalid_parameter)
+                                            processing_failed)
                     return
 
                 # if everything is correct, change the liked field to be true
@@ -128,14 +127,13 @@ class LikeDislikeListing(webapp2.RequestHandler):
 
             else:
                 # user want to unlike the list
-                if not favoriteLiked:
+                if not favorite_liked:
                     # return error
                     error = {
-                        duplicated_liked[
-                            'error']: 'The listing is already disliked'
+                        duplicated_liked['error']: 'The listing is already disliked'
                     }
                     write_error_to_response(self.response, error,
-                                            missing_invalid_parameter)
+                                            processing_failed)
                     return
 
                 # change the liked field to be false
