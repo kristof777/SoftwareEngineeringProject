@@ -77,9 +77,6 @@ class TestHandlers(unittest.TestCase):
             "liked": "True"
         }
 
-        # likeTheListing["userId"] = likerId
-        # likeTheListing["listingId"] = listingId
-
         request = webapp2.Request.blank('/like', POST=like_the_listing)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, processing_failed)
