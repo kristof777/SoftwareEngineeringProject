@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import sys
 
 from extras.Error_Code import *
@@ -9,16 +10,14 @@ import os
 import unittest
 import Main
 import webapp2
-from google.appengine.ext import testbed
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.utils import setup_testbed
 
 
 class TestHandlerChangePassword(unittest.TestCase):
     def setUp(self):
-        self.testbed = testbed.Testbed()
-        self.testbed.activate()
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_memcache_stub()
+        setup_testbed(self)
 
     def test_change_password(self):
         database_entry1 = {"email": "student@usask.ca",

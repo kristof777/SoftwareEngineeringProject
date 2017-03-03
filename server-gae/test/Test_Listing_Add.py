@@ -1,25 +1,21 @@
 from __future__ import absolute_import
+
 import os
-import unittest
 import sys
+import unittest
+
 import Main
-from google.appengine.ext import testbed
 from models.Listing import Listing
 from web_apis.Create_User import *
+
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
-        # First, create an instance of the Testbed class.
-        self.testbed = testbed.Testbed()
-        # Then activate the testbed, which will allow you to use
-        # service stubs.
-        self.testbed.activate()
-        # Next, declare which service stubs you want to use.
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_memcache_stub()
+        setup_testbed(self)
+
 
     def test_create_listings(self):
         # test case 1: empty object as input

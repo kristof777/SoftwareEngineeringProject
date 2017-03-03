@@ -1,25 +1,24 @@
 from __future__ import absolute_import
+
 import json
 import os
 import sys
+
 sys.path.append("../")
 import unittest
 import extras.Error_Code as Error_Code
 import Main
 import webapp2
-from google.appengine.ext import testbed
 from models.User import *
-
+from extras.utils import setup_testbed
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlerSignIn(unittest.TestCase):
     # Set up the testbed
     def setUp(self):
-        self.testbed = testbed.Testbed()
-        self.testbed.activate()
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_memcache_stub()
+        setup_testbed(self)
+
 
     def test_sign_in(self):
         database_entry1 = {"email": "student@usask.ca",

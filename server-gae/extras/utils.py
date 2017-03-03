@@ -4,6 +4,8 @@ import webapp2
 import json
 from Error_Code import *
 from validate_email import validate_email
+from google.appengine.ext import testbed
+
 
 """
 province_abbr and province_complete are all the provinces of canada,
@@ -495,4 +497,8 @@ def are_two_lists_same(list1, list2):
            len(list1) == len(list2)
 
 
-
+def setup_testbed(test_handler):
+    test_handler.testbed = testbed.Testbed()
+    test_handler.testbed.activate()
+    test_handler.testbed.init_datastore_v3_stub()
+    test_handler.testbed.init_memcache_stub()
