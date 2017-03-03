@@ -4,7 +4,7 @@
 # A helper script to allow both smoke tests to run even if one fails
 # while still having the build fail if either fails
 
-echo "*******RUNNING BACK-END SMOKE TESTS*******"
+echo "\n\n*******RUNNING BACK-END SMOKE TESTS*******"
 python -m unittest discover -s server-gae/ -p 'Test*.py'
 
 echo "*******RUNNING FRONT-END SMOKE TESTS*******"
