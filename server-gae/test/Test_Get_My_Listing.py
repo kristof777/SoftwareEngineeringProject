@@ -1,27 +1,19 @@
 from __future__ import absolute_import
-import unittest
-import json
+
 import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import extras.Error_Code as Error_Code
+import unittest
+
 import Main
-import webapp2
-from google.appengine.ext import testbed
-from models.Listing import Listing
+import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
-import extras.utils as utils
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
-        # First, create an instance of the Testbed class.
-        self.testbed = testbed.Testbed()
-        # Then activate the testbed, which will allow you to use
-        # service stubs.
-        self.testbed.activate()
-        # Next, declare which service stubs you want to use.
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_memcache_stub()
+        setup_testbed(self)
+
 
         # create 10 listings for one user
         self.listings, users = create_dummy_listings_for_testing(Main, 10)
@@ -55,7 +47,7 @@ class TestHandlers(unittest.TestCase):
         request = webapp2.Request.blank('/getMyListing', POST=invalid_my_listings)
         response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter_error)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 

@@ -1,73 +1,38 @@
 import logging
 from Base_Handler import *
-import os
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *
 from extras.Error_Code import *
 
 
-
-# We need to decide whether uses are allowed to
-# access certain resources depending on if they are logged in or not.
 def user_required(handler):
     """
     Decorator that checks if there's a user associated with the current session.
     Will also fail if there's no session present.
+    :param handler: handler to make decorator work
+    :return:
     """
     def check_sign_in(self, *args, **kwargs):
         auth = self.auth
         if not auth.get_user_by_session():
             write_error_to_response(self, {not_authorized['error']:
-                                    "not authorized to chnage user"},
+                                    "not authorized to change user"},
                                     not_authorized['status'])
         else:
             return handler(self, *args, **kwargs)
     return check_sign_in
 
-# when websites send us an activation link after a registration,
-# the url usually contain their equivalent of signup tokens.
-class VerificationHandler(BaseHandler):
-    def get(self, *args, **kwargs):
-        user = None
-        user_id = kwargs['user_id']
-        signup_token = kwargs['signup_token']
-        verification_type = kwargs['type']
-
-        user, ts = self.user_model.get_by_auth_token(int(user_id), signup_token, 'signup')
-
-        if not user:
-            logging.info('Could not find any user with id "%s" signup token "%s"',
-                         user_id, signup_token)
-            self.abort(404)
-
-        # store user data in the session
-        self.auth.set_session(self.auth.store.user_to_dict(user), remember=True)
-
-        if verification_type == 'v': #remove signup token, we don't want users to come back with an old link
-         self.user_model.delete_signup_token(user.get_id(), signup_token)
-
-        if not user.verified:
-            user.verified = True
-            user.put()
-
-            self.display_message('User email address has been verified.')
-            return
-        elif verification_type == 'p':
-            # supply user to the page
-            params = {
-                'user': user,
-                'token': signup_token
-            }
-            self.render_template('Reset_Password.html', params)
-        else:
-            logging.info('verification type not supported.')
-            self.abort(404)
-
 
 class SetPasswordHandler(BaseHandler):
+    """
+    Sets the user password and deleted the Old token.
+    It extends the BaseHandler for Basic handler utilities.
+    """
 
     @user_required
     def post(self):
+        """
+        :return:
+        """
         password = self.request.get('password')
         old_token = self.request.get('t')
 
@@ -86,22 +51,38 @@ class SetPasswordHandler(BaseHandler):
 
 # @user_required need to be there to make sure that the user is logged in
 class AuthenticatedHandler(BaseHandler):
-  @user_required
-  def get(self):
-    self.render_template('../webpages/Authenticated.html')
+    """
+    Used for testing purposes on browser to check if authenticated user is
+    logged in or not.
+    """
+    @user_required
+    def get(self):
+        self.render_template('../webpages/Authenticated.html')
 
 
 class LogoutHandler(BaseHandler):
-  def get(self):
-    self.auth.unset_session()
-    self.redirect(self.uri_for('home'))
+    """
+    Handler used to unset the session and logout the session. By unset I mean
+    delete the token from UserToken model.
+    """
+    def get(self):
+        self.auth.unset_session()
+        self.redirect(self.uri_for('home'))
 
 
 class ForgotPasswordHandler(BaseHandler):
+
     def get(self):
+        """
+        Used to present the forgot password page by calling _serve_page
+        :return:
+        """
         self._serve_page()
 
     def post(self):
+        """
+        :return:
+        """
         email = self.request.get('email')
         user = self.user_model.get_by_auth_id(email)
         if not user:
@@ -111,8 +92,9 @@ class ForgotPasswordHandler(BaseHandler):
         user_id = user.get_id()
         token = self.user_model.create_signup_token(user_id)
 
-        verification_url = self.uri_for('verification', type='p', user_id=user_id,
-                                        signup_token=token, _full=True)
+        verification_url = self.uri_for('verification', type='p',
+                                        user_id=user_id,signup_token=token,
+                                        _full=True)
 
         msg = 'Send an email to user in order to reset their password. \
                   They will be able to do so by visiting <a href="{url}">{url}</a>'

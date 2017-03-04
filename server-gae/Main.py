@@ -41,6 +41,7 @@ from models.User import User
 from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
 from web_apis.Get_Listings import GetListing
+from web_apis.Confirm_Email import VerificationHandler
 # from web_apis.SignInWithToken import *
 
 # configuration

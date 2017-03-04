@@ -32,7 +32,7 @@ export class LoginService {
                     this.loadSessionInfo();
                 }, error => {
                     this._logger.error("Could not access database: ");
-                    this._logger.error(error);
+                    this._logger.error(JSON.stringify(error));
                 });
         });
     }
@@ -53,9 +53,12 @@ export class LoginService {
      * @param token the new token
      */
     public setToken(token: string): void{
+        assert.string(token, "The received token was not a string");
+
         this.token = token;
         this.updateToken(token);
-        this._logger.info("New token has been set: " + token);
+
+        this._logger.debug("New token has been set: " + token);
     }
 
     /**
@@ -64,6 +67,8 @@ export class LoginService {
      * @returns {number}    the id
      */
     public getUserId(): number{
+        assert.number(this.userId, "The userId is not defined");
+
         return this.userId;
     }
 
@@ -72,6 +77,8 @@ export class LoginService {
      * @returns {string}    the token
      */
     public getToken(): string{
+        assert.string(this.token, "The token is not defined");
+
         return this.token;
     }
 
@@ -81,15 +88,15 @@ export class LoginService {
      * @param token the token to insert
      */
     private updateToken(token: string){
-        assert.object(LoginService.user);
-        assert.object(this.db);
+        assert.object(LoginService.user, "A user must be logged in to update the token.");
+        assert.object(this.db, "A database connection was not established.");
 
         this.db.executeSql("INSERT INTO session (userId, token, created_date) VALUES (?, ?, datetime(now))", [
             this.userId, this.token]).then(() => {
-            this._logger.info("New session token was saved successfully.");
+            this._logger.debug("New session token was saved successfully.");
         }, error => {
             this._logger.error("Could not insert new session token: ");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 
@@ -97,20 +104,20 @@ export class LoginService {
      * Load the most recent userId and token from the users phone.
      */
     private loadSessionInfo(){
-        assert.object(LoginService.user);
-        assert.object(this.db);
+        assert.object(LoginService.user, "A user must be logged in to update the token.");
+        assert.object(this.db, "A database connection was not established.");
 
         this.db.executeSql("SELECT userId, token FROM session ORDER BY created_date DESC LIMIT 1", {}).then((data) => {
             if(!data.rows) {
                 this.userId = data.rows.item(0).userId;
                 this.token = data.rows.item(0).token;
-                this._logger.info(`Loaded previous session info: {userId: ${this.userId}, token: ${this.token}`);
+                this._logger.debug(`Loaded previous session info: {userId: ${this.userId}, token: ${this.token}`);
             } else {
-                this._logger.info("There was no login session stored on the device");
+                this._logger.debug("There was no login session stored on the device");
             }
         }, error => {
             this._logger.error("Error selecting session from SQLite database: ");
-            this._logger.error(error);
+            this._logger.error(JSON.stringify(error));
         });
     }
 

@@ -1,25 +1,19 @@
 from __future__ import absolute_import
-import json
+
 import os
 import sys
+
 sys.path.append("../")
 import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-import extras.Error_Code as Error_Code
 import Main
-import webapp2
-from google.appengine.ext import testbed
-from models.Listing import Listing
 from web_apis.Create_User import *
 
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
-        self.testbed = testbed.Testbed()
-        self.testbed.activate()
-        self.testbed.init_datastore_v3_stub()
-        self.testbed.init_memcache_stub()
-        self.users = create_dummy_users_for_testing(1, Main)
+        setup_testbed(self)
+        self.users = create_dummy_users_for_testing(Main, 1)
 
     def test_sign_out(self):
         """

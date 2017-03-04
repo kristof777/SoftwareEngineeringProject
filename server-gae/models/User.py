@@ -9,10 +9,10 @@ class User(Webapp2User):
     email = ndb.StringProperty(required=True)
     first_name = ndb.StringProperty(required=True)
     last_name = ndb.StringProperty(required=False)
-    phone1 = ndb.StringProperty(required=True)
+    phone1 = ndb.StringProperty(required=False)
     phone2 = ndb.StringProperty(required=False)
     province = ndb.StringProperty(required=True)
-    city = ndb.StringProperty(required=True)
+    city = ndb.StringProperty(required=False)
 
 
     def set_password(self, raw_password):

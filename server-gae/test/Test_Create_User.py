@@ -1,27 +1,23 @@
 from __future__ import absolute_import
+
 import json
 import os
 import sys
+
 sys.path.append("../")
 import unittest
 from extras.Error_Code import *
 import Main
 import webapp2
-from google.appengine.ext import testbed
 from models.User import User
 from extras.utils import create_random_user, are_two_lists_same
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.utils import setup_testbed
 
 
 class TestHandlers(unittest.TestCase):
     def setUp(self):
-        # First, create an instance of the Testbed class.
-        self.testbed = testbed.Testbed()
-        # Then activate the testbed, which will allow you to use
-        # service stubs.
-        self.testbed.activate()
-        # Next, declare which service stubs you want to use.
-        self.testbed.init_datastore_v3_stub()
+        setup_testbed(self)
         self.testbed.init_memcache_stub()
 
     def test_create_user(self):
@@ -140,6 +136,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(password_not_strong['error'], errors_expected)
 
         # test case 7 correct information
+
 
         input7 = create_random_user()
         request = webapp2.Request.blank('/createUser', POST=input7)

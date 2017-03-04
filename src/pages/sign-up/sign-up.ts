@@ -16,7 +16,6 @@ let assert = require('assert-plus');
 })
 export class SignUpPage {
     @ViewChild(Slides) slides: Slides;
-    selectedMode: number;
 
     // Form validation
     signUpStep1: FormGroup;
@@ -89,7 +88,8 @@ export class SignUpPage {
             this.kasperService.loginService.setToken(data.token);
             this.navCtrl.setRoot(MyProfilePage);
         }, error => {
-
+            this._logger.error("There was an error registering: ");
+            this._logger.error(JSON.stringify(error));
         });
     }
 
@@ -115,6 +115,9 @@ export class SignUpPage {
         }
     }
 
+    /**
+     * Move back to the previous step.
+     */
     previousStep(): void{
         if(this.slides.getActiveIndex() != 0) {
             this.slides.lockSwipes(false);
@@ -138,6 +141,8 @@ export class SignUpPage {
                 return this.signUpStep2.valid;
             case 2:
                 return this.signUpStep3.valid;
+            default:
+                assert(false, "Tried to confirm step that did not exist.");
         }
     }
 

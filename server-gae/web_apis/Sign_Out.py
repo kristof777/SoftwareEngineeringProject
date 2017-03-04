@@ -1,4 +1,5 @@
 from extras.utils import *
+
 sys.path.append("../")
 from extras.Base_Handler import BaseHandler
 
@@ -9,7 +10,3 @@ class SignOut(BaseHandler):
 
     def post(self):
         self.auth.unset_session()
-
-
-
-

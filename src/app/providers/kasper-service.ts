@@ -1,3 +1,4 @@
+let assert = require('assert-plus');
 import {Injectable} from "@angular/core";
 import {Http, ResponseContentType} from "@angular/http";
 import {KasperConfig} from "../kasper-config";
@@ -7,7 +8,6 @@ import {Filter} from "../models/filter";
 import {Listing} from "../models/listing";
 import {LoginService} from "./login-service";
 import {FormControl} from "@angular/forms";
-let assert = require('assert-plus');
 
 @Injectable()
 export class KasperService {
@@ -107,7 +107,7 @@ export class KasperService {
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      firstName, lastName, phone1, phone2, city, province, email
      */
-    editUser(changeValues: JSON): any {
+    editUser(changeValues: Object): any {
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);

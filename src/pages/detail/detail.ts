@@ -52,21 +52,21 @@ export class DetailPage {
      * Navigate to the My Listings page.
      */
     goToFavourites(): void{
-        this._logger.info("Favourites was clicked");
+        this._logger.debug("Favourites was clicked");
     }
 
     /**
      * Add the house to the users dislike list
      */
     unlike(): void{
-        this._logger.info("Unlike was clicked");
+        this._logger.debug("Unlike was clicked");
     }
 
     /**
      * Add the house to the users favourites list
      */
     like(): void{
-        this._logger.info("Like was clicked.");
+        this._logger.debug("Like was clicked.");
     }
 
     /**
@@ -80,8 +80,10 @@ export class DetailPage {
      * Display the next property
      */
     nextProperty(): void{
+        this._logger.debug("Next Property was clicked");
+
         this.goToFirstSlide();
-        this._logger.info("Next Property was clicked");
+
         if(this.isNextProperty())
             this.cursor += 1;
     }
@@ -90,8 +92,10 @@ export class DetailPage {
      * Display the previous property
      */
     previousProperty(): void{
+        this._logger.debug("Previous Property was clicked");
+
         this.goToFirstSlide();
-        this._logger.info("Previous Property was clicked");
+
         if(this.isPreviousProperty())
             this.cursor -= 1;
     }

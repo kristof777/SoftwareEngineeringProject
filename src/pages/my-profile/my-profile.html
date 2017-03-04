@@ -8,7 +8,7 @@
 
 <ion-content>
     <ion-list [formGroup]="profileGroup">
-        <ion-item no-lines color="danger" text-wrap *ngIf="currentUser == null">
+        <ion-item no-lines color="danger" text-wrap *ngIf="!loginService.isLoggedIn()">
             You are not logged in.
         </ion-item>
         <ion-list-header>PROFILE</ion-list-header>

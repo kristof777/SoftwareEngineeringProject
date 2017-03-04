@@ -1,13 +1,18 @@
-import sys
-sys.path.append("../")
 import random
 import string
 import webapp2
 import json
 from Error_Code import *
 from validate_email import validate_email
+from google.appengine.ext import testbed
 
 
+"""
+province_abbr and province_complete are all the provinces of canada,
+province_abbr have abbreviations of provinces, where as province_complete has
+complete names of the provinces. Province at index i represents the same
+province.
+"""
 province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NW", "ON", "PE",
                  "QC", "SK", "YT"]
 
@@ -16,6 +21,13 @@ province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
                      "north west territories", "ontario",
                      "prince edward island", "quebec", "saskatchewan", "yukon"]
 
+
+"""
+listing_keys contains all the valid keys for a listing
+"""
+listing_keys = ["sqft", "bedrooms", "bathrooms", "price", "city", "province",
+                "address", "description", "isPublished", "images",
+                "thumbnailImageIndex"]
 
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
@@ -63,8 +75,8 @@ def get_random_email():
     :return: a string representing email
     """
 
-    return get_random_string(random.randint(6, 12)) + "@" \
-           + get_random_string(random.randint(4, 6)) + ".ca"
+    return get_random_string(random.randint(6, 12)) + "@" + \
+        get_random_string(random.randint(4, 6)) + ".ca"
 
 
 def get_random_password():
@@ -76,40 +88,12 @@ def get_random_password():
     return get_random_string(random.randint(8, 16), 1, 1, 1)
 
 
-def test_random_email():
-    """
-    #TODO
-    :return:
-    """
-    for i in range(0, 10):
-        email = get_random_email()
-        testing_email = email.split("@")
-        assert len(testing_email) == 2
-        assert testing_email[1][-3:] == ".ca"
-        email = testing_email[0] + testing_email[1][:-3]
-        assert email.isalnum()
-
-
-def test_random_password():
-    """
-    #TODO
-    :return:
-    """
-    for i in range(0, 10):
-        password = get_random_password()
-        assert len(password) >= 8
-        assert password.isalnum()
-        assert any(s.islower() for s in password)
-        assert any(s.isupper() for s in password)
-        assert any(s.isdigit() for s in password)
-
-
-def create_dummy_users_for_testing(n, Main):
+def create_dummy_users_for_testing(main, n):
     """
     Crates n Dummy Users with random valid password, email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
      "SK" as a province, userId, and a token
-
+    :param main: Main handler, to make an api call.
     :param n: number of dummy users required.
     :return: a dictionary of user with email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
@@ -131,9 +115,8 @@ def create_dummy_users_for_testing(n, Main):
                     if random.randint(0, 1) else "",
                     "confirmedPassword": password
                     }
-
         request = webapp2.Request.blank('/createUser', POST=new_user)
-        response = request.get_response(Main.app)
+        response = request.get_response(main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
         del new_user["password"]
@@ -144,11 +127,12 @@ def create_dummy_users_for_testing(n, Main):
     return users
 
 
-def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
+def create_dummy_listings_for_testing(main, num_listings, num_users=1):
     """
     Crates n Dummy Users and listings, where all data in listings is random but
     province which is saskatchewan.
 
+    :param main: Main handler, to make an api call.
     :param num_listings: number of dummy listing required.
     :param num_users: number of users, in which listing needs to be distributed
     :return: a dictionary of listing with all listing data as keys and listingID
@@ -157,7 +141,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
     assert num_listings >= num_users
     assert num_users != 0
 
-    users = create_dummy_users_for_testing(num_users, Main)
+    users = create_dummy_users_for_testing(main, num_users)
     assert len(users) == num_users
     for i in range(0, num_users):
         if i == num_users - 1 and num_listings % num_users != 0:
@@ -185,7 +169,7 @@ def create_dummy_listings_for_testing(Main, num_listings, num_users=1 ):
                                    }
             request = webapp2.Request.blank('/createListing',
                                             POST=random_listing_info)
-            response = request.get_response(Main.app)
+            response = request.get_response(main.app)
             output = json.loads(response.body)
             random_listing_info["listingId"] = output["listingId"]
             listings.append(random_listing_info)
@@ -197,7 +181,6 @@ def create_random_user():
     """
     :return: a random user with random field populated
     """
-
     password = get_random_password()
     user = {"email": get_random_email(),
             "password": password,
@@ -234,42 +217,56 @@ def create_random_listing(user_id):
     return random_listing
 
 
-def keys_missing(dictionary, post):
+def keys_missing(required_keys, post):
     """
     Example :
-    key_error_dict = {"password": "missingPassword",
-    "confirmedPassword": "missingConfirmedPassword"}
+    required_keys = [ "missingPassword", "confirmedPassword" ]
     post = {}
     then
-    error will be {"missingPassword": "Password is missing",
+    errors will be {"missingPassword": "Password is missing",
     "missingConfirmedPassword": "confirmedPassowrd is missing"}
     values = {}
-    :param key_error_dict: Takes a key error dictionary
+
+    :param required_keys: List of keys
     :param post: Post request
     :return: errors and post values converted to string
     """
     errors = {}
     values = {}
 
-    if dictionary == {}:
-        for key in post:
-            values[key] = post.get(key)
-        return errors, values
-
-    for key in dictionary:
+    #  find if anything is missing for not
+    for key in required_keys:
         error = missing[key]['error']
         value_in_response = post.get(key)
-        if is_missing(value_in_response):
+        if is_empty(value_in_response):
             errors[error] = str(key) + " is Missing"
         else:
             values[key] = str(value_in_response)
+
+    # If any key present in post, which is not required, converted to values.
+    for key in post:
+        if key not in errors and key not in values:
+            values[key] = post.get(key)
+
     return errors, values
 
 
 def key_validation(dictionary):
+    """
+    Function used to find if if all the keys present in the dictionary are valid
+    or not. key validation uses
+    :param dictionary: Dictionary whose should be phone1, phone2, email,
+    password, province, userId, listingId, price, bathrooms, bedrooms, sqft,
+    isPublished, thumbnailImageIndex, liked, valuesRequired, maxLimit,
+    listingIdList, lower, upper
+    Everything not in list is considered as valid
+    :return: the dictionary stating what all is invalid.
+    """
     invalid = {}
     for key in dictionary:
         value = dictionary[key]
+        if is_empty(value):
+            continue
         if key in valid_check:
             if not valid_check[key](value):
                 invalid[invalids[key]["error"]] = key + " is invalid"
@@ -277,7 +274,13 @@ def key_validation(dictionary):
 
 
 def is_valid_integer(input_string):
-    assert input_string != None
+    """
+    Checks if input_string is integer or not
+    :param input_string: A number or a string.
+    :return: True if integer, otherwise false
+    """
+
+    assert input_string is not None
     try:
         int(input_string)
         return True
@@ -286,7 +289,13 @@ def is_valid_integer(input_string):
 
 
 def is_valid_float(input_string):
-    assert input_string != None
+    """
+
+    Checks if input_string is float or not
+    :param input_string: A number or a string.
+    :return: True if float, otherwise false
+    """
+    assert input_string is not None
     try:
         float(input_string)
         return True
@@ -295,8 +304,13 @@ def is_valid_float(input_string):
 
 
 def is_valid_bool(input_string):
-    assert input_string != None
-    if input_string == "True" or input_string == "False":
+    """
+    Checks if input_string is boolean or not
+    :param input_string: A number or a string.
+    :return: True if boolean, otherwise false
+    """
+    assert input_string is not None
+    if input_string in ['true', "True", "TRUE", '1', "t", "y", "yes", "false", "False", "FALSE", "0", "n", "no", "N"]:
         return True
     else:
         return False
@@ -304,52 +318,57 @@ def is_valid_bool(input_string):
 
 def is_valid_phone(phone):
     """
-
-    :param phone:
-    :return: true if phone number is Valid
+    Checks if phone is valid phone or not. Valid here means, if it is of 10
+    digits or not.
+    :param phone: A number or a string.
+    :return: True if a valid phone number, otherwise false
     """
-    assert phone != None
+    assert phone is not None
     phone = str(phone)
     return len(phone) == 10 and is_valid_integer(phone)
 
+
 def is_valid_password(password):
     """
-
+    Checks if password is a valid password or not. Valid here checks if length
+    is greater than 8, has at least number, a lower case letter and an upper
+    case letter
     :param password:
-    :return: true if password is valid
+    :return: true if password is valid, otherwise false
     """
-    return len(password) >= 8 and any(s.islower() for s in password) and \
-           any(s.isupper() for s in password) and \
-           any(s.isdigit() for s in password)
+    return len(password) >= 8 and any(s.islower() for s in password) \
+           and any(s.isupper() for s in password) \
+           and any(s.isdigit() for s in password)
 
 
-def is_valid_string_list(list):
-    # return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-    #                    "province", "address", "description", "isPublished", "images",
-    #                    "thumbnailImageIndex"] for key in list)
-    # return not set(list).issubset({"sqft", "bedrooms", "bathrooms", "price", "city",
-    #         "province", "address", "description", "isPublished", "images", "thumbnailImageIndex"})
-    list_object = json.loads(list)
-    return not any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-                               "province", "address", "description", "isPublished", "images",
-                               "thumbnailImageIndex"] for key in list_object)
-
-
+def is_valid_string_listing(listing):
+    """
+    Checks if all the key is listing dictionary are contained in listing_keys
+    :param listing: a listing dictionary
+    :return: true if listing dictionary has all valid keys, otherwise false
+    """
+    if len(listing) == 0:
+        return True
+    list_object = json.loads(listing)
+    return not any(key not in listing_keys
+                   for key in list_object)
 
 
 def is_valid_integer_list(any_list):
+    """
+    Check if the complete list has all the integers or not.
+    :param any_list:
+    :return: true if all integers, otherwise false
+    """
     list_object = json.loads(any_list)
-    return not any(not is_valid_integer(str(listing_id)) for listing_id in list_object)
-    # for item in list(any_list):
-    #     if not is_valid_integer(item):
-    #         return False
-    # return True
-
+    return not any(not is_valid_integer(str(listing_id)) for listing_id in
+                   list_object)
 
 
 def is_valid_email(email):
     """
-    :param email:
+    Checks is email is valid or not
+    :param email: email that is needed to tested
     :return: True is email is valid
 
     """
@@ -357,16 +376,37 @@ def is_valid_email(email):
 
 
 def is_valid_province(province):
+    """
+    Check is the given string is a valid province is canada, either in full name
+    or abbreviated form
+    :param province: string that needs to be tested
+    :return: true if a valid province
+    """
     return province.lower() in province_complete or province  in province_abbr
 
+
 def is_valid_xor(dictionary, key1, key2):
+    """
+    Makes sure if xor condition is being hold or not, i.e. only one of key1 or
+    key2 should be present, but not both. We decided to allow to have none as
+    our condition, for simplicity.
+    :param dictionary:
+    :param key1:
+    :param key2:
+    :return:
+    """
     if key1 in dictionary and key2 in dictionary:
-        return is_missing(dictionary[key1]) or is_missing(dictionary[key2])
+        return is_empty(dictionary[key1]) or is_empty(dictionary[key2])
     else:
         return True
 
 
-def is_missing(var):
+def is_empty(var):
+    """
+
+    :param var:
+    :return:
+    """
     return var in ["", u'', '', None, [], {}] or str(var).isspace()
 
 
@@ -381,20 +421,10 @@ def is_missing(var):
 #                 return False
 
 
-
-def test_keys_validation():
-    keys = ["key1", "key2", "key3"]
-    errors = ["error1", "error2", "error3"]
-    key_error_dict = dict(zip(keys, errors))
-    response = {"key1": "a", "key2": "b", "key3": u'    '}
-    print(keys_missing(key_error_dict, response))
-    response = {"key1": "a", "key2": "b", "key3": u''}
-    print(keys_missing(key_error_dict, response))
-    response = {"key1": "a", "key2": "", "key3": u''}
-    print(keys_missing(key_error_dict, response))
-    response = {"key1": "a", "key2": "", "key3": u'    '}
-    print(keys_missing(key_error_dict, response))
-
+"""
+This dictionary is used to make checking for valid keys simpler. It maps the key
+to it's validator.
+"""
 
 valid_check = {
     "phone1": is_valid_phone,
@@ -411,7 +441,7 @@ valid_check = {
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
     "liked": is_valid_bool,
-    "valuesRequired": is_valid_string_list,
+    "valuesRequired": is_valid_string_listing,
     "maxLimit": is_valid_integer,
     "listingIdList": is_valid_integer_list,
     "lower": is_valid_integer,
@@ -419,34 +449,56 @@ valid_check = {
 }
 
 
-def write_error_to_response(response, error_message, error_status):
+def write_error_to_response(response, error_dict, error_status):
     """
-    :param self: self object
-    :param errorMessage: the error message to be sent
-    :param errorStatus: Error status, eg: 200 for success
+    Converts an error dict to json, and writes it to response.
+
+    :param response: response object, where message needs to be written
+    :param error_dict: the error message to be sent
+    :param error_status: Error status, eg: 200 for success
+    :return Nothing
     """
-    response.write(json.dumps(error_message))
+    response.write(json.dumps(error_dict))
     response.set_status(error_status)
 
 
 def write_success_to_response(response, success_dict):
+    """
+    Converts an success dict to json, and writes it to response.
+
+    :param response: response object, where message needs to be written
+    :param success_dict:
+    :return:
+    """
     response.write(json.dumps(success_dict))
     response.set_status(success)
 
 
 def scale_province(province):
+    """
+    Scale the province to it's abbreviated form.
+    :param province: valid province
+    :return:
+    """
+    assert is_valid_province(province)
     if province.lower() in province_complete:
         province = province_abbr[province_complete.index(province.lower())]
     return province
 
 
 def are_two_lists_same(list1, list2):
-    return len(set(list1).difference(set(list2))) == 0
+    """
+    Check is two lists are same or not, with order not mattering
+    :param list1: first list
+    :param list2: second list
+    :return: true if lists are identical, with ordering not mattering
+    """
+    return len(set(list1).difference(set(list2))) == 0 and \
+           len(list1) == len(list2)
 
 
-
-if __name__ == "__main__":
-    test_random_email()
-    test_random_password()
-
-
+def setup_testbed(test_handler):
+    test_handler.testbed = testbed.Testbed()
+    test_handler.testbed.activate()
+    test_handler.testbed.init_datastore_v3_stub()
+    test_handler.testbed.init_memcache_stub()

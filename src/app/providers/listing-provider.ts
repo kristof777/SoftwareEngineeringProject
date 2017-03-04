@@ -1,10 +1,11 @@
-import 'rxjs/add/operator/map';
-import {Injectable} from '@angular/core';
+let assert = require('assert-plus');
+import "rxjs/add/operator/map";
+import {Injectable} from "@angular/core";
 import {Listing} from "../models/listing";
 import {Location} from "../models/location";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../models/province";
-import {Http, ResponseContentType} from '@angular/http';
+import {Http} from "@angular/http";
 import {KasperService} from "./kasper-service";
 import {Filter} from "../models/filter";
 
@@ -29,6 +30,8 @@ export class ListingProvider {
      * Add a listing to the database
      */
     addListing(newListing: Listing){
+        assert.object(newListing, "Received a null listing");
+
         this._logger.error("ListingProvider.addListing is not implemented.");
     }
 
@@ -47,9 +50,9 @@ export class ListingProvider {
     /**
      * Remove a listing from the database
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
-    removeListing(listingID : number){
+    removeListing(listingId : number){
         this._logger.error("ListingProvider.removeListing is not implemented.");
     }
 

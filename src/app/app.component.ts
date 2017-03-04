@@ -24,7 +24,7 @@ export class MyApp {
                 this.createLoginTable(db);
             }, error => {
                 this._logger.error("Could not access SQLite database: ");
-                this._logger.error(error);
+                this._logger.error(JSON.stringify(error));
             });
         });
     }
@@ -44,7 +44,7 @@ export class MyApp {
                 // Don't do anything if it's created successfully or already exists.
             }, error => {
                 this._logger.error("Could not create session table: ");
-                this._logger.error(error);
+                this._logger.error(JSON.stringify(error));
             });
     }
 }

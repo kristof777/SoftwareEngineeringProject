@@ -5,6 +5,7 @@ import {Logger} from "angular2-logger/core";
 import {Listing} from "../../app/models/listing";
 import {FilterPage} from "../filter/filter";
 import {DetailPage} from "../detail/detail";
+import {Filter} from "../../app/models/filter";
 let assert = require('assert-plus');
 
 @Component({
@@ -44,7 +45,10 @@ export class BrowsePage {
      * @param index the index of the listing
      */
     dislikeListing(index: number): void{
-        this._logger.log("Disliking slide at index " + index);
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
+
+        this._logger.debug("Disliking slide at index " + index);
 
         this.toastCtrl.create({
             message: "Disliked the selected listing.",
@@ -61,7 +65,10 @@ export class BrowsePage {
      * @param index the index of the listing
      */
     likeListing(index: number): void{
-        this._logger.log("Liking slide at index " + index);
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
+
+        this._logger.debug("Liking slide at index " + index);
 
         this.toastCtrl.create({
             message: "Liked the selected listing.",
@@ -76,11 +83,16 @@ export class BrowsePage {
      * Display the filters screen
      */
     goToFilters(): void{
-        this._logger.info("Filters was clicked");
-        let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
+        this._logger.debug("Filters was clicked");
 
-        filterModal.onDidDismiss(data => {
-            this._logger.info("Filter Modal Data: " + JSON.stringify(data));
+        let filterModal = this.modalCtrl.create(FilterPage, { filter: null });
+
+        filterModal.onDidDismiss((data: Filter) => {
+            if(!data){
+                this._logger.debug("Filter Modal was cancelled");
+            } else {
+                this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
+            }
         });
 
         filterModal.present();
@@ -91,6 +103,9 @@ export class BrowsePage {
      * @param index the index of the listing
      */
     goToDetails(index): void{
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
+
         this.navCtrl.push(DetailPage, {data: this.listings, cursor: index});
     }
 }
