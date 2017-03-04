@@ -2,13 +2,13 @@
 set -v
 
 # Author: Chris Mykota-Reid ~.u 
-# Installs all the packages required for whatever build is being done
-# mkdir www is because Travis is a bad influence on Ionic and got it drunk
-# and now needs it's hand held through the build
+# Installs all the packages required for whatever build is being done.
+# Travis is a bad influence on Ionic and got it drunk
+# and now needs it's hand held through the build.  That's what 'mkdir www' is for.
 
 
-# downloads and installs all the files required to run ios
-# you can find the versions inside the doc or posted at the end 
+# Downloads and installs all the files required to run ios.
+# You can find the versions inside the doc or posted at the end 
 # of the build log
 ios_install(){
   brew update
@@ -18,9 +18,9 @@ ios_install(){
   ionic state restore
 }
 
-# downloads and installs all the common files required to run android/linux
-# you can find the versions inside the doc or posted at the end 
-# of the build log
+# Downloads and installs all the common files required to run android/linux.
+# You can find the versions inside the doc or posted at the end 
+# of the build log.
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default screen xvfb
   npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core
@@ -31,9 +31,9 @@ lindroid_install(){
   # chrome_install
 }
 
-# downloads and installs all the files required to run android
-# you can find the versions inside the doc or posted at the end 
-# of the build log
+# Downloads and installs all the files required to run android.
+# You can find the versions inside the doc or posted at the end 
+# of the build log.
 android_install(){
   ionic state restore
   wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
@@ -48,10 +48,8 @@ android_install(){
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
 }
 
-# downloads and installs google app engine for our server build
+# Downloads and installs google app engine for our server build.
 gae_install(){
-  #pip list
-  #curl https://sdk.cloud.google.com | bash  
   gcloud -v
   sudo gcloud components update
   echo "" | sudo gcloud components install app-engine-python
@@ -60,13 +58,14 @@ gae_install(){
   sudo pip install webapp2
   sudo pip install WebOb
   sudo pip install django
-  # sudo du / | grep "google-cloud"
 }
 
-# downloads and installs chrome 
-# DEPRICATED: 
-# this might not be needed anymore. adding google-chrome to sources
+# Downloads and installs chrome. 
+# DEPRICATED: this might not be needed anymore. adding google-chrome to sources
 # and google-chrome-stable to packages installs chrome now
+# Also currently not using chrome for testing.
+# Keeping this here in case it is needed again.
+# I am a code horder.  I have problems. I have stacks of
 chrome_install(){
     export CHROME_BIN=/usr/bin/google-chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -74,24 +73,12 @@ chrome_install(){
     npm install chromedriver
 }
 
-# downloads and installs geckodriver to be used with our build
-# DEPRICATED: Probably doesn't need to be here anymore since ver 47.0.1 doesn't
-# use it
-geckodriver_install(){
-    wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
-    tar -xvzf geckodriver*
-    chmod +x geckodriver
-    ls
-    ls geckodriver
-    echo $PWD
-}
 
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
   ios_install
-  mkdir www
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-  #echo "got to linux install"
+  echo "got to linux install"
   lindroid_install
   
   # prevent dialogue messages from appearing in gooogle app engine install
@@ -99,10 +86,9 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
   
   gae_install
-  mkdir www
 else
   echo "got to install: android"
   lindroid_install
   android_install
-  mkdir www
 fi
+mkdir www
