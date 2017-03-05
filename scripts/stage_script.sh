@@ -20,6 +20,9 @@ setup_git(){
   git config --global user.email "clm972@mail.usask.ca"
   git config --global user.name "ChrisMykotaReid"
   git remote set-url origin git@github.com:CMPT371Team1/Project.git
+  git branch id3
+  git checkout id3
+  git pull origin id3
   git branch id3_ReadyForTesting
   git checkout id3_ReadyForTesting
   git pull origin id3_ReadyForTesting
