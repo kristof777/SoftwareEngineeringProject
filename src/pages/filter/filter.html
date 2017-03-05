@@ -54,7 +54,7 @@
         <!--Bedrooms Range-->
         <ion-item>
             <ion-label stacked>Bedrooms</ion-label>
-            <ion-range [(ngModel)]="bedrooms" lower="1" upper="4" id="FlBed" dualKnobs="true" step="1" snaps="true" min="{{_bedroomsMin}}" max="{{_bedroomsMax}}" pin="true">
+            <ion-range [(ngModel)]="bedrooms" lower="1" upper="4" id="FlBedRange" dualKnobs="true" step="1" snaps="true" min="{{_bedroomsMin}}" max="{{_bedroomsMax}}" pin="true">
                 <ion-label *ngIf="bedrooms?.lower == 1" range-left>No Min</ion-label>
                 <ion-label *ngIf="bedrooms?.lower != 1" range-left>1</ion-label>
                 <ion-label *ngIf="bedrooms?.upper != 10" range-right>10</ion-label>
