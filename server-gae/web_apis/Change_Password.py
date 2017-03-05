@@ -7,47 +7,20 @@ from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.utils import *
 
 
-
-# We need to decide whether users are allowed to
-# access certain resources depending on if they are logged in or not.
-def user_required(handler): # TODO Garbage function
-    """
-    Decorator that checks if there's a user associated with the current session.
-    Will also fail if there's no session present.
-    """
-
-    def check_sign_in(self, *args, **kwargs):
-        auth = self.auth
-        if not auth.get_user_by_session():
-            self.redirect(self.uri_for('signIn'), abort=True)
-        else:
-            return handler(self, *args, **kwargs)
-
-    return check_sign_in
-
-
 class ChangePassword(BaseHandler):
     """
-    Class used to handle get and post.
+    lass containing the get and post for Change Password.
     Get:  is used to render an HTML page.
     Post:
         @pre-cond: Expecting keys to be old_password,
-                   new_password, and confirmed_password. If any of these is not
-                   present an appropriate error and status code 400 is returned.
+                   new_password, and confirmed_password.
 
-                   new_password and confirmed_password are expected to be equal
-                   then if not then appropriate missing_invalid_parameter_error
-                   is returned.
+        @post-cond: On success, a user's password is changed in the database.
 
-                   new passwords must be >=8in length, and have at least one
-                   uppercase, lowercase, and numeric character or it will return
-                   a missing_invalid_parameter_error.
+        @:return:   A new token if success with code 200, otherwise,
+                    an appropriate error message and code.
 
-        @post-cond: A users password is changed in the database. Token and
-                    userId is returned as an response
-                    object.
     """
-    # TODO Add return ^ & Grammarly
     def get(self):
         self.render_template('../webpages/Change_Password.html')
 
@@ -64,19 +37,24 @@ class ChangePassword(BaseHandler):
 
         errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
-        if len(errors) != 0:  # TODO >0
+        if len(errors) > 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # attempt to get the current user by the old password. Will throw an
-        # exception if the password or e-mail are unrecognized.
+        #check if user_id is not a valid int
+        if not is_valid_integer(values['userId']):
+            write_error_to_response(self.response, missing_invalid_parameter['error'],
+                                    missing_invalid_parameter['status'])
+            return
+
+        user = User.get_by_id(int(values['userId']))
         try:
-            user = User.get_by_id(int(values['userId']))  # TODO parseInt, move out of try
+            # attempt to get the current user by the old password. Will throw an
+            # exception if the password or e-mail are unrecognized.
             user_dict = self.auth.get_user_by_password(
                 user.email, values['oldPassword'], remember=True,
                 save_session=True)
-
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
@@ -97,7 +75,7 @@ class ChangePassword(BaseHandler):
         self.user_model.delete_auth_token((values['userId']), token)
         token = self.user_model.create_auth_token((values['userId']))
 
-        if not is_valid_password(values['newPassword']):  # TODO use fn in utils to check this
+        if not is_valid_password(values['newPassword']):
             write_error_to_response(self.response, password_not_strong['error'],
                                     password_not_strong['status'])
             return
@@ -107,19 +85,18 @@ class ChangePassword(BaseHandler):
                                     password_mismatch['status'])
             return
 
+        User.set_password(user, values['newPassword'])
+
         try:
-            User.set_password(user, values['newPassword'])  # TODO Remove from try
             # This will throw an exception if the password is wrong, which will
             # only happen if set_password failed.
             user_dict = self.auth.get_user_by_password(
                 user.email, values['newPassword'], remember=True,
                 save_session=True)
-        except:  # TODO specify possible exceptions
+        except (InvalidAuthIdError, InvalidPasswordError) as e:
             # set_password failed. This should never happen
             assert False
-        # TODO ++(++(++(++(++(assert++)++)++)++)++)++
         # self.auth.store.delete_auth_token(user['userId'], user['token'])
         user_dict = {'token': token}
-        self.response.write(json.dumps(user_dict))  # TODO use write_success from utils
-        self.response.set_status(200)
 
+        write_success_to_response(self.response,user_dict)
