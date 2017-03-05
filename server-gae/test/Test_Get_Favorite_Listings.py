@@ -6,7 +6,7 @@ import unittest
 import Main
 import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
-
+from extras.utils import get_response_from_post
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -110,13 +110,7 @@ def get_like_post_dictionary(userId, listingId, liked):
 
 
 def get_like_response(POST):
-    request = webapp2.Request.blank('/like', POST=POST)
-    response = request.get_response(Main.app)
-    if response.body:
-        return json.loads(response.body), response.status_int
-    else:
-        return None, response.status_int
-
+    return get_response_from_post(Main, POST, 'like')
 
 def run_tests():
     unittest.main()
