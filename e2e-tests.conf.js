@@ -1,6 +1,5 @@
 exports.config = {
     capabilities: {
-        //platformName: 'iOS',
         /*
         'browserName': 'chrome',
         'chromeOptions': {
