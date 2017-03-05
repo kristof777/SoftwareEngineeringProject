@@ -193,7 +193,7 @@ def create_random_user():
 def create_random_listing(user_id):
     """
     :param user_id: User Id where listing belongs
-    :return: a random listing with random field populated
+    :return: a listing with randomly generated fields
     """
     random_listing = {"userId": user_id,
                       "bedrooms": str(random.randint(1, 10)),
@@ -254,8 +254,9 @@ def key_validation(dictionary):
     password, province, userId, listingId, price, bathrooms, bedrooms, sqft,
     isPublished, thumbnailImageIndex, liked, valuesRequired, maxLimit,
     listingIdList, lower, upper
-    Everything not in list is considered as valid
-    :return: the dictionary stating what all is invalid.
+
+    Everything not in the list is considered as valid
+    :return: a dictionary containing all invalid keys.
     """
     invalid = {}
     for key in dictionary:
@@ -270,7 +271,7 @@ def key_validation(dictionary):
 
 def is_valid_integer(input_string):
     """
-    Checks if input_string is integer or not
+    Checks if input_string is an integer
     :param input_string: A number or a string.
     :return: True if integer, otherwise false
     """
@@ -325,10 +326,9 @@ def is_valid_phone(phone):
 
 def is_valid_password(password):
     """
-    Checks if password is a valid password or not. Valid here checks if length
-    is greater than 8, has at least number, a lower case letter and an upper
-    case letter
-    :param password:
+    Checks if password is a valid password or not. Valid passwords are >=8,
+    and have at least one lower-case, upper-case, and numeric character.
+    :param password: String to be checked
     :return: true if password is valid, otherwise false
     """
     return len(password) >= 8 and any(s.islower() for s in password) \
@@ -372,19 +372,16 @@ def is_valid_email(email):
 
 def is_valid_province(province):
     """
-    Check is the given string is a valid province is canada, either in full name
-    or abbreviated form
+    Checks the validity of a province string
     :param province: string that needs to be tested
-    :return: true if a valid province
+    :return: true if valid province
     """
     return province.lower() in province_complete or province  in province_abbr
 
 
 def is_valid_xor(dictionary, key1, key2):
     """
-    Makes sure if xor condition is being hold or not, i.e. only one of key1 or
-    key2 should be present, but not both. We decided to allow to have none as
-    our condition, for simplicity.
+    Ensures both of the given keys are not in the dictionary.
     :param dictionary:
     :param key1:
     :param key2:
@@ -398,9 +395,8 @@ def is_valid_xor(dictionary, key1, key2):
 
 def is_empty(var):
     """
-
     :param var:
-    :return:
+    :return: True if the var is empty, false otherwise
     """
     return var in ["", u'', '', None, [], {}] or str(var).isspace()
 
@@ -459,7 +455,8 @@ def write_error_to_response(response, error_dict, error_status):
 
 def write_success_to_response(response, success_dict):
     """
-    Converts an success dict to json, and writes it to response.
+    Converts dict to json, and writes it to response.
+    This function should be used for successful calls.
 
     :param response: response object, where message needs to be written
     :param success_dict:
@@ -483,10 +480,10 @@ def scale_province(province):
 
 def are_two_lists_same(list1, list2):
     """
-    Check is two lists are same or not, with order not mattering
+    Checks if two lists are same
     :param list1: first list
     :param list2: second list
-    :return: true if lists are identical, with ordering not mattering
+    :return: true if lists are identical
     """
     return len(set(list1).difference(set(list2))) == 0 and \
            len(list1) == len(list2)
