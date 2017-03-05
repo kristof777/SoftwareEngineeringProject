@@ -27,6 +27,7 @@ setup_git(){
 # Merges the successfully smoke tested code into the testing branch.
 merge(){
   git merge id3
+  git commit -m "smoke tests passed [ci skip]
   git push
 }
 
