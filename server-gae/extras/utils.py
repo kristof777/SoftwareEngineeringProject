@@ -32,13 +32,11 @@ listing_keys = ["sqft", "bedrooms", "bathrooms", "price", "city", "province",
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
     """
-    Function takes the integer, and return a random string of that length, which
-    contains n characters, with lower_case lower case characters, upper_case
-    upper case characters and numbers numbers.
-    :param n: representing the lenth of desired random string:
-    :param lower_case: number of desired lower case letters in random string
-    :param upper_case: number of desired upper case letters in random string
-    :param numbers: number of desired numbers in random string
+    Creates a random string with the given properties
+    :param n: lenth
+    :param lower_case: number of lower case characters
+    :param upper_case: number of upper case characters
+    :param numbers: number of numeric characters
     :return: a random string
     """
     s = ""
@@ -90,12 +88,10 @@ def get_random_password():
 
 def create_dummy_users_for_testing(main, n):
     """
-    Crates n Dummy Users with random valid password, email, first name,
-     last name, city, postalCode, phone number1, phone number2 (optionally)
-     "SK" as a province, userId, and a token
+     Creates n dummy users with random values.
     :param main: Main handler, to make an api call.
     :param n: number of dummy users required.
-    :return: a dictionary of user with email, first name,
+    :return: a dictionary containing: email, first name,
      last name, city, postalCode, phone number1, phone number2 (optionally)
      "SK" as a province, userId, and a token as keys.
     """
@@ -129,12 +125,12 @@ def create_dummy_users_for_testing(main, n):
 
 def create_dummy_listings_for_testing(main, num_listings, num_users=1):
     """
-    Crates n Dummy Users and listings, where all data in listings is random but
-    province which is saskatchewan.
+    Creates n dummy users and listings. All of the fields will be randomized,
+    with the exception of Province, which will be Saskatchewan
 
-    :param main: Main handler, to make an api call.
-    :param num_listings: number of dummy listing required.
-    :param num_users: number of users, in which listing needs to be distributed
+    :param main: Main handler
+    :param num_listings: number of dummy listing to create
+    :param num_users: number of users to assign listings to
     :return: a dictionary of listing with all listing data as keys and listingID
      """
     listings = []
@@ -179,7 +175,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
 
 def create_random_user():
     """
-    :return: a random user with random field populated
+    :return: a randomly generated user profile
     """
     password = get_random_password()
     user = {"email": get_random_email(),
@@ -222,7 +218,7 @@ def keys_missing(required_keys, post):
     Example :
     required_keys = [ "missingPassword", "confirmedPassword" ]
     post = {}
-    then
+
     errors will be {"missingPassword": "Password is missing",
     "missingConfirmedPassword": "confirmedPassowrd is missing"}
     values = {}
@@ -253,9 +249,8 @@ def keys_missing(required_keys, post):
 
 def key_validation(dictionary):
     """
-    Function used to find if if all the keys present in the dictionary are valid
-    or not. key validation uses
-    :param dictionary: Dictionary whose should be phone1, phone2, email,
+    Checks the validity a dictionary of keys.
+    :param dictionary: Dictionary containing:  phone1, phone2, email,
     password, province, userId, listingId, price, bathrooms, bedrooms, sqft,
     isPublished, thumbnailImageIndex, liked, valuesRequired, maxLimit,
     listingIdList, lower, upper
