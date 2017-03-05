@@ -5,6 +5,8 @@
 # Sends the sources code to a branch for more rigorous testing.
 # Is a modification of the deploy script.
 
+set -ev
+
 # Un-encrypts the ssh key, starts up and adds it to the list of keys for the Travis machine
 setup_ssh(){
   openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
