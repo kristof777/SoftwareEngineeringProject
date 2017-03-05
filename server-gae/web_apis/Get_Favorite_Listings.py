@@ -1,14 +1,19 @@
 import sys
-
 from extras.utils import *
 from models.Favorite import Favorite
 from models.Listing import Listing
 from models.User import User
-
 sys.path.append("../")
 
 
 class GetFavourites(webapp2.RequestHandler):
+    """
+    Class used to handle get and post.
+    Get:  do nothing
+    Post:
+        @pre-cond: Expecting keys to be userId
+        @post-cond: favorite listings that are published
+    """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -24,18 +29,16 @@ class GetFavourites(webapp2.RequestHandler):
         error_keys = ['userId']
 
         # check if there's any missing field, if so, just return to the user what all is missing
-        # if not, then go ahead and check validity
-
         errors, values = keys_missing(error_keys, self.request.POST)
 
         # If there exists error then return the response, and stop the function
+        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
+        # check validity for integer fields (userId)
         invalid = key_validation(values)
 
         if len(invalid) != 0:
@@ -51,13 +54,12 @@ class GetFavourites(webapp2.RequestHandler):
             }
             write_error_to_response(self.response, error, not_authorized)
             return
-
+        # Get all favorites object that satisfies the filter condition
         favorites = Favorite.query(Favorite.userId == int(values['userId']),
                                    Favorite.liked == True).fetch()
 
         returned_array = []
         for favorite in favorites:
-
             fav_listingId = favorite.listingId
             listing = Listing.get_by_id(fav_listingId)
 

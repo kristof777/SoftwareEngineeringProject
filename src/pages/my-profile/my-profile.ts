@@ -34,11 +34,7 @@ export class MyProfilePage {
                 public loginService: LoginService,
                 public platform: Platform,
                 private _logger: Logger) {
-        if(!this.loginService.isLoggedIn()){
-            navCtrl.setRoot(SignInPage);
-        } else {
-            this.loadUser();
-        }
+        this.loadUser();
 
         this.provinces = Province.asArray;
 

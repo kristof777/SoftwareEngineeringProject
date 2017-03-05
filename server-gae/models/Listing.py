@@ -1,8 +1,7 @@
 import sys
-sys.path.append("../")
 from google.appengine.ext import ndb
-import extras.Error_Code as Error_Code
-# Code from ID3
+sys.path.append("../")
+
 
 class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""
@@ -56,9 +55,6 @@ class Listing(ndb.Model):
     def set_sqft(self, sqft):
         self.sqft = int(sqft)
 
-
-
-
     def set_property(self, key, value):
         _key_to_set = {
             "price": self.set_price,
@@ -75,8 +71,6 @@ class Listing(ndb.Model):
             "city": self.set_city
         }
         _key_to_set[key](value)
-
-
 
     def get_value_from_key(self, key):
         _key_to_get_value = {
@@ -109,7 +103,7 @@ class Listing(ndb.Model):
         if key == 'description':
             return cls.description
         if key == 'isPublished':
-           return cls.isPublished
+            return cls.isPublished
         if key == 'province':
             return cls.province
         if key == 'city':
@@ -121,6 +115,6 @@ class Listing(ndb.Model):
         if key == 'address':
             return cls.address
         if key == 'listingId':
-           return cls.listingId
+            return cls.listingId
 
 

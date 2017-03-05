@@ -39,7 +39,6 @@ class SignInWithToken(BaseHandler):
             return
 
         assert token is not None
-        # Todo This is all wrong.userId is supposed to be given, and not email.
         user = (User.get_by_auth_token(int(user_id), token, subject='auth'))[0]
 
         if user is None:

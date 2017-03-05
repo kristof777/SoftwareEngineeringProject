@@ -7,8 +7,9 @@
 
 set -ev
 
-# Builds the ios app.  If we are deploying builds a release version, otherwise
-# builds and emulates the app for testing.
+# Builds the ios app.  If we are deploying, it builds a release version, otherwise,
+# builds and emulates the app for testing.  Currently not being built for 
+# deployment.
 ios_build(){
   ionic platform add ios
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
@@ -20,15 +21,13 @@ ios_build(){
   fi
 }
 
-# Builds the browser version of our app 
+# Builds the browser version of our app.  A deployment build should not be done
+# on this version.
 browser_build(){
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
     ionic build
-    # kill -9 $IONIC_PID
-    #python 371server-gae/main.py
   else
     # dev_appserver.py 371server-gae/main.py
-    ls
     ./scripts/test_script.sh
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests

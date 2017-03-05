@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../")
+sys.path.append('../')
 import logging
 from extras.Base_Handler import BaseHandler
 from models.User import *
@@ -8,9 +8,9 @@ from extras.utils import *
 
 
 
-# We need to decide whether uses are allowed to
+# We need to decide whether users are allowed to
 # access certain resources depending on if they are logged in or not.
-def user_required(handler):
+def user_required(handler): # TODO Garbage function
     """
     Decorator that checks if there's a user associated with the current session.
     Will also fail if there's no session present.
@@ -33,13 +33,13 @@ class ChangePassword(BaseHandler):
     Post:
         @pre-cond: Expecting keys to be old_password,
                    new_password, and confirmed_password. If any of these is not
-                   present an appropriate error and status code 40 is returned.
+                   present an appropriate error and status code 400 is returned.
 
                    new_password and confirmed_password are expected to be equal
                    then if not then appropriate missing_invalid_parameter_error
                    is returned.
 
-                   new passwords must be 8 in length, and have at least one
+                   new passwords must be >=8in length, and have at least one
                    uppercase, lowercase, and numeric character or it will return
                    a missing_invalid_parameter_error.
 
@@ -47,7 +47,7 @@ class ChangePassword(BaseHandler):
                     userId is returned as an response
                     object.
     """
-
+    # TODO Add return ^ & Grammarly
     def get(self):
         self.render_template('../webpages/Change_Password.html')
 
@@ -55,7 +55,7 @@ class ChangePassword(BaseHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
         # For each required field, making sure it is non-null, non-empty
-        # and contains more than than space characters
+        # and contains more than space characters
 
         error_keys = ['oldPassword', 'newPassword', 'confirmedPassword',
                       'userId']
@@ -64,7 +64,7 @@ class ChangePassword(BaseHandler):
 
         errors, values = keys_missing(error_keys, self.request.POST)
         # If there exists error then return the response, and stop the function
-        if len(errors) != 0:
+        if len(errors) != 0:  # TODO >0
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
@@ -72,7 +72,7 @@ class ChangePassword(BaseHandler):
         # attempt to get the current user by the old password. Will throw an
         # exception if the password or e-mail are unrecognized.
         try:
-            user = User.get_by_id(int(values["userId"]))
+            user = User.get_by_id(int(values['userId']))  # TODO parseInt, move out of try
             user_dict = self.auth.get_user_by_password(
                 user.email, values['oldPassword'], remember=True,
                 save_session=True)
@@ -80,46 +80,46 @@ class ChangePassword(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
-            write_error_to_response(self.response, not_authorized["error"],
+            write_error_to_response(self.response, not_authorized['error'],
                                     not_authorized['status'])
             return
 
         if user is None:
-            write_error_to_response(self.response, not_authorized["error"],
+            write_error_to_response(self.response, not_authorized['error'],
                                     not_authorized['status'])
             logging.info(
                 'Sign-in-with-token failed for user %s because of %s',
-                int(values["userId"]))
+                int(values['userId']))
             return
 
         # Get a new token
         token = user_dict['token']
-        self.user_model.delete_auth_token((values["userId"]), token)
-        token = self.user_model.create_auth_token((values["userId"]))
+        self.user_model.delete_auth_token((values['userId']), token)
+        token = self.user_model.create_auth_token((values['userId']))
 
-        if not is_valid_password(values['newPassword']):
+        if not is_valid_password(values['newPassword']):  # TODO use fn in utils to check this
             write_error_to_response(self.response, password_not_strong['error'],
                                     password_not_strong['status'])
             return
 
         if values['newPassword'] != values['confirmedPassword']:
-            write_error_to_response(self.response, password_mismatch["error"],
+            write_error_to_response(self.response, password_mismatch['error'],
                                     password_mismatch['status'])
             return
 
         try:
-            User.set_password(user, values['newPassword'])
+            User.set_password(user, values['newPassword'])  # TODO Remove from try
             # This will throw an exception if the password is wrong, which will
             # only happen if set_password failed.
             user_dict = self.auth.get_user_by_password(
                 user.email, values['newPassword'], remember=True,
                 save_session=True)
-        except:
+        except:  # TODO specify possible exceptions
             # set_password failed. This should never happen
-            assert (False)
-
+            assert False
+        # TODO ++(++(++(++(++(assert++)++)++)++)++)++
         # self.auth.store.delete_auth_token(user['userId'], user['token'])
         user_dict = {'token': token}
-        self.response.write(json.dumps(user_dict))
+        self.response.write(json.dumps(user_dict))  # TODO use write_success from utils
         self.response.set_status(200)
-        return
+
