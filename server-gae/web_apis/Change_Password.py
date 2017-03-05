@@ -85,6 +85,12 @@ class ChangePassword(BaseHandler):
                                     password_mismatch['status'])
             return
 
+        if values['newPassword'] == values['oldPassword']:
+            write_error_to_response(self.response,
+                                    new_password_is_the_same_as_old['error'],
+                                    new_password_is_the_same_as_old['status'])
+            return
+
         User.set_password(user, values['newPassword'])
 
         try:
