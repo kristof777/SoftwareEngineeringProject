@@ -12,7 +12,7 @@ import Main
 import webapp2
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import setup_testbed  # TODO add newPassword=oldPassword
+from extras.utils import setup_testbed
 
 
 class TestHandlerChangePassword(unittest.TestCase):
@@ -20,7 +20,9 @@ class TestHandlerChangePassword(unittest.TestCase):
         setup_testbed(self)
 
     def test_change_password(self):
-        database_entry1 = {"email": "student@usask.ca",  # TODO Random utils
+        # I need to create the database entry manually because I need access
+        # to the password.
+        database_entry1 = {"email": "student@usask.ca",
                   "password": "aaAA1234",
                   "firstName": "Student",
                   "lastName": "USASK",
@@ -38,7 +40,7 @@ class TestHandlerChangePassword(unittest.TestCase):
         user_id = user['userId']
 
         # If this assert fails then create user unit tests should be run
-        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.status_int, success)
 
 
         # Case 1: They do not enter one or many fields.
@@ -46,7 +48,7 @@ class TestHandlerChangePassword(unittest.TestCase):
         request = webapp2.Request.blank('/changePassword', POST=input1)
         response = request.get_response(Main.app)  # get response back
 
-        self.assertEquals(response.status_int, 400)
+        self.assertEquals(response.status_int, missing_invalid_parameter)
         errors_expected = [missing_password['error'],
                            missing_new_password['error'],
                            missing_confirmed_password['error'],
@@ -63,7 +65,7 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         request = webapp2.Request.blank('/changePassword', POST=input2)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 401)
+        self.assertEquals(response.status_int, unauthorized_access)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
@@ -78,7 +80,7 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         request = webapp2.Request.blank('/changePassword', POST=input3)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 401)
+        self.assertEquals(response.status_int, unauthorized_access)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
@@ -93,14 +95,30 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         request = webapp2.Request.blank('/changePassword', POST=input4)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 403)
+        self.assertEquals(response.status_int, processing_failed)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse(True)
         self.assertEquals(password_not_strong['error'], error_message)
 
-        # Case5: Success case
+        # Case5: new passwords and old password are the same
+        input4 = {"oldPassword": "aaAA1234",
+                  "newPassword": "aaAA1234",
+                  "confirmedPassword": "aaAA1234",
+                  "userId": user_id}
+
+        request = webapp2.Request.blank('/changePassword', POST=input4)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, processing_failed)
+        try:
+            error_message = str(json.loads(response.body))
+        except IndexError as _:
+            self.assertFalse(True)
+        self.assertEquals(new_password_is_the_same_as_old['error'],
+                          error_message)
+
+        # Case6: Success case
         input5 = {"oldPassword": "aaAA1234",
                   "newPassword": "newPass123",
                   "confirmedPassword": "newPass123",
@@ -108,7 +126,7 @@ class TestHandlerChangePassword(unittest.TestCase):
 
         request = webapp2.Request.blank('/changePassword', POST=input5)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
+        self.assertEquals(response.status_int, success)
 
         output = json.loads(response.body)
         self.assertTrue("token" in output)
