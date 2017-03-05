@@ -32,7 +32,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "phone1": 1111111111,
                   "confirmedPassword": "aaAA1234" }
 
-        request = webapp2.Request.blank('/createUser', POST=database_entry1)  # TODO make fn
+        request = webapp2.Request.blank('/createUser', POST=database_entry1)
         response = request.get_response(Main.app)
 
         user = json.loads(response.body)
@@ -54,7 +54,7 @@ class TestHandlerChangePassword(unittest.TestCase):
                            missing_confirmed_password['error'],
                            missing_user_id['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertEquals(len(set(errors_expected).  # TODO use fn in utils
+        self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
         # Case 2: Incorrect old password
@@ -70,6 +70,7 @@ class TestHandlerChangePassword(unittest.TestCase):
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse(True)
+            return
         self.assertEquals(not_authorized['error'], error_message)
 
         # Case3: Passwords do not match
