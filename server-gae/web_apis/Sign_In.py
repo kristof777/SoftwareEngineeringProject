@@ -2,7 +2,7 @@ import logging
 
 from extras.utils import *
 import sys
-sys.path.append("../")
+sys.path.append('../')
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.Base_Handler import BaseHandler
 from extras.Error_Code import *
@@ -29,19 +29,19 @@ class SignIn(BaseHandler):
         user_email = self.request.POST.get('email')
 
         if user_email is None:
-            message[missing_email['error']] = "Missing user email"
+            message[missing_email['error']] = 'Missing user email'
         password = self.request.POST.get('password')
         if password is None:
-            message[missing_password["error"]] = "Missing password"
+            message[missing_password['error']] = 'Missing password'
 
-        if len(message.keys()) != 0:
+        if len(message.keys()) != 0:  # TODO use other fn to do this
             write_error_to_response(self.response, message,
                                     missing_invalid_parameter)
             return
 
         assert user_email is not None and password is not None
         try:
-            # Todo This is all wrong. userId is supposed to be given, and not email.
+            # TODO user_email to lower
             user = self.auth.get_user_by_password(
                 user_email, password, remember=True, save_session=True)
 
@@ -54,13 +54,13 @@ class SignIn(BaseHandler):
                          'phone2': user['phone2'],
                          'city': user['city'],
                          'province': user['province']}
-            self.response.out.write(json.dumps(user_dict))
+            self.response.out.write(json.dumps(user_dict)) # TODO write success to response fn
             self.response.set_status(success)
 
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          user_email, type(e))
-            write_error_to_response(self.response, not_authorized["error"],
+            write_error_to_response(self.response, not_authorized['error'],
                                     not_authorized['status'])
 
     def _serve_page(self, failed=False):
@@ -69,5 +69,5 @@ class SignIn(BaseHandler):
             'user_email': user_email,
             'failed': failed
         }
-        self.response.write("Failed")
+        self.response.write('Failed')
         self.render_template('../webpages/Sign_In.html', params)
