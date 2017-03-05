@@ -33,4 +33,4 @@ merge(){
 
 setup_ssh
 setup_git
-deploy
+merge
