@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 import unittest
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'server-gae.settings'
 import Main
 from web_apis.Create_User import *
 
@@ -222,9 +222,10 @@ def get_like_response(POST):
     request = webapp2.Request.blank('/like', POST=POST)
     response = request.get_response(Main.app)
     if response.body:
-        return json.loads(response.body), response.status_int
-    else:
-        return None, response.status_int
+        json_body = json.loads(response.body)
+        if json_body:
+            return json_body, response.status_int
+    return None, response.status_int
 
 
 def get_listing_response(POST):

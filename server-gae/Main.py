@@ -23,11 +23,10 @@
 #############################################################################################
 
 import os
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from google.appengine.dist import use_library
-# use_library('django', '0.96')
-# webapp_django_version = '0.96'
+use_library('django', '0.96')
+webapp_django_version = '0.96'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'server-gae.settings'
 from web_apis.Sign_In import SignIn
 from web_apis.Create_User import *
 from web_apis.Create_Listing import *
@@ -42,13 +41,13 @@ from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
 from web_apis.Get_Listings import GetListing
 from web_apis.Confirm_Email import VerificationHandler
-# from web_apis.SignInWithToken import *
 
 # configuration
 config = {
     'webapp2_extras.auth': {
         'user_model': User,
-        'user_attributes': ['email', 'first_name', 'last_name', 'phone1', 'phone2', 'province', 'city']
+        'user_attributes': ['email', 'first_name', 'last_name', 'phone1',
+                            'phone2', 'province', 'city']
     },
     'webapp2_extras.sessions':{
         'secret_key': 'YOUR_SECRET_KEY'
@@ -76,7 +75,4 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/getMyListing', GetMyListing),
     webapp2.Route('/editUser', EditUser),
     webapp2.Route('/getListings', GetListing)
-
-
-    # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

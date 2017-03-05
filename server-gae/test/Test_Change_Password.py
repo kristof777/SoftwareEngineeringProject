@@ -10,7 +10,6 @@ import os
 import unittest
 import Main
 import webapp2
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import setup_testbed  # TODO add newPassword=oldPassword
 
@@ -109,10 +108,8 @@ class TestHandlerChangePassword(unittest.TestCase):
         request = webapp2.Request.blank('/changePassword', POST=input5)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 200)
-
         output = json.loads(response.body)
         self.assertTrue("token" in output)
-
 
     def tearDown(self):
         self.testbed.deactivate()

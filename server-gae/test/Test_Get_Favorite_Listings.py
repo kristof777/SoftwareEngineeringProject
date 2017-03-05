@@ -113,10 +113,10 @@ def get_like_response(POST):
     request = webapp2.Request.blank('/like', POST=POST)
     response = request.get_response(Main.app)
     if response.body:
-        return json.loads(response.body), response.status_int
-    else:
-        return None, response.status_int
-
+        json_body = json.loads(response.body)
+        if json_body:
+            return json_body, response.status_int
+    return None, response.status_int
 
 def run_tests():
     unittest.main()

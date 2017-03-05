@@ -40,6 +40,8 @@ class CreateUser(BaseHandler):
                                     missing_invalid_parameter)
             return
 
+        assert len(errors) == 0
+
         phone2 = self.request.POST.get('phone2')
         if not is_empty(phone2):
             values['phone2'] = phone2
@@ -55,6 +57,8 @@ class CreateUser(BaseHandler):
                                     missing_invalid_parameter)
             return
 
+        assert len(invalid) == 0
+
         if values['password'] != values['confirmedPassword']:
             error = {
                 password_mismatch['error']:
@@ -64,7 +68,12 @@ class CreateUser(BaseHandler):
 
             return
 
+        assert values['password']  == values['confirmedPassword']
+
         values['province'] = scale_province(str(values['province']))
+
+        assert len(values['province']) == 2
+
         unique_properties = ['email']
         user_data = self.user_model.create_user(
             values['email'], unique_properties, email=values['email'],
