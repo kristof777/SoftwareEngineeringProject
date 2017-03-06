@@ -138,6 +138,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
 
                 # change the liked field to be false
                 favorite.liked = False
+                favorite.put()
 
         # return successfully
         write_success_to_response(self.response, {})

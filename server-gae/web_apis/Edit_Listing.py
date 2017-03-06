@@ -125,6 +125,6 @@ class EditListing(webapp2.RequestHandler):
 
         for key in change_values:
             listing.set_property(key, change_values[key])
-
+        listing.put()
         write_success_to_response(self.response, {
             'modifiedDate': str(datetime.datetime.now())})
