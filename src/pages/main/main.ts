@@ -13,7 +13,7 @@ import {SignInPage} from "../sign-in/sign-in";
         `<ion-tabs color="primary">
             <ion-tab [root]="tab1Root" tabTitle="Browse" tabIcon="search"></ion-tab>
             <ion-tab [root]="tab2Root" tabTitle="Favourites" tabIcon="heart"></ion-tab>
-            <ion-tab [root]="tab3Root" tabTitle="My Profile" tabIcon="person"></ion-tab>
+            <ion-tab [root]="tab3Root" tabTitle="My Profile" tabIcon="person" (click)="setProfileRoot()"></ion-tab>
             <ion-tab [root]="tab4Root" tabTitle="My Listings" tabIcon="list-box" class="tab-secondary"></ion-tab>
         </ion-tabs>`
 })
@@ -24,7 +24,11 @@ export class MainPage {
     tab4Root: any = MyListingsPage;
 
     constructor(private loginService: LoginService) {
-        if(loginService.isLoggedIn()){
+        this.setProfileRoot();
+    }
+
+    setProfileRoot(){
+        if(this.loginService.isLoggedIn()){
             this.tab3Root = MyProfilePage;
         } else {
             this.tab3Root = SignInPage;
