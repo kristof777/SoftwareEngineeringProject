@@ -15,6 +15,8 @@ let assert = require('assert-plus');
 })
 export class BrowsePage {
     listings: Listing[];
+    filter: Filter;
+
     voteDelay: number = 1000;
     canVote: boolean = true;
 
@@ -90,14 +92,16 @@ export class BrowsePage {
      */
     goToFilters(): void{
         this._logger.debug("Filters was clicked");
+        let me = this;
 
-        let filterModal = this.modalCtrl.create(FilterPage, { filter: null });
+        let filterModal = this.modalCtrl.create(FilterPage, { filter: this.filter });
 
         filterModal.onDidDismiss((data: Filter) => {
             if(!data){
                 this._logger.debug("Filter Modal was cancelled");
             } else {
                 this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
+                me.filter = data;
             }
         });
 
