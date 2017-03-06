@@ -1,12 +1,12 @@
-let assert = require('assert-plus');
+import {LoginService} from "../../app/providers/login-service";
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component} from "@angular/core";
+import {NavController, ModalController} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
-import {BrowsePage} from "../browse/browse"
-import {EditListingsPage} from "../edit-listings/edit-listings"
-import {AddListingPage} from "../add-listing/add-listing"
+import {DetailPage} from "../detail/detail";
+import {AddListingPage} from "../add-listing/add-listing";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-my-listings',
@@ -18,20 +18,23 @@ export class MyListingsPage {
     listings: Listing[];
 
     constructor(public navCtrl: NavController,
+                public modalCtrl: ModalController,
                 public listingProvider: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger) {
 
-        let data = listingProvider.savedListings.myListings;
-        this.listings = Object.keys(data).map(key => data[key]);
+        this.listings = Array();
+        // let data = listingProvider.savedListings.myListings;
+        // this.listings = Object.keys(data).map(key => data[key]);
     }
 
     /**
-     * Shows up the information about listing, in browse mode
+     * Display the detailed view for the selected listing
      *
      * @param listing listing clicked by user
      */
     selectListing(listing:Listing){
-        this.navCtrl.push(BrowsePage, {
+        this.navCtrl.push(DetailPage, {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
@@ -39,12 +42,13 @@ export class MyListingsPage {
     }
 
     /**
+     * Display the edit listing view for the selected listing
      *
      * @param listing: listing to be edited
      */
     editListing(listing:Listing){
-        this.navCtrl.push(EditListingsPage,{
-            data:listing
+        this.navCtrl.push(AddListingPage,{
+            listing:listing
         });
         this._logger.debug("Trying to edit...")
 
@@ -63,7 +67,39 @@ export class MyListingsPage {
      * Takes you to listing page
      */
     addListing(){
-        // TODO switch to a modal
+
         this.navCtrl.push(AddListingPage);
+    }
+
+    /**
+     * Get the Unpublished listing
+     *
+     * @returns {Listing[]}  Unpublished listing
+     */
+    getUnpublished(): Listing[]{
+        let result: Listing[] = [];
+
+        for(let i=0; i<this.listings.length; i++){
+            if(!this.listings[i].isPublished)
+                result.push(this.listings[i]);
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the published listing
+     *
+     * @returns {Listing[]}  Published listing
+     */
+    getPublished(): Listing[]{
+        let result: Listing[] = [];
+
+        for(let i=0; i<this.listings.length; i++){
+            if(this.listings[i].isPublished)
+                result.push(this.listings[i]);
+        }
+
+        return result;
     }
 }

@@ -1,7 +1,7 @@
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
@@ -14,6 +14,10 @@ import {Province} from "../../app/models/province";
     providers: [ListingProvider]
 })
 export class AddListingPage {
+    curListing: Listing;
+
+    private listingId;
+    private listerId;
     bathrooms: number;
     province: string;
     city: string;
@@ -27,31 +31,52 @@ export class AddListingPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public navParams: NavParams,
                 private _logger: Logger) {
         this.images = [];
+
+        if(this.navParams.get('listing')){
+            this.loadListingInfo(this.navParams.get('listing'));
+        }
     }
 
-    /**
-     * Returns true if all of the required fields are present
-     */
-    verifyFields(): boolean{
-        return false;
-    }
+    loadListingInfo(listing: Listing): void{
+        assert.object(listing, "listing should never be null");
 
-    /**
-     * Save the listing to the device and the server
-     */
-    save(){
-        let newListing: Listing = new Listing(
-            -1, -1, // listingId, listerId
-            new Location(Province.fromAbbr(this.province), this.city, this.address, this.postalCode,
-                0.0, 0.0), // longintude, latitude
-            this.bedrooms, this.bathrooms, this.squarefeet, this.price, this.description,
-            false, "0000-00-00", "0000-00-00", // isPublished, created, modified
-            this.images,
+        this.curListing = new Listing(
+            listing.listingId,
+            listing.listerId,
+            new Location(
+                Province.fromAbbr(listing.location.province.abbr),
+                listing.location.city,
+                listing.location.address,
+                listing.location.postalCode,
+                listing.location.latitude,
+                listing.location.longitude,
+            ),
+            listing.bedrooms,
+            listing.bathrooms,
+            listing.squarefeet,
+            listing.price,
+            listing.description,
+            listing.isPublished,
+            listing.createdDate,
+            listing.modifiedDate,
+            listing.images
         );
 
-        this.listingProvider.addListing(newListing);
+        this.listingId = listing.listingId;
+        this.listerId = listing.listerId;
+        this.bathrooms = listing.bathrooms;
+        this.province = listing.location.province.abbr;
+        this.city = listing.location.city;
+        this.bedrooms = listing.bedrooms;
+        this.squarefeet = listing.squarefeet;
+        this.price = listing.price;
+        this.address = listing.location.address;
+        this.postalCode = listing.location.postalCode;
+        this.description = listing.description;
+        this.images = listing.images;
     }
 
     /**
@@ -71,12 +96,29 @@ export class AddListingPage {
         Camera.getPicture(options).then((data) => {
             this.images[this.images.length] = data;
         }, (error) => {
-            this._logger.log(error);
+            this._logger.error("An error occurred while selecting an image.");
+            this._logger.error(JSON.stringify(error));
         });
+    }
+
+    /**
+     * Save the listing to the device and the server
+     */
+    saveWithoutPublishing(){
+        this._logger.error("AddListingPage.saveWithoutPublishing is not implemented yet");
     }
 
     /**
      * Set the listing to published
      */
-    publish(){}
+    saveAndPublish(){
+        this._logger.error("AddListingPage.saveAndPublish is not implemented yet");
+    }
+
+    /**
+     * Set the listing to unpublished
+     */
+    unpublish(){
+        this._logger.error("AddListingPage.unpublish is not implemented yet");
+    }
 }

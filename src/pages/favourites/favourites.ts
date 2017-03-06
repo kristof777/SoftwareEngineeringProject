@@ -1,10 +1,11 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
-let assert = require('assert-plus');
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
+import {Component} from "@angular/core";
+import {NavController} from "ionic-angular";
+import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
-import {BrowsePage} from "../browse/browse"
+import {DetailPage} from "../detail/detail";
+import {LoginService} from "../../app/providers/login-service";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-favourites',
@@ -17,10 +18,12 @@ export class FavouritesPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public loginService: LoginService,
                 private _logger: Logger) {
 
-        let data = listingProvider.savedListings.favListings;
-        this.listings = Object.keys(data).map(key => data[key]);
+        this.listings = Array();
+        // let data = listingProvider.savedListings.favListings;
+        // this.listings = Object.keys(data).map(key => data[key]);
     }
 
     /**
@@ -30,7 +33,7 @@ export class FavouritesPage {
      */
     selectListing(listing:Listing){
         // open about that listing
-        this.navCtrl.push(BrowsePage,{
+        this.navCtrl.push(DetailPage,{
             data:this.listings,
             cursor:this.listings.indexOf(listing)
         });

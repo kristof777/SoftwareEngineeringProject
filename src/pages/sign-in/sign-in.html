@@ -1,22 +1,45 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            Sign In
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
 <ion-content padding>
     <img class="logo" src="http://placehold.it/300x300" />
 
-    <ion-list inset>
-        <ion-item>
-            <ion-label><ion-icon name="contact"></ion-icon></ion-label>
-            <ion-input [(ngModel)]="email" type="text" placeholder="E-mail" id="email"></ion-input>
-        </ion-item>
+    <form [formGroup]="loginForm">
+        <ion-list inset>
+            <ion-item>
+                <ion-label><ion-icon name="contact"></ion-icon></ion-label>
+                <ion-input formControlName="email" (blur)="attemptEmail()" type="text" placeholder="E-mail" id="email"></ion-input>
+            </ion-item>
 
-        <ion-item>
-            <ion-label><ion-icon name="lock"></ion-icon></ion-label>
-            <ion-input [(ngModel)]="password" type="password" placeholder="Password" id="password"></ion-input>
-        </ion-item>
-    </ion-list>
+            <ion-item no-lines class="invalid" *ngIf="!loginForm.controls.email.valid && emailAttempted">
+                The email you entered is invalid.
+            </ion-item>
 
-    <button ion-button block color="primary" (click)="doSignIn()">Sign In</button>
+            <ion-item>
+                <ion-label><ion-icon name="lock"></ion-icon></ion-label>
+                <ion-input formControlName="password" type="password" placeholder="Password" id="password"></ion-input>
+            </ion-item>
+        </ion-list>
+
+        <button ion-button block color="primary" (click)="doSignIn()">Sign In</button>
+    </form>
 
     <div class="register">
         <p>Need an account?</p>
         <p><a href="#" (click)="pushRegister()">Register Here</a></p>
     </div>
+
+    <div class="facebookLogin">
+        <p>Login with Facebook
+            <button ion-button item-left clear icon-only id = "facebook" (click)="facebookLogin()">
+                <ion-icon name = "logo-facebook"></ion-icon>
+            </button>
+        </p>
+    </div>
+
 </ion-content>

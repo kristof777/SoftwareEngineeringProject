@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>
+            My Profile
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list [formGroup]="profileGroup">
+        <ion-item no-lines color="danger" text-wrap *ngIf="!loginService.isLoggedIn()">
+            You are not logged in.
+        </ion-item>
+        <ion-list-header>PROFILE</ion-list-header>
+        <ion-item>
+            <ion-label stacked>Email</ion-label>
+            <ion-input formControlName="email" type="text" placeholder="{{ currentUser?.email }}" id="settingsEmail"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>First Name</ion-label>
+            <ion-input formControlName="firstName" type="text" placeholder="{{ currentUser?.firstName }}" id="settingsFirstName"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Last Name</ion-label>
+            <ion-input formControlName="lastName" type="text" placeholder="{{ currentUser?.lastName }}" id="settingsLastName"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Primary Phone</ion-label>
+            <ion-input formControlName="phone1" type="tel" placeholder="{{ currentUser?.phone1 }}" id="settingsPhoneNumber"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Secondary Phone</ion-label>
+            <ion-input formControlName="phone2" type="tel" placeholder="{{ currentUser?.phone2 }}"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Province</ion-label>
+            <ion-select formControlName="province" placeholder="{{ currentUser?.location.province.name }}" id="settingsProvince">
+                <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>City</ion-label>
+            <ion-input formControlName="city" type="text" placeholder="{{ currentUser?.location.city }}" id="settingsCity"></ion-input>
+        </ion-item>
+
+        <ion-list-header>Setting</ion-list-header>
+
+        <ion-item>
+            <ion-label staked>Notification</ion-label>
+            <ion-toggle formControlName="notificationsEnabled"></ion-toggle>
+        </ion-item>
+
+        <ion-item>
+            <button ion-button block (click)="showChangePassword()">Change Password</button>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-item>
+        <button item-left ion-button clear (click)="signOut()">Sign Out</button>
+        <button item-right ion-button clear (click)="saveChanges()">Save</button>
+    </ion-item>
+</ion-footer>

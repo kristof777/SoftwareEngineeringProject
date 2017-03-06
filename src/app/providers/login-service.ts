@@ -1,110 +1,132 @@
-import { Injectable } from '@angular/core';
-import {Http, ResponseContentType} from '@angular/http';
-import {KasperConfig} from "../kasper-config";
-import 'rxjs/add/operator/map';
-import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
+import {KasperConfig} from "../kasper-config";
+import {Injectable} from "@angular/core";
+import {SQLite} from "ionic-native";
+import "rxjs/add/operator/map";
+import {Logger} from "angular2-logger/core";
+import {User} from "../models/user";
+import {Platform} from "ionic-angular";
 
+/**
+ * LoginService holds the current session data of a user, and saves the session data to the device
+ * for the app to automatically sign to sign in with later.
+ */
 @Injectable()
-export class UserService {
+export class LoginService {
+    private db: SQLite;
 
-    constructor(public http: Http,
-                private _logger: Logger) {
+    // The data previously stored in the database
+    private userId: number;
+    private token: string;
+
+    // The user object returned after logging in
+    public static user: User;
+
+    constructor(private _logger: Logger,
+                private platform: Platform) {
+        this.platform.ready().then(() => {
+            this.db = new SQLite();
+
+            this.db.openDatabase(KasperConfig.DB_INFO)
+                .then(() => {
+                    this.loadSessionInfo();
+                }, error => {
+                    this._logger.error("Could not access database: ");
+                    this._logger.error(JSON.stringify(error));
+                });
+        });
     }
 
     /**
-     * Send a login request to the server
+     * Set the logged in user
      *
-     * @param email     the email to sign in with
-     * @param password  the password to sign in with
-     * @param cbLogin   the callback for the data
+     * @param user   the user who is logged in
      */
-    login(email: string, password: string, cbLogin: (data: any) => void): void{
-        let body = new FormData();
-        body.append('email', email);
-        body.append('password', password);
-
-        this.http.post(KasperConfig.API_URL + "/signin", body, ResponseContentType.Json)
-            .subscribe(data => {
-                cbLogin(data);
-            }, error => {
-                this._logger.log("Oooops, sign in failed!");
-                this._logger.log(error);
-            });
+    public setUser(user: User){
+        LoginService.user = user;
+        this.userId = user.id;
     }
 
     /**
-     * Send a request to register the user in the database, then log them in
+     * Update the token for the currently logged in user.
      *
-     * @param email             the email of the user
-     * @param password          the desired password
-     * @param confirmedPassword the password confirmation
-     * @param firstName         the first name of the user
-     * @param lastName          the last name of the user
-     * @param phoneNumber       the primary phone number of the user
-     * @param city              the city of the user
+     * @param token the new token
      */
-    signUp(email: string, password: string, confirmedPassword: string, firstName: string,
-           lastName: string, phoneNumber: string, city: string): void{
-        let body = new FormData();
-        body.append('email', email);
-        body.append('password', password);
-        body.append('confirmedPassword', confirmedPassword);
-        body.append('firstName', firstName);
-        body.append('lastName', lastName);
-        body.append('phone1', phoneNumber);
-        body.append('city', city);
-        body.append('province', "SK");
-        body.append('postalcode', "123456");
+    public setToken(token: string): void{
+        assert.string(token, "The received token was not a string");
 
-        this.http.post(KasperConfig.API_URL + "/createuser", body, ResponseContentType.Json)
-            .subscribe(data => {
-                this._logger.log(data);
-                // TODO use the response to login
-            }, error => {
-                this._logger.log("Oooops, sign in failed!");
-                this._logger.log(error);
-            });
+        this.token = token;
+        this.updateToken(token);
+
+        this._logger.debug("New token has been set: " + token);
     }
-     /** Checks a password for validity.
-     *
-     * @param password  the password to check
-     * @precond         the password is not null
-     * @returns {strength, message}
-     *          strength    the strength of the password [0 to 4]
-     *          message     a message depicting how to raise the strength
-     */
-    checkPass(password: string): Object{
-        assert (password != null);
-        let lowerCase = new RegExp("^(?=.*[a-z])");
-        let upperCase = new RegExp("^(?=.*[A-Z])");
-        let numeric = new RegExp("^(?=.*[0-9])");
-        let length = new RegExp("^(?=.{7,})");
 
-        if(!lowerCase.test(password)){
-            return {
-                strength: 0,
-                message: "Password must include at least one lower case letter"
-            };
-        } else if(!upperCase.test(password)){
-            return {
-                strength: 1,
-                message: "Password must include at least one upper case letter"
-            };
-        } else if(!numeric.test(password)){
-            return {
-                strength: 2,
-                message: "Password must include at least one number"
-            };
-        } else if(!length.test(password)){
-            return {
-                strength: 3,
-                message: "Password must include at least 7 characters long"
-            };
-        } else {
-            return {
-                strength: 4
-            };
-        }
+    /**
+     * Get the currently logged in user's id
+     *
+     * @returns {number}    the id
+     */
+    public getUserId(): number{
+        assert.number(this.userId, "The userId is not defined");
+
+        return this.userId;
+    }
+
+    /**
+     * Get the currently stored token
+     * @returns {string}    the token
+     */
+    public getToken(): string{
+        assert.string(this.token, "The token is not defined");
+
+        return this.token;
+    }
+
+    /**
+     * Insert a new userId/token pair into the users.
+     *
+     * @param token the token to insert
+     */
+    private updateToken(token: string){
+        assert.object(LoginService.user, "A user must be logged in to update the token.");
+        assert.object(this.db, "A database connection was not established.");
+
+        this.db.executeSql("INSERT INTO session (userId, token, created_date) VALUES (?, ?, datetime(now))", [
+            this.userId, this.token]).then(() => {
+            this._logger.debug("New session token was saved successfully.");
+        }, error => {
+            this._logger.error("Could not insert new session token: ");
+            this._logger.error(JSON.stringify(error));
+        });
+    }
+
+    /**
+     * Load the most recent userId and token from the users phone.
+     */
+    private loadSessionInfo(){
+        assert.object(LoginService.user, "A user must be logged in to update the token.");
+        assert.object(this.db, "A database connection was not established.");
+
+        this.db.executeSql("SELECT userId, token FROM session ORDER BY created_date DESC LIMIT 1", {}).then((data) => {
+            if(!data.rows) {
+                this.userId = data.rows.item(0).userId;
+                this.token = data.rows.item(0).token;
+                this._logger.debug(`Loaded previous session info: {userId: ${this.userId}, token: ${this.token}`);
+            } else {
+                this._logger.debug("There was no login session stored on the device");
+            }
+        }, error => {
+            this._logger.error("Error selecting session from SQLite database: ");
+            this._logger.error(JSON.stringify(error));
+        });
+    }
+
+    /**
+     * Checks whether a user is currently set.
+     *
+     * @returns {boolean} true if the user is logged in
+     */
+    public isLoggedIn(): boolean{
+        return !!LoginService.user;
     }
 }

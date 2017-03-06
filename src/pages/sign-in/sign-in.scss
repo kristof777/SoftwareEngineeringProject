@@ -16,14 +16,6 @@ page-sign-in {
         display: block;
     }
 
-    ion-list{
-        ion-item {
-            margin-right: auto !important;
-            margin-left: auto !important;
-            max-width: 500px;
-        }
-    }
-
     .register{
         margin-top: 15px;
 
@@ -31,6 +23,26 @@ page-sign-in {
             text-align: center;
             padding: 0;
             margin: 0;
+        }
+    }
+
+    .invalid{
+        color: #EA6153;
+        font-size: 10pt;
+        min-height: 0;
+    }
+
+    .facebookLogin{
+        margin-top: 15px;
+
+        p{
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            ion-icon{
+                font-size: 23pt;
+                color: #0c60ee;
+            }
         }
     }
 }

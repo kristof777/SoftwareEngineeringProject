@@ -1,10 +1,12 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
-let assert = require('assert-plus');
-import {Component, ViewChild} from '@angular/core';
-import {NavController, ToastController, ModalController, NavParams, Slides} from 'ionic-angular';
-import {Listing} from '../../app/models/listing';
-import {FilterPage} from '../filter/filter';
+import {Component} from "@angular/core";
+import {NavController, ModalController, ItemSliding, ToastController} from "ionic-angular";
 import {Logger} from "angular2-logger/core";
+import {Listing} from "../../app/models/listing";
+import {FilterPage} from "../filter/filter";
+import {DetailPage} from "../detail/detail";
+import {Filter} from "../../app/models/filter";
+let assert = require('assert-plus');
 
 @Component({
     selector: 'page-browse',
@@ -12,86 +14,98 @@ import {Logger} from "angular2-logger/core";
     providers: [ListingProvider]
 })
 export class BrowsePage {
-    @ViewChild(Slides) slides: Slides;
-    data: Listing[];
-    // The index of the page currently being displayed
-    cursor: number = 0;
+    listings: Listing[];
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
+                public listingProvider: ListingProvider,
                 public modalCtrl: ModalController,
-                public listings: ListingProvider,
-                private _logger: Logger,
-                public navParams: NavParams) {
-        if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
-            this.data = listings.data;
-        }
-        else {
-            this.data = navParams.get('data');
-            this.cursor = navParams.get('cursor');
+                private _logger: Logger,) {
+
+        this.listings = listingProvider.data;
+    }
+
+    /**
+     * Called when the user drags a listing
+     *
+     * @param event the drag event
+     * @param index the index of the listing being dragged
+     */
+    onDrag(event: ItemSliding, index: number){
+        if(event.getOpenAmount() < -100){
+            this.likeListing(index);
+        } else if (event.getOpenAmount() > 100){
+            this.dislikeListing(index);
         }
     }
 
+    /**
+     * Send request to dislike a listing
+     *
+     * @param index the index of the listing
+     */
+    dislikeListing(index: number): void{
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
+
+        this._logger.debug("Disliking slide at index " + index);
+
+        this.toastCtrl.create({
+            message: "Disliked the selected listing.",
+            duration: 3000,
+            position: 'top'
+        }).present();
+
+        delete this.listings[index];
+    }
 
     /**
-     * Navigate to the My Listings page.
+     * Send request to like a listing
+     *
+     * @param index the index of the listing
      */
-    goToFavourites(): void{
-        this._logger.info("Favourites was clicked");
+    likeListing(index: number): void{
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
+
+        this._logger.debug("Liking slide at index " + index);
+
+        this.toastCtrl.create({
+            message: "Liked the selected listing.",
+            duration: 3000,
+            position: 'top'
+        }).present();
+
+        delete this.listings[index];
     }
 
     /**
      * Display the filters screen
      */
     goToFilters(): void{
-        this._logger.info("Filters was clicked");
-        let filterModal = this.modalCtrl.create(FilterPage, { someData: "data" });
+        this._logger.debug("Filters was clicked");
 
-        filterModal.onDidDismiss(data => {
-            this._logger.info("Filter Modal Data: " + JSON.stringify(data));
+        let filterModal = this.modalCtrl.create(FilterPage, { filter: null });
+
+        filterModal.onDidDismiss((data: Filter) => {
+            if(!data){
+                this._logger.debug("Filter Modal was cancelled");
+            } else {
+                this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
+            }
         });
 
         filterModal.present();
     }
 
     /**
-     * Add the house to the users dislike list
+     * Open the detailed page of a listing
+     * @param index the index of the listing
      */
-    unlike(): void{
-        this._logger.info("Unlike was clicked");
-    }
+    goToDetails(index): void{
+        assert(index > -1 && index < this.listings.length,
+            "Index should be within the bounds of available listings");
 
-    /**
-     * Add the house to the users favourites list
-     */
-    like(): void{
-        this._logger.info("Like was clicked.");
-    }
-
-    /**
-     * Return to the first image in the slides
-     */
-    goToFirstSlide(): void{
-        this.slides.slideTo(0, 0);
-    }
-
-    /**
-     * Display the next property
-     */
-    nextProperty(): void{
-        this.goToFirstSlide();
-        this._logger.info("Next Property was clicked");
-        if(this.cursor < (this.data.length - 1))
-            this.cursor += 1;
-    }
-
-    /**
-     * Display the previous property
-     */
-    previousProperty(): void{
-        this.goToFirstSlide();
-        this._logger.info("Previous Property was clicked");
-        if(this.cursor > 0)
-            this.cursor -= 1;
+        this.navCtrl.push(DetailPage, {data: this.listings, cursor: index});
     }
 }

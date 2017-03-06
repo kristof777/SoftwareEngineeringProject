@@ -9,7 +9,7 @@ exports.config = {
     },
     baseUrl: 'http://localhost:8100',
     specs: [
-        'spec.js'
+        'registerBrowseAddListing.tests.js'
     ],
     jasmineNodeOpts: {
         isVerbose: true,

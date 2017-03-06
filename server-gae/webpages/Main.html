@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}Home{% endblock %}</title>
+    <style>
+      input {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+
+  <div class="content">
+    {% block maincontent %}
+
+    {% endblock %}
+  </div>
+
+  <div>
+    <footer>
+      <hr/>
+      <p>
+        {% if not user %}
+          <a href="/signIn">Sign in (and forgot password)</a>
+        {% else %}
+          Signed in as <span style="background-color: OldLace">{{ user.first_name }}</span> | <a href="/logout">Logout</a>
+        {% endif %}
+        |
+        <a href="/">Home</a>
+        |
+        <a href="/showlistings">Show listings</a>
+        |
+        <a href="/like">Like and Dislike</a>
+        |
+        <a href="/createUser">New user</a>
+        |
+        <a href="/authenticated">Secured page</a> (you can see this after login)
+      </p>
+    </footer>
+  </div>
+
+  </body>
+</html>

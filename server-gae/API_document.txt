@@ -1,0 +1,13 @@
+Kasper API:
+
+/createUser
+	GET: HTML page
+	POST: return message about success or failure
+/signIn
+	GET: HTML page
+	POST: return message about if signed in or not; return user info and listings back
+/createListing
+	GET: HTML page (should pass in user email as parameter)
+	POST: return message about if the list is created or not
+/showlisting
+	GET: all listings of user (should pass in user email as parameter)

@@ -1,13 +1,13 @@
 import {Logger} from "angular2-logger/core";
+import {Component} from "@angular/core";
+import {NavParams, ViewController, AlertController} from "ionic-angular";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
-import {Component} from '@angular/core';
-import {NavParams, NavController, ViewController, AlertController} from 'ionic-angular';
-import {UserService} from '../../app/providers/login-service'
 
 @Component({
     selector: 'page-change-password',
     templateUrl: 'change-password.html',
-    providers: [UserService]
+    providers: [KasperService]
 })
 export class ChangePasswordPage {
     currentPassword: string;
@@ -18,7 +18,7 @@ export class ChangePasswordPage {
                 params: NavParams,
                 private alertCtrl: AlertController,
                 private _logger: Logger,
-                private loginService: UserService) {
+                private kasperService: KasperService) {
     }
 
     /**
@@ -40,11 +40,12 @@ export class ChangePasswordPage {
         }
 
         // Verify the new password is strong enough
-        let passwordCheck: any = this.loginService.checkPass(this.newPassword);
-        if(passwordCheck.strength != 4){
-            this.alert("Stronger Password Required", passwordCheck.message);
-            return;
-        }
+        // TODO Update to form control
+        // let passwordCheck: any = this.kasperService.checkPass(this.newPassword);
+        // if(passwordCheck.strength != 4){
+        //     this.alert("Stronger Password Required", passwordCheck.message);
+        //     return;
+        // }
 
         // Create the data to send back to the other page to be submitted
         let data = {

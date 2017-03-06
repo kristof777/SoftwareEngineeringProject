@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Listing</title>
+</head>
+<body>
+    <form method="post" action="/createListing", enctype="multipart/form-data">
+        <label>Lister Email</label>
+        <input name="lister_email" type="email">
+        <br>
+        <label>Bedrooms</label>
+        <input name="bedrooms" type="number">
+        <br>
+        <label>square feet</label>
+        <input name="sqft" type="number">
+        <br>
+        <label>bathrooms</label>
+        <input name="bathrooms" type="number">
+        <br>
+        <label>price</label>
+        <input name="price" type="number">
+        <br>
+        <label>province</label>
+        <input name="province" type="text">
+        <br>
+        <label>city</label>
+        <input name="city" type="text">
+        <br>
+        <label>description</label>
+        <input name="description" type="text">
+        <br>
+        <label>isPublished</label>
+        <input name="isPublished" type="checkbox">
+        <br>
+        <label>images</label>
+        <input type="file" name="image" multiple>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

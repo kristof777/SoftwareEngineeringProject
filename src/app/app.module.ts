@@ -8,17 +8,19 @@ import {SignInPage} from '../pages/sign-in/sign-in';
 import {SignUpPage} from '../pages/sign-up/sign-up';
 
 import {MainPage} from '../pages/main/main';
+import {DetailPage} from '../pages/detail/detail';
 import {BrowsePage} from '../pages/browse/browse';
 import {MyListingsPage} from '../pages/my-listings/my-listings';
 import {FavouritesPage} from '../pages/favourites/favourites';
-import {SettingsPage} from '../pages/settings/settings';
-
-import {EditListingsPage} from '../pages/edit-listings/edit-listings';
+import {MyProfilePage} from '../pages/my-profile/my-profile';
 import {AddListingPage} from '../pages/add-listing/add-listing';
+import {ContactPage} from '../pages/contact/contact';
 
 import {FilterPage} from '../pages/filter/filter';
 import {ChangePasswordPage} from '../pages/change-password/change-password';
-import {SavedListingProvider} from "./providers/saved-listing-provider";
+
+import {LoginService} from "./providers/login-service";
+import {KasperService} from "./providers/kasper-service";
 
 @NgModule({
     declarations: [
@@ -26,14 +28,15 @@ import {SavedListingProvider} from "./providers/saved-listing-provider";
         SignInPage,
         SignUpPage,
         AddListingPage,
-        EditListingsPage,
         FavouritesPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,
         MyListingsPage,
-        SettingsPage,
-        BrowsePage
+        MyProfilePage,
+        DetailPage,
+        BrowsePage,
+        ContactPage
     ],
     imports: [
         IonicModule.forRoot(MyApp, {tabsPlacement: 'bottom'})
@@ -44,18 +47,20 @@ import {SavedListingProvider} from "./providers/saved-listing-provider";
         SignInPage,
         SignUpPage,
         AddListingPage,
-        EditListingsPage,
         FavouritesPage,
         FilterPage,
         ChangePasswordPage,
         MainPage,
         MyListingsPage,
-        SettingsPage,
-        BrowsePage
+        MyProfilePage,
+        DetailPage,
+        BrowsePage,
+        ContactPage
     ],
     providers: [
         {provide: ErrorHandler, useClass: IonicErrorHandler},
-        SavedListingProvider,
+        LoginService,
+        KasperService,
         Logger,
         LOG_LOGGER_PROVIDERS]
 })

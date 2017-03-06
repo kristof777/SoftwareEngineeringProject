@@ -1,12 +1,15 @@
 <ion-header>
-    <ion-navbar>
-        <ion-title>
+    <ion-navbar color="primary">
+        <ion-title *ngIf="curListing == null">
             Add Listing
+        </ion-title>
+        <ion-title *ngIf="curListing != null">
+            Edit Listing
         </ion-title>
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Province</ion-label>
@@ -64,16 +67,17 @@
 
         <ion-item>
             <ion-label floating stacked>Description </ion-label>
-            <ion-textarea [(ngModel)]="description" text-wrap id="alDesc"></ion-textarea>
+            <ion-textarea [(ngModel)]="description" id="alDesc" text-wrap ></ion-textarea>
         </ion-item>
 
         <ion-item>
             <button item-left ion-button small (click)="addImage()" id="alImage">Add Image</button>
-            <button item-right ion-button small (click)="save()" id="alSave">Save</button>
         </ion-item>
 
         <ion-item>
-            <button ion-button block (click)="publish()" id="alPublish">Publish</button>
+            <button ion-button block (click)="saveWithoutPublishing()" id="alSave">Save without Publishing</button>
+            <button *ngIf="curListing == null || ((curListing != null) && !curListing.isPublished)" ion-button block (click)="saveAndPublish()" id="alPublish">Publish</button>
+            <button *ngIf="(curListing != null) && curListing.isPublished" ion-button block (click)="unpublish()" id="alUnpublish">Unpublish</button>
         </ion-item>
     </ion-list>
 </ion-content>
