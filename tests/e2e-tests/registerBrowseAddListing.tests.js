@@ -4,6 +4,8 @@ describe('Registering new user as a user would', function() {
 
     beforeEach(function () {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000; //100 seconds
+
     });
 
     afterEach(function() {
