@@ -34,19 +34,7 @@ export class DetailPage {
             this.data = navParams.get('data');
             this.cursor = navParams.get('cursor');
         }
-
-        //TODO: Remove fake user account
-        let userID: number = 1;
-        let email: string = "john.doe@gmail.com";
-        let firstName: string = "John";
-        let lastName: string = "Doe";
-        let phone1: string = "3065555555";
-        let phone2: string = null;
-        let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
-
-        this.loginService.setUser(new User(userID, email, firstName, lastName, phone1, phone2, location));
     }
-
 
     /**
      * Navigate to the My Listings page.
@@ -133,6 +121,9 @@ export class DetailPage {
      * @returns {boolean}   true if it is their property
      */
     belongsToUser(): boolean{
+        if(!this.loginService.isLoggedIn())
+            return false;
+
         return this.loginService.getUserId() == this.data[this.cursor].listerId;
     }
 
