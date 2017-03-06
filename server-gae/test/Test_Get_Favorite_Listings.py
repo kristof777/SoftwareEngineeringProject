@@ -10,7 +10,12 @@ from extras.utils import get_response_from_post
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlers(unittest.TestCase):
+class TestGetFavouriteListing(unittest.TestCase):
+    """
+    Test cases
+    successful get info
+    Invalid userId
+    """
     def setUp(self):
         setup_testbed(self)
 
@@ -51,15 +56,11 @@ class TestHandlers(unittest.TestCase):
         # the first five listings has been liked, so we create a list of those listings for future use
         self.likedListings = listings[0:5]
 
-    def test_get_fav_listings(self):
 
-        #######################################################################3
-        # test case 1: successful get info
-
+    def test_success(self):
         getFavs = {
             "userId": self.likerId
         }
-
         request = webapp2.Request.blank('/getFavourites', POST=getFavs)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
@@ -73,9 +74,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(len(output["listings"]), isPublishes)
 
-        #######################################################################3
-        # test case 2: invalid userId
-
+    def test_invalid_userid(self):
         invalidFavs = {
             "userId": "blablabla"
         }

@@ -11,6 +11,17 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
+    """
+        test case 1: the owner can't like their listings
+        now user want to like the listing
+        test case 2: successful delivery (like the listing)
+        test case 3: send a like request(liked==True) while the listing is already liked
+        test case 4: dislike this listing
+        should be a successful delivery
+        test case 5: dislike this listing again
+        test case 6: missing user input
+        test case 7: invalid user input
+    """
     def setUp(self):
         setup_testbed(self)
 
@@ -29,12 +40,7 @@ class TestHandlers(unittest.TestCase):
         liker = users[0]
         self.likerId = liker['userId']
 
-    def test_like_dislike_a_listing(self):
-
-        #########################################################################################################
-        # test case 1: the owner can't like their listings
-
-        # now user want to like the listing
+    def test_owner_liking_listing(self):
         like_the_listing = {
             "userId": self.ownerId,
             "listingId": self.listingId,
@@ -55,9 +61,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(unallowed_liked['error'], errors_expected)
 
-        #####################################################################################################
-        # test case 2: successful delivery (like the listing)
-
+    def test_like_listing(self):
         like_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
@@ -68,14 +72,16 @@ class TestHandlers(unittest.TestCase):
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
 
+    def test_already_liked_listing(self):
 
-        ########################################################################################################
-        # test case 3: send a like request(liked==True) while the listing is already liked
         like_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
             "liked": "True"
         }
+        request = webapp2.Request.blank('/like', POST=like_the_listing)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, success)
 
         request = webapp2.Request.blank('/like', POST=like_the_listing)
         response = request.get_response(Main.app)
@@ -90,10 +96,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(duplicated_liked['error'], errors_expected)
 
-        ########################################################################################################
-        # test case 4: dislike this listing
-        # should be a successful delivery
-
+    def test_dislike_listing(self):
         dislike_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
@@ -104,13 +107,17 @@ class TestHandlers(unittest.TestCase):
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
 
-        ########################################################################################################
-        # test case 5: dislike this listing again
+    def test_dislikng_like(self):
+
         dislike_the_listing_again = {
             "userId": self.likerId,
             "listingId": self.listingId,
             "liked": "False"
         }
+
+        request = webapp2.Request.blank('/like', POST=dislike_the_listing_again)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, success)
 
         request = webapp2.Request.blank('/like', POST=dislike_the_listing_again)
         response = request.get_response(Main.app)
@@ -125,9 +132,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(duplicated_liked['error'], errors_expected)
 
-        ########################################################################################################
-        # test case 6: missing user input
-
+    def test_missing_user_input(self):
         like_with_missing_input = {
             "userId": "",
             "listingId": "",
@@ -146,16 +151,15 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-        ########################################################################################################
-        # test case 7: invalid user input
-
+    def test_invalid_user_input(self):
         like_with_invalid_input = {
             "userId": "supposed to be an integer",
             "listingId": "supposed to be an integer",
             "liked": "supposed to be a boolean"
         }
 
-        request = webapp2.Request.blank('/like', POST=like_with_invalid_input)  # api you need to test
+        request = webapp2.Request.blank('/like',
+                                        POST=like_with_invalid_input)  # api you need to test
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, missing_invalid_parameter)
         errors_expected = [invalid_user_id['error'],
