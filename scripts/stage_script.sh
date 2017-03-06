@@ -5,6 +5,8 @@
 # Sends the sources code to a branch for more rigorous testing.
 # Is a modification of the deploy script.
 
+set -ev
+
 # Un-encrypts the ssh key, starts up and adds it to the list of keys for the Travis machine
 setup_ssh(){
   openssl aes-256-cbc -K $encrypted_fed185e319aa_key -iv $encrypted_fed185e319aa_iv -in keys/github_deploy_key.enc -out github_deploy_key -d
@@ -20,17 +22,22 @@ setup_git(){
   git config --global user.email "clm972@mail.usask.ca"
   git config --global user.name "ChrisMykotaReid"
   git remote set-url origin git@github.com:CMPT371Team1/Project.git
+  git branch id3_ReadyForTesting
   git checkout id3_ReadyForTesting
+  git pull --no-commit origin id3_ReadyForTesting
+  git commit -m "smoke tests passed, merging into testing ready branch [ci skip]"
+  git push
 }
 
 
 # Merges the successfully smoke tested code into the testing branch.
 merge(){
-  git merge id3
+  git merge "${TRAVIS_BRANCH}"
+  git commit -m "smoke tests passed, merging into testing ready branch [ci skip]"
   git push
 }
 
 
 setup_ssh
 setup_git
-deploy
+merge
