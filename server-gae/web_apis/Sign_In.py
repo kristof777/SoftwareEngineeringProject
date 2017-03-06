@@ -24,26 +24,32 @@ class SignIn(BaseHandler):
         self._serve_page()
 
     def post(self):
+
+        # validating if request has all required keys
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        error_keys = ['email', 'password']
+
+        errors, values = keys_missing(error_keys, self.request.POST)
         message = {}
         user_email = self.request.POST.get('email')
 
+        # checking for empty fields
         if user_email is None:
             message[missing_email['error']] = 'Missing user email'
         password = self.request.POST.get('password')
         if password is None:
             message[missing_password['error']] = 'Missing password'
 
-        if len(message.keys()) != 0:  # TODO use other fn to do this
+        if len(message.keys()) > 0:
             write_error_to_response(self.response, message,
                                     missing_invalid_parameter)
             return
 
         assert user_email is not None and password is not None
         try:
-            # TODO user_email to lower
+            # sign in and return user information.
             user = self.auth.get_user_by_password(
-                user_email, password, remember=True, save_session=True)
+                user_email.lower(), password, remember=True, save_session=True)
 
             user_dict = {'token': user['token'],
                          'userId': user['user_id'],
@@ -54,8 +60,7 @@ class SignIn(BaseHandler):
                          'phone2': user['phone2'],
                          'city': user['city'],
                          'province': user['province']}
-            self.response.out.write(json.dumps(user_dict)) # TODO write success to response fn
-            self.response.set_status(success)
+            write_success_to_response(self.response,user_dict)
 
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
