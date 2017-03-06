@@ -47,6 +47,9 @@ unrecognized_key = {"error": "unrecognizedKey",
 password_cant_be_changed = {"error": "passwordCantBeChanged",
                             "status": processing_failed}
 
+new_password_is_the_same_as_old = {"error": "newPasswordIsTheSameAsOld",
+                            "status": processing_failed}
+
 invalid_user_id = {"error": "invalidUserId",
                    "status": missing_invalid_parameter}
 

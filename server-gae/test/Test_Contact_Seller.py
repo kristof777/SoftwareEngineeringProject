@@ -32,8 +32,8 @@ class TestHandlers(unittest.TestCase):
         self.testbed.deactivate()
 
 
-def get_post_dictionary(user_id, token, listing_id, message, phone1, phone2, ):
-    return {"userId": user_id, "authToken":token,"changeValues": json.dumps(change_values)}
+# def get_post_dictionary(user_id, token, listing_id, message, phone1, phone2, ):
+#     return {"userId": user_id, "authToken":token,"changeValues": json.dumps(change_values)}
 
 
 def get_response(POST):
