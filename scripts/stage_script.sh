@@ -20,17 +20,20 @@ setup_git(){
   git config --global user.email "clm972@mail.usask.ca"
   git config --global user.name "ChrisMykotaReid"
   git remote set-url origin git@github.com:CMPT371Team1/Project.git
+  git branch id3_ReadyForTesting
   git checkout id3_ReadyForTesting
+  git pull origin id3_ReadyForTesting
 }
 
 
 # Merges the successfully smoke tested code into the testing branch.
 merge(){
   git merge id3
+  git commit -m "smoke tests passed [ci skip]"
   git push
 }
 
 
 setup_ssh
 setup_git
-deploy
+merge
