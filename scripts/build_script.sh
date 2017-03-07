@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author: Chris Mykota-Reid :>
-# This script calls the commands required to compile (TODO: TESTING)
+# This script calls the commands required to compile
 # and emulate our program
 
 
