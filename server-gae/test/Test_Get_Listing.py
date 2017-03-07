@@ -77,18 +77,6 @@ class TestHandlers(unittest.TestCase):
         for value in res_value:
             self.assertTrue("listingId" in value)
 
-    def test_unrecognized_key_1(self):
-        get_filter_listings = {
-            "valuesRequired":"",
-            "userId": "",
-            "filter": ""
-        }
-
-        res_value, status = get_listing_response(get_filter_listings)
-        self.assertEqual(status, success)
-        self.assertEquals(len(res_value), len(self.listings))
-        for value in res_value:
-            self.assertTrue("listingId" in value)
 
     def test_unrecognized_key_2(self):
         get_filter_listings = {
@@ -119,35 +107,35 @@ class TestHandlers(unittest.TestCase):
 
         self.assertTrue(error_expected in res_value)
 
-        def test_unrecognized_key_3(self):
-            get_filter_listings = {
-                "valuesRequired": json.dumps(
-                    ["bedrooms", "bathrooms", "address", "price"]),
-                "maxLimit": 8,
-                "userId": self.userId,
-                "filter": json.dumps({
-                    "price": {
-                        "lower": 100,
-                        "upper": 8000000
-                    },
-                    "bedrooms": {
-                        "lower": 1,
-                        "upper": 1000
-                    },
-                    "bathrooms": {
-                        "lower": 1.0,
-                        "upper": 200
-                    },
-                    "province": "Saskatchewan",
-                    "what_the_heck": "is_this"
-                })
-            }
+    def test_unrecognized_key_3(self):
+        get_filter_listings = {
+            "valuesRequired": json.dumps(
+                ["bedrooms", "bathrooms", "address", "price"]),
+            "maxLimit": 8,
+            "userId": self.userId,
+            "filter": json.dumps({
+                "price": {
+                    "lower": 100,
+                    "upper": 8000000
+                },
+                "bedrooms": {
+                    "lower": 1,
+                    "upper": 1000
+                },
+                "bathrooms": {
+                    "lower": 1.0,
+                    "upper": 200
+                },
+                "province": "Saskatchewan",
+                "what_the_heck": "is_this"
+            })
+        }
 
-            res_value, status = get_listing_response(get_filter_listings)
-            self.assertEqual(status, missing_invalid_parameter)
-            error_expected = unrecognized_key['error']
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, missing_invalid_parameter)
+        error_expected = unrecognized_key['error']
 
-            self.assertTrue(error_expected in res_value)
+        self.assertTrue(error_expected in res_value)
 
     def test_get_listing_with_id(self):
         get_listings = {
@@ -166,7 +154,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEqual(status, success)
         self.assertEquals(len(res_value), 7)
 
-    def get_listing_with_filter(self):
+    def test_get_listing_with_filter(self):
 
         get_filter_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
@@ -201,7 +189,7 @@ class TestHandlers(unittest.TestCase):
             assert float(value['bathrooms']) >= float(json.loads(get_filter_listings['filter'])['bathrooms']['lower'])
 
 
-    def invalid_key_values_required(self):
+    def test_invalid_key_values_required(self):
         get_filter_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price", "what_the_heck"]),
         }

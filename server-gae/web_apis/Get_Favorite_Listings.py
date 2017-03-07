@@ -65,7 +65,7 @@ class GetFavourites(webapp2.RequestHandler):
 
             if listing.isPublished:
                 template_values = {
-                    'listingId': listing.listingId,
+                    'listingId': fav_listingId,
                     'userId': listing.userId,
                     'bedrooms': listing.bedrooms,
                     'sqft': listing.sqft,

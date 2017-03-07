@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-slides effect="flip">
+    <ion-slides>
         <ion-slide padding [formGroup]="signUpStep1">
             <ion-item>
                 <ion-label stacked>Email</ion-label>
@@ -20,7 +20,7 @@
 
             <ion-item>
                 <ion-label stacked>Password</ion-label>
-                <ion-input type="text" (blur)="attemptPassword()" formControlName="password" placeholder="Enter your password here" id="signUpPassword"></ion-input>
+                <ion-input type="password" (blur)="attemptPassword()" formControlName="password" placeholder="Enter your password here" id="signUpPassword"></ion-input>
             </ion-item>
 
             <ion-item no-lines class="invalid"  *ngIf="passwordAttempted && !signUpStep1.controls.password.valid">
@@ -29,7 +29,7 @@
 
             <ion-item>
                 <ion-label stacked>Confirm Password</ion-label>
-                <ion-input type="text" (focus)="attemptConfirmPassword()" formControlName="confirmPassword" placeholder="Enter your password again" id="signUpConfirmPassword"></ion-input>
+                <ion-input type="password" (focus)="attemptConfirmPassword()" formControlName="confirmPassword" placeholder="Enter your password again" id="signUpConfirmPassword"></ion-input>
             </ion-item>
 
             <ion-item no-lines class="invalid"  *ngIf="confirmPasswordAttempted && (signUpStep1.value.password != signUpStep1.value.confirmPassword)">
