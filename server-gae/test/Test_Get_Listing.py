@@ -77,18 +77,6 @@ class TestHandlers(unittest.TestCase):
         for value in res_value:
             self.assertTrue("listingId" in value)
 
-    def test_unrecognized_key_1(self):
-        get_filter_listings = {
-            "valuesRequired":"",
-            "userId": "",
-            "filter": ""
-        }
-
-        res_value, status = get_listing_response(get_filter_listings)
-        self.assertEqual(status, success)
-        self.assertEquals(len(res_value), len(self.listings))
-        for value in res_value:
-            self.assertTrue("listingId" in value)
 
     def test_unrecognized_key_2(self):
         get_filter_listings = {
