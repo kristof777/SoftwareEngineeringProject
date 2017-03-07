@@ -37,7 +37,8 @@ merge(){
   git push
 }
 
-
-setup_ssh
-setup_git
-merge
+if [[ "${BUILD_TYPE}" == "test" ]]; then 
+  setup_ssh
+  setup_git
+  merge
+fi
