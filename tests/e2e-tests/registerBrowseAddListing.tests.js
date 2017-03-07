@@ -4,7 +4,8 @@ describe('Registering new user as a user would', function() {
 
     beforeEach(function () {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000; //20 seconds
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000; //100 seconds
+
     });
 
     afterEach(function() {
@@ -16,33 +17,67 @@ describe('Registering new user as a user would', function() {
         let myProfileTab = element(by.id('tab-t0-2'));
         myProfileTab.click();
         browser.driver.sleep(1500);
+
         let registerButton;
         registerButton = element(by.css('.register'));
         registerButton.click();
         browser.driver.sleep(1500);
+
         let email, password, confirmPassword;
         email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
         password = element(by.id('signUpPassword')).all(by.tagName('input')).first();
         confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
 
-        email.sendKeys('testEmail@email.ca');
-        password.sendKeys('Password123');
-        confirmPassword.sendKeys('Password123');
-
         let nextButton;
         nextButton = element(by.buttonText('Next'));
-        nextButton.click();
+
+
+        email.sendKeys('wrongFormatEmail');
+        password.sendKeys('Password123');
+        confirmPassword.sendKeys('Password123');
+         nextButton.click();
+        email.sendKeys().clear();
+        password.sendKeys().clear();
+        confirmPassword.sendKeys().clear();
+        email.sendKeys('testEmail@email.ca');
+        password.sendKeys('weakpassword');
+        confirmPassword.sendKeys('weakpassword');
+         nextButton.click();
+        password.sendKeys().clear();
+        confirmPassword.sendKeys().clear();
+        password.sendKeys('NotMatchingPassword123');
+        confirmPassword.sendKeys('DifferentPassword123');
+         nextButton.click();
+        password.sendKeys().clear();
+        confirmPassword.sendKeys().clear();
+        password.sendKeys('Password123');
+        confirmPassword.sendKeys('Password123');
+         nextButton.click();
 
         browser.driver.sleep(1500);
 
         let firstName, lastName, phoneNumber;
+        nextButton = element(by.buttonText('Next'));
         firstName = element(by.id('signUpFirstName')).all(by.tagName('input')).first();
         lastName = element(by.id('signUpLastName')).all(by.tagName('input')).first();
         phoneNumber = element(by.id('signUpPhoneNumber')).all(by.tagName('input')).first();
         firstName.sendKeys('John');
         lastName.sendKeys('Smith');
-        phoneNumber.sendKeys('3065551234');
-        nextButton = element(by.buttonText('Next'));
+        // test with too long of phoneNumber
+        phoneNumber.sendKeys('30655512341234');
+        nextButton.click();
+        phoneNumber.sendKeys().clear();
+        // test with too short of phoneNumber
+        phoneNumber.sendKeys('306555');
+        nextButton.click();
+        phoneNumber.sendKeys().clear();
+        // test with letters
+        phoneNumber.sendKeys("phoneNumbr");
+        nextButton.click();
+        phoneNumber.sendKeys().clear();
+        // correct format
+        phoneNumber.sendKeys("3065551234");
+
         nextButton.click();
         browser.driver.sleep(1500);
 
@@ -58,27 +93,50 @@ describe('Registering new user as a user would', function() {
         okButton.click();
         browser.driver.sleep(500);
         city = element(by.id('signUpCity')).all(by.tagName('input')).first();
-            city.sendKeys('Edmonton');
+        city.sendKeys('Edmonton');
 
 
          let finish = element(by.buttonText('Finish'));
          finish.click();
 
-        // if still on register then go back to login and login with same username
-        // else continue with my profile screen
-        if(finish.isDisplayed()){
+        // if still on register then go back to login and login with same username as this email has
+        // already been registered in the database
+        // else continue with my profile
+       /* if(finish.isDisplayed()){
             myProfileTab.click();
             browser.driver.sleep(500);
-            email = element(by.id('email')).all(by.tagName('input')).first();;
-            email.sendKeys('test');
+            email = element(by.id('email')).all(by.tagName('input')).first();
             password = element(by.id('password')).all(by.tagName('input')).first();
-           // password.sendKeys('Pasword123');
             let signInButton = element(by.buttonText('Sign In'));
+            email.sendKeys('test@usask.ca');
+            password.sendKeys('wrongPassword123');
+             signInButton.click();
+            password.sendKeys().clear();
+            password.sendKeys('Password123');
             signInButton.click();
             browser.driver.sleep(500);
 
+        }*/
 
-        }
+        finish.isPresent().then(function(present) {
+          if (present) {
+                        myProfileTab.click();
+                        browser.driver.sleep(500);
+                        email = element(by.id('email')).all(by.tagName('input')).first();
+                        password = element(by.id('password')).all(by.tagName('input')).first();
+                        let signInButton = element(by.buttonText('Sign In'));
+                        email.sendKeys('test@usask.ca');
+                        password.sendKeys('wrongPassword123');
+                         signInButton.click();
+                        password.sendKeys().clear();
+                        password.sendKeys('Password123');
+                        signInButton.click();
+                        browser.driver.sleep(500);
+          } else {
+            //
+          }
+        });
+
         done();
      });
 
@@ -128,8 +186,8 @@ describe('Registering new user as a user would', function() {
 
       // testing "add listing" functionality
         let myListings = element(by.id('tab-t0-3'));
-                                          myListings.click();
-                                          browser.driver.sleep(500);
+        myListings.click();
+        browser.driver.sleep(500);
         let addListingButton;
         addListingButton= element(by.id('addButton'));
         addListingButton.click();
@@ -149,7 +207,7 @@ describe('Registering new user as a user would', function() {
                 okaybtn.click();
                 browser.driver.sleep(500);
 
-                                let bath = element(by.id('alBathRoom')).all(by.tagName('input')).first();
+                 let bath = element(by.id('alBathRoom')).all(by.tagName('input')).first();
 
 
                 let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
@@ -180,6 +238,8 @@ describe('Registering new user as a user would', function() {
                 browser.driver.sleep(500);
                 desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
 
+                let saveButton = element(by.id('alSave'));
+                saveButton.click();
 
                 browser.driver.sleep(500);
                 done();

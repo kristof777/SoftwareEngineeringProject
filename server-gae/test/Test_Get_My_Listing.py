@@ -10,10 +10,14 @@ from web_apis.Create_User import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlers(unittest.TestCase):
+class TestGetMyListing(unittest.TestCase):
+    """
+        test case 1: successful get info
+        test case 2: invalid userId
+    """
+
     def setUp(self):
         setup_testbed(self)
-
 
         # create 10 listings for one user
         self.listings, users = create_dummy_listings_for_testing(Main, 10)
@@ -21,12 +25,7 @@ class TestHandlers(unittest.TestCase):
         assert len(self.listings) == 10
         self.ownerId = users[0]['userId']
 
-
-    def test_get_my_listings(self):
-
-        #######################################################################3
-        # test case 1: successful get info
-
+    def test_success_info(self):
         get_my_listings = {
             "userId": self.ownerId
         }
@@ -37,14 +36,13 @@ class TestHandlers(unittest.TestCase):
         output = json.loads(response.body)
         self.assertEquals(len(output["myListings"]), 10)
 
-        #######################################################################3
-        # test case 2: invalid userId
-
+    def test_invalid_userid(self):
         invalid_my_listings = {
             "userId": "blablabla"
         }
 
-        request = webapp2.Request.blank('/getMyListing', POST=invalid_my_listings)
+        request = webapp2.Request.blank('/getMyListing',
+                                        POST=invalid_my_listings)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -56,4 +54,7 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
+
+
+
 

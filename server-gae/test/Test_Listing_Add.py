@@ -13,15 +13,23 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlers(unittest.TestCase):
+    """
+        test case 1: empty object as input
+        test case 2
+        checking if all error codes are received, if empty code is sent
+        test case 3
+        checking if all error codes are received, if all user inputs are spaces
+        test case 4: there're some missing fields
+        test case 5# test case 6
+        test case 7: correct input
+    """
     def setUp(self):
         setup_testbed(self)
 
-
-    def test_create_listings(self):
-        # test case 1: empty object as input
+    def test_empty_input(self):
         input = {}
-
-        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing',
+                                        POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -44,11 +52,7 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-
-        #################################################################
-        # test case 2
-        # checking if all error codes are received, if empty code is sent
-
+    def test_empty_fields(self):
         input = {"userId": "",
                  "bedrooms": "",
                  "sqft": "",
@@ -86,10 +90,7 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-        #################################################################
-        # test case 3
-        # checking if all error codes are received, if all user inputs are spaces
-
+    def test_multiple_spaces_input(self):
         input = {"userId": "      ",
                  "bedrooms": "       ",
                  "sqft": "        ",
@@ -104,7 +105,8 @@ class TestHandlers(unittest.TestCase):
                  "images": '    '
                  }
 
-        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing',
+                                        POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -127,16 +129,15 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-        ###########################################################################
-        # test case 4: there're some missing fields
-
+    def test_some_missing_fields(self):
         input = create_random_listing("")
         input['sqft'] = ""
         input['description'] = ""
         input['city'] = ""
         input['images'] = ''
 
-        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing',
+                                        POST=input)  # api you need to test
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -152,11 +153,7 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-
-        ###########################################################################
-        # test case 5
-        # checking if all error codes are received, if there's a non-existing userId
-
+    def test_invalid_user_id(self):
         input = create_random_listing("1111")
 
         request = webapp2.Request.blank('/createListing', POST=input)
@@ -173,10 +170,7 @@ class TestHandlers(unittest.TestCase):
 
         self.assertEquals(not_authorized['error'], errors_expected)
 
-        ###########################################################################
-        # test case 6
-        # checking if all error codes are received, if all numeric fields are invalid
-
+    def test_invalid_numeric_field(self):
         input = create_random_listing("supposed to be int")
         input['bedrooms'] = "supposed to be int"
         input['sqft'] = "supposed to be int"
@@ -201,9 +195,7 @@ class TestHandlers(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
-        #############################################################################
-        # test case 7: correct input
-
+    def test_correct_input(self):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         input = inputs[0]
         request = webapp2.Request.blank('/createListing', POST=input)
@@ -226,6 +218,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_created.address, input['address'])
         self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
         self.assertEquals(listing_created.images, input['images'])
+
 
 
     def tearDown(self):
