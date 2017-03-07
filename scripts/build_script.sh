@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author: Chris Mykota-Reid :>
-# This script calls the commands required to compile (TODO: TESTING)
+# This script calls the commands required to compile
 # and emulate our program
 
 
@@ -17,7 +17,6 @@ ios_build(){
   else
     ionic build ios
     ionic emulate ios
-    cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
   fi
 }
 
