@@ -13,4 +13,8 @@ export class ContactPage {
                 private _logger: Logger) {
 
     }
+
+    sendMessage(){
+
+    }
 }
