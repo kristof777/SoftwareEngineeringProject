@@ -78,12 +78,24 @@ export class SignInPage {
      */
     signInCallback(result: any): void{
         result.subscribe(data => {
-            this.kasperService.loginService.setUser(
-                new User(data.userId, data.email, data.firstName, data.lastName,  data.phone1, data.phone2,
-                    new Location(Province.fromAbbr(data.province), data.city, "", "", 0.0, 0.0)
-                ));
+            // Create a user object from the result of the login statement
+            let user: User = new User(data.userId, data.email, data.firstName, data.lastName,
+                data.phone1, data.phone2, new Location(Province.fromAbbr(data.province), data.city,
+                    "", "", 0.0, 0.0 )
+            );
+
+            // Set the login data for the user
+            this.kasperService.loginService.setUser(user);
             this.kasperService.loginService.setToken(data.token);
+
+            // Set the root of the current tab to the MyProfile page.
             this.navCtrl.setRoot(MyProfilePage);
+
+            // Move back to the browse page.
+            // This is currently required as selecting the My Profile tab a second time (before
+            // changing to another tab) will bring the user back to the SignInPage page.
+            this.navCtrl.parent.select(0);
+
             }, error => {
                 this._logger.error("Error ")
                 this._logger.error(JSON.stringify(error));
