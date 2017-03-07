@@ -29,6 +29,8 @@ browser_build(){
   else
     # dev_appserver.py 371server-gae/main.py
     ./scripts/test_script.sh
+    touch /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
+    chmod u+rwx /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
     # sudo du / | grep "geckodriver"
     # kill -9 $IONIC_PID # should occure after tests
   fi
