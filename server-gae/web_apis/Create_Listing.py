@@ -91,6 +91,5 @@ class CreateListing(webapp2.RequestHandler):
                               values['thumbnailImageIndex']))
         listing.put()
         listing.set_property('listingId', listing.key.id())
-        listing.put()
         write_success_to_response(self.response,
                                   {'listingId': listing.listingId})
