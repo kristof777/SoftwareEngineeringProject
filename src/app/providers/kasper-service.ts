@@ -197,10 +197,12 @@ export class KasperService {
      *
      * @param filter            the filter to apply
      */
-    getListings(filter: Filter): any{
+    getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('filter', JSON.stringify(filter));
+        body.append('valuesRequired', JSON.stringify(valuesRequired));
+        body.append('maxLimit', maxLimit);
 
         return this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
             .map(response => response.json());
