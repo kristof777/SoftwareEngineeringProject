@@ -73,7 +73,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/like', LikeDislikeListing),
     webapp2.Route('/editListing', EditListing),
     webapp2.Route('/getFavourites', GetFavourites),
-    webapp2.Route('/getMyListing', GetMyListing),
+    webapp2.Route('/getMyListings', GetMyListing),
     webapp2.Route('/editUser', EditUser),
     webapp2.Route('/getListings', GetListing)
 
