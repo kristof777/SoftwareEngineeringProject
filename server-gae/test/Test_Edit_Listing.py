@@ -105,7 +105,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_invalid_fields(self):
         change_values = { "bedrooms": "supposed to be a number",
-                            "sqft": "supposed to be a number",
+                            "squarefeet": "supposed to be a number",
                             "bathrooms": "supposed to be a number",
                             "price": "supposed to be a number",
                             "isPublished": "supposed to be a boolean",
@@ -119,7 +119,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_bedrooms['error'],
-                           Error_Code.invalid_sqft['error'],
+                           Error_Code.invalid_squarefeet['error'],
                            Error_Code.invalid_bathrooms['error'],
                            Error_Code.invalid_price['error'],
                            Error_Code.invalid_thumbnail_image_index['error'],
@@ -130,7 +130,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_correct_input(self):
         change_values = {"bedrooms": "4",
-                         "sqft": "1500",
+                         "squarefeet": "1500",
                          "bathrooms": "5",
                          "price": "2050000",
                          "isPublished": "False",
@@ -145,7 +145,7 @@ class TestHandlers(unittest.TestCase):
         listing_changed = Listing.get_by_id(self.listingId)
         self.assertEquals(listing_changed.bedrooms,
                           int(change_values['bedrooms']))
-        self.assertEquals(listing_changed.sqft, int(change_values['sqft']))
+        self.assertEquals(listing_changed.squarefeet, int(change_values['squarefeet']))
         self.assertEquals(listing_changed.bathrooms,
                           float(change_values['bathrooms']))
         self.assertEquals(listing_changed.price, int(change_values['price']))

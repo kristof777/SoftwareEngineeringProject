@@ -25,7 +25,7 @@ province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
 """
 listing_keys contains all the valid keys for a listing
 """
-listing_keys = ["sqft", "bedrooms", "bathrooms", "price", "city", "province",
+listing_keys = ["squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex"]
 
@@ -148,7 +148,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
         for j in range(0, distribution):
             random_listing_info = {"userId": user["userId"],
                                    "bedrooms": str(random.randint(1, 10)),
-                                   "sqft": str(random.randint(200, 2000)),
+                                   "squarefeet": str(random.randint(200, 2000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
                                        random.randint(20000, 20000000)),
@@ -199,7 +199,7 @@ def create_random_listing(user_id):
     """
     random_listing = {"userId": user_id,
                       "bedrooms": str(random.randint(1, 10)),
-                      "sqft": str(random.randint(200, 2000)),
+                      "squarefeet": str(random.randint(200, 2000)),
                       "bathrooms": str(random.randint(1, 10)),
                       "price": str(random.randint(20000, 20000000)),
                       "description": " ".join(
@@ -438,7 +438,7 @@ valid_check = {
     "price": is_valid_integer,
     "bathrooms": is_valid_float,
     "bedrooms": is_valid_integer,
-    "sqft": is_valid_integer,
+    "squarefeet": is_valid_integer,
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
     "liked": is_valid_bool,

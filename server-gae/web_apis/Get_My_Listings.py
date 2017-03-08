@@ -64,7 +64,7 @@ class GetMyListing(webapp2.RequestHandler):
                 'listingId': listing.listingId,
                 'userId': listing.userId,
                 'bedrooms': listing.bedrooms,
-                'sqft': listing.sqft,
+                'squarefeet': listing.squarefeet,
                 'bathrooms': listing.bathrooms,
                 'price': listing.price,
                 'description': listing.description,
@@ -77,4 +77,4 @@ class GetMyListing(webapp2.RequestHandler):
             }
             returned_array.append(template_values)
 
-        write_success_to_response(self.response, {"myListings": returned_array})
+        write_success_to_response(self.response, {"listings": returned_array})
