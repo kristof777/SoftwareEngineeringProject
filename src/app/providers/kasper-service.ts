@@ -62,7 +62,11 @@ export class KasperService {
     }
 
     confirmEmail(): any{
-        this._logger.error("KasperService.confirmEmail is not implemented.");
+        let body = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
