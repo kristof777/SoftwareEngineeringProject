@@ -35,10 +35,12 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
+    - google-chrome
     packages:
     - g++-4.8
     - oracle-java8-installer
     - lib32stdc++6
+    - google-chrome-stable
     #- lib32z1
     
 
@@ -51,14 +53,14 @@ before_script:
   - "./scripts/before_script.sh"
 
 script:
-  - "./scripts/build_script.sh"
+  #- "./scripts/build_script.sh"
   
 after_success:
-  - "./scripts/systeminfo_script.sh"
-  - "./scripts/stage_script.sh"
+  #- "./scripts/systeminfo_script.sh"
+  #- "./scripts/stage_script.sh"
   
 after_failure:
-  - "./scripts/systeminfo_script.sh"
+  #- "./scripts/systeminfo_script.sh"
   
 deploy:
  provider: script
