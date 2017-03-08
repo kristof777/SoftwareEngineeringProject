@@ -8,7 +8,6 @@ import {
 import {SignUpPage} from "../sign-up/sign-up";
 import {KasperService} from "../../app/providers/kasper-service";
 import {User} from "../../app/models/user";
-import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
 import {MyProfilePage} from "../my-profile/my-profile";
 let assert = require('assert-plus');
@@ -59,9 +58,10 @@ export class SignInPage {
             let lastName: string = "Doe";
             let phone1: string = "3065555555";
             let phone2: string = null;
-            let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
+            let province = Province.SK;
+            let city = "Saskatoon";
 
-            let testUser = new User(userID, email, firstName, lastName, phone1, phone2, location);
+            let testUser = new User(userID, email, firstName, lastName, phone1, phone2, province, city);
 
             this.kasperService.loginService.setUser(testUser);
 
@@ -91,9 +91,7 @@ export class SignInPage {
         result.subscribe(data => {
             // Create a user object from the result of the login statement
             let user: User = new User(data.userId, data.email, data.firstName, data.lastName,
-                data.phone1, data.phone2, new Location(Province.fromAbbr(data.province), data.city,
-                    "", "", 0.0, 0.0 )
-            );
+                data.phone1, data.phone2, Province.fromAbbr(data.province), data.city);
 
             // Set the login data for the user
             this.kasperService.loginService.setUser(user);

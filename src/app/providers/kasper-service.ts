@@ -244,9 +244,9 @@ export class KasperService {
     createListings(listing: Listing): any{
         let body = new FormData();
         this.appendAuthentication(body);
-        body.append('province', listing.location.province.abbr);
-        body.append('city', listing.location.city);
-        body.append('address', listing.location.address);
+        body.append('province', listing.province.abbr);
+        body.append('city', listing.city);
+        body.append('address', listing.address);
         body.append('price', listing.price);
         body.append('sqft', listing.squarefeet);
         body.append('bedrooms', listing.bedrooms);

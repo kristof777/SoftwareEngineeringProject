@@ -39,14 +39,14 @@
 
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select formControlName="province" placeholder="{{ currentUser?.location.province.name }}" id="settingsProvince">
+            <ion-select formControlName="province" placeholder="{{ currentUser?.province.name }}" id="settingsProvince">
                 <ion-option *ngFor="let p of provinces" value="{{p.abbr}}">{{p.name}}</ion-option>
             </ion-select>
         </ion-item>
 
         <ion-item>
             <ion-label stacked>City</ion-label>
-            <ion-input formControlName="city" type="text" placeholder="{{ currentUser?.location.city }}" id="settingsCity"></ion-input>
+            <ion-input formControlName="city" type="text" placeholder="{{ currentUser?.city }}" id="settingsCity"></ion-input>
         </ion-item>
 
         <ion-list-header>Setting</ion-list-header>

@@ -28,6 +28,18 @@ export class MyListingsPage {
         // this.listings = Object.keys(data).map(key => data[key]);
     }
 
+    ionViewDidEnter(){
+        let me = this;
+
+        if(this.loginService.isLoggedIn()) {
+            this.listingProvider.getMyListings().subscribe(data => {
+                me.listings = data['myListings'];
+            }, error => {
+                this._logger.error(JSON.stringify(error));
+            });
+        }
+    }
+
     /**
      * Display the detailed view for the selected listing
      *
