@@ -196,6 +196,8 @@ export class KasperService {
      * }
      *
      * @param filter            the filter to apply
+     * @param valuesRequired    the fields to return about the listings
+     * @param maxLimit          the max number of returned results
      */
     getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
         let body = new FormData();
@@ -280,12 +282,17 @@ export class KasperService {
      *       email: string
      * }
      *
-     * @param listingId             the listing id
+     * @param listingId     the listing id
+     * @param message       the message for the seller
      */
-    requestContactInformation(listingId: number): any{
+    contactSeller(listingId: number, message: string): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
+        body.append('message', message);
+        body.append('phone1', LoginService.user.phone1);
+        body.append('phone2', LoginService.user.phone2);
+        body.append('email', LoginService.user.email);
 
         return this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
             , ResponseContentType.Json)
