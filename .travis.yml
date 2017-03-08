@@ -55,16 +55,15 @@ before_script:
   - "./scripts/before_script.sh"
 
 script:
-  - google-chrome --version
-  #- "./scripts/build_script.sh"
+  - "./scripts/build_script.sh"
   
   
 after_success:
-  #- "./scripts/systeminfo_script.sh"
-  #- "./scripts/stage_script.sh"
+  - "./scripts/systeminfo_script.sh"
+  - "./scripts/stage_script.sh"
   
 after_failure:
-  #- "./scripts/systeminfo_script.sh"
+  - "./scripts/systeminfo_script.sh"
   
 deploy:
  provider: script
