@@ -144,6 +144,17 @@ export class KasperService {
     }
 
     /**
+     * Request to sign out of the api.
+     */
+    signOut(): any{
+        let body = new FormData();
+        this.appendAuthentication(body)
+
+        return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
      * Request the favourite listings of a user
      *
      * The return data is as follows
