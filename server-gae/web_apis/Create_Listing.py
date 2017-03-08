@@ -39,7 +39,7 @@ class CreateListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['price', 'sqft', 'bedrooms', 'bathrooms', 'description',
+        error_keys = ['price', 'squarefeet', 'bedrooms', 'bathrooms', 'description',
                       'images',
                       'thumbnailImageIndex', 'address', 'province', 'city',
                       'userId', 'isPublished']
@@ -80,7 +80,7 @@ class CreateListing(webapp2.RequestHandler):
         # all set
         listing = Listing(userId=int(values['userId']),
                           bedrooms=int(values['bedrooms']),
-                          sqft=int(values['sqft']),
+                          squarefeet=int(values['squarefeet']),
                           bathrooms=float(values['bathrooms']),
                           price=int(values['price']),
                           description=values['description'],

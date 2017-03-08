@@ -52,7 +52,7 @@ class EditListing(webapp2.RequestHandler):
         change_values = json.loads(values['changeValues'])
 
         # check if there's any unrecognized key presented in changeValues
-        if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+        if any(key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
                            "province", "address", "description", "isPublished",
                            "images","thumbnailImageIndex"] for key in
                change_values.keys()):

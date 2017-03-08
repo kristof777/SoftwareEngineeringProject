@@ -101,7 +101,7 @@ no_listings_left = {"error": "noListingsLeft",
 invalid_bedrooms = {"error": "invalidNumberOfBedrooms",
                     "status": missing_invalid_parameter}
 
-invalid_sqft = {"error": "invalidSquareFeet",
+invalid_squarefeet = {"error": "invalidSquareFeet",
                 "status": missing_invalid_parameter}
 
 invalid_bathrooms = {"error": "invalidNumberOfBathrooms",
@@ -134,7 +134,7 @@ missing_address = {"error": "missingAddress",
 missing_price = {"error": "missingPrice",
                  "status": missing_invalid_parameter}
 
-missing_sqft = {"error": "missingSqft",
+missing_squarefeet = {"error": "missingSqft",
                 "status": missing_invalid_parameter}
 
 missing_bedrooms = {"error": "missingBedrooms",
@@ -178,7 +178,7 @@ invalids = {
     "price": invalid_price,
     "bedrooms": invalid_bedrooms,
     "bathrooms": invalid_bathrooms,
-    "sqft": invalid_sqft,
+    "squarefeet": invalid_squarefeet,
     "isPublished": invalid_published,
     "thumbnailImageIndex": invalid_thumbnail_image_index,
     "liked": invalid_liked,
@@ -205,7 +205,7 @@ missing = {
     "price": missing_price,
     "bedrooms": missing_bedrooms,
     "bathrooms": missing_bathrooms,
-    "sqft": missing_sqft,
+    "squarefeet": missing_squarefeet,
     "isPublished": missing_published,
     "thumbnailImageIndex": missing_image_index,
     "images": missing_image,
