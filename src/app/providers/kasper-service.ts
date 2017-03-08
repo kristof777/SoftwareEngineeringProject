@@ -66,7 +66,11 @@ export class KasperService {
     }
 
     confirmEmail(): any{
-        this._logger.error("KasperService.confirmEmail is not implemented.");
+        let body = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -144,6 +148,17 @@ export class KasperService {
     }
 
     /**
+     * Request to sign out of the api.
+     */
+    signOut(): any{
+        let body = new FormData();
+        this.appendAuthentication(body)
+
+        return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
      * Request the favourite listings of a user
      *
      * The return data is as follows
@@ -185,13 +200,34 @@ export class KasperService {
      * }
      *
      * @param filter            the filter to apply
+     * @param valuesRequired    the fields to return about the listings
+     * @param maxLimit          the max number of returned results
      */
-    getListings(filter: Filter): any{
+    getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('filter', JSON.stringify(filter));
+        body.append('valuesRequired', JSON.stringify(valuesRequired));
+        body.append('maxLimit', maxLimit);
 
         return this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
+     * Submit a request to get listings according to the specified filter
+     *
+     * The return data is as follows
+     * {
+     *      myListings: Listing[]
+     * }
+     *
+     */
+    getMyListings(): any{
+        let body = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/getMyListing", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -250,12 +286,17 @@ export class KasperService {
      *       email: string
      * }
      *
-     * @param listingId             the listing id
+     * @param listingId     the listing id
+     * @param message       the message for the seller
      */
-    requestContactInformation(listingId: number): any{
+    contactSeller(listingId: number, message: string): any{
         let body = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
+        body.append('message', message);
+        body.append('phone1', LoginService.user.phone1);
+        body.append('phone2', LoginService.user.phone2);
+        body.append('email', LoginService.user.email);
 
         return this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
             , ResponseContentType.Json)

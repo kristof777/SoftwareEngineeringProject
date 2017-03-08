@@ -1,12 +1,13 @@
 exports.config = {
     capabilities: {
-        
+        /*
         'browserName': 'chrome',
         'chromeOptions': {
             args: ['--disable-web-security']
         },
+        */
         
-        //'browserName': 'firefox',
+        'browserName': 'firefox',
         shardTestFiles: true,
         maxInstances: 10
     },
