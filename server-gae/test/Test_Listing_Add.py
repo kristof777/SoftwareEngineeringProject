@@ -188,7 +188,8 @@ class TestHandlers(unittest.TestCase):
                            invalid_sqft['error'],
                            invalid_bathrooms['error'],
                            invalid_price['error'],
-                           invalid_thumbnail_image_index['error']]
+                           invalid_thumbnail_image_index['error']
+                           ]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -217,7 +218,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_created.city, input['city'])
         self.assertEquals(listing_created.address, input['address'])
         self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
-        self.assertEquals(listing_created.images, input['images'])
+        self.assertEquals(listing_created.images, json.loads(input['images']))
 
 
 

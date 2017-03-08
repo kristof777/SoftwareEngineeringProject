@@ -13,7 +13,7 @@ class Listing(ndb.Model):
     isPublished = ndb.BooleanProperty(required=True, default=False)
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=True)
-    images = ndb.BlobProperty(required=True)
+    images = ndb.BlobProperty(repeated=True)
     thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
     userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=True)

@@ -83,6 +83,9 @@ invalid_listing_id = {"error": "invalidListingId",
 missing_listing_id = {"error": "missingListingId",
                       "status": missing_invalid_parameter}
 
+invalid_images = {"error": "invalidImages",
+                  "status": missing_invalid_parameter}
+
 missing_liked = {"error": "missingLiked",
                  "status": missing_invalid_parameter}
 
@@ -183,7 +186,8 @@ invalids = {
     "thumbnailImageIndex": invalid_thumbnail_image_index,
     "liked": invalid_liked,
     "filter": invalid_filter_bound,
-    "valuesRequired": invalid_values_required
+    "valuesRequired": invalid_values_required,
+    'images': invalid_images
 }
 
 missing = {

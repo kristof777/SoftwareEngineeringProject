@@ -58,6 +58,7 @@ class CreateListing(webapp2.RequestHandler):
         #  and boolean field (isPublished)
         invalid = key_validation(values)
 
+
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
                                     missing_invalid_parameter)
@@ -78,6 +79,8 @@ class CreateListing(webapp2.RequestHandler):
         isPublished = True if values['isPublished'] in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
 
         # all set
+        values['images'] = json.loads(values['images'])
+        values['images'] = [str(image) for image in values['images']]
         listing = Listing(userId=int(values['userId']),
                           bedrooms=int(values['bedrooms']),
                           sqft=int(values['sqft']),
