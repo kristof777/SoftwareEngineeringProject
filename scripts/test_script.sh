@@ -8,11 +8,15 @@ echo $'\n\n\n\n*******RUNNING BACK-END SMOKE TESTS*******'
 python -m unittest discover -s server-gae/ -p 'Test*.py'
 export BACK_END_TEST=$?
 
-echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS*******'
+echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS FOR FIREFOX*******'
 screen -d -m -L ionic serve --firefox@47.0.1
 sleep 50
-xvfb-run protractor e2e-tests.conf.js
-export FRONT_END_TEST=$?
+xvfb-run protractor firefox-e2e-tests.conf.js
+export FRONT_END_FF=$?
+
+echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS FOR CHROME*******'
+xvfb-run protractor chrome-e2e-tests.conf.js
+export FRONT_END_CHROME=$?
 
 if [[ ${BACK_END_TEST} > 0 ]]; then
   echo ${BACK_END_TEST}
@@ -21,4 +25,7 @@ fi
 if [[ ${FRONT_END_TEST} > 0 ]]; then
   echo ${FRONT_END_TEST}
   exit 2
+fi
+if [[ ${FRONT_END_TEST} > 0 ]]; then
+  exit 3
 fi
