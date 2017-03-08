@@ -147,6 +147,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
         user = users[i]
         for j in range(0, distribution):
             random_listing_info = {"userId": user["userId"],
+                                   "authToken": user["token"],
                                    "bedrooms": str(random.randint(1, 10)),
                                    "squarefeet": str(random.randint(200, 2000)),
                                    "bathrooms": str(random.randint(1, 10)),
@@ -192,12 +193,13 @@ def create_random_user():
     return user
 
 
-def create_random_listing(user_id):
+def create_random_listing(user_id, token):
     """
     :param user_id: User Id where listing belongs
     :return: a listing with randomly generated fields
     """
     random_listing = {"userId": user_id,
+                      "authToken": token,
                       "bedrooms": str(random.randint(1, 10)),
                       "squarefeet": str(random.randint(200, 2000)),
                       "bathrooms": str(random.randint(1, 10)),

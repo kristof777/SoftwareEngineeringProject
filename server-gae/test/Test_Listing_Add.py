@@ -45,7 +45,8 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -54,6 +55,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_empty_fields(self):
         input = {"userId": "",
+                 "authToken": "",
                  "bedrooms": "",
                  "squarefeet": "",
                  "bathrooms": "",
@@ -83,7 +85,8 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -92,6 +95,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_multiple_spaces_input(self):
         input = {"userId": "      ",
+                 "authToken": "      ",
                  "bedrooms": "       ",
                  "squarefeet": "        ",
                  "bathrooms": "      ",
@@ -122,7 +126,8 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -130,7 +135,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
     def test_some_missing_fields(self):
-        input = create_random_listing("")
+        input = create_random_listing("", "")
         input['squarefeet'] = ""
         input['description'] = ""
         input['city'] = ""
@@ -143,6 +148,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
+                           missing_token['error'],
                            missing_squarefeet['error'],
                            missing_description['error'],
                            missing_city['error'],
@@ -154,7 +160,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
     def test_invalid_user_id(self):
-        input = create_random_listing("1111")
+        input = create_random_listing("1111", "sfasdtr54523df")
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
@@ -171,7 +177,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(not_authorized['error'], errors_expected)
 
     def test_invalid_numeric_field(self):
-        input = create_random_listing("supposed to be int")
+        input = create_random_listing("supposed to be int", "random token")
         input['bedrooms'] = "supposed to be int"
         input['squarefeet'] = "supposed to be int"
         input['bathrooms'] = "supposed to be float"

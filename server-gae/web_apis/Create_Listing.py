@@ -42,7 +42,7 @@ class CreateListing(webapp2.RequestHandler):
         error_keys = ['price', 'squarefeet', 'bedrooms', 'bathrooms', 'description',
                       'images',
                       'thumbnailImageIndex', 'address', 'province', 'city',
-                      'userId', 'isPublished']
+                      'userId', 'isPublished', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -58,7 +58,6 @@ class CreateListing(webapp2.RequestHandler):
         #  and boolean field (isPublished)
         invalid = key_validation(values)
 
-
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
                                     missing_invalid_parameter)
@@ -72,6 +71,16 @@ class CreateListing(webapp2.RequestHandler):
             }
             write_error_to_response(self.response, error,
                                     unauthorized_access)
+            return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                                    "auth",
+                                                    values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to chnage user"},
+                                    not_authorized['status'])
             return
 
         values['province'] = scale_province(str(values['province']))
