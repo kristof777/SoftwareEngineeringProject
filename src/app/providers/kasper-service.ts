@@ -207,6 +207,23 @@ export class KasperService {
     }
 
     /**
+     * Submit a request to get listings according to the specified filter
+     *
+     * The return data is as follows
+     * {
+     *      myListings: Listing[]
+     * }
+     *
+     */
+    getMyListings(): any{
+        let body = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/getMyListing", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
      * Submit a request to create a listing
      *
      * The return data is as follows
