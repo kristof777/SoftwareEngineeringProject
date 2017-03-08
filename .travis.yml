@@ -1,4 +1,6 @@
+dist: trusty
 sudo: true
+
 env: 
   CXX=g++-4.8 
   ANDROID_HOME=/home/travis/build/CMPT371Team1/Project/android-sdk-linux
