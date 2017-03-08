@@ -53,7 +53,9 @@ before_script:
   - "./scripts/before_script.sh"
 
 script:
+  - google-chrome --version
   #- "./scripts/build_script.sh"
+  
   
 after_success:
   #- "./scripts/systeminfo_script.sh"
