@@ -34,7 +34,7 @@ class TestGetMyListing(unittest.TestCase):
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
-        self.assertEquals(len(output["myListings"]), 10)
+        self.assertEquals(len(output["listings"]), 10)
 
     def test_invalid_userid(self):
         invalid_my_listings = {
