@@ -1,3 +1,4 @@
+import {AlertController} from "ionic-angular";
 let assert = require('assert-plus');
 import {Injectable} from "@angular/core";
 import {Http, ResponseContentType} from "@angular/http";
@@ -11,10 +12,13 @@ import {FormControl} from "@angular/forms";
 
 @Injectable()
 export class KasperService {
+    public static errorMessages: string[][];
 
     constructor(public http: Http,
                 public loginService: LoginService,
+                public alertCtrl: AlertController,
                 private _logger: Logger) {
+        KasperService.errorMessages = this.initErrors();
     }
 
     /**
@@ -338,5 +342,113 @@ export class KasperService {
         }
 
         return null;
+    }
+
+    /**
+     * Error message to appear for the different calls.
+     *
+     * @returns {string[][]} an array of api routes, and error keys associated with them
+     */
+    initErrors(): string[][]{ // TODO finish these declarations
+        let result: string[][] = [[]];
+
+        result['signIn'] = [];
+        result['signIn']['notAuthorized'] = "The credentials you entered were not valid.";
+        result['signIn']['missingEmail'] = "Email is required to login.";
+        result['signIn']['missingPassword'] = "Password is required to login.";
+
+        result['signInToken'] = [];
+        result['signInToken']['notAuthorized'] = "";
+
+        result['confirmEmail'] = [];
+        result['confirmEmail']['missingUserId'] = "";
+        result['confirmEmail']['invalidUserId'] = "";
+
+        result['createUser'] = [];
+        result['createUser']['emailAlreadyExists'] = "";
+        result['createUser']['passwordMismatch'] = "";
+        result['createUser']['passwordNotStrong'] = "";
+        result['createUser']['missingEmail'] = "";
+        result['createUser']['missingPassword'] = "";
+        result['createUser']['missingConfirmedPassword'] = "";
+        result['createUser']['missingFirstName'] = "";
+        result['createUser']['missingLastName'] = "";
+        result['createUser']['missingPhoneNumber'] = "";
+        result['createUser']['missingCity'] = "";
+
+        result['editUser'] = [];
+        result['editUser']['emailAlreadyExists'] = "";
+        result['editUser']['nothingRequestedToChange'] = "";
+        result['editUser']['unrecognizedKey'] = "";
+        result['editUser']['invalidUserId'] = "";
+        result['editUser']['missingUserId'] = "";
+        result['editUser']['passwordCantBeChanged'] = "";
+
+        result['changePassword'] = [];
+        result['changePassword']['missingOldPassword'] = "";
+        result['changePassword']['missingNewPassword'] = "";
+        result['changePassword']['missingNewPasswordConfirmed'] = "";
+        result['changePassword']['passwordNotStrong'] = "";
+        result['changePassword']['invalidUserId'] = "";
+        result['changePassword']['missingUserId'] = "";
+        result['changePassword']['notAuthorized'] = "";
+        result['changePassword']['newPasswordMismatch'] = "";
+        result['changePassword']['newPasswordIsTheSameAsOld'] = "";
+
+        result['signOut'] = [];
+        result['signOut']['invalidUserId'] = "";
+
+        result['getFavourites'] = [];
+        result['getFavourites']['noFavouriteListing'] = "";
+        result['getFavourites']['invalidUserId'] = "";
+        result['getFavourites']['missingUserId'] = "";
+
+        result['getMyListing'] = [];
+        result['getMyListing']['invalidUserId'] = "";
+        result['getMyListing']['missingUserId'] = "";
+
+        result['likeDislikeListing'] = [];
+        result['likeDislikeListing']['invalidListingId'] = "";
+        result['likeDislikeListing']['invalidUserId'] = "";
+        result['likeDislikeListing']['missingUserId'] = "";
+        result['likeDislikeListing']['missingListingId'] = "";
+        result['likeDislikeListing']['missingLiked'] = "";
+
+        result['getListings'] = [];
+        result['getListings']['noListingsLeft'] = "";
+
+        result['createListing'] = [];
+        result['createListing']['invalidCity'] = "";
+        result['createListing']['invalidProvince'] = "";
+        result['createListing']['invalidAddress'] = "";
+
+        result['editListing'] = [];
+        result['editListing']['nothingRequestedToChange'] = "";
+        result['editListing']['unrecognizedKey'] = "";
+        result['editListing']['invalidUserId'] = "";
+        result['editListing']['missingUserId'] = "";
+        result['editListing']['notAuthorized'] = "";
+        result['editListing']['missingListingId'] = "";
+
+        result['contactSeller'] = [];
+        result['contactSeller']['missingListingId'] = "";
+        result['contactSeller']['missingUserId'] = "";
+        result['contactSeller']['invalidUserId'] = "";
+        result['contactSeller']['invalidListingId'] = "";
+        result['contactSeller']['userEmailNotConfirmed'] = "";
+
+        return result;
+    }
+
+    handleError(key: any){
+        assert.string(KasperService.errorMessages['signIn'][key], "Unhandled error response: " + key);
+
+        let message: string = KasperService.errorMessages['signIn'][key]
+
+        this.alertCtrl.create({
+            title: "Oops!",
+            subTitle: message,
+            buttons: ['Dismiss']
+        }).present();
     }
 }

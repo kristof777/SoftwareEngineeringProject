@@ -1,7 +1,10 @@
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
-import {NavController, ToastController, ViewController} from "ionic-angular";
+import {
+    NavController, ToastController, ViewController, LoadingController,
+    Loading, AlertController
+} from "ionic-angular";
 import {SignUpPage} from "../sign-up/sign-up";
 import {KasperService} from "../../app/providers/kasper-service";
 import {User} from "../../app/models/user";
@@ -19,11 +22,13 @@ export class SignInPage {
     loginForm: FormGroup;
     private emailAttempted: boolean = false;
 
+    private loading: Loading;
+
     constructor(public navCtrl: NavController,
-                public toastCtrl: ToastController,
+                public alertCtrl: AlertController,
                 private _logger: Logger,
+                public loadingCtrl: LoadingController,
                 public formBuilder: FormBuilder,
-                public viewCtrl: ViewController,
                 public kasperService: KasperService) {
         this.loginForm = formBuilder.group({
             email: ['', Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}"), Validators.required])],
@@ -63,6 +68,12 @@ export class SignInPage {
             this.navCtrl.setRoot(MyProfilePage);
         } else if(this.loginForm.valid){
             let test = this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password);
+
+            this.loading = this.loadingCtrl.create({
+                content: "Logging in..."
+            });
+            this.loading.present();
+
             this.signInCallback(test);
         } else {
             this._logger.error("Tried to submit when fields do not pass validation.");
@@ -97,9 +108,10 @@ export class SignInPage {
             this.navCtrl.parent.select(0);
 
             }, error => {
-                this._logger.error("Error ")
-                this._logger.error(JSON.stringify(error));
+                this._logger.error("signIn error: " + JSON.stringify(error));
+                this.kasperService.handleError(error.json());
             });
+        this.loading.dismiss();
     }
 
     attemptEmail(){
