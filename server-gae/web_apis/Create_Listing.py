@@ -79,7 +79,7 @@ class CreateListing(webapp2.RequestHandler):
                                                     values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to chnage user"},
+                                                        "not authorized to create listings"},
                                     not_authorized['status'])
             return
 

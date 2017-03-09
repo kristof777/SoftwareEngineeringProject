@@ -32,7 +32,7 @@ class EditListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
         # check if there's any missing field, if so, just return to the user what all is missing
-        error_keys = ['changeValues', 'userId', 'listingId']
+        error_keys = ['changeValues', 'userId', 'listingId', 'authToken']
         errors, values = keys_missing(error_keys, self.request.POST)
 
         # If there exists error then return the response, and stop the function
@@ -101,6 +101,16 @@ class EditListing(webapp2.RequestHandler):
                 not_authorized['error']: 'User not authorized'
             }
             write_error_to_response(self.response, error, unauthorized_access)
+            return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to edit listings"},
+                                    not_authorized['status'])
             return
 
         listing = Listing.get_by_id(int(values['listingId']))

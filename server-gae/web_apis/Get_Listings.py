@@ -113,6 +113,30 @@ class GetListing(webapp2.RequestHandler):
         # we want to get listings that are not in favorites table (only if user signed in)
         # if user not sign in, we don't need to care about this favorite part
         if "userId" in values and not is_empty(values["userId"]):
+            user = User.get_by_id(int(values['userId']))
+            if user is None:
+                error = {
+                    not_authorized['error']: 'User not authorized'
+                }
+                write_error_to_response(self.response, error, unauthorized_access)
+                return
+            if "authToken" not in values or is_empty(values["authToken"]):
+                error = {
+                    missing_token['error']: 'AuthToken is missing'
+                }
+                write_error_to_response(self.response, error, unauthorized_access)
+                return
+
+            # Check if it is the valid user
+            valid_user = user.validate_token(int(values["userId"]),
+                                             "auth",
+                                             values["authToken"])
+            if not valid_user:
+                write_error_to_response(self.response, {not_authorized['error']:
+                                                            "not authorized to get filtered listings"},
+                                        not_authorized['status'])
+                return
+
             returned_listing_ids = filter_favorite_listings(values["userId"], returned_listing_ids)
 
         # after this, returned_listing_ids contains all the listings' ids that

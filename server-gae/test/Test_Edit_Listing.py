@@ -35,6 +35,7 @@ class TestHandlers(unittest.TestCase):
         owner = users[0]
         listing = listings[0]
         self.ownerId = owner['userId']
+        self.token = owner['token']
         self.listingId = listing['listingId']
 
         # now create a new user as an editor
@@ -42,15 +43,17 @@ class TestHandlers(unittest.TestCase):
         assert len(users) == 1
         editors = users[0]
         self.editorId = editors['userId']
+        self.editorToken = editors['token']
 
 
     def test_missing_input(self):
-        res_value, status = get_response(get_post_dictionary("", "", {}))
+        res_value, status = get_response(get_post_dictionary("", "", "", {}))
 
         self.assertEqual(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_listing_id['error']]
+                           Error_Code.missing_listing_id['error'],
+                           Error_Code.missing_token['error']]
         self.assertEquals(are_two_lists_same(res_value, errors_expected), True)
 
     def test_missing_key_value(self):
@@ -61,7 +64,7 @@ class TestHandlers(unittest.TestCase):
                 "description": "  ",
         }
 
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
+        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
 
         self.assertEqual(status, missing_invalid_parameter)
 
@@ -74,7 +77,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_unrecognized_key(self):
         change_values = { "blablabla": "blablabla"}
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
+        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
         self.assertEqual(status, unrecognized_key["status"])
         error_expected = Error_Code.unrecognized_key['error']
         self.assertTrue(error_expected in res_value)
@@ -83,14 +86,14 @@ class TestHandlers(unittest.TestCase):
         change_values = {"bathrooms": 10}
 
         res_value, status = get_response(
-            get_post_dictionary(self.editorId, self.listingId, change_values))
+            get_post_dictionary(self.editorId, self.listingId, self.editorToken, change_values))
         self.assertEquals(status, not_authorized['status'])
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
 
     def invalid_user_id(self):
         change_values = {"bathrooms": 10}
-        res_value, status = get_response(get_post_dictionary("blabla", "blabla", change_values))
+        res_value, status = get_response(get_post_dictionary("blabla", "blabla", self.token, change_values))
         self.assertEquals(status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error'],
                            Error_Code.invalid_listing_id['error']]
@@ -98,7 +101,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_unauthorized_userid_listing_id(self):
         change_values = {"bathrooms": 10}
-        res_value, status = get_response(get_post_dictionary(1111111, 4444444, change_values))
+        res_value, status = get_response(get_post_dictionary(1111111, 4444444, self.token, change_values))
         self.assertEquals(status, not_authorized['status'])
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
@@ -114,7 +117,7 @@ class TestHandlers(unittest.TestCase):
                             "thumbnailImageIndex": "supposed to be a number"
                           }
 
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, change_values))
+        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
 
         self.assertEquals(status, missing_invalid_parameter)
 
@@ -140,7 +143,7 @@ class TestHandlers(unittest.TestCase):
                          }
 
         res_value, status = get_response(
-            get_post_dictionary(self.ownerId, self.listingId, change_values))
+            get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
         self.assertEquals(status, success)
         listing_changed = Listing.get_by_id(self.listingId)
         self.assertEquals(listing_changed.bedrooms,
@@ -156,10 +159,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_changed.thumbnailImageIndex,
                           int(change_values['thumbnailImageIndex']))
 
-
-
-
-
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
         # completed. If the testbed is not deactivated, the original
@@ -167,9 +166,9 @@ class TestHandlers(unittest.TestCase):
         self.testbed.deactivate()
 
 
-def get_post_dictionary(userId, listingId, change_values):
+def get_post_dictionary(userId, listingId, token, change_values):
     return {"userId": userId, "listingId":
-        listingId, "changeValues": json.dumps(change_values)}
+        listingId, "authToken": token, "changeValues": json.dumps(change_values)}
 
 
 def get_response(POST):

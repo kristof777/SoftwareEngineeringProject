@@ -34,25 +34,31 @@ class TestHandlers(unittest.TestCase):
         users = create_dummy_users_for_testing(Main, 1)
         assert len(users) == 1
         self.userId = users[0]['userId']
+        self.token = users[0]['token']
 
         # make the user like a few listings
-        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[0]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[0]['listingId'],
+                                                                       self.token, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[1]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[1]['listingId'],
+                                                                       self.token, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[2]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[2]['listingId'],
+                                                                       self.token, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[3]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[3]['listingId'],
+                                                                       self.token, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[4]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[4]['listingId'],
+                                                                       self.token, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
@@ -83,6 +89,7 @@ class TestHandlers(unittest.TestCase):
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
             "maxLimit": 8,
             "userId": self.userId,
+            "authToken": self.token,
             "filter": json.dumps({
                 "price": {
                     "lower": 100,
@@ -113,6 +120,7 @@ class TestHandlers(unittest.TestCase):
                 ["bedrooms", "bathrooms", "address", "price"]),
             "maxLimit": 8,
             "userId": self.userId,
+            "authToken": self.token,
             "filter": json.dumps({
                 "price": {
                     "lower": 100,
@@ -160,6 +168,7 @@ class TestHandlers(unittest.TestCase):
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
             "maxLimit": 8,
             "userId": self.userId,
+            "authToken": self.token,
             "filter": json.dumps({
                 "price": {
                     "lower": 100,
@@ -202,9 +211,9 @@ class TestHandlers(unittest.TestCase):
 
 
 
-def get_like_post_dictionary(userId, listingId, liked):
+def get_like_post_dictionary(userId, listingId, token, liked):
     return {"userId": userId, "listingId":
-        listingId, "liked": liked}
+        listingId, "authToken": token, "liked": liked}
 
 
 def get_like_response(POST):

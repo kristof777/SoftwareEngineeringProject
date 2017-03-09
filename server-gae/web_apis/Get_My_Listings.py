@@ -25,7 +25,7 @@ class GetMyListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['userId']
+        error_keys = ['userId', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -52,6 +52,16 @@ class GetMyListing(webapp2.RequestHandler):
                 not_authorized['error']: 'User not authorized'
             }
             write_error_to_response(self.response, error, not_authorized)
+            return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to get my listings"},
+                                    not_authorized['status'])
             return
 
         owner_id = int(values['userId'])

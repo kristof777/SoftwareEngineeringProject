@@ -23,7 +23,7 @@ class DeleteListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
-        error_keys = ['userId', 'listingId']
+        error_keys = ['userId', 'listingId', 'authToken']
 
         errors,values = keys_missing(error_keys, self.request.POST)
 
@@ -50,6 +50,16 @@ class DeleteListing(webapp2.RequestHandler):
             }
             write_error_to_response(self.response, error,
                                     unauthorized_access)
+            return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to delete listings"},
+                                    not_authorized['status'])
             return
 
         listing = Listing.get_by_id(int(values['listingId']))

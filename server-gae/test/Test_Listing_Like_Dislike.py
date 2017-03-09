@@ -32,6 +32,7 @@ class TestHandlers(unittest.TestCase):
         owner = users[0]
         listing = listings[0]
         self.ownerId = owner['userId']
+        self.ownerToken = owner['token']
         self.listingId = listing['listingId']
 
         # now create a new user as a liker
@@ -39,11 +40,13 @@ class TestHandlers(unittest.TestCase):
         assert len(users) == 1
         liker = users[0]
         self.likerId = liker['userId']
+        self.likerToken = liker['token']
 
     def test_owner_liking_listing(self):
         like_the_listing = {
             "userId": self.ownerId,
             "listingId": self.listingId,
+            'authToken': self.ownerToken,
             "liked": "True"
         }
 
@@ -65,6 +68,7 @@ class TestHandlers(unittest.TestCase):
         like_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
+            "authToken": self.likerToken,
             "liked": "True"
         }
 
@@ -77,6 +81,7 @@ class TestHandlers(unittest.TestCase):
         like_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
+            "authToken": self.likerToken,
             "liked": "True"
         }
         request = webapp2.Request.blank('/like', POST=like_the_listing)
@@ -100,6 +105,7 @@ class TestHandlers(unittest.TestCase):
         dislike_the_listing = {
             "userId": self.likerId,
             "listingId": self.listingId,
+            "authToken": self.likerToken,
             "liked": "False"
         }
 
@@ -112,6 +118,7 @@ class TestHandlers(unittest.TestCase):
         dislike_the_listing_again = {
             "userId": self.likerId,
             "listingId": self.listingId,
+            "authToken": self.likerToken,
             "liked": "False"
         }
 
@@ -136,6 +143,7 @@ class TestHandlers(unittest.TestCase):
         like_with_missing_input = {
             "userId": "",
             "listingId": "",
+            "authToken": "",
             "liked": ""
         }
 
@@ -144,7 +152,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
         errors_expected = [missing_user_id['error'],
                            missing_listing_id['error'],
-                           missing_liked['error']]
+                           missing_liked['error'],
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -155,6 +164,7 @@ class TestHandlers(unittest.TestCase):
         like_with_invalid_input = {
             "userId": "supposed to be an integer",
             "listingId": "supposed to be an integer",
+            "authToken": self.likerToken,
             "liked": "supposed to be a boolean"
         }
 
