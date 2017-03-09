@@ -36,7 +36,7 @@ class TestHandlers(unittest.TestCase):
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
-                           missing_sqft['error'],
+                           missing_squarefeet['error'],
                            missing_bathrooms['error'],
                            missing_price['error'],
                            missing_description['error'],
@@ -45,7 +45,10 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -54,8 +57,9 @@ class TestHandlers(unittest.TestCase):
 
     def test_empty_fields(self):
         input = {"userId": "",
+                 "authToken": "",
                  "bedrooms": "",
-                 "sqft": "",
+                 "squarefeet": "",
                  "bathrooms": "",
                  "price": "",
                  "description": "",
@@ -64,6 +68,8 @@ class TestHandlers(unittest.TestCase):
                  "city": "",
                  "address": "",
                  "thumbnailImageIndex": "",
+                 "longitude": "",
+                 "latitude": "",
                  "images": ''
                  }
 
@@ -74,7 +80,7 @@ class TestHandlers(unittest.TestCase):
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
-                           missing_sqft['error'],
+                           missing_squarefeet['error'],
                            missing_bathrooms['error'],
                            missing_price['error'],
                            missing_description['error'],
@@ -83,7 +89,10 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -92,8 +101,9 @@ class TestHandlers(unittest.TestCase):
 
     def test_multiple_spaces_input(self):
         input = {"userId": "      ",
+                 "authToken": "      ",
                  "bedrooms": "       ",
-                 "sqft": "        ",
+                 "squarefeet": "        ",
                  "bathrooms": "      ",
                  "price": "        ",
                  "description": "      ",
@@ -101,6 +111,8 @@ class TestHandlers(unittest.TestCase):
                  "province": "       ",
                  "city": "       ",
                  "address": "      ",
+                 "longitude": "   ",
+                 "latitude": "   ",
                  "thumbnailImageIndex": "      ",
                  "images": '    '
                  }
@@ -113,7 +125,7 @@ class TestHandlers(unittest.TestCase):
 
         errors_expected = [missing_user_id['error'],
                            missing_bedrooms['error'],
-                           missing_sqft['error'],
+                           missing_squarefeet['error'],
                            missing_bathrooms['error'],
                            missing_price['error'],
                            missing_description['error'],
@@ -122,7 +134,10 @@ class TestHandlers(unittest.TestCase):
                            missing_address['error'],
                            missing_image['error'],
                            missing_image_index['error'],
-                           missing_published['error']]
+                           missing_published['error'],
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -130,8 +145,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
     def test_some_missing_fields(self):
-        input = create_random_listing("")
-        input['sqft'] = ""
+        input = create_random_listing("", "")
+        input['squarefeet'] = ""
         input['description'] = ""
         input['city'] = ""
         input['images'] = ''
@@ -143,7 +158,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
-                           missing_sqft['error'],
+                           missing_token['error'],
+                           missing_squarefeet['error'],
                            missing_description['error'],
                            missing_city['error'],
                            missing_image['error']]
@@ -154,7 +170,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
 
     def test_invalid_user_id(self):
-        input = create_random_listing("1111")
+        input = create_random_listing("1111", "sfasdtr54523df")
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
@@ -171,12 +187,14 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(not_authorized['error'], errors_expected)
 
     def test_invalid_numeric_field(self):
-        input = create_random_listing("supposed to be int")
+        input = create_random_listing("supposed to be int", "random token")
         input['bedrooms'] = "supposed to be int"
-        input['sqft'] = "supposed to be int"
+        input['squarefeet'] = "supposed to be int"
         input['bathrooms'] = "supposed to be float"
         input['price'] = "supposed to be int"
         input['thumbnailImageIndex'] = 'supposed to be int'
+        input['longitude'] = 'supposed to be float'
+        input['latitude'] = 'supposed to be float'
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
@@ -185,10 +203,13 @@ class TestHandlers(unittest.TestCase):
 
         errors_expected = [invalid_user_id['error'],
                            invalid_bedrooms['error'],
-                           invalid_sqft['error'],
+                           invalid_squarefeet['error'],
                            invalid_bathrooms['error'],
                            invalid_price['error'],
-                           invalid_thumbnail_image_index['error']]
+                           invalid_longitude['error'],
+                           invalid_latitude['error'],
+                           invalid_thumbnail_image_index['error']
+                           ]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -208,7 +229,7 @@ class TestHandlers(unittest.TestCase):
 
         listing_created = Listing.get_by_id(int(output["listingId"]))
         self.assertEquals(listing_created.bedrooms, int(input['bedrooms']))
-        self.assertEquals(listing_created.sqft, int(input['sqft']))
+        self.assertEquals(listing_created.squarefeet, int(input['squarefeet']))
         self.assertEquals(listing_created.bathrooms, float(input['bathrooms']))
         self.assertEquals(listing_created.price, int(input['price']))
         self.assertEquals(listing_created.description, input['description'])
@@ -217,17 +238,13 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_created.city, input['city'])
         self.assertEquals(listing_created.address, input['address'])
         self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
-        self.assertEquals(listing_created.images, input['images'])
-
-
+        self.assertEquals(listing_created.images, json.loads(input['images']))
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
         # completed. If the testbed is not deactivated, the original
         # stubs will not be restored.
         self.testbed.deactivate()
-
-
 
 
 def run_tests():

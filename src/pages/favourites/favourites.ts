@@ -22,8 +22,18 @@ export class FavouritesPage {
                 private _logger: Logger) {
 
         this.listings = Array();
-        // let data = listingProvider.savedListings.favListings;
-        // this.listings = Object.keys(data).map(key => data[key]);
+    }
+
+    ionViewDidEnter(){
+        let me = this;
+
+        if(this.loginService.isLoggedIn()) {
+            this.listingProvider.getFavourites().subscribe(data => {
+                me.listings = data['listings'];
+            }, error => {
+                this._logger.error(JSON.stringify(error));
+            });
+        }
     }
 
     /**

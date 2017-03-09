@@ -39,10 +39,10 @@ class CreateListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['price', 'sqft', 'bedrooms', 'bathrooms', 'description',
+        error_keys = ['price', 'squarefeet', 'bedrooms', 'bathrooms', 'description',
                       'images',
                       'thumbnailImageIndex', 'address', 'province', 'city',
-                      'userId', 'isPublished']
+                      'userId', 'isPublished', 'longitude', 'latitude', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -73,20 +73,34 @@ class CreateListing(webapp2.RequestHandler):
                                     unauthorized_access)
             return
 
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                                    "auth",
+                                                    values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to create listings"},
+                                    not_authorized['status'])
+            return
+
         values['province'] = scale_province(str(values['province']))
 
         isPublished = True if values['isPublished'] in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
 
         # all set
+        values['images'] = json.loads(values['images'])
+        values['images'] = [str(image) for image in values['images']]
         listing = Listing(userId=int(values['userId']),
                           bedrooms=int(values['bedrooms']),
-                          sqft=int(values['sqft']),
+                          squarefeet=int(values['squarefeet']),
                           bathrooms=float(values['bathrooms']),
                           price=int(values['price']),
                           description=values['description'],
                           isPublished=isPublished, province=values['province'],
                           city=values['city'],
                           address=values['address'], images=values['images'],
+                          longitude=float(values['longitude']),
+                          latitude=float(values['latitude']),
                           thumbnailImageIndex=int(
                               values['thumbnailImageIndex']))
         listing.put()

@@ -26,7 +26,7 @@ class GetFavourites(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['userId']
+        error_keys = ['userId', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -54,6 +54,17 @@ class GetFavourites(webapp2.RequestHandler):
             }
             write_error_to_response(self.response, error, not_authorized)
             return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to get favourites"},
+                                    not_authorized['status'])
+            return
+
         # Get all favorites object that satisfies the filter condition
         favorites = Favorite.query(Favorite.userId == int(values['userId']),
                                    Favorite.liked == True).fetch()
@@ -68,7 +79,7 @@ class GetFavourites(webapp2.RequestHandler):
                     'listingId': fav_listingId,
                     'userId': listing.userId,
                     'bedrooms': listing.bedrooms,
-                    'sqft': listing.sqft,
+                    'squarefeet': listing.squarefeet,
                     'bathrooms': listing.bathrooms,
                     'price': listing.price,
                     'description': listing.description,
@@ -77,6 +88,8 @@ class GetFavourites(webapp2.RequestHandler):
                     'city': listing.city,
                     'address': listing.address,
                     'images': listing.images,
+                    'longitude': listing.longitude,
+                    'latitude': listing.latitude,
                     'thumbnailImageIndex': listing.thumbnailImageIndex
                 }
                 returned_array.append(template_values)

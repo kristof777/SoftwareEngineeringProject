@@ -1,3 +1,4 @@
+from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
 from extras.utils import *
 
@@ -93,6 +94,20 @@ class CreateUser(BaseHandler):
         self.auth.get_user_by_token(user_id, token, remember=True,
                                     save_session=True)
 
+        verification_url = self.uri_for('verification', type='v', user_id=user_id,
+                                        signup_token=signup_token, _full=True)
+        message = mail.EmailMessage(
+            sender="karsper@account.com",
+            subject="Your account has been approved")
+
+        message.to = user.email
+        message.body = """Thank you for creating an account!
+         Please confirm your email address by clicking on the link below:
+         {}
+         """.format(verification_url)
+        message.send()
+
         write_success_to_response(self.response, {'token': token,
                                                   "userId": user_id})
+
 

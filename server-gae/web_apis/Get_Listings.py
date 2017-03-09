@@ -113,6 +113,30 @@ class GetListing(webapp2.RequestHandler):
         # we want to get listings that are not in favorites table (only if user signed in)
         # if user not sign in, we don't need to care about this favorite part
         if "userId" in values and not is_empty(values["userId"]):
+            user = User.get_by_id(int(values['userId']))
+            if user is None:
+                error = {
+                    not_authorized['error']: 'User not authorized'
+                }
+                write_error_to_response(self.response, error, unauthorized_access)
+                return
+            if "authToken" not in values or is_empty(values["authToken"]):
+                error = {
+                    missing_token['error']: 'AuthToken is missing'
+                }
+                write_error_to_response(self.response, error, unauthorized_access)
+                return
+
+            # Check if it is the valid user
+            valid_user = user.validate_token(int(values["userId"]),
+                                             "auth",
+                                             values["authToken"])
+            if not valid_user:
+                write_error_to_response(self.response, {not_authorized['error']:
+                                                            "not authorized to get filtered listings"},
+                                        not_authorized['status'])
+                return
+
             returned_listing_ids = filter_favorite_listings(values["userId"], returned_listing_ids)
 
         # after this, returned_listing_ids contains all the listings' ids that
@@ -180,12 +204,12 @@ def is_valid_filter(filterJson):
     invalid = {}
 
     for key in filterObject:
-        if key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
+        if key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"]:
             invalid[unrecognized_key['error']] = "Unrecognized key " + key
             break
-        if key in ["bedrooms", "bathrooms", "sqft", "price"]:
+        if key in ["bedrooms", "bathrooms", "squarefeet", "price"]:
             if any(bound not in ["lower", "upper"] for bound in filterObject[key]):
                 invalid[invalid_filter_bound['error']] = str(key) + " upper/lower bound invalid"
                 break
@@ -220,14 +244,14 @@ def decode_filter(filterJson):
     global PRICE_MIN, PRICE_MAX, BATHROOM_MIN, BATHROOM_MAX
 
     for key in filter_object:
-        if key in ["bedrooms", "sqft", "price", "bathrooms"]:  # if key is a numeric field
+        if key in ["bedrooms", "squarefeet", "price", "bathrooms"]:  # if key is a numeric field
             if key == "bedrooms":
                 # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
                     BEDROOM_MIN = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
                     BEDROOM_MAX = int(filter_object[key]["upper"])
-            elif key == "sqft":
+            elif key == "squarefeet":
                 # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
                     SQFT_MIN = int(filter_object[key]["lower"])
@@ -278,7 +302,7 @@ def get_listingIds_with_numeric_bounds():
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
-    sqft_query = Listing.query().filter(Listing.sqft >= SQFT_MIN, Listing.sqft <= SQFT_MAX)
+    sqft_query = Listing.query().filter(Listing.squarefeet >= SQFT_MIN, Listing.squarefeet <= SQFT_MAX)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
 

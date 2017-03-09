@@ -30,26 +30,32 @@ class TestGetFavouriteListing(unittest.TestCase):
         assert len(users) == 1
         liker = users[0]
         self.likerId = liker['userId']
+        self.likerToken = liker['token']
 
         # make the liker likes the first five of the listings
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[0]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[0]['listingId'],
+                                                                       self.likerToken,  "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[1]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[1]['listingId'],
+                                                                       self.likerToken, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[2]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[2]['listingId'],
+                                                                       self.likerToken, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[3]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[3]['listingId'],
+                                                                       self.likerToken, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[4]['listingId'], "True"))
+        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, listings[4]['listingId'],
+                                                                       self.likerToken, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
@@ -59,7 +65,8 @@ class TestGetFavouriteListing(unittest.TestCase):
 
     def test_success(self):
         getFavs = {
-            "userId": self.likerId
+            "userId": self.likerId,
+            "authToken": self.likerToken
         }
         request = webapp2.Request.blank('/getFavourites', POST=getFavs)
         response = request.get_response(Main.app)
@@ -76,7 +83,8 @@ class TestGetFavouriteListing(unittest.TestCase):
 
     def test_invalid_userid(self):
         invalidFavs = {
-            "userId": "blablabla"
+            "userId": "blablabla",
+            "authToken": self.likerToken
         }
 
         request = webapp2.Request.blank('/getFavourites', POST=invalidFavs)
@@ -103,9 +111,9 @@ class TestGetFavouriteListing(unittest.TestCase):
         self.testbed.deactivate()
 
 
-def get_like_post_dictionary(userId, listingId, liked):
+def get_like_post_dictionary(userId, listingId, authToken, liked):
     return {"userId": userId, "listingId":
-        listingId, "liked": liked}
+        listingId, "authToken": authToken, "liked": liked}
 
 
 def get_like_response(POST):

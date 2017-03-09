@@ -5,7 +5,6 @@ import {KasperService} from "../../app/providers/kasper-service";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {MyProfilePage} from "../my-profile/my-profile";
 import {Province} from "../../app/models/province";
-import {Location} from "../../app/models/location";
 import {User} from "../../app/models/user";
 let assert = require('assert-plus');
 
@@ -75,8 +74,8 @@ export class SignUpPage {
 
         let user: User = new User(-1, this.signUpStep1.value.email, this.signUpStep2.value.firstName,
             this.signUpStep2.value.lastName, this.signUpStep2.value.phoneNumber, "",
-            new Location(Province.fromAbbr(this.signUpStep3.value.province),
-            this.signUpStep3.value.city, "", "", 0.0, 0.0));
+            Province.fromAbbr(this.signUpStep3.value.province),
+            this.signUpStep3.value.city);
 
         this.registerCallback(result, user);
     }

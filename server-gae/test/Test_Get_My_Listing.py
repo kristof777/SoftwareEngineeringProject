@@ -24,24 +24,27 @@ class TestGetMyListing(unittest.TestCase):
         assert len(users) == 1
         assert len(self.listings) == 10
         self.ownerId = users[0]['userId']
+        self.ownerToken = users[0]['token']
 
     def test_success_info(self):
         get_my_listings = {
-            "userId": self.ownerId
+            "userId": self.ownerId,
+            "authToken": self.ownerToken
         }
 
-        request = webapp2.Request.blank('/getMyListing', POST=get_my_listings)
+        request = webapp2.Request.blank('/getMyListings', POST=get_my_listings)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
-        self.assertEquals(len(output["myListings"]), 10)
+        self.assertEquals(len(output["listings"]), 10)
 
     def test_invalid_userid(self):
         invalid_my_listings = {
-            "userId": "blablabla"
+            "userId": "blablabla",
+            "authToken": self.ownerToken
         }
 
-        request = webapp2.Request.blank('/getMyListing',
+        request = webapp2.Request.blank('/getMyListings',
                                         POST=invalid_my_listings)
         response = request.get_response(Main.app)
 

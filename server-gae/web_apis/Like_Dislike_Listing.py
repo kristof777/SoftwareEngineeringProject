@@ -37,7 +37,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
-        error_keys = ['userId', 'listingId', 'liked']
+        error_keys = ['userId', 'listingId', 'liked', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -65,6 +65,16 @@ class LikeDislikeListing(webapp2.RequestHandler):
             }
             write_error_to_response(self.response, error,
                                     unauthorized_access)
+            return
+
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to like/dislike listings"},
+                                    not_authorized['status'])
             return
 
         listing = Listing.get_by_id(int(values['listingId']))
@@ -106,7 +116,6 @@ class LikeDislikeListing(webapp2.RequestHandler):
         favorite = Favorite.query(Favorite.userId == user_id,
                                   Favorite.listingId == listing_id).get()
         if favorite is None:
-            # TODO: do we need to make sure that the liked input is true when creating the favorite object?
             favorite = Favorite(userId=user_id, listingId=listing_id, liked=liked)
             favorite.put()
         else:  # if the favorite object does exist

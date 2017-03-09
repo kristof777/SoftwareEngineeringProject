@@ -25,7 +25,7 @@ export class BrowsePage {
                 public listingProvider: ListingProvider,
                 public modalCtrl: ModalController,
                 private _logger: Logger,) {
-        this.listings = listingProvider.data;
+        this.listings = listingProvider.listings;
     }
 
     /**
