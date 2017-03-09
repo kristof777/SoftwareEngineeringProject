@@ -33,7 +33,7 @@ export class MyListingsPage {
 
         if(this.loginService.isLoggedIn()) {
             this.listingProvider.getMyListings().subscribe(data => {
-                me.listings = data['myListings'];
+                me.listings = data['listings'];
             }, error => {
                 this._logger.error(JSON.stringify(error));
             });

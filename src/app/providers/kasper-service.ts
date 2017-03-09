@@ -227,7 +227,7 @@ export class KasperService {
         let body = new FormData();
         this.appendAuthentication(body);
 
-        return this.http.post(KasperConfig.API_URL + "/getMyListing", body, ResponseContentType.Json)
+        return this.http.post(KasperConfig.API_URL + "/getMyListings", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -444,9 +444,9 @@ export class KasperService {
         result['getFavourites']['invalidUserId'] = "";
         result['getFavourites']['missingUserId'] = "";
 
-        result['getMyListing'] = [];
-        result['getMyListing']['invalidUserId'] = "";
-        result['getMyListing']['missingUserId'] = "";
+        result['getMyListings'] = [];
+        result['getMyListings']['invalidUserId'] = "";
+        result['getMyListings']['missingUserId'] = "";
 
         result['likeDislikeListing'] = [];
         result['likeDislikeListing']['invalidListingId'] = "";
