@@ -30,18 +30,18 @@ class TestGetMyListing(unittest.TestCase):
             "userId": self.ownerId
         }
 
-        request = webapp2.Request.blank('/getMyListing', POST=get_my_listings)
+        request = webapp2.Request.blank('/getMyListings', POST=get_my_listings)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         output = json.loads(response.body)
-        self.assertEquals(len(output["myListings"]), 10)
+        self.assertEquals(len(output["listings"]), 10)
 
     def test_invalid_userid(self):
         invalid_my_listings = {
             "userId": "blablabla"
         }
 
-        request = webapp2.Request.blank('/getMyListing',
+        request = webapp2.Request.blank('/getMyListings',
                                         POST=invalid_my_listings)
         response = request.get_response(Main.app)
 

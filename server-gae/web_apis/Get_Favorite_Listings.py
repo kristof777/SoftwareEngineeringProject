@@ -68,7 +68,7 @@ class GetFavourites(webapp2.RequestHandler):
                     'listingId': fav_listingId,
                     'userId': listing.userId,
                     'bedrooms': listing.bedrooms,
-                    'sqft': listing.sqft,
+                    'squarefeet': listing.squarefeet,
                     'bathrooms': listing.bathrooms,
                     'price': listing.price,
                     'description': listing.description,

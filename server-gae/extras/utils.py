@@ -25,7 +25,7 @@ province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
 """
 listing_keys contains all the valid keys for a listing
 """
-listing_keys = ["sqft", "bedrooms", "bathrooms", "price", "city", "province",
+listing_keys = ["squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex"]
 
@@ -147,8 +147,9 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
         user = users[i]
         for j in range(0, distribution):
             random_listing_info = {"userId": user["userId"],
+                                   "authToken": user["token"],
                                    "bedrooms": str(random.randint(1, 10)),
-                                   "sqft": str(random.randint(200, 2000)),
+                                   "squarefeet": str(random.randint(200, 2000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
                                        random.randint(20000, 20000000)),
@@ -161,8 +162,10 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
                                    "city": get_random_string(),
                                    "address": get_random_string(),
                                    "thumbnailImageIndex": 0,
-                                   "images": 'some images'
+                                   "images": json.dumps(['some images',
+                                                         'some images 2'])
                                    }
+
             request = webapp2.Request.blank('/createListing',
                                             POST=random_listing_info)
             response = request.get_response(main.app)
@@ -190,14 +193,15 @@ def create_random_user():
     return user
 
 
-def create_random_listing(user_id):
+def create_random_listing(user_id, token):
     """
     :param user_id: User Id where listing belongs
     :return: a listing with randomly generated fields
     """
     random_listing = {"userId": user_id,
+                      "authToken": token,
                       "bedrooms": str(random.randint(1, 10)),
-                      "sqft": str(random.randint(200, 2000)),
+                      "squarefeet": str(random.randint(200, 2000)),
                       "bathrooms": str(random.randint(1, 10)),
                       "price": str(random.randint(20000, 20000000)),
                       "description": " ".join(
@@ -208,7 +212,7 @@ def create_random_listing(user_id):
                       "city": get_random_string(),
                       "address": get_random_string(),
                       "thumbnailImageIndex": 0,
-                      "images": 'some images'
+                      "images": json.dumps(['some images', 'some images 2'])
                       }
     return random_listing
 
@@ -412,6 +416,14 @@ def is_empty(var):
 #                 return False
 
 
+def is_valid_images(images):
+    try:
+        json.loads(images)
+    except ValueError:
+        return False
+    return True
+
+
 """
 This dictionary is used to make checking for valid keys simpler. It maps the key
 to it's validator.
@@ -428,7 +440,7 @@ valid_check = {
     "price": is_valid_integer,
     "bathrooms": is_valid_float,
     "bedrooms": is_valid_integer,
-    "sqft": is_valid_integer,
+    "squarefeet": is_valid_integer,
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
     "liked": is_valid_bool,
@@ -436,7 +448,8 @@ valid_check = {
     "maxLimit": is_valid_integer,
     "listingIdList": is_valid_integer_list,
     "lower": is_valid_integer,
-    "upper": is_valid_integer
+    "upper": is_valid_integer,
+    "images": is_valid_images
 }
 
 
@@ -503,3 +516,5 @@ def get_response_from_post(Main, post, api):
         if json_body:
             return json_body, response.status_int
     return None, response.status_int
+
+
