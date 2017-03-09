@@ -27,7 +27,7 @@ listing_keys contains all the valid keys for a listing
 """
 listing_keys = ["squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
-                "thumbnailImageIndex"]
+                "thumbnailImageIndex", "latitude", "longitude", "authToken"]
 
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
@@ -446,6 +446,24 @@ def is_valid_images(images):
     except ValueError:
         return False
     return True
+
+
+def convert_to_bool(input_string):
+    """
+    :param input_string: the string that needs to be converted to a boolean value
+    :return: True if the var is in the list, false otherwise
+    """
+
+    return True if input_string in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
+
+
+def is_existing_and_non_empty(existing_string, values):
+    """
+    :param existing_string: key string that need to check in the dictionary
+    :param values: the dictionary
+    :return: True if there's non-empty value for the key, false otherwise
+    """
+    return existing_string in values and not is_empty(values[existing_string])
 
 
 """

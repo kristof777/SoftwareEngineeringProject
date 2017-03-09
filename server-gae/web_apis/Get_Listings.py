@@ -28,7 +28,15 @@ SQFT_MIN = DEFAULT_SQFT_MIN
 PRICE_MAX = DEFAULT_PRICE_MAX
 PRICE_MIN = DEFAULT_PRICE_MIN
 
+
 class GetListing(webapp2.RequestHandler):
+    """
+    Class used to handle get filtered listings.
+    Get:  do nothing
+    Post:
+        @pre-cond: all keys are optional
+        @post-cond: get all listings that match the filter back as response
+    """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -40,18 +48,14 @@ class GetListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        # Since every field (userId, valuesRequired, filter) are optional, so it's fine if any of these is missing
-        # That's why we leave the missing_key dictionary empty
+        # every field (userId, valuesRequired, filter) is optional
         errors, values = keys_missing({}, self.request.POST)
 
-        # check if valuesRequired contains any invalid/unrecognized elements
-        # every element should be one of [price, bathrooms, bedrooms,...]
         invalid = key_validation(values)
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid, missing_invalid_parameter)
             return
 
-        # if we have a "filter" field passed in
         if "filter" in values:
             invalid.update(is_valid_filter(values["filter"]))
             if len(invalid) != 0:
@@ -64,31 +68,19 @@ class GetListing(webapp2.RequestHandler):
             write_error_to_response(self.response, invalid, missing_invalid_parameter)
             return
 
-        # This part should never be called since the listings are not gonna be stored on devices
-        # But it's here just in case
-        if "listingIdList" in values and not is_empty(values['listingIdList']):
-            listingId_list = json.loads(values["listingIdList"])
-            listing_info_list = []
-            for listingId in listingId_list:
-
-                listingId = int(listingId)
-                listing_object = Listing.get_by_id(listingId)
-
-                if listing_object is not None:
-                    listing_info_list.append(create_returned_values_dict(listing_object, values))
-
+        # This part should never be called
+        if is_existing_and_non_empty("listingIdList", values):
+            listing_info_list = get_listings_from_listing_ids(values)
             write_success_to_response(self.response, listing_info_list)
             return
 
         # Now time to deal with the filter
 
-        # if there's non-numeric field in the filter (such as "city", "address", "description",
-        # make sure to store it in a dictionary when we decode them, which is initialized to be empty
         non_numeric_dict = {}
 
         # if the filter does exist and is not empty, then we decode the conditions in it,
         # if it doesn't exist, we use the default filter
-        if "filter" in values and not is_empty(values["filter"]):
+        if is_existing_and_non_empty("filter", values):
             non_numeric_dict = decode_filter(values["filter"])
 
         # Now, send queries with all numeric bounds
@@ -108,11 +100,9 @@ class GetListing(webapp2.RequestHandler):
             if matched:
                 returned_listing_ids.append(listing.listingId)
 
-        # now returned_listings contain all the listings that satisfy the filter conditions
-
         # we want to get listings that are not in favorites table (only if user signed in)
         # if user not sign in, we don't need to care about this favorite part
-        if "userId" in values and not is_empty(values["userId"]):
+        if is_existing_and_non_empty("userId", values):
             user = User.get_by_id(int(values['userId']))
             if user is None:
                 error = {
@@ -120,7 +110,7 @@ class GetListing(webapp2.RequestHandler):
                 }
                 write_error_to_response(self.response, error, unauthorized_access)
                 return
-            if "authToken" not in values or is_empty(values["authToken"]):
+            if not is_existing_and_non_empty("authToken", values):
                 error = {
                     missing_token['error']: 'AuthToken is missing'
                 }
@@ -139,22 +129,16 @@ class GetListing(webapp2.RequestHandler):
 
             returned_listing_ids = filter_favorite_listings(values["userId"], returned_listing_ids)
 
-        # after this, returned_listing_ids contains all the listings' ids that
-        # are satisfying filter conditions and not in the favorite table
-
         # now we decide the number of items to  return
         max_limit = DEFAULT_MAX_LIMIT
 
-        # if max_limit is provided by the request
-        if "maxLimit" in values and not is_empty(values["maxLimit"]):
+        if is_existing_and_non_empty("maxLimit", values):
             max_limit = int(values["maxLimit"])
         # if the number of listings we have filtered is greater than or equal to the max limit,
         # then return max_limit number of listings. If not, return all filtered listings
         if len(returned_listing_ids) >= max_limit:
             returned_listing_ids = returned_listing_ids[0: max_limit + 1]
 
-        # now we decide which field to return according to the "valueRequired" in the request
-        # if not provided, then only return a list of listingIds
         listing_info_list = []
 
         for listing_object_id in returned_listing_ids:
@@ -169,13 +153,15 @@ def create_returned_values_dict(listing_object, values_dict):
     """
     This function is to get the returned fields that the request declared in field "valuesRequired"
 
+    @pre-cond: none
+    @post-cond: none
+
     :param listing_object: the Listing object
     :param values_dict: the request data
     :return the dictionary of returned data for that listing
     """
     listing_dict = {}
-    if "valuesRequired" in values_dict and not is_empty(values_dict['valuesRequired']):
-        # valuesRequired is not missing
+    if is_existing_and_non_empty("valuesRequired", values_dict):
         values_required = json.loads(values_dict["valuesRequired"])
         for key in values_required:
             listing_dict[key] = listing_object.get_value_from_key(key)
@@ -186,58 +172,64 @@ def create_returned_values_dict(listing_object, values_dict):
     return listing_dict
 
 
-def is_valid_filter(filterJson):
+def is_valid_filter(filter_json):
     """
     This function is checking if the data in the "filter" dictionary are valid,
     that means each key in filter dictionary is in the list ["address", "bedrooms"...]
     And if the key is one of numeric fields ["bathrooms", "sqft", "bedrooms", "price"],
     we check if there is an inner dictionary whose keys are in the bound list ["upper", "lower"]
 
+    @pre-cond: none
+    @post-cond: none
+
     :param "filterJson" json object in the "filter" field from the request
     :return the dictionary that contains invalid errors, empty if everything is valid
     """
 
-    if len(filterJson) == 0:
+    if len(filter_json) == 0:
         return {}
 
-    filterObject = json.loads(filterJson)
+    filter_object = json.loads(filter_json)
     invalid = {}
 
-    for key in filterObject:
+    for key in filter_object:
         if key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"]:
             invalid[unrecognized_key['error']] = "Unrecognized key " + key
             break
         if key in ["bedrooms", "bathrooms", "squarefeet", "price"]:
-            if any(bound not in ["lower", "upper"] for bound in filterObject[key]):
+            if any(bound not in ["lower", "upper"] for bound in filter_object[key]):
                 invalid[invalid_filter_bound['error']] = str(key) + " upper/lower bound invalid"
                 break
             if key == "bathrooms":
-                if "lower" in filterObject[key]:
-                    if not is_valid_float(filterObject[key]["lower"]):
+                if "lower" in filter_object[key]:
+                    if not is_valid_float(filter_object[key]["lower"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom lower bound invalid"
-                if "upper" in filterObject[key]:
-                    if not is_valid_float(filterObject[key]["upper"]):
+                if "upper" in filter_object[key]:
+                    if not is_valid_float(filter_object[key]["upper"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom upper bound invalid"
 
-            invalid.update(key_validation(filterObject[key]))
+            invalid.update(key_validation(filter_object[key]))
 
     return invalid
 
 
-def decode_filter(filterJson):
+def decode_filter(filter_json):
     """
     This function is for decoding everything in the "filter" field
     For numeric conditions, if there's "upper" or "lower" bounds,
     replace the default bounds with the sent ones.
     For non-numeric conditions, simply add the key-value to the non_numeric dictionary
 
+    @pre-cond: none
+    @post-cond: none
+
     :param "filterJson" json object in the "filter" field from the request
     :return the non_numeric dictionary that contains all non_numeric key-value pairs
     """
 
-    filter_object = json.loads(filterJson)
+    filter_object = json.loads(filter_json)
     non_numeric_dict = {}
 
     global BEDROOM_MAX, BEDROOM_MIN, SQFT_MAX, SQFT_MIN
@@ -270,14 +262,11 @@ def decode_filter(filterJson):
                 if "upper" in filter_object[key]:
                     BATHROOM_MAX = float(filter_object[key]["upper"])
 
-        else:  # if key is not numeric
+        else:
             if key == "province":
-                # if the user send "saskatchewan", we need to scale it to "SK",
-                # and store this key-value pair into non_numeric dictionary
-                non_numeric_dict.update({"province": scale_province(filter_object[key])})
+                non_numeric_dict["province"] = scale_province(filter_object[key])
             else:
-                # directly store this key-value pair into non_numeric dictionary
-                non_numeric_dict.update({key: filter_object[key]})
+                non_numeric_dict[key] = filter_object[key]
 
     return non_numeric_dict
 
@@ -286,6 +275,9 @@ def get_listingIds_with_numeric_bounds():
     """
     This function is for getting the filtered listing_ids that satisfies all
     numeric bounds
+
+    @pre-cond: none
+    @post-cond: none
 
     :return the list of filtered listingIds
     """
@@ -339,6 +331,9 @@ def filter_favorite_listings(user_id, listing_ids):
     """
     This function is removing all favorite listings that are in the filtered listings
 
+    @pre-cond: user_id and listing_ids are not none
+    @post-cond: none
+
     :parameter user_id: the userId in order to find all his/her favorites
     :parameter listing_ids: the list of listingIds
     :return the list of listingIds after this filter
@@ -353,13 +348,31 @@ def filter_favorite_listings(user_id, listing_ids):
         if seen_listing is not None:
             seen_listing_ids.append(seen_listing.listingId)
 
-    # now seenListingIds contains all the listings' ids that are in the favorites table
-    # we want the listings that are not in the favorite table
-    # so we have returned_listing_ids which contains the superset of listingIds,
-    # we wanna delete those listingIds which are in the seen_listing_ids
+    # wanna delete those listingIds which are in the seen_listing_ids
     filtered_listing_ids = listing_ids
     for seen_listing_id in seen_listing_ids:
         if seen_listing_id in listing_ids:
             filtered_listing_ids.remove(seen_listing_id)
 
     return filtered_listing_ids
+
+
+def get_listings_from_listing_ids(values):
+    """
+    This function is get a list of listings from listingIds
+
+    @pre-cond: values["listingIdList"] is not empty
+    @post-cond: none
+
+    :parameter values: the request object
+    :return the list of listings
+    """
+    listing_id_list = json.loads(values["listingIdList"])
+    listing_info_list = []
+    for listingId in listing_id_list:
+        listing_object = Listing.get_by_id(int(listingId))
+
+        if listing_object is not None:
+            listing_info_list.append(create_returned_values_dict(listing_object, values))
+
+    return listing_info_list

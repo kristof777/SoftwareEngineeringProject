@@ -12,8 +12,6 @@ from extras.utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-
-
 class TestConfirmEmail(unittest.TestCase):
     """
     These are test, being tested
@@ -29,8 +27,8 @@ class TestConfirmEmail(unittest.TestCase):
         self.api = "createUser"
 
     def test_create_user_with_email_confirmation(self):
-        input = create_random_user()
-        response_body, status_int = get_response_from_post(Main, input,
+        random_user = create_random_user()
+        response_body, status_int = get_response_from_post(Main, random_user,
                                                            self.api)
         self.assertEquals(status_int, success)
         self.assertTrue("token" in response_body)
@@ -42,13 +40,5 @@ class TestConfirmEmail(unittest.TestCase):
         self.assertEqual(user_saved.email, messages[0].to)
 
     def tearDown(self):
-        # Don't forget to deactivate the testbed after the tests are
-        # completed. If the testbed is not deactivated, the original
-        # stubs will not be restored.
         self.testbed.deactivate()
 
-
-
-
-# suite = unittest.TestLoader().loadTestsFromTestCase(TestHandlers)
-# unittest.TextTestRunner(verbosity=3).run(suite)

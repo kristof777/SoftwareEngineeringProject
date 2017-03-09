@@ -34,7 +34,7 @@ from web_apis.Create_Listing import *
 from web_apis.Get_My_Listings import *
 from web_apis.Like_Dislike_Listing import *
 from web_apis.Edit_Listing import *
-from web_apis.Get_Favorite_Listings import *
+from web_apis.Get_Favourites import *
 from web_apis.Change_Password import *
 from web_apis.Sign_In_With_Token import *
 from models.User import User
