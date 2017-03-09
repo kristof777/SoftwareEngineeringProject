@@ -533,6 +533,8 @@ def setup_testbed(test_handler):
     test_handler.testbed.activate()
     test_handler.testbed.init_datastore_v3_stub()
     test_handler.testbed.init_memcache_stub()
+    test_handler.testbed.init_mail_stub()
+    test_handler.mail_stub = test_handler.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
 
 
 def get_response_from_post(Main, post, api):
