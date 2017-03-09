@@ -9,7 +9,7 @@ chmod 600 server_key
 eval "$(ssh-agent -s)"
 ssh-add server_key 
 
-ssh gaa721@cmpt371g1.usask.ca
+echo yes | ssh gaa721@cmpt371g1.usask.ca
 cd Project
 git pull
 exit
