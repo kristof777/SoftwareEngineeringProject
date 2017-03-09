@@ -9,25 +9,6 @@ sys.path.append("../")
 
 DEFAULT_MAX_LIMIT = 20 # max number of listings required, by default (if not provided)
 
-DEFAULT_BEDROOMS_MAX = 10
-DEFAULT_BEDROOMS_MIN = 1
-DEFAULT_BATHROOMS_MAX = 10.0
-DEFAULT_BATHROOMS_MIN = 1.0
-DEFAULT_SQFT_MAX = 10000
-DEFAULT_SQFT_MIN = 0
-DEFAULT_PRICE_MAX = 999999999
-DEFAULT_PRICE_MIN = 10
-
-# Set default value for upper and lower bounds
-BEDROOM_MAX = DEFAULT_BEDROOMS_MAX
-BEDROOM_MIN = DEFAULT_BEDROOMS_MIN
-BATHROOM_MAX = DEFAULT_BATHROOMS_MAX
-BATHROOM_MIN = DEFAULT_BATHROOMS_MIN
-SQFT_MAX = DEFAULT_SQFT_MAX
-SQFT_MIN = DEFAULT_SQFT_MIN
-PRICE_MAX = DEFAULT_PRICE_MAX
-PRICE_MIN = DEFAULT_PRICE_MIN
-
 
 class GetListing(webapp2.RequestHandler):
     """
@@ -146,6 +127,7 @@ class GetListing(webapp2.RequestHandler):
             if listing_object is not None:
                 listing_info_list.append(create_returned_values_dict(listing_object, values))
 
+        Listing.reset_filter()
         write_success_to_response(self.response, listing_info_list)
 
 
@@ -232,35 +214,28 @@ def decode_filter(filter_json):
     filter_object = json.loads(filter_json)
     non_numeric_dict = {}
 
-    global BEDROOM_MAX, BEDROOM_MIN, SQFT_MAX, SQFT_MIN
-    global PRICE_MIN, PRICE_MAX, BATHROOM_MIN, BATHROOM_MAX
-
     for key in filter_object:
         if key in ["bedrooms", "squarefeet", "price", "bathrooms"]:  # if key is a numeric field
             if key == "bedrooms":
-                # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
-                    BEDROOM_MIN = int(filter_object[key]["lower"])
+                    Listing.numeric_filter_bounds['bedrooms_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
-                    BEDROOM_MAX = int(filter_object[key]["upper"])
+                    Listing.numeric_filter_bounds['bedrooms_max'] = int(filter_object[key]["upper"])
             elif key == "squarefeet":
-                # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
-                    SQFT_MIN = int(filter_object[key]["lower"])
+                    Listing.numeric_filter_bounds['sqft_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
-                    SQFT_MAX = int(filter_object[key]["upper"])
+                    Listing.numeric_filter_bounds['sqft_max'] = int(filter_object[key]["upper"])
             elif key == "price":
-                # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
-                    PRICE_MIN = int(filter_object[key]["lower"])
+                    Listing.numeric_filter_bounds['price_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
-                    PRICE_MAX = int(filter_object[key]["upper"])
+                    Listing.numeric_filter_bounds['price_max'] = int(filter_object[key]["upper"])
             elif key == "bathrooms":
-                # check if "lower" and "upper" are specified
                 if "lower" in filter_object[key]:
-                    BATHROOM_MIN = float(filter_object[key]["lower"])
+                    Listing.numeric_filter_bounds['bathrooms_min'] = float(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
-                    BATHROOM_MAX = float(filter_object[key]["upper"])
+                    Listing.numeric_filter_bounds['bathrooms_max'] = float(filter_object[key]["upper"])
 
         else:
             if key == "province":
@@ -288,25 +263,29 @@ def get_listingIds_with_numeric_bounds():
 
     # query all the listings in db that satisfies the bedroom bound condition,
     # only fetch their key(listingId) for efficiency
-    bedroom_query = Listing.query().filter(Listing.bedrooms >= BEDROOM_MIN, Listing.bedrooms <= BEDROOM_MAX)
+    bedroom_query = Listing.query().filter(Listing.bedrooms >= Listing.numeric_filter_bounds['bedrooms_min'],
+                                           Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'])
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
-    sqft_query = Listing.query().filter(Listing.squarefeet >= SQFT_MIN, Listing.squarefeet <= SQFT_MAX)
+    sqft_query = Listing.query().filter(Listing.squarefeet >= Listing.numeric_filter_bounds['sqft_min'],
+                                        Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'])
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
 
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
-    price_query = Listing.query().filter(Listing.price >= PRICE_MIN, Listing.price <= PRICE_MAX)
+    price_query = Listing.query().filter(Listing.price >= Listing.numeric_filter_bounds['price_min'],
+                                         Listing.price <= Listing.numeric_filter_bounds['price_max'])
     price_keys = price_query.fetch(keys_only=True)
     price_keys_len = len(price_keys)
 
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
-    bathrooms_query = Listing.query().filter(Listing.bathrooms >= BATHROOM_MIN, Listing.bathrooms <= BATHROOM_MAX)
+    bathrooms_query = Listing.query().filter(Listing.bathrooms >= Listing.numeric_filter_bounds['bathrooms_min'],
+                                             Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'])
     bathrooms_keys = bathrooms_query.fetch(keys_only=True)
     bathrooms_keys_len = len(bathrooms_keys)
 

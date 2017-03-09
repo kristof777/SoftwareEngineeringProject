@@ -2,6 +2,15 @@ import sys
 from google.appengine.ext import ndb
 sys.path.append("../")
 
+DEFAULT_BEDROOMS_MAX = 10
+DEFAULT_BEDROOMS_MIN = 1
+DEFAULT_BATHROOMS_MAX = 10.0
+DEFAULT_BATHROOMS_MIN = 1.0
+DEFAULT_SQFT_MAX = 10000
+DEFAULT_SQFT_MIN = 0
+DEFAULT_PRICE_MAX = 999999999
+DEFAULT_PRICE_MIN = 10
+
 
 class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""
@@ -20,6 +29,28 @@ class Listing(ndb.Model):
     listingId = ndb.IntegerProperty(required=True,default=0)
     longitude = ndb.FloatProperty(required=True, default=0)
     latitude = ndb.FloatProperty(required=True, default=0)
+
+    numeric_filter_bounds = {
+        "bedrooms_min": DEFAULT_BEDROOMS_MIN,
+        "bedrooms_max": DEFAULT_BEDROOMS_MAX,
+        "bathrooms_min": DEFAULT_BATHROOMS_MIN,
+        "bathrooms_max": DEFAULT_BATHROOMS_MAX,
+        "sqft_min": DEFAULT_SQFT_MIN,
+        "sqft_max": DEFAULT_SQFT_MAX,
+        "price_min": DEFAULT_PRICE_MIN,
+        "price_max": DEFAULT_PRICE_MAX
+    }
+
+    @classmethod
+    def reset_filter(cls):
+        cls.numeric_filter_bounds['bedrooms_min'] = DEFAULT_BEDROOMS_MIN
+        cls.numeric_filter_bounds['bedrooms_max'] = DEFAULT_BEDROOMS_MAX
+        cls.numeric_filter_bounds['bathrooms_min'] = DEFAULT_BATHROOMS_MIN
+        cls.numeric_filter_bounds['bathrooms_max'] = DEFAULT_BATHROOMS_MAX
+        cls.numeric_filter_bounds['sqft_min'] = DEFAULT_SQFT_MIN
+        cls.numeric_filter_bounds['sqft_max'] = DEFAULT_SQFT_MAX
+        cls.numeric_filter_bounds['price_min'] = DEFAULT_PRICE_MIN
+        cls.numeric_filter_bounds['price_max'] = DEFAULT_PRICE_MAX
 
     def set_bedrooms(self, bedrooms):
         self.bedrooms = int(bedrooms)

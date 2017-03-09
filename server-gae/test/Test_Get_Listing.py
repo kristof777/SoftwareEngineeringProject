@@ -202,6 +202,16 @@ class TestHandlers(unittest.TestCase):
             self.assertTrue(float(value['bathrooms']) >=
                             float(json.loads(get_filter_listings['filter'])['bathrooms']['lower']))
 
+        #######################
+        # make sure that the filter is reset to default after being customized
+        get_filter_listings = {}
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), len(self.listings))
+        for value in res_value:
+            self.assertTrue("listingId" in value)
+
     def test_invalid_key_values_required(self):
         get_filter_listings = {
             "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price", "what_the_heck"]),
