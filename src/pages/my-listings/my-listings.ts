@@ -24,8 +24,6 @@ export class MyListingsPage {
                 private _logger: Logger) {
 
         this.listings = Array();
-        // let data = listingProvider.savedListings.myListings;
-        // this.listings = Object.keys(data).map(key => data[key]);
     }
 
     ionViewDidEnter(){

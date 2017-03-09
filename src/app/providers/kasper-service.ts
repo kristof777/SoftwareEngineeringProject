@@ -41,7 +41,7 @@ export class KasperService {
      * @param password  the password to sign in with
      */
     login(email: string, password: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
 
@@ -58,7 +58,7 @@ export class KasperService {
      * }
      */
     loginWithToken(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
@@ -66,7 +66,7 @@ export class KasperService {
     }
 
     confirmEmail(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
@@ -94,7 +94,7 @@ export class KasperService {
      */
     signUp(email: string, password: string, confirmedPassword: string, firstName: string,
             lastName: string, phone1: string, phone2: string, city: string, province: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
         body.append('confirmedPassword', confirmedPassword);
@@ -116,7 +116,7 @@ export class KasperService {
      *                      firstName, lastName, phone1, phone2, city, province, email
      */
     editUser(changeValues: Object): any {
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
@@ -137,7 +137,7 @@ export class KasperService {
      * @param newPasswordConfirmed  the new password for the user
      */
     changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
         body.append('newPassword', newPassword);
@@ -151,7 +151,7 @@ export class KasperService {
      * Request to sign out of the api.
      */
     signOut(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body)
 
         return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
@@ -167,10 +167,10 @@ export class KasperService {
      * }
      */
     getFavourites(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
-        return this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
+        return this.http.post(KasperConfig.API_URL + "/getFavourites", body,
             ResponseContentType.Json)
             .map(response => response.json());
     }
@@ -182,7 +182,7 @@ export class KasperService {
      * @param liked                 do they like it
      */
     likeDislikeListing(listingId: number, liked: boolean): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
         body.append('liked', liked);
@@ -204,7 +204,7 @@ export class KasperService {
      * @param maxLimit          the max number of returned results
      */
     getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('filter', JSON.stringify(filter));
         body.append('valuesRequired', JSON.stringify(valuesRequired));
@@ -224,7 +224,7 @@ export class KasperService {
      *
      */
     getMyListings(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/getMyListings", body, ResponseContentType.Json)
@@ -242,7 +242,7 @@ export class KasperService {
      * @param listing           the listing
      */
     createListings(listing: Listing): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('province', listing.province.abbr);
         body.append('city', listing.city);
@@ -268,7 +268,7 @@ export class KasperService {
      *                      description, images, thumbnailImageIndex, isPublished
      */
     editListing(changeValues: JSON): any {
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
@@ -290,7 +290,7 @@ export class KasperService {
      * @param message       the message for the seller
      */
     contactSeller(listingId: number, message: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
         body.append('message', message);
@@ -484,7 +484,7 @@ export class KasperService {
     handleError(key: any){
         assert.string(KasperService.errorMessages['signIn'][key], "Unhandled error response: " + key);
 
-        let message: string = KasperService.errorMessages['signIn'][key]
+        let message: string = KasperService.errorMessages['signIn'][key];
 
         this.alertCtrl.create({
             title: "Oops!",

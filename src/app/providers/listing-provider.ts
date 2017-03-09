@@ -113,6 +113,15 @@ export class ListingProvider {
     }
 
     /**
+     * Get the full information about a listing
+     *
+     * @return an array of listings
+     */
+    getFavourites() : any{
+        return this.kasperService.getFavourites();
+    }
+
+    /**
      * Publish a listing
      *
      * @param listingID the id of the listing
