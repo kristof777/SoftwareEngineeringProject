@@ -131,6 +131,12 @@ invalid_address = {"error": "invalidAddress",
 invalid_filter_bound = {"error": "invalidFilterBound",
                         "status": missing_invalid_parameter}
 
+invalid_longitude = {"error": "invalidLongitude",
+                     "status": missing_invalid_parameter}
+
+invalid_latitude = {"error": "invalidLatitude",
+                    "status": missing_invalid_parameter}
+
 missing_address = {"error": "missingAddress",
                    "status": missing_invalid_parameter}
 
@@ -148,6 +154,12 @@ missing_published = {"error": "missingPublished",
 
 missing_bathrooms = {"error": "missingBathrooms",
                      "status": missing_invalid_parameter}
+
+missing_longitude = {"error": "missingLongitude",
+                     "status": missing_invalid_parameter}
+
+missing_latitude = {"error": "missingLatitude",
+                    "status": missing_invalid_parameter}
 
 missing_description = {"error": "missingDescription",
                        "status": missing_invalid_parameter}
@@ -187,7 +199,9 @@ invalids = {
     "liked": invalid_liked,
     "filter": invalid_filter_bound,
     "valuesRequired": invalid_values_required,
-    'images': invalid_images
+    'images': invalid_images,
+    "longitude": invalid_longitude,
+    "latitude": invalid_latitude
 }
 
 missing = {
@@ -215,5 +229,7 @@ missing = {
     "images": missing_image,
     "description": missing_description,
     "address": missing_address,
-    "liked": missing_liked
+    "liked": missing_liked,
+    "longitude": missing_longitude,
+    "latitude": missing_latitude
 }

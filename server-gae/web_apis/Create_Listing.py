@@ -42,7 +42,7 @@ class CreateListing(webapp2.RequestHandler):
         error_keys = ['price', 'squarefeet', 'bedrooms', 'bathrooms', 'description',
                       'images',
                       'thumbnailImageIndex', 'address', 'province', 'city',
-                      'userId', 'isPublished', 'authToken']
+                      'userId', 'isPublished', 'longitude', 'latitude', 'authToken']
 
         # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -99,6 +99,8 @@ class CreateListing(webapp2.RequestHandler):
                           isPublished=isPublished, province=values['province'],
                           city=values['city'],
                           address=values['address'], images=values['images'],
+                          longitude=float(values['longitude']),
+                          latitude=float(values['latitude']),
                           thumbnailImageIndex=int(
                               values['thumbnailImageIndex']))
         listing.put()

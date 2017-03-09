@@ -46,7 +46,9 @@ class TestHandlers(unittest.TestCase):
                            missing_image['error'],
                            missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error']]
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -66,6 +68,8 @@ class TestHandlers(unittest.TestCase):
                  "city": "",
                  "address": "",
                  "thumbnailImageIndex": "",
+                 "longitude": "",
+                 "latitude": "",
                  "images": ''
                  }
 
@@ -86,7 +90,9 @@ class TestHandlers(unittest.TestCase):
                            missing_image['error'],
                            missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error']]
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -105,6 +111,8 @@ class TestHandlers(unittest.TestCase):
                  "province": "       ",
                  "city": "       ",
                  "address": "      ",
+                 "longitude": "   ",
+                 "latitude": "   ",
                  "thumbnailImageIndex": "      ",
                  "images": '    '
                  }
@@ -127,7 +135,9 @@ class TestHandlers(unittest.TestCase):
                            missing_image['error'],
                            missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error']]
+                           missing_token['error'],
+                           missing_longitude['error'],
+                           missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
@@ -183,6 +193,8 @@ class TestHandlers(unittest.TestCase):
         input['bathrooms'] = "supposed to be float"
         input['price'] = "supposed to be int"
         input['thumbnailImageIndex'] = 'supposed to be int'
+        input['longitude'] = 'supposed to be float'
+        input['latitude'] = 'supposed to be float'
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
@@ -194,6 +206,8 @@ class TestHandlers(unittest.TestCase):
                            invalid_squarefeet['error'],
                            invalid_bathrooms['error'],
                            invalid_price['error'],
+                           invalid_longitude['error'],
+                           invalid_latitude['error'],
                            invalid_thumbnail_image_index['error']
                            ]
 

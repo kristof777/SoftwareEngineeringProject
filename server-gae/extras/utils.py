@@ -149,6 +149,8 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
             random_listing_info = {"userId": user["userId"],
                                    "authToken": user["token"],
                                    "bedrooms": str(random.randint(1, 10)),
+                                   "longitude": str(random.randint(-180, 180)),
+                                   "latitude": str(random.randint(-90, 90)),
                                    "squarefeet": str(random.randint(200, 2000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
@@ -201,6 +203,8 @@ def create_random_listing(user_id, token):
     random_listing = {"userId": user_id,
                       "authToken": token,
                       "bedrooms": str(random.randint(1, 10)),
+                      "longitude": str(random.randint(-180, 180)),
+                      "latitude": str(random.randint(-90, 90)),
                       "squarefeet": str(random.randint(200, 2000)),
                       "bathrooms": str(random.randint(1, 10)),
                       "price": str(random.randint(20000, 20000000)),
@@ -397,6 +401,26 @@ def is_valid_xor(dictionary, key1, key2):
         return True
 
 
+def is_valid_latitude(latitude):
+    assert latitude is not None
+    try:
+        float(latitude)
+        return -90 <= float(latitude) <= 90
+        # return -90 <= latitude and latitude <= 90
+    except ValueError:
+        return False
+
+
+def is_valid_longitude(longitude):
+    assert longitude is not None
+    try:
+        float(longitude)
+        return -180 <= float(longitude) <= 180
+        # return -180 <= longitude and longitude <= 180
+    except ValueError:
+        return False
+
+
 def is_empty(var):
     """
     :param var:
@@ -449,7 +473,9 @@ valid_check = {
     "listingIdList": is_valid_integer_list,
     "lower": is_valid_integer,
     "upper": is_valid_integer,
-    "images": is_valid_images
+    "images": is_valid_images,
+    "latitude": is_valid_latitude,
+    "longitude": is_valid_longitude
 }
 
 
@@ -507,6 +533,7 @@ def setup_testbed(test_handler):
     test_handler.testbed.activate()
     test_handler.testbed.init_datastore_v3_stub()
     test_handler.testbed.init_memcache_stub()
+
 
 def get_response_from_post(Main, post, api):
     request = webapp2.Request.blank('/' + api,POST=post)

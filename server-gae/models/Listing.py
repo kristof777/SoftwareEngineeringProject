@@ -18,6 +18,8 @@ class Listing(ndb.Model):
     userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=True)
     listingId = ndb.IntegerProperty(required=True,default=0)
+    longitude = ndb.FloatProperty(required=True, default=0)
+    latitude = ndb.FloatProperty(required=True, default=0)
 
     def set_bedrooms(self, bedrooms):
         self.bedrooms = int(bedrooms)
@@ -55,6 +57,12 @@ class Listing(ndb.Model):
     def set_squarefeet(self, squarefeet):
         self.squarefeet = int(squarefeet)
 
+    def set_longitude(self, longitude):
+        self.longitude = float(longitude)
+
+    def set_latitude(self, latitude):
+        self.latitude = float(latitude)
+
     def set_property(self, key, value):
         _key_to_set = {
             "price": self.set_price,
@@ -68,7 +76,9 @@ class Listing(ndb.Model):
             "thumbnailImageIndex": self.set_thumbnail_index,
             "images": self.set_images,
             "listingId": self.set_listing_id,
-            "city": self.set_city
+            "city": self.set_city,
+            "longitude": self.longitude,
+            "latitude": self.latitude
         }
         _key_to_set[key](value)
 
@@ -86,7 +96,9 @@ class Listing(ndb.Model):
             "userId": self.userId,
             "thumbnailImageIndex": self.thumbnailImageIndex,
             "images": self.images,
-            "listingId": self.listingId
+            "listingId": self.listingId,
+            "longitude": self.longitude,
+            "latitude": self.latitude
         }
         return _key_to_get_value[key]
 
@@ -116,5 +128,9 @@ class Listing(ndb.Model):
             return cls.address
         if key == 'listingId':
             return cls.listingId
+        if key == 'longitude':
+            return cls.longitude
+        if key == 'latitude':
+            return cls.latitude
 
 

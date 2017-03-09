@@ -82,6 +82,8 @@ class GetMyListing(webapp2.RequestHandler):
                 'province': listing.province,
                 'city': listing.city,
                 'address': listing.address,
+                'longitude': listing.longitude,
+                'latitude': listing.latitude,
                 'images': listing.images,
                 'thumbnailImageIndex': listing.thumbnailImageIndex
             }
