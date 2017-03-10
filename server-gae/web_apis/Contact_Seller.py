@@ -67,6 +67,4 @@ class ContactSeller(BaseHandler):
                           phone=values['phone'],
                           email=values['email'])
         message.put()
-        message.received = True
-        message.put()
         write_success_to_response(self.response, {})

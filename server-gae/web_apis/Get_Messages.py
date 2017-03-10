@@ -1,18 +1,20 @@
 import sys
 from extras.utils import *
 from models.Listing import Listing
+from models.Message import Message
 from models.User import User
 sys.path.append("../")
 
 
-class GetMyListing(webapp2.RequestHandler):
+class GetMessages(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  do nothing
-    Post:
-        @pre-cond: Expecting keys to be userId
-        @post-cond: all my listings
-    """
+     Class used to handle get and post.
+     Get:  do nothing
+     Post:
+         @pre-cond: Expecting keys to be userId
+         @post-cond: all the messages that sent to me
+     """
+
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -56,33 +58,40 @@ class GetMyListing(webapp2.RequestHandler):
                                          values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to get my listings"},
+                                                        "not authorized to get my messages"},
                                     not_authorized['status'])
             return
 
-        owner_id = int(values['userId'])
+        user_id = int(values['userId'])
+        my_messages = Message.query(Message)
 
-        my_listings = Listing.query(Listing.userId == owner_id).fetch()
-        returned_array = []
 
-        for listing in my_listings:
-            template_values = {
-                'listingId': listing.listingId,
-                'userId': listing.userId,
-                'bedrooms': listing.bedrooms,
-                'squarefeet': listing.squarefeet,
-                'bathrooms': listing.bathrooms,
-                'price': listing.price,
-                'description': listing.description,
-                'isPublished': listing.isPublished,
-                'province': listing.province,
-                'city': listing.city,
-                'address': listing.address,
-                'longitude': listing.longitude,
-                'latitude': listing.latitude,
-                'images': listing.images,
-                'thumbnailImageIndex': listing.thumbnailImageIndex
-            }
-            returned_array.append(template_values)
 
-        write_success_to_response(self.response, {"listings": returned_array})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
