@@ -13,35 +13,104 @@ from web_apis.Create_User import *
 class TestHandlers(unittest.TestCase):
     def setUp(self):
         setup_testbed(self)
-        self.user_buyer = create_dummy_users_for_testing(Main, 1)
-        self.user_seller, self.listing = create_dummy_listings_for_testing(Main,
-                                                                           1)
+        self.user_buyer = create_dummy_users_for_testing(Main, 1)[0]
+        listings, user_sellers = create_dummy_listings_for_testing(Main,1)
+        self.user_seller = user_sellers[0]
+        self.listing = listings[0]
 
+    def test_correct_input(self):
+        correct_input = {
+            "senderId": self.user_buyer['userId'],
+            "listingId": self.listing['listingId'],
+            "authToken": self.user_buyer['token'],
+            "message": "Hey, I'm interested in your property.",
+            "phone": self.user_buyer['phone1'],
+            "email": self.user_buyer['email']
+        }
 
-    def test_sign_out(self):
-        """
-        # Test1: User signed in with email
-        # Test2: User signed in with token
-        :return:
-        """
+        request = webapp2.Request.blank('/contactSeller', POST=correct_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, success)
+
+    def test_unallowed_input(self):
+        unallowed_input = {
+            "senderId": self.user_seller['userId'],
+            "listingId": self.listing['listingId'],
+            "authToken": self.user_seller['token'],
+            "message": "Hey, I'm interested in your property.",
+            "phone": self.user_buyer['phone1'],
+            "email": self.user_buyer['email']
+        }
+
+        request = webapp2.Request.blank('/contactSeller', POST=unallowed_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, processing_failed)
+
+        errors_expected = [unallowed_message_send['error']]
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
+    def test_unauthorized_user_id_input(self):
+        unauthorized_input = {
+            "senderId": 111,
+            "listingId": self.listing['listingId'],
+            "authToken": self.user_buyer['token'],
+            "message": "Hey, I'm interested in your property.",
+            "phone": self.user_buyer['phone1'],
+            "email": self.user_buyer['email']
+        }
+
+        request = webapp2.Request.blank('/contactSeller', POST=unauthorized_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, not_authorized['status'])
+
+        errors_expected = [not_authorized['error']]
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
+    def test_unauthorized_listingId_input(self):
+        unauthorized_input = {
+            "senderId": self.user_buyer['userId'],
+            "listingId": 111,
+            "authToken": self.user_buyer['token'],
+            "message": "Hey, I'm interested in your property.",
+            "phone": self.user_buyer['phone1'],
+            "email": self.user_buyer['email']
+        }
+
+        request = webapp2.Request.blank('/contactSeller', POST=unauthorized_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, un_auth_listing['status'])
+
+        errors_expected = [un_auth_listing['error']]
+        error_keys = [str(x) for x in json.loads(response.body)]
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
+    def test_missing_input(self):
+        missing_input = {}
+
+        request = webapp2.Request.blank('/contactSeller', POST=missing_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, missing_invalid_parameter)
+
+        errors_expected = [missing_senderId['error'],
+                           missing_listing_id['error'],
+                           missing_message['error'],
+                           missing_phone_number['error'],
+                           missing_email['error'],
+                           missing_token['error']]
+        error_keys = [str(x) for x in json.loads(response.body)]
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def tearDown(self):
-        # Don't forget to deactivate the testbed after the tests are
-        # completed. If the testbed is not deactivated, the original
-        # stubs will not be restored.
         self.testbed.deactivate()
-
-
-# def get_post_dictionary(user_id, token, listing_id, message, phone1, phone2, ):
-#     return {"userId": user_id, "authToken":token,"changeValues": json.dumps(change_values)}
-
-
-def get_response(POST):
-    request = webapp2.Request.blank('/editUser', POST=POST)
-    response = request.get_response(Main.app)
-    return json.loads(response.body), response.status_int
-
-
 
 
 def run_tests():

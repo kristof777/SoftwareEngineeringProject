@@ -42,20 +42,13 @@ class CreateListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         error_keys = listing_keys
 
-        # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
         invalid = key_validation(values)
-
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
                                     missing_invalid_parameter)
