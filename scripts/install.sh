@@ -67,6 +67,7 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux install"
   lindroid_install
+  sudo apt-get install sshpass
   
   # prevent dialogue messages from appearing in gooogle app engine install
   export CLOUDSDK_INSTALL_DIR=/$HOME
