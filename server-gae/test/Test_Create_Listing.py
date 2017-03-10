@@ -27,9 +27,9 @@ class TestHandlers(unittest.TestCase):
         setup_testbed(self)
 
     def test_empty_input(self):
-        input = {}
+        empty_input = {}
         request = webapp2.Request.blank('/createListing',
-                                        POST=input)  # api you need to test
+                                        POST=empty_input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -51,9 +51,7 @@ class TestHandlers(unittest.TestCase):
                            missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
-
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_empty_fields(self):
         input = {"userId": "",
@@ -73,7 +71,7 @@ class TestHandlers(unittest.TestCase):
                  "images": ''
                  }
 
-        request = webapp2.Request.blank('/createListing', POST=input)  # api you need to test
+        request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -95,9 +93,7 @@ class TestHandlers(unittest.TestCase):
                            missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
-
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_multiple_spaces_input(self):
         input = {"userId": "      ",
@@ -118,7 +114,7 @@ class TestHandlers(unittest.TestCase):
                  }
 
         request = webapp2.Request.blank('/createListing',
-                                        POST=input)  # api you need to test
+                                        POST=input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -140,19 +136,17 @@ class TestHandlers(unittest.TestCase):
                            missing_latitude['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
-
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_some_missing_fields(self):
-        input = create_random_listing("", "")
-        input['squarefeet'] = ""
-        input['description'] = ""
-        input['city'] = ""
-        input['images'] = ''
+        missing_input = create_random_listing("", "")
+        missing_input['squarefeet'] = ""
+        missing_input['description'] = ""
+        missing_input['city'] = ""
+        missing_input['images'] = ''
 
         request = webapp2.Request.blank('/createListing',
-                                        POST=input)  # api you need to test
+                                        POST=missing_input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, missing_invalid_parameter)
@@ -165,9 +159,7 @@ class TestHandlers(unittest.TestCase):
                            missing_image['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
-
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_invalid_user_id(self):
         input = create_random_listing("1111", "sfasdtr54523df")
@@ -178,13 +170,9 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, unauthorized_access)
 
         errors_expected = [not_authorized['error']]
+        error_keys = [str(x) for x in json.loads(response.body)]
 
-        try:
-            errors_expected = str(json.loads(response.body).keys()[0])
-        except IndexError as _:
-            self.assertFalse()
-
-        self.assertEquals(not_authorized['error'], errors_expected)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_invalid_numeric_field(self):
         input = create_random_listing("supposed to be int", "random token")
@@ -213,13 +201,12 @@ class TestHandlers(unittest.TestCase):
 
         error_keys = [str(x) for x in json.loads(response.body)]
 
-        # checking if there is a difference between error_keys and what we got
-        self.assertEquals(are_two_lists_same(error_keys, errors_expected), True)
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_correct_input(self):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
-        input = inputs[0]
-        request = webapp2.Request.blank('/createListing', POST=input)
+        correct_input = inputs[0]
+        request = webapp2.Request.blank('/createListing', POST=correct_input)
         response = request.get_response(Main.app)
 
         self.assertEquals(response.status_int, success)
@@ -228,22 +215,19 @@ class TestHandlers(unittest.TestCase):
         self.assertTrue("listingId" in output)
 
         listing_created = Listing.get_by_id(int(output["listingId"]))
-        self.assertEquals(listing_created.bedrooms, int(input['bedrooms']))
-        self.assertEquals(listing_created.squarefeet, int(input['squarefeet']))
-        self.assertEquals(listing_created.bathrooms, float(input['bathrooms']))
-        self.assertEquals(listing_created.price, int(input['price']))
-        self.assertEquals(listing_created.description, input['description'])
-        self.assertEquals(str(listing_created.isPublished), input['isPublished'])
-        self.assertEquals(listing_created.province, input['province'])
-        self.assertEquals(listing_created.city, input['city'])
-        self.assertEquals(listing_created.address, input['address'])
-        self.assertEquals(listing_created.thumbnailImageIndex, int(input['thumbnailImageIndex']))
-        self.assertEquals(listing_created.images, json.loads(input['images']))
+        self.assertEquals(listing_created.bedrooms, int(correct_input['bedrooms']))
+        self.assertEquals(listing_created.squarefeet, int(correct_input['squarefeet']))
+        self.assertEquals(listing_created.bathrooms, float(correct_input['bathrooms']))
+        self.assertEquals(listing_created.price, int(correct_input['price']))
+        self.assertEquals(listing_created.description, correct_input['description'])
+        self.assertEquals(str(listing_created.isPublished), correct_input['isPublished'])
+        self.assertEquals(listing_created.province, correct_input['province'])
+        self.assertEquals(listing_created.city, correct_input['city'])
+        self.assertEquals(listing_created.address, correct_input['address'])
+        self.assertEquals(listing_created.thumbnailImageIndex, int(correct_input['thumbnailImageIndex']))
+        self.assertEquals(listing_created.images, json.loads(correct_input['images']))
 
     def tearDown(self):
-        # Don't forget to deactivate the testbed after the tests are
-        # completed. If the testbed is not deactivated, the original
-        # stubs will not be restored.
         self.testbed.deactivate()
 
 

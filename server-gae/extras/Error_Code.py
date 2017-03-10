@@ -59,6 +59,9 @@ invalid_phone1 = {"error": "invalidPhone1",
 invalid_phone2 = {"error": "invalidPhone2",
                   "status": missing_invalid_parameter}
 
+invalid_phone = {"error": "invalidPhone",
+                 "status": missing_invalid_parameter}
+
 invalid_email = {"error": "invalidEmail",
                  "status": missing_invalid_parameter}
 
@@ -170,8 +173,14 @@ missing_image = {"error": "missingImage",
 missing_image_index = {"error": "missingImageIndex",
                        "status": missing_invalid_parameter}
 
-un_auth_listing = {"error": "unAuthListing",
+missing_senderId = {"error": "missingSenderId",
+                    "status": missing_invalid_parameter}
+
+missing_message = {"error": "missingMessage",
                    "status": missing_invalid_parameter}
+
+un_auth_listing = {"error": "unAuthListing",
+                   "status": unauthorized_access}
 
 password_mismatch = {"error": "passwordMismatch",
                      "status": unauthorized_access}
@@ -181,6 +190,9 @@ invalid_xor_condition = {"error": "missingXorCondition",
 
 invalid_values_required = {"error": "invalidValuesRequired",
                            "status": missing_invalid_parameter}
+
+unallowed_message_send = {"error": "unallowedMessageSend",
+                          "status": processing_failed}
 
 invalids = {
     "phone1": invalid_phone1,
@@ -201,11 +213,12 @@ invalids = {
     "valuesRequired": invalid_values_required,
     'images': invalid_images,
     "longitude": invalid_longitude,
-    "latitude": invalid_latitude
+    "latitude": invalid_latitude,
+    "senderId": invalid_user_id,
+    "phone": invalid_phone
 }
 
 missing = {
-
     "phone1": missing_phone_number,
     "email": missing_email,
     "password": missing_password,
@@ -231,5 +244,8 @@ missing = {
     "address": missing_address,
     "liked": missing_liked,
     "longitude": missing_longitude,
-    "latitude": missing_latitude
+    "latitude": missing_latitude,
+    "senderId": missing_senderId,
+    "message": missing_message,
+    "phone": missing_phone_number,
 }

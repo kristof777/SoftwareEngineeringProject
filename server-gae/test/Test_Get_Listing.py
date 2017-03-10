@@ -27,12 +27,12 @@ class TestHandlers(unittest.TestCase):
 
         # create 10 listings for one user
         self.listings, users = create_dummy_listings_for_testing(Main, 20)
-        assert len(users) == 1
-        assert len(self.listings) == 20
+        self.assertEquals(len(users), 1)
+        self.assertEquals(len(self.listings), 20)
         self.ownerId = users[0]['userId']
 
         users = create_dummy_users_for_testing(Main, 1)
-        assert len(users) == 1
+        self.assertEquals(len(users), 1)
         self.userId = users[0]['userId']
         self.token = users[0]['token']
 
@@ -82,7 +82,6 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(len(res_value), len(self.listings))
         for value in res_value:
             self.assertTrue("listingId" in value)
-
 
     def test_unrecognized_key_2(self):
         get_filter_listings = {
@@ -189,14 +188,29 @@ class TestHandlers(unittest.TestCase):
         res_value, status = get_listing_response(get_filter_listings)
         self.assertEqual(status, success)
         for value in res_value:
-            assert len(value) == 4
-            assert int(value['price']) <= int(json.loads(get_filter_listings['filter'])['price']['upper'])
-            assert int(value['price']) >= int(json.loads(get_filter_listings['filter'])['price']['lower'])
-            assert int(value['bedrooms']) <= int(json.loads(get_filter_listings['filter'])['bedrooms']['upper'])
-            assert int(value['bedrooms']) >= int(json.loads(get_filter_listings['filter'])['bedrooms']['lower'])
-            assert float(value['bathrooms']) <= float(json.loads(get_filter_listings['filter'])['bathrooms']['upper'])
-            assert float(value['bathrooms']) >= float(json.loads(get_filter_listings['filter'])['bathrooms']['lower'])
+            self.assertEquals(len(value), 4)
+            self.assertTrue(int(value['price']) <=
+                            int(json.loads(get_filter_listings['filter'])['price']['upper']))
+            self.assertTrue(int(value['price']) >=
+                            int(json.loads(get_filter_listings['filter'])['price']['lower']))
+            self.assertTrue(int(value['bedrooms']) <=
+                            int(json.loads(get_filter_listings['filter'])['bedrooms']['upper']))
+            self.assertTrue(int(value['bedrooms']) >=
+                            int(json.loads(get_filter_listings['filter'])['bedrooms']['lower']))
+            self.assertTrue(float(value['bathrooms']) <=
+                            float(json.loads(get_filter_listings['filter'])['bathrooms']['upper']))
+            self.assertTrue(float(value['bathrooms']) >=
+                            float(json.loads(get_filter_listings['filter'])['bathrooms']['lower']))
 
+        #######################
+        # make sure that the filter is reset to default after being customized
+        get_filter_listings = {}
+
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, success)
+        self.assertEquals(len(res_value), len(self.listings))
+        for value in res_value:
+            self.assertTrue("listingId" in value)
 
     def test_invalid_key_values_required(self):
         get_filter_listings = {
@@ -210,15 +224,13 @@ class TestHandlers(unittest.TestCase):
         self.assertTrue(error_expected in res_value)
 
 
-
-def get_like_post_dictionary(userId, listingId, token, liked):
-    return {"userId": userId, "listingId":
-        listingId, "authToken": token, "liked": liked}
+def get_like_post_dictionary(user_id, listing_id, token, liked):
+    return {"userId": user_id, "listingId":
+            listing_id, "authToken": token, "liked": liked}
 
 
 def get_like_response(POST):
     return get_response_from_post(Main, POST, 'like')
-
 
 
 def get_listing_response(POST):

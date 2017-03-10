@@ -25,6 +25,7 @@ class CreateListing(webapp2.RequestHandler):
         @post-cond: A listing with provided information is created in the
                     database. ListingId is returned as an response
                     object.
+
     """
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
@@ -39,25 +40,15 @@ class CreateListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['price', 'squarefeet', 'bedrooms', 'bathrooms', 'description',
-                      'images',
-                      'thumbnailImageIndex', 'address', 'province', 'city',
-                      'userId', 'isPublished', 'longitude', 'latitude', 'authToken']
+        error_keys = listing_keys
 
-        # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId, bedrooms, bathrooms, sqft, price, thumbnailImageIndex)
-        #  and boolean field (isPublished)
         invalid = key_validation(values)
-
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
                                     missing_invalid_parameter)
@@ -84,8 +75,7 @@ class CreateListing(webapp2.RequestHandler):
             return
 
         values['province'] = scale_province(str(values['province']))
-
-        isPublished = True if values['isPublished'] in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
+        is_published = convert_to_bool(values["isPublished"])
 
         # all set
         values['images'] = json.loads(values['images'])
@@ -96,7 +86,7 @@ class CreateListing(webapp2.RequestHandler):
                           bathrooms=float(values['bathrooms']),
                           price=int(values['price']),
                           description=values['description'],
-                          isPublished=isPublished, province=values['province'],
+                          isPublished=is_published, province=values['province'],
                           city=values['city'],
                           address=values['address'], images=values['images'],
                           longitude=float(values['longitude']),

@@ -28,8 +28,7 @@ class VerificationHandler(BaseHandler):
         if not user.verified:
             user.verified = True
             user.put()
-
-            self.display_message('User email address has been verified.')
+            # self.display_message('User email address has been verified.')
             return
         elif verification_type == 'p':
             # supply user to the page
