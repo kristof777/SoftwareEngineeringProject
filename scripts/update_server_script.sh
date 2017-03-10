@@ -11,7 +11,7 @@ SERVER_PASS="${SERVER_PASS::-1}"
 
 sudo apt-get install sshpass
 
-sshpass -p '$SERVER_PASS' ssh gaa721@cmpt371g1.usask.ca
+sshpass -p "$SERVER_PASS" ssh gaa721@cmpt371g1.usask.ca
 cd Project
 git pull
 exit
