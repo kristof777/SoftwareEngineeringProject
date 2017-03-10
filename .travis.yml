@@ -51,23 +51,21 @@ addons:
   
 install:
   - "./scripts/install.sh"
-  - echo $TRAVIS_OS_NAME
 
 before_script:
   - "./scripts/before_script.sh"
 
 script:
-  - echo hi
-  - "./scripts/build_script.sh"
+  - "./scripts/build.sh"
   
   
 after_success:
-  - "./scripts/update_server_script.sh"
-  - "./scripts/systeminfo_script.sh"
-  - "./scripts/stage_script.sh"
+  - "./scripts/system_info.sh"
+  - "./scripts/update_server.sh"
+  - "./scripts/stage.sh"
   
 after_failure:
-  - "./scripts/systeminfo_script.sh"
+  - "./scripts/system_info.sh"
   
 deploy:
  provider: script
