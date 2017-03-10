@@ -308,7 +308,7 @@ export class KasperService {
      */
     appendAuthentication(body: FormData): void{
         body.append('userId', this.loginService.getUserId());
-        body.append('token', this.loginService.getToken());
+        body.append('authToken', this.loginService.getToken());
     }
 
     /**
