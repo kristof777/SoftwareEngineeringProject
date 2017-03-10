@@ -75,7 +75,7 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   
   gae_install
   sudo du / | grep "geckodriver"
-  echo "${PYTHON_PATH}"
+  echo "${PYTHONPATH}"
 else
   echo "got to install: android"
   lindroid_install
