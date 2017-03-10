@@ -9,9 +9,7 @@ chmod 600 server_key
 eval "$(ssh-agent -s)"
 ssh-add server_key 
 
-ssh-keyscan -H cmpt371g1.usask.ca >> ~/.ssh/known_hosts
-
-ssh -q gaa721@cmpt371g1.usask.ca
+ssh cmpt371g1.usask.ca
 cd Project
 git pull
 exit
