@@ -27,6 +27,7 @@ lindroid_install(){
   # installs packages specified in the ionic json
   npm install
   webdriver-manager update
+  sudo apt-get install sshpass
   # commented out for now, we could use chrome at some point and this might be needed for it
   # chrome_install
 }
@@ -60,26 +61,13 @@ gae_install(){
   sudo pip install django
 }
 
-# Downloads and installs chrome. 
-# DEPRICATED: this might not be needed anymore. adding google-chrome to sources
-# and google-chrome-stable to packages installs chrome now
-# Also currently not using chrome for testing.
-# Keeping this here in case it is needed again.
-# I am a code horder.  I have problems. I have stacks of
-chrome_install(){
-    export CHROME_BIN=/usr/bin/google-chrome
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome*.deb
-    npm install chromedriver
-}
-
-
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
   echo "got to install osx"
   ios_install
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux install"
   lindroid_install
+  sudo apt-get install sshpass
   
   # prevent dialogue messages from appearing in gooogle app engine install
   export CLOUDSDK_INSTALL_DIR=/$HOME
