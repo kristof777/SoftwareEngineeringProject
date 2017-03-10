@@ -34,8 +34,7 @@ node_js:
 
 addons:
   firefox: "47.0.1"
-  ssh_known_hosts:
-    - cmpt371g1.usask.ca
+  ssh_known_hosts: cmpt371g1.usask.ca
   apt:
     sources:
     - ubuntu-toolchain-r-test
