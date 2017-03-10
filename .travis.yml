@@ -26,14 +26,15 @@ cache:
 node_js:
 - 6.9.4
 
-matrix:
-  include:
-  - os: android
-  - os: osx
-    osx_image: xcode7 
+#matrix:
+#  include:
+#  - os: android
+#  - os: osx
+#    osx_image: xcode7 
 
 addons:
   firefox: "47.0.1"
+  ssh_known_hosts: cmpt371g1.usask.ca
   apt:
     sources:
     - ubuntu-toolchain-r-test
@@ -48,19 +49,21 @@ addons:
 
   
 install:
-  - "./scripts/install.sh"
-  - echo $TRAVIS_OS_NAME
+  #- "./scripts/install.sh"
+  #- echo $TRAVIS_OS_NAME
 
 before_script:
-  - "./scripts/before_script.sh"
+  #- "./scripts/before_script.sh"
 
 script:
-  - "./scripts/build_script.sh"
+  - echo hi
+  #- "./scripts/build_script.sh"
   
   
 after_success:
-  - "./scripts/systeminfo_script.sh"
-  - "./scripts/stage_script.sh"
+  - "./scripts/update_server_script.sh"
+  #- "./scripts/systeminfo_script.sh"
+  #- "./scripts/stage_script.sh"
   
 after_failure:
   - "./scripts/systeminfo_script.sh"
