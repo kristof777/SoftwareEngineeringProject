@@ -4,6 +4,8 @@
 # Logs into our server after a successful build using an encrypted key, and updates
 # the server's repo.
 
+set -ve
+
 if [[ "${BUILD_TYPE}" != "deployment" ]]; then 
   SCRIPT="cd Project; git pull ; exit"
 
