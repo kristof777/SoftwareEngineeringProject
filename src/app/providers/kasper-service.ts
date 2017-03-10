@@ -394,47 +394,47 @@ export class KasperService {
         let result: string[][] = [[]];
 
         result['signIn'] = [];
-        result['signIn']['notAuthorized'] = "The credentials you entered were not valid.";
-        result['signIn']['missingEmail'] = "Email is required to login.";
-        result['signIn']['missingPassword'] = "Password is required to login.";
+        result['signIn']['notAuthorized'] = "Looks like you entered the wrong email or password";
+        result['signIn']['missingEmail'] = "Please enter your email to continue";
+        result['signIn']['missingPassword'] = "Please enter your password to continue";
 
         result['signInToken'] = [];
-        result['signInToken']['notAuthorized'] = "";
+        result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
 
         result['confirmEmail'] = [];
         result['confirmEmail']['missingUserId'] = "";
         result['confirmEmail']['invalidUserId'] = "";
 
         result['createUser'] = [];
-        result['createUser']['emailAlreadyExists'] = "";
-        result['createUser']['passwordMismatch'] = "";
-        result['createUser']['passwordNotStrong'] = "";
-        result['createUser']['missingEmail'] = "";
-        result['createUser']['missingPassword'] = "";
-        result['createUser']['missingConfirmedPassword'] = "";
-        result['createUser']['missingFirstName'] = "";
-        result['createUser']['missingLastName'] = "";
-        result['createUser']['missingPhoneNumber'] = "";
-        result['createUser']['missingCity'] = "";
+        result['createUser']['emailAlreadyExists'] = "Looks like this email is already in our system";
+        result['createUser']['passwordMismatch'] = "Looks like the entered passwords don't match ";
+        result['createUser']['passwordNotStrong'] = "Please make sure your password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['createUser']['missingEmail'] = "Looks like your email adress is missing";
+        result['createUser']['missingPassword'] = "Please enter your password";
+        result['createUser']['missingConfirmedPassword'] = "Please confirm your password";
+        result['createUser']['missingFirstName'] = "Please enter your first name";
+        result['createUser']['missingLastName'] = "Please enter your last name";
+        result['createUser']['missingPhoneNumber'] = "Please enter your phone number";
+        result['createUser']['missingCity'] = "Please enter your city";
 
         result['editUser'] = [];
-        result['editUser']['emailAlreadyExists'] = "";
-        result['editUser']['nothingRequestedToChange'] = "";
-        result['editUser']['unrecognizedKey'] = "";
-        result['editUser']['invalidUserId'] = "";
-        result['editUser']['missingUserId'] = "";
-        result['editUser']['passwordCantBeChanged'] = "";
+        result['editUser']['emailAlreadyExists'] = "Looks like this email is already in use, please pick a different one";
+        result['editUser']['nothingRequestedToChange'] = "If you want to make changes, enter some fields and click save ";
+        result['editUser']['unrecognizedKey'] = "Looks like you tried to change a field that doesn't exist. You don't want to do that.";
+        result['editUser']['invalidUserId'] = "Setting new information failed.";
+        result['editUser']['missingUserId'] = "Setting new information failed. ";
+        result['editUser']['passwordCantBeChanged'] = "Please use the change password button to change your password";
 
         result['changePassword'] = [];
-        result['changePassword']['missingOldPassword'] = "";
-        result['changePassword']['missingNewPassword'] = "";
-        result['changePassword']['missingNewPasswordConfirmed'] = "";
-        result['changePassword']['passwordNotStrong'] = "";
-        result['changePassword']['invalidUserId'] = "";
-        result['changePassword']['missingUserId'] = "";
-        result['changePassword']['notAuthorized'] = "";
-        result['changePassword']['newPasswordMismatch'] = "";
-        result['changePassword']['newPasswordIsTheSameAsOld'] = "";
+        result['changePassword']['missingOldPassword'] = "Please eneter your current password";
+        result['changePassword']['missingNewPassword'] = "Please eneter your new password";
+        result['changePassword']['missingNewPasswordConfirmed'] = "Please confirm your now password";
+        result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['changePassword']['invalidUserId'] = "Setting new password failed.";
+        result['changePassword']['missingUserId'] = "Setting new password failed.";
+        result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
+        result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
+        result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you enetered is the same as your surrent password. Please choose a new password.";
 
         result['signOut'] = [];
         result['signOut']['invalidUserId'] = "";
@@ -487,7 +487,7 @@ export class KasperService {
         let message: string = KasperService.errorMessages['signIn'][key];
 
         this.alertCtrl.create({
-            title: "Oops!",
+            title: "Oops...",
             subTitle: message,
             buttons: ['Dismiss']
         }).present();
