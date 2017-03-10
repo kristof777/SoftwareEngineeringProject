@@ -6,6 +6,7 @@
 
 openssl aes-256-cbc -K $encrypted_cb585f974371_key -iv $encrypted_cb585f974371_iv -in server_pass.enc -out server_pass -d
 export SERVER_PASS='cat server_pass'
+hexdump -c server_pass
 SERVER_PASS="${SERVER_PASS::-1}"
 
 sudo apt-get install sshpass
