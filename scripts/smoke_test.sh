@@ -3,7 +3,7 @@
 # Author: Chris Mykota-Reid 
 # A helper script to allow both smoke tests to run even if one fails
 # while still having the build fail if either fails
-
+sudo du / | grep "pyyaml"
 echo $'\n\n\n\n*******RUNNING BACK-END SMOKE TESTS*******'
 python test.py
 python -m unittest discover -s server-gae/ -p 'Test*.py'
