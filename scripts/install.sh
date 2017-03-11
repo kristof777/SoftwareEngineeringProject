@@ -74,8 +74,6 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   export CLOUDSDK_CORE_DISABLE_PROMPTS=1
   
   gae_install
-  sudo du / | grep "gae"
-  #echo "${PYTHONPATH}"
 else
   echo "got to install: android"
   lindroid_install
