@@ -10,6 +10,7 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3:${PYTHONPATH}
+  PYTHONPATH=/opt/python/2.7.12/lib/python2.7/dist-packages:${PYTHONPATH}
   BUILD_TYPE=test
   RELEASE_ID=ID4
   
