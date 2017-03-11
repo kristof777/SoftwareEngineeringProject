@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Author: Chris Mykota-Reid
+# Author: Chris Mykota-Reid 
 # A helper script to allow both smoke tests to run even if one fails
 # while still having the build fail if either fails
 
