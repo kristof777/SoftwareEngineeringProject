@@ -9,10 +9,10 @@ env:
   PATH=/home/travis/.nvm/versions/node/v6.9.4/lib/node_modules/jasmine/bin:${PATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine:${PYTHONPATH}
   PYTHONPATH=${PYTHONPATH}:${TRAVIS_HOME}
-  #PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2
-  #PYTHONPATH=${PYHTONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3
   BUILD_TYPE=test
   RELEASE_ID=ID4
+  #PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2
+  #PYTHONPATH=${PYHTONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3
 
 
 branches:
