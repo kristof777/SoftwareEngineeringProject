@@ -48,7 +48,7 @@ addons:
     - oracle-java8-installer
     - lib32stdc++6
     - google-chrome-stable
-    #- lib32z1
+    - lib32z1
     
 
   
