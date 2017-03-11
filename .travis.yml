@@ -1,4 +1,4 @@
-dist: trusty
+#dist: trusty
 sudo: true
 
 env: 
@@ -42,12 +42,12 @@ addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
-    - google-chrome
+    #- google-chrome
     packages:
     - g++-4.8
     - oracle-java8-installer
     - lib32stdc++6
-    - google-chrome-stable
+    #- google-chrome-stable
     #- lib32z1
     
 
