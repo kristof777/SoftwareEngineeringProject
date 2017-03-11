@@ -15,8 +15,8 @@ xvfb-run protractor firefox-e2e-tests.conf.js
 export FRONT_END_FF=$?
 
 echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS FOR CHROME*******'
-#xvfb-run protractor chrome-e2e-tests.conf.js
-#export FRONT_END_CHROME=$?
+xvfb-run protractor chrome-e2e-tests.conf.js
+export FRONT_END_CHROME=$?
 
 if [[ ${BACK_END_TEST} > 0 ]]; then
   echo ${BACK_END_TEST}
