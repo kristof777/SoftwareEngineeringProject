@@ -25,7 +25,7 @@ province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
 """
 listing_keys contains all the valid keys for a listing
 """
-listing_keys = ["squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
+listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex", "latitude", "longitude", "authToken"]
 

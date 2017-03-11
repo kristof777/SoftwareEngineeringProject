@@ -10,6 +10,7 @@ env:
   PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine
   PYTHONPATH=${PYTHONPATH}:${TRAVIS_HOME}
   BUILD_TYPE=test
+  RELEASE_ID=ID4
 
 
 branches:
@@ -34,6 +35,7 @@ matrix:
 
 addons:
   firefox: "47.0.1"
+  ssh_known_hosts: cmpt371g1.usask.ca
   apt:
     sources:
     - ubuntu-toolchain-r-test
@@ -49,21 +51,21 @@ addons:
   
 install:
   - "./scripts/install.sh"
-  - echo $TRAVIS_OS_NAME
 
 before_script:
   - "./scripts/before_script.sh"
 
 script:
-  - "./scripts/build_script.sh"
+  - "./scripts/build.sh"
   
   
 after_success:
-  - "./scripts/systeminfo_script.sh"
-  - "./scripts/stage_script.sh"
+  - "./scripts/system_info.sh"
+  - "./scripts/update_server.sh"
+  - "./scripts/stage.sh"
   
 after_failure:
-  - "./scripts/systeminfo_script.sh"
+  - "./scripts/system_info.sh"
   
 deploy:
  provider: script
