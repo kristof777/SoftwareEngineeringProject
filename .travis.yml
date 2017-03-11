@@ -11,7 +11,7 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/yaml-3.10:${PYTHONPATH}
-  PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-1.10.6:${PYTHONPATH}
+  PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
   BUILD_TYPE=test
   RELEASE_ID=ID4
   
