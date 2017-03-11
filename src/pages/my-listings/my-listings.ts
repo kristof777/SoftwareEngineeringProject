@@ -24,8 +24,18 @@ export class MyListingsPage {
                 private _logger: Logger) {
 
         this.listings = Array();
-        // let data = listingProvider.savedListings.myListings;
-        // this.listings = Object.keys(data).map(key => data[key]);
+    }
+
+    ionViewDidEnter(){
+        let me = this;
+
+        if(this.loginService.isLoggedIn()) {
+            this.listingProvider.getMyListings().subscribe(data => {
+                me.listings = data['listings'];
+            }, error => {
+                this._logger.error(JSON.stringify(error));
+            });
+        }
     }
 
     /**

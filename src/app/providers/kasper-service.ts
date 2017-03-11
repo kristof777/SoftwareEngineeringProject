@@ -1,3 +1,4 @@
+import {AlertController} from "ionic-angular";
 let assert = require('assert-plus');
 import {Injectable} from "@angular/core";
 import {Http, ResponseContentType} from "@angular/http";
@@ -11,10 +12,13 @@ import {FormControl} from "@angular/forms";
 
 @Injectable()
 export class KasperService {
+    public static errorMessages: string[][];
 
     constructor(public http: Http,
                 public loginService: LoginService,
+                public alertCtrl: AlertController,
                 private _logger: Logger) {
+        KasperService.errorMessages = this.initErrors();
     }
 
     /**
@@ -37,7 +41,7 @@ export class KasperService {
      * @param password  the password to sign in with
      */
     login(email: string, password: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
 
@@ -54,7 +58,7 @@ export class KasperService {
      * }
      */
     loginWithToken(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
@@ -62,7 +66,11 @@ export class KasperService {
     }
 
     confirmEmail(): any{
-        this._logger.error("KasperService.confirmEmail is not implemented.");
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -86,7 +94,7 @@ export class KasperService {
      */
     signUp(email: string, password: string, confirmedPassword: string, firstName: string,
             lastName: string, phone1: string, phone2: string, city: string, province: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
         body.append('confirmedPassword', confirmedPassword);
@@ -108,7 +116,7 @@ export class KasperService {
      *                      firstName, lastName, phone1, phone2, city, province, email
      */
     editUser(changeValues: Object): any {
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
@@ -129,13 +137,24 @@ export class KasperService {
      * @param newPasswordConfirmed  the new password for the user
      */
     changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
         body.append('newPassword', newPassword);
         body.append('newPasswordConfirmed', newPasswordConfirmed);
 
         return this.http.post(KasperConfig.API_URL + "/changePassword", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
+     * Request to sign out of the api.
+     */
+    signOut(): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body)
+
+        return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -148,10 +167,10 @@ export class KasperService {
      * }
      */
     getFavourites(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
-        return this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
+        return this.http.post(KasperConfig.API_URL + "/getFavourites", body,
             ResponseContentType.Json)
             .map(response => response.json());
     }
@@ -163,7 +182,7 @@ export class KasperService {
      * @param liked                 do they like it
      */
     likeDislikeListing(listingId: number, liked: boolean): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
         body.append('liked', liked);
@@ -181,13 +200,34 @@ export class KasperService {
      * }
      *
      * @param filter            the filter to apply
+     * @param valuesRequired    the fields to return about the listings
+     * @param maxLimit          the max number of returned results
      */
-    getListings(filter: Filter): any{
-        let body = new FormData();
+    getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('filter', JSON.stringify(filter));
+        body.append('valuesRequired', JSON.stringify(valuesRequired));
+        body.append('maxLimit', maxLimit);
 
         return this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
+     * Submit a request to get listings according to the specified filter
+     *
+     * The return data is as follows
+     * {
+     *      myListings: Listing[]
+     * }
+     *
+     */
+    getMyListings(): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/getMyListings", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -202,11 +242,11 @@ export class KasperService {
      * @param listing           the listing
      */
     createListings(listing: Listing): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('province', listing.location.province.abbr);
-        body.append('city', listing.location.city);
-        body.append('address', listing.location.address);
+        body.append('province', listing.province.abbr);
+        body.append('city', listing.city);
+        body.append('address', listing.address);
         body.append('price', listing.price);
         body.append('sqft', listing.squarefeet);
         body.append('bedrooms', listing.bedrooms);
@@ -228,7 +268,7 @@ export class KasperService {
      *                      description, images, thumbnailImageIndex, isPublished
      */
     editListing(changeValues: JSON): any {
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('changeValues', changeValues);
 
@@ -246,12 +286,17 @@ export class KasperService {
      *       email: string
      * }
      *
-     * @param listingId             the listing id
+     * @param listingId     the listing id
+     * @param message       the message for the seller
      */
-    requestContactInformation(listingId: number): any{
-        let body = new FormData();
+    contactSeller(listingId: number, message: string): any{
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
+        body.append('message', message);
+        body.append('phone1', LoginService.user.phone1);
+        body.append('phone2', LoginService.user.phone2);
+        body.append('email', LoginService.user.email);
 
         return this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
             , ResponseContentType.Json)
@@ -338,5 +383,113 @@ export class KasperService {
         }
 
         return null;
+    }
+
+    /**
+     * Error message to appear for the different calls.
+     *
+     * @returns {string[][]} an array of api routes, and error keys associated with them
+     */
+    initErrors(): string[][]{ // TODO finish these declarations
+        let result: string[][] = [[]];
+
+        result['signIn'] = [];
+        result['signIn']['notAuthorized'] = "Looks like you entered the wrong email or password";
+        result['signIn']['missingEmail'] = "Please enter your email to continue";
+        result['signIn']['missingPassword'] = "Please enter your password to continue";
+
+        result['signInToken'] = [];
+        result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
+
+        result['confirmEmail'] = [];
+        result['confirmEmail']['missingUserId'] = "";
+        result['confirmEmail']['invalidUserId'] = "";
+
+        result['createUser'] = [];
+        result['createUser']['emailAlreadyExists'] = "Looks like this email is already in our system";
+        result['createUser']['passwordMismatch'] = "Looks like the entered passwords don't match ";
+        result['createUser']['passwordNotStrong'] = "Please make sure your password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['createUser']['missingEmail'] = "Looks like your email adress is missing";
+        result['createUser']['missingPassword'] = "Please enter your password";
+        result['createUser']['missingConfirmedPassword'] = "Please confirm your password";
+        result['createUser']['missingFirstName'] = "Please enter your first name";
+        result['createUser']['missingLastName'] = "Please enter your last name";
+        result['createUser']['missingPhoneNumber'] = "Please enter your phone number";
+        result['createUser']['missingCity'] = "Please enter your city";
+
+        result['editUser'] = [];
+        result['editUser']['emailAlreadyExists'] = "Looks like this email is already in use, please pick a different one";
+        result['editUser']['nothingRequestedToChange'] = "If you want to make changes, enter some fields and click save ";
+        result['editUser']['unrecognizedKey'] = "Looks like you tried to change a field that doesn't exist. You don't want to do that.";
+        result['editUser']['invalidUserId'] = "Setting new information failed.";
+        result['editUser']['missingUserId'] = "Setting new information failed. ";
+        result['editUser']['passwordCantBeChanged'] = "Please use the change password button to change your password";
+
+        result['changePassword'] = [];
+        result['changePassword']['missingOldPassword'] = "Please eneter your current password";
+        result['changePassword']['missingNewPassword'] = "Please eneter your new password";
+        result['changePassword']['missingNewPasswordConfirmed'] = "Please confirm your now password";
+        result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['changePassword']['invalidUserId'] = "Setting new password failed.";
+        result['changePassword']['missingUserId'] = "Setting new password failed.";
+        result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
+        result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
+        result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you enetered is the same as your surrent password. Please choose a new password.";
+
+        result['signOut'] = [];
+        result['signOut']['invalidUserId'] = "";
+
+        result['getFavourites'] = [];
+        result['getFavourites']['noFavouriteListing'] = "";
+        result['getFavourites']['invalidUserId'] = "";
+        result['getFavourites']['missingUserId'] = "";
+
+        result['getMyListings'] = [];
+        result['getMyListings']['invalidUserId'] = "";
+        result['getMyListings']['missingUserId'] = "";
+
+        result['likeDislikeListing'] = [];
+        result['likeDislikeListing']['invalidListingId'] = "";
+        result['likeDislikeListing']['invalidUserId'] = "";
+        result['likeDislikeListing']['missingUserId'] = "";
+        result['likeDislikeListing']['missingListingId'] = "";
+        result['likeDislikeListing']['missingLiked'] = "";
+
+        result['getListings'] = [];
+        result['getListings']['noListingsLeft'] = "";
+
+        result['createListing'] = [];
+        result['createListing']['invalidCity'] = "";
+        result['createListing']['invalidProvince'] = "";
+        result['createListing']['invalidAddress'] = "";
+
+        result['editListing'] = [];
+        result['editListing']['nothingRequestedToChange'] = "";
+        result['editListing']['unrecognizedKey'] = "";
+        result['editListing']['invalidUserId'] = "";
+        result['editListing']['missingUserId'] = "";
+        result['editListing']['notAuthorized'] = "";
+        result['editListing']['missingListingId'] = "";
+
+        result['contactSeller'] = [];
+        result['contactSeller']['missingListingId'] = "";
+        result['contactSeller']['missingUserId'] = "";
+        result['contactSeller']['invalidUserId'] = "";
+        result['contactSeller']['invalidListingId'] = "";
+        result['contactSeller']['userEmailNotConfirmed'] = "";
+
+        return result;
+    }
+
+    handleError(key: any){
+        assert.string(KasperService.errorMessages['signIn'][key], "Unhandled error response: " + key);
+
+        let message: string = KasperService.errorMessages['signIn'][key];
+
+        this.alertCtrl.create({
+            title: "Oops...",
+            subTitle: message,
+            buttons: ['Dismiss']
+        }).present();
     }
 }

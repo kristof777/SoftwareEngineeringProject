@@ -5,7 +5,6 @@ import {NavController, NavParams} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
-import {Location} from "../../app/models/location";
 import {Province} from "../../app/models/province";
 
 @Component({
@@ -46,14 +45,6 @@ export class AddListingPage {
         this.curListing = new Listing(
             listing.listingId,
             listing.listerId,
-            new Location(
-                Province.fromAbbr(listing.location.province.abbr),
-                listing.location.city,
-                listing.location.address,
-                listing.location.postalCode,
-                listing.location.latitude,
-                listing.location.longitude,
-            ),
             listing.bedrooms,
             listing.bathrooms,
             listing.squarefeet,
@@ -62,19 +53,25 @@ export class AddListingPage {
             listing.isPublished,
             listing.createdDate,
             listing.modifiedDate,
-            listing.images
+            listing.images,
+            Province.fromAbbr(listing.province.abbr),
+            listing.city,
+            listing.address,
+            listing.postalCode,
+            listing.latitude,
+            listing.longitude,
         );
 
         this.listingId = listing.listingId;
         this.listerId = listing.listerId;
         this.bathrooms = listing.bathrooms;
-        this.province = listing.location.province.abbr;
-        this.city = listing.location.city;
+        this.province = listing.province.abbr;
+        this.city = listing.city;
         this.bedrooms = listing.bedrooms;
         this.squarefeet = listing.squarefeet;
         this.price = listing.price;
-        this.address = listing.location.address;
-        this.postalCode = listing.location.postalCode;
+        this.address = listing.address;
+        this.postalCode = listing.postalCode;
         this.description = listing.description;
         this.images = listing.images;
     }

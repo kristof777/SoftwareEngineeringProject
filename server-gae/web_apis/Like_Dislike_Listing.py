@@ -37,21 +37,14 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
 
-        error_keys = ['userId', 'listingId', 'liked']
-
-        # check if there's any missing field, if so, just return to the user what all is missing
+        error_keys = ['userId', 'listingId', 'liked', 'authToken']
         errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        # check validity for integer fields (userId and listingId) and a boolean field (isPublished)
         invalid = key_validation(values)
-
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
                                     missing_invalid_parameter)
@@ -67,6 +60,15 @@ class LikeDislikeListing(webapp2.RequestHandler):
                                     unauthorized_access)
             return
 
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to like/dislike listings"},
+                                    not_authorized['status'])
+            return
+
         listing = Listing.get_by_id(int(values['listingId']))
         if listing is None:
             error = {
@@ -76,8 +78,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
                                     unauthorized_access)
             return
 
-        liked = True if values['liked'] in ['true', "True", "TRUE", '1', "t", "y", "yes"] else False
-
+        liked = convert_to_bool(values['liked'])
         user_id = int(values['userId'])
         listing_id = int(values['listingId'])
 
@@ -91,22 +92,10 @@ class LikeDislikeListing(webapp2.RequestHandler):
                                     processing_failed)
             return
 
-        # Next, check if the favorite object already exists
-        # if it already exists, check the user input liked
-        #   if liked == true, then it means the user want to like the list
-        #       if the liked field in the object is true, return error
-        #       if the liked field in the object is false, change it to true
-        #   if liked == false, then it means the user want to unlike the list
-        #       if the liked field in the object is false, then return error
-        #       if the liked field in the object is true, change it to false
-        # if the favorite object doesn't exist
-        #   create a new favorite object with liked input value
-
         # check if the favorite object exists
         favorite = Favorite.query(Favorite.userId == user_id,
                                   Favorite.listingId == listing_id).get()
         if favorite is None:
-            # TODO: do we need to make sure that the liked input is true when creating the favorite object?
             favorite = Favorite(userId=user_id, listingId=listing_id, liked=liked)
             favorite.put()
         else:  # if the favorite object does exist
@@ -138,7 +127,7 @@ class LikeDislikeListing(webapp2.RequestHandler):
 
                 # change the liked field to be false
                 favorite.liked = False
-                favorite.put()
+            favorite.put()
 
         # return successfully
         write_success_to_response(self.response, {})

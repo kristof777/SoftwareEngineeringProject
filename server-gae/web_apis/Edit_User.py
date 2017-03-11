@@ -44,7 +44,7 @@ class EditUser(BaseHandler):
                                                     values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to chnage user"},
+                                                        "not authorized to change user"},
                                     not_authorized['status'])
             return
 

@@ -59,6 +59,9 @@ invalid_phone1 = {"error": "invalidPhone1",
 invalid_phone2 = {"error": "invalidPhone2",
                   "status": missing_invalid_parameter}
 
+invalid_phone = {"error": "invalidPhone",
+                 "status": missing_invalid_parameter}
+
 invalid_email = {"error": "invalidEmail",
                  "status": missing_invalid_parameter}
 
@@ -83,6 +86,9 @@ invalid_listing_id = {"error": "invalidListingId",
 missing_listing_id = {"error": "missingListingId",
                       "status": missing_invalid_parameter}
 
+invalid_images = {"error": "invalidImages",
+                  "status": missing_invalid_parameter}
+
 missing_liked = {"error": "missingLiked",
                  "status": missing_invalid_parameter}
 
@@ -101,7 +107,7 @@ no_listings_left = {"error": "noListingsLeft",
 invalid_bedrooms = {"error": "invalidNumberOfBedrooms",
                     "status": missing_invalid_parameter}
 
-invalid_sqft = {"error": "invalidSquareFeet",
+invalid_squarefeet = {"error": "invalidSquareFeet",
                 "status": missing_invalid_parameter}
 
 invalid_bathrooms = {"error": "invalidNumberOfBathrooms",
@@ -128,13 +134,19 @@ invalid_address = {"error": "invalidAddress",
 invalid_filter_bound = {"error": "invalidFilterBound",
                         "status": missing_invalid_parameter}
 
+invalid_longitude = {"error": "invalidLongitude",
+                     "status": missing_invalid_parameter}
+
+invalid_latitude = {"error": "invalidLatitude",
+                    "status": missing_invalid_parameter}
+
 missing_address = {"error": "missingAddress",
                    "status": missing_invalid_parameter}
 
 missing_price = {"error": "missingPrice",
                  "status": missing_invalid_parameter}
 
-missing_sqft = {"error": "missingSqft",
+missing_squarefeet = {"error": "missingSqft",
                 "status": missing_invalid_parameter}
 
 missing_bedrooms = {"error": "missingBedrooms",
@@ -146,6 +158,12 @@ missing_published = {"error": "missingPublished",
 missing_bathrooms = {"error": "missingBathrooms",
                      "status": missing_invalid_parameter}
 
+missing_longitude = {"error": "missingLongitude",
+                     "status": missing_invalid_parameter}
+
+missing_latitude = {"error": "missingLatitude",
+                    "status": missing_invalid_parameter}
+
 missing_description = {"error": "missingDescription",
                        "status": missing_invalid_parameter}
 
@@ -155,8 +173,14 @@ missing_image = {"error": "missingImage",
 missing_image_index = {"error": "missingImageIndex",
                        "status": missing_invalid_parameter}
 
-un_auth_listing = {"error": "unAuthListing",
+missing_senderId = {"error": "missingSenderId",
+                    "status": missing_invalid_parameter}
+
+missing_message = {"error": "missingMessage",
                    "status": missing_invalid_parameter}
+
+un_auth_listing = {"error": "unAuthListing",
+                   "status": unauthorized_access}
 
 password_mismatch = {"error": "passwordMismatch",
                      "status": unauthorized_access}
@@ -166,6 +190,9 @@ invalid_xor_condition = {"error": "missingXorCondition",
 
 invalid_values_required = {"error": "invalidValuesRequired",
                            "status": missing_invalid_parameter}
+
+unallowed_message_send = {"error": "unallowedMessageSend",
+                          "status": processing_failed}
 
 invalids = {
     "phone1": invalid_phone1,
@@ -178,16 +205,20 @@ invalids = {
     "price": invalid_price,
     "bedrooms": invalid_bedrooms,
     "bathrooms": invalid_bathrooms,
-    "sqft": invalid_sqft,
+    "squarefeet": invalid_squarefeet,
     "isPublished": invalid_published,
     "thumbnailImageIndex": invalid_thumbnail_image_index,
     "liked": invalid_liked,
     "filter": invalid_filter_bound,
-    "valuesRequired": invalid_values_required
+    "valuesRequired": invalid_values_required,
+    'images': invalid_images,
+    "longitude": invalid_longitude,
+    "latitude": invalid_latitude,
+    "senderId": invalid_user_id,
+    "phone": invalid_phone
 }
 
 missing = {
-
     "phone1": missing_phone_number,
     "email": missing_email,
     "password": missing_password,
@@ -205,11 +236,16 @@ missing = {
     "price": missing_price,
     "bedrooms": missing_bedrooms,
     "bathrooms": missing_bathrooms,
-    "sqft": missing_sqft,
+    "squarefeet": missing_squarefeet,
     "isPublished": missing_published,
     "thumbnailImageIndex": missing_image_index,
     "images": missing_image,
     "description": missing_description,
     "address": missing_address,
-    "liked": missing_liked
+    "liked": missing_liked,
+    "longitude": missing_longitude,
+    "latitude": missing_latitude,
+    "senderId": missing_senderId,
+    "message": missing_message,
+    "phone": missing_phone_number,
 }

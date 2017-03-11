@@ -15,14 +15,17 @@ let assert = require('assert-plus');
 })
 export class BrowsePage {
     listings: Listing[];
+    filter: Filter;
+
+    voteDelay: number = 1000;
+    canVote: boolean = true;
 
     constructor(public navCtrl: NavController,
                 public toastCtrl: ToastController,
                 public listingProvider: ListingProvider,
                 public modalCtrl: ModalController,
                 private _logger: Logger,) {
-
-        this.listings = listingProvider.data;
+        this.listings = listingProvider.listings;
     }
 
     /**
@@ -32,9 +35,10 @@ export class BrowsePage {
      * @param index the index of the listing being dragged
      */
     onDrag(event: ItemSliding, index: number){
-        if(event.getOpenAmount() < -100){
+        if(!this.canVote) return;
+        if (event.getOpenAmount() < -100) {
             this.likeListing(index);
-        } else if (event.getOpenAmount() > 100){
+        } else if (event.getOpenAmount() > 100) {
             this.dislikeListing(index);
         }
     }
@@ -48,6 +52,8 @@ export class BrowsePage {
         assert(index > -1 && index < this.listings.length,
             "Index should be within the bounds of available listings");
 
+        this.startVoteTimer();
+
         this._logger.debug("Disliking slide at index " + index);
 
         this.toastCtrl.create({
@@ -56,7 +62,7 @@ export class BrowsePage {
             position: 'top'
         }).present();
 
-        delete this.listings[index];
+        this.listings.splice(index, 1);
     }
 
     /**
@@ -68,6 +74,8 @@ export class BrowsePage {
         assert(index > -1 && index < this.listings.length,
             "Index should be within the bounds of available listings");
 
+        this.startVoteTimer();
+
         this._logger.debug("Liking slide at index " + index);
 
         this.toastCtrl.create({
@@ -76,7 +84,7 @@ export class BrowsePage {
             position: 'top'
         }).present();
 
-        delete this.listings[index];
+        this.listings.splice(index, 1);
     }
 
     /**
@@ -84,14 +92,16 @@ export class BrowsePage {
      */
     goToFilters(): void{
         this._logger.debug("Filters was clicked");
+        let me = this;
 
-        let filterModal = this.modalCtrl.create(FilterPage, { filter: null });
+        let filterModal = this.modalCtrl.create(FilterPage, { filter: this.filter });
 
         filterModal.onDidDismiss((data: Filter) => {
             if(!data){
                 this._logger.debug("Filter Modal was cancelled");
             } else {
                 this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
+                me.filter = data;
             }
         });
 
@@ -107,5 +117,16 @@ export class BrowsePage {
             "Index should be within the bounds of available listings");
 
         this.navCtrl.push(DetailPage, {data: this.listings, cursor: index});
+    }
+
+    /**
+     * Set a delay for voting
+     */
+    startVoteTimer(): void{
+        let me = this;
+        this.canVote = false;
+        setTimeout(function(){
+            me.canVote = true;
+        }, this.voteDelay);
     }
 }

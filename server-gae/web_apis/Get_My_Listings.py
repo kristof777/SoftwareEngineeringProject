@@ -25,13 +25,9 @@ class GetMyListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['userId']
+        error_keys = ['userId', 'authToken']
 
-        # check if there's any missing field, if so, just return to the user what all is missing
         errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
@@ -54,6 +50,16 @@ class GetMyListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, not_authorized)
             return
 
+        # Check if it is the valid user
+        valid_user = user.validate_token(int(values["userId"]),
+                                         "auth",
+                                         values["authToken"])
+        if not valid_user:
+            write_error_to_response(self.response, {not_authorized['error']:
+                                                        "not authorized to get my listings"},
+                                    not_authorized['status'])
+            return
+
         owner_id = int(values['userId'])
 
         my_listings = Listing.query(Listing.userId == owner_id).fetch()
@@ -64,7 +70,7 @@ class GetMyListing(webapp2.RequestHandler):
                 'listingId': listing.listingId,
                 'userId': listing.userId,
                 'bedrooms': listing.bedrooms,
-                'sqft': listing.sqft,
+                'squarefeet': listing.squarefeet,
                 'bathrooms': listing.bathrooms,
                 'price': listing.price,
                 'description': listing.description,
@@ -72,9 +78,11 @@ class GetMyListing(webapp2.RequestHandler):
                 'province': listing.province,
                 'city': listing.city,
                 'address': listing.address,
+                'longitude': listing.longitude,
+                'latitude': listing.latitude,
                 'images': listing.images,
                 'thumbnailImageIndex': listing.thumbnailImageIndex
             }
             returned_array.append(template_values)
 
-        write_success_to_response(self.response, {"myListings": returned_array})
+        write_success_to_response(self.response, {"listings": returned_array})

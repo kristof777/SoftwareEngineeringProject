@@ -1,11 +1,20 @@
-from extras.utils import *
 import sys
-from models import User
+from extras.utils import *
+from models.Listing import Listing
+from models.Message import Message
+from models.User import User
 sys.path.append("../")
-from extras.Base_Handler import BaseHandler
 
 
-class SignOut(BaseHandler):
+class GetMessages(webapp2.RequestHandler):
+    """
+     Class used to handle get and post.
+     Get:  do nothing
+     Post:
+         @pre-cond: Expecting keys to be userId
+         @post-cond: all the messages that sent to me
+     """
+
     def options(self, *args, **kwargs):
         self.response.headers['Access-Control-Allow-Origin'] = '*'
         self.response.headers[
@@ -14,15 +23,13 @@ class SignOut(BaseHandler):
             'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
-        pass
+        self.response.out.write()
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         error_keys = ['userId', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
 
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
+        errors, values = keys_missing(error_keys, self.request.POST)
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
@@ -51,9 +58,40 @@ class SignOut(BaseHandler):
                                          values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized"},
+                                                        "not authorized to get my messages"},
                                     not_authorized['status'])
             return
 
-        self.auth.unset_session()
-        write_success_to_response(self.response, {})
+        user_id = int(values['userId'])
+        my_messages = Message.query(Message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

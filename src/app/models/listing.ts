@@ -1,9 +1,8 @@
-import {Location} from "./location";
+import {Province} from "./province";
 
 export class Listing {
     public listingId: number;
     public listerId: number;
-    public location: Location;
     public bedrooms: number;
     public bathrooms: number;
     public squarefeet: number;
@@ -14,12 +13,18 @@ export class Listing {
     public modifiedDate: string;
     public images: string[];
 
+    public province: Province;
+    public city: string;
+    public address: string;
+    public postalCode: string;
+    public longitude: number;
+    public latitude: number;
+
     /**
      * Creates a listing
      *
      * @param listingId     id of the listing
      * @param listerId      id of the user who listed this listing
-     * @param location      the province and city
      * @param bedrooms      the amount of bedrooms
      * @param bathrooms     the amount of bathrooms
      * @param squarefeet    the square feet
@@ -29,14 +34,20 @@ export class Listing {
      * @param createdDate   the date this listing was created
      * @param modifiedDate  the last time this listing was modified
      * @param images        an array of images in byte64
+     * @param province      the province of the listing
+     * @param city          the city of the listing
+     * @param address       the address of the listing
+     * @param postalCode    the postal code of the listing
+     * @param longitude     the longitude of the listing
+     * @param latitude      the latitude of the listing
      */
-    constructor(listingId: number, listerId: number, location: Location, bedrooms: number,
+    constructor(listingId: number, listerId: number, bedrooms: number,
                 bathrooms: number, squarefeet: number, price: number, description: string,
                 isPublished: boolean, createdDate: string, modifiedDate: string,
-                images: string[]) {
+                images: string[], province: Province, city: string, address: string,
+                postalCode: string, longitude: number, latitude: number) {
         this.listingId = listingId;
         this.listerId = listerId;
-        this.location = location;
         this.bedrooms = bedrooms;
         this.bathrooms = bathrooms;
         this.squarefeet = squarefeet;
@@ -46,5 +57,12 @@ export class Listing {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.images = images;
+
+        this.province = province;
+        this.city = city;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 }

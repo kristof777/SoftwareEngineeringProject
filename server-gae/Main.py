@@ -34,7 +34,7 @@ from web_apis.Create_Listing import *
 from web_apis.Get_My_Listings import *
 from web_apis.Like_Dislike_Listing import *
 from web_apis.Edit_Listing import *
-from web_apis.Get_Favorite_Listings import *
+from web_apis.Get_Favourites import *
 from web_apis.Change_Password import *
 from web_apis.Sign_In_With_Token import *
 from models.User import User
@@ -42,6 +42,8 @@ from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
 from web_apis.Get_Listings import GetListing
 from web_apis.Confirm_Email import VerificationHandler
+from web_apis.Delete_Listing import *
+from web_apis.Contact_Seller import ContactSeller
 # from web_apis.SignInWithToken import *
 
 # configuration
@@ -73,9 +75,11 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/like', LikeDislikeListing),
     webapp2.Route('/editListing', EditListing),
     webapp2.Route('/getFavourites', GetFavourites),
-    webapp2.Route('/getMyListing', GetMyListing),
+    webapp2.Route('/getMyListings', GetMyListing),
     webapp2.Route('/editUser', EditUser),
-    webapp2.Route('/getListings', GetListing)
+    webapp2.Route('/getListings', GetListing),
+    webapp2.Route('/deleteListing', DeleteListing),
+    webapp2.Route('/contactSeller', ContactSeller)
 
 
     # webapp2.Route('/showlistings', ShowListings)
