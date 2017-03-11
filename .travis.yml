@@ -9,6 +9,7 @@ env:
   PATH/home/travis/.nvm/versions/node/v6.9.4/lib/node_modules/jasmine/bin:${PATH}
   PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine
   PYTHONPATH=${PYTHONPATH}:${TRAVIS_HOME}
+  PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2
   BUILD_TYPE=test
   RELEASE_ID=ID4
 
