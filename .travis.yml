@@ -32,10 +32,10 @@ node_js:
 - 6.9.4
 
 matrix:
-  #include:
-  #- os: android
-  #- os: osx
-  #  osx_image: xcode7 
+  include:
+  - os: android
+  - os: osx
+    osx_image: xcode7 
 
 addons:
   firefox: "47.0.1"
@@ -64,12 +64,12 @@ script:
   
   
 after_success:
-  #- "./scripts/system_info.sh"
-  #- "./scripts/update_server.sh"
-  #- "./scripts/stage.sh"
+  - "./scripts/system_info.sh"
+  - "./scripts/update_server.sh"
+  - "./scripts/stage.sh"
   
 after_failure:
-  #- "./scripts/system_info.sh"
+  - "./scripts/system_info.sh"
   
 deploy:
  provider: script
