@@ -11,7 +11,7 @@ env:
   PYTHONPATH=${PYTHONPATH}:${TRAVIS_HOME}
   PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webapp2-2.5.2
   PYTHONPATH=${PYHTONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3
-  PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/google/appengine/dist27
+  PYTHONPATH=${PYTHONPATH}:/usr/lib/google-cloud-sdk/platform/google_appengine/google/appengine/dist
   BUILD_TYPE=test
   RELEASE_ID=ID4
 
