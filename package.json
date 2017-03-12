@@ -43,6 +43,7 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-camera",
     "cordova-sqlite-storage",
+    "cordova-plugin-facebook4",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
