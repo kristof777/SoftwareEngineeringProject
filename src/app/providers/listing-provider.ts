@@ -22,13 +22,11 @@ export class ListingProvider {
     /**
      * Add a listing to the database
      */
-    addListing(newListing: Listing){
+    addListing(newListing: Listing): any{
         assert.object(newListing, "Received a null listing");
 
-        this._logger.error("ListingProvider.addListing is not implemented.");
+        return this.kasperService.createListings(newListing);
     }
-
-    addListingCallback(data: any){}
 
     /**
      * Edit an existing listing in the database

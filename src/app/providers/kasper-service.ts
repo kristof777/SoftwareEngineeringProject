@@ -248,9 +248,11 @@ export class KasperService {
         body.append('city', listing.city);
         body.append('address', listing.address);
         body.append('price', listing.price);
-        body.append('sqft', listing.squarefeet);
+        body.append('squarefeet', listing.squarefeet);
         body.append('bedrooms', listing.bedrooms);
         body.append('bathrooms', listing.bathrooms);
+        body.append('longitude', 0.0);
+        body.append('latitude', 0.0);
         body.append('description', listing.description);
         body.append('images', JSON.stringify(listing.images));
         body.append('thumbnailImageIndex', 0);
@@ -481,10 +483,13 @@ export class KasperService {
         return result;
     }
 
-    handleError(key: any){
-        assert.string(KasperService.errorMessages['signIn'][key], "Unhandled error response: " + key);
+    handleError(route: string, key: any){
+        if(!KasperService.errorMessages[route][key]) {
+            this._logger.error("Unhandled error : [" + route + ", " + JSON.stringify(key) + "]");
+            return;
+        }
 
-        let message: string = KasperService.errorMessages['signIn'][key];
+        let message: string = KasperService.errorMessages[route][key];
 
         this.alertCtrl.create({
             title: "Oops...",

@@ -65,4 +65,9 @@ export class Listing {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
+    static emptyListing(): Listing{
+        return new Listing(-1, -1, 0, 0, 0, 0, "", false, "0000-00-00", "0000-00-00", [],
+            Province.SK, "", "", "", 0.0, 0.0);
+    }
 }
