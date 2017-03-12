@@ -194,6 +194,18 @@ invalid_values_required = {"error": "invalidValuesRequired",
 unallowed_message_send = {"error": "unallowedMessageSend",
                           "status": processing_failed}
 
+invalid_message_id = {"error": "invalidMessageId",
+                      "status": missing_invalid_parameter}
+
+missing_message_id = {"error": "missingMessageId",
+                      "status": missing_invalid_parameter}
+
+missing_read_del = {"error": "missingReadDel",
+                   "status": missing_invalid_parameter}
+
+invalid_read_del = {"error": "invalidReadDel",
+                   "status": missing_invalid_parameter}
+
 invalids = {
     "phone1": invalid_phone1,
     "phone2": invalid_phone2,
@@ -215,7 +227,9 @@ invalids = {
     "longitude": invalid_longitude,
     "latitude": invalid_latitude,
     "senderId": invalid_user_id,
-    "phone": invalid_phone
+    "phone": invalid_phone,
+    "messageId": invalid_message_id,
+    "readDel": missing_read_del
 }
 
 missing = {
@@ -248,4 +262,6 @@ missing = {
     "senderId": missing_senderId,
     "message": missing_message,
     "phone": missing_phone_number,
+    "readDel": missing_read_del,
+    "messageId": missing_message_id
 }
