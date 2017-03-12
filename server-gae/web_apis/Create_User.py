@@ -1,6 +1,7 @@
 from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
 from extras.utils import *
+from models.FB import FBLogin
 
 
 class CreateUser(BaseHandler):
@@ -64,7 +65,6 @@ class CreateUser(BaseHandler):
                                     missing_invalid_parameter)
 
             return
-
         values['province'] = scale_province(str(values['province']))
         unique_properties = ['email']
         user_data = self.user_model.create_user(
@@ -75,7 +75,6 @@ class CreateUser(BaseHandler):
             province=values['province'], city=values['city'],
             last_name=last_name,
             verified=False)
-
         # user_data[0] contains True if user was created successfully
         if not user_data[0]:
             error_json = json.dumps({email_alreadyExists['error']
@@ -88,24 +87,28 @@ class CreateUser(BaseHandler):
         # user_data[1] contains Token if user was created successfully
         user = user_data[1]
         user_id = user.get_id()
-        signup_token = self.user_model.create_signup_token(user_id)
         token = self.user_model.create_auth_token(user_id)
+        if "fbId" in values:
+            fb_field = FBLogin(user_id= int(user_id), fb_id = int(values["fbId"]))
+            fb_field.put()
+        else:
+            signup_token = self.user_model.create_signup_token(user_id)
 
-        self.auth.get_user_by_token(user_id, token, remember=True,
-                                    save_session=True)
+            self.auth.get_user_by_token(user_id, token, remember=True,
+                                        save_session=True)
 
-        verification_url = self.uri_for('verification', type='v', user_id=user_id,
-                                        signup_token=signup_token, _full=True)
-        message = mail.EmailMessage(
-            sender="karsper@account.com",
-            subject="Your account has been approved")
+            verification_url = self.uri_for('verification', type='v', user_id=
+            user_id, signup_token=signup_token, _full=True)
+            message = mail.EmailMessage(
+                sender="karsper@account.com",
+                subject="Your account has been approved")
 
-        message.to = user.email
-        message.body = """Thank you for creating an account!
-         Please confirm your email address by clicking on the link below:
-         {}
-         """.format(verification_url)
-        message.send()
+            message.to = user.email
+            message.body = """Thank you for creating an account!
+             Please confirm your email address by clicking on the link below:
+             {}
+             """.format(verification_url)
+            message.send()
 
         write_success_to_response(self.response, {'token': token,
                                                   "userId": user_id})

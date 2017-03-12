@@ -45,6 +45,7 @@ from web_apis.Confirm_Email import VerificationHandler
 from web_apis.Delete_Listing import *
 from web_apis.Contact_Seller import ContactSeller
 from web_apis.Edit_Message import EditMessage
+from web_apis.FB_Login import FacebookLogin
 
 # configuration
 config = {
@@ -80,7 +81,8 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/getListings', GetListing),
     webapp2.Route('/deleteListing', DeleteListing),
     webapp2.Route('/contactSeller', ContactSeller),
-    webapp2.Route('/editMessage', EditMessage)
+    webapp2.Route('/editMessage', EditMessage),
+    webapp2.Route('/fbLogin', FacebookLogin),
 
 
 
