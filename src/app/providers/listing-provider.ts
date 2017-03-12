@@ -95,12 +95,13 @@ export class ListingProvider {
     /**
      * Get the full information about a listing
      *
-     * @param listingID
+     * @param filter            the filter to apply to the search
+     * @param requiredFields    the fields we want returned from the server
+     * @param limit             the max number of returned results
      * @return a listing
      */
-    getListings() : void{
-        this._logger.error("ListingProvider.getListing is not implemented.");
-        return null;
+    getListings(filter: Filter, requiredFields: string[], limit: number) : any{
+        return this.kasperService.getListings(filter, requiredFields, limit);
     }
 
     /**

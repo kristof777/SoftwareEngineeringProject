@@ -26,6 +26,22 @@ export class BrowsePage {
                 public modalCtrl: ModalController,
                 private _logger: Logger,) {
         this.listings = listingProvider.listings;
+
+        this.filter = new Filter(null, {}, {}, {}, {});
+    }
+
+    ionViewDidLoad(){
+        this.loadListings();
+    }
+
+    loadListings(): void{
+        let me = this;
+
+        this.listingProvider.getListings(this.filter, ['price', 'images'], 5).subscribe(data => {
+            me.listings = data['listings'];
+        }, error => {
+            this._logger.error(JSON.stringify(error));
+        });
     }
 
     /**
@@ -102,6 +118,7 @@ export class BrowsePage {
             } else {
                 this._logger.debug("Filter Modal Data: " + JSON.stringify(data));
                 me.filter = data;
+                this.loadListings();
             }
         });
 

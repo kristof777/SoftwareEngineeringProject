@@ -12,7 +12,7 @@
         <!--List of Provinces-->
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province" multiple="true" id="FlProv">
+            <ion-select [(ngModel)]="province" id="FlProv">
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
                 <ion-option value="MB">Manitoba</ion-option>
@@ -43,11 +43,11 @@
         <!--Square Feet Range-->
         <ion-item>
             <ion-label stacked>Square Feet</ion-label>
-            <ion-range [(ngModel)]="squareFeet" id="FlSqft" dualKnobs="true" min="{{_squareFeetMin}}" max="{{_squareFeetMax}}" pin="true">
-                <ion-label *ngIf="squareFeet?.lower == 100" range-left>No Min</ion-label>
-                <ion-label *ngIf="squareFeet?.lower != 100" range-left>100</ion-label>
-                <ion-label *ngIf="squareFeet?.upper != 10000" range-right>10000</ion-label>
-                <ion-label *ngIf="squareFeet?.upper == 10000" range-right>No Max</ion-label>
+            <ion-range [(ngModel)]="squarefeet" id="FlSqft" dualKnobs="true" min="{{_squarefeetMin}}" max="{{_squarefeetMax}}" pin="true">
+                <ion-label *ngIf="squarefeet?.lower == 100" range-left>No Min</ion-label>
+                <ion-label *ngIf="squarefeet?.lower != 100" range-left>100</ion-label>
+                <ion-label *ngIf="squarefeet?.upper != 10000" range-right>10000</ion-label>
+                <ion-label *ngIf="squarefeet?.upper == 10000" range-right>No Max</ion-label>
             </ion-range>
         </ion-item>
 

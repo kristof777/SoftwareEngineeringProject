@@ -206,7 +206,7 @@ export class KasperService {
     getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
         let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('filter', JSON.stringify(filter));
+        body.append('filter', filter.toJson());
         body.append('valuesRequired', JSON.stringify(valuesRequired));
         body.append('maxLimit', maxLimit);
 
