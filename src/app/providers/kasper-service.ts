@@ -402,14 +402,14 @@ export class KasperService {
         result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
 
         result['confirmEmail'] = [];
-        result['confirmEmail']['missingUserId'] = "";
-        result['confirmEmail']['invalidUserId'] = "";
+        result['confirmEmail']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['confirmEmail']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['createUser'] = [];
         result['createUser']['emailAlreadyExists'] = "Looks like this email is already in our system";
         result['createUser']['passwordMismatch'] = "Looks like the entered passwords don't match ";
         result['createUser']['passwordNotStrong'] = "Please make sure your password is at least 8 characters long, and has a number and both lower and upper-case characters ";
-        result['createUser']['missingEmail'] = "Looks like your email adress is missing";
+        result['createUser']['missingEmail'] = "Looks like your email address is missing";
         result['createUser']['missingPassword'] = "Please enter your password";
         result['createUser']['missingConfirmedPassword'] = "Please confirm your password";
         result['createUser']['missingFirstName'] = "Please enter your first name";
@@ -426,57 +426,57 @@ export class KasperService {
         result['editUser']['passwordCantBeChanged'] = "Please use the change password button to change your password";
 
         result['changePassword'] = [];
-        result['changePassword']['missingOldPassword'] = "Please eneter your current password";
-        result['changePassword']['missingNewPassword'] = "Please eneter your new password";
+        result['changePassword']['missingOldPassword'] = "Please enter your current password";
+        result['changePassword']['missingNewPassword'] = "Please enter your new password";
         result['changePassword']['missingNewPasswordConfirmed'] = "Please confirm your now password";
         result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
         result['changePassword']['invalidUserId'] = "Setting new password failed.";
         result['changePassword']['missingUserId'] = "Setting new password failed.";
         result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
         result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
-        result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you enetered is the same as your surrent password. Please choose a new password.";
+        result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you entered is the same as your current password. Please choose a new password.";
 
         result['signOut'] = [];
-        result['signOut']['invalidUserId'] = "";
+        result['signOut']['invalidUserId'] = "Looks like you are already signed out";
 
         result['getFavourites'] = [];
-        result['getFavourites']['noFavouriteListing'] = "";
-        result['getFavourites']['invalidUserId'] = "";
-        result['getFavourites']['missingUserId'] = "";
+        result['getFavourites']['noFavouriteListing'] = "You don't have anything favourited. To add things to favourites, swipe right on houses on the main page. ";
+        result['getFavourites']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['getFavourites']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['getMyListings'] = [];
-        result['getMyListings']['invalidUserId'] = "";
-        result['getMyListings']['missingUserId'] = "";
+        result['getMyListings']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['getMyListings']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['likeDislikeListing'] = [];
-        result['likeDislikeListing']['invalidListingId'] = "";
-        result['likeDislikeListing']['invalidUserId'] = "";
-        result['likeDislikeListing']['missingUserId'] = "";
-        result['likeDislikeListing']['missingListingId'] = "";
-        result['likeDislikeListing']['missingLiked'] = "";
+        result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingLiked'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['getListings'] = [];
-        result['getListings']['noListingsLeft'] = "";
+        result['getListings']['noListingsLeft'] = "Looks like you've hit the end of your search. To see more listings, adjust your filter settings.";
 
         result['createListing'] = [];
-        result['createListing']['invalidCity'] = "";
-        result['createListing']['invalidProvince'] = "";
-        result['createListing']['invalidAddress'] = "";
+        result['createListing']['invalidCity'] = "Looks like the city you entered was not recognized";
+        result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
+        result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
 
         result['editListing'] = [];
-        result['editListing']['nothingRequestedToChange'] = "";
-        result['editListing']['unrecognizedKey'] = "";
-        result['editListing']['invalidUserId'] = "";
-        result['editListing']['missingUserId'] = "";
-        result['editListing']['notAuthorized'] = "";
-        result['editListing']['missingListingId'] = "";
+        result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
+        result['editListing']['unrecognizedKey'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['notAuthorized'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['contactSeller'] = [];
-        result['contactSeller']['missingListingId'] = "";
-        result['contactSeller']['missingUserId'] = "";
-        result['contactSeller']['invalidUserId'] = "";
-        result['contactSeller']['invalidListingId'] = "";
-        result['contactSeller']['userEmailNotConfirmed'] = "";
+        result['contactSeller']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['userEmailNotConfirmed'] = "You need to confirm your email before contacting a seller.";
 
         return result;
     }

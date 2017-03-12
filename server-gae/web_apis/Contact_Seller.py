@@ -65,8 +65,10 @@ class ContactSeller(BaseHandler):
                           listingId=int(values['listingId']),
                           message=values['message'],
                           phone=values['phone'],
-                          email=values['email'])
+                          email=values['email'],
+                          receiverId = int(listing.userId)
+                          )
         message.put()
-        message.received = True
+        message.messageId = message.key.id()
         message.put()
         write_success_to_response(self.response, {})

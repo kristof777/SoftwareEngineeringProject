@@ -25,7 +25,7 @@ province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
 """
 listing_keys contains all the valid keys for a listing
 """
-listing_keys = ["squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
+listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex", "latitude", "longitude", "authToken"]
 
@@ -466,6 +466,11 @@ def is_existing_and_non_empty(existing_string, values):
     return existing_string in values and not is_empty(values[existing_string])
 
 
+def is_valid_read_del(read_del):
+    if read_del is None:
+        return False
+    return read_del in ["r", "d", "R", "D" ]
+
 """
 This dictionary is used to make checking for valid keys simpler. It maps the key
 to it's validator.
@@ -493,7 +498,9 @@ valid_check = {
     "upper": is_valid_integer,
     "images": is_valid_images,
     "latitude": is_valid_latitude,
-    "longitude": is_valid_longitude
+    "longitude": is_valid_longitude,
+    "messageId": is_valid_integer,
+    "readDel": is_valid_read_del
 }
 
 
@@ -564,4 +571,6 @@ def get_response_from_post(Main, post, api):
             return json_body, response.status_int
     return None, response.status_int
 
+def get_keys_from_values(values):
+    return [str(x) for x in values]
 

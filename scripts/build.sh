@@ -23,7 +23,7 @@ ios_build(){
 # on this platform.
 browser_build(){
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
-    ./scripts/test_script.sh
+    ./scripts/smoke_test.sh
     # sudo du / | grep "geckodriver"
   fi
 }
