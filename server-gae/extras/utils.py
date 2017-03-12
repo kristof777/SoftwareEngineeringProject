@@ -500,7 +500,8 @@ valid_check = {
     "latitude": is_valid_latitude,
     "longitude": is_valid_longitude,
     "messageId": is_valid_integer,
-    "readDel": is_valid_read_del
+    "readDel": is_valid_read_del,
+    "fbId": is_valid_integer
 }
 
 

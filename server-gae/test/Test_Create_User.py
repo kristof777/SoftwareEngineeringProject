@@ -8,7 +8,9 @@ from extras.Error_Code import *
 import Main
 import webapp2
 from models.User import User
+from models.FB_Login import FBLogin
 from extras.utils import *
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -107,7 +109,7 @@ class TestCreateUser(unittest.TestCase):
         error_keys = [str(x) for x in response_body]
         self.assertTrue(are_two_lists_same(errors_expected, error_keys))
 
-    def test_create_user(self):
+    def test_create_user_without_fb(self):
         input = create_random_user()
         response_body, status_int = get_response_from_post(Main, input,
                                                            self.api)
@@ -121,6 +123,33 @@ class TestCreateUser(unittest.TestCase):
         self.assertEquals(user_saved.email,input["email"])
         self.assertEquals(user_saved.phone1,input["phone1"])
         self.assertEquals(user_saved.province,input["province"])
+
+    def test_create_user_with_fb(self):
+        input = create_random_user()
+        input["fbId"] = "1212312398"
+        response_body, status_int = get_response_from_post(Main, input,
+                                                           self.api)
+        self.assertEquals(status_int, success)
+        self.assertTrue("token" in response_body)
+        self.assertTrue("userId" in response_body)
+        user_saved = User.get_by_id(int(response_body["userId"]))
+        self.assertEquals(user_saved.first_name,input["firstName"])
+        self.assertEquals(user_saved.last_name,input["lastName"])
+        self.assertEquals(user_saved.city,input["city"])
+        self.assertEquals(user_saved.email,input["email"])
+        self.assertEquals(user_saved.phone1,input["phone1"])
+        self.assertEquals(user_saved.province,input["province"])
+        fb_e_id = FBLogin.query().fetch(keys_only=True)[0].integer_id()
+        fb_e = FBLogin.get_by_id(fb_e_id)
+        self.assertEquals(fb_e.user_id,int(response_body["userId"]))
+        self.assertEquals(fb_e.fb_id, int(input["fbId"]))
+
+
+
+
+
+
+
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
