@@ -29,7 +29,7 @@ class EditListing(webapp2.RequestHandler):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
 
         # check if there's any missing field, if so, just return to the user what all is missing
         error_keys = ['changeValues', 'userId', 'listingId', 'authToken']

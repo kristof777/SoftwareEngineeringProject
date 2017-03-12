@@ -24,7 +24,7 @@ class SignInWithToken(BaseHandler):
         self._serve_page()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         message = {}
         token = self.request.POST.get('token')
         if token is None:

@@ -574,3 +574,6 @@ def get_response_from_post(Main, post, api):
 def get_keys_from_values(values):
     return [str(x) for x in values]
 
+
+def setup_post(response):
+    response.headers.add_header('Access-Control-Allow-Origin', '*')

@@ -31,11 +31,10 @@ class LikeDislikeListing(webapp2.RequestHandler):
             'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 
     def get(self):
-
         self.render_template('../webpages/Like_dislike_listing.html')
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
 
         error_keys = ['userId', 'listingId', 'liked', 'authToken']
         errors, values = keys_missing(error_keys, self.request.POST)

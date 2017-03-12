@@ -39,7 +39,7 @@ class CreateListing(webapp2.RequestHandler):
         self.render_template('../webpages/Create_Listing.html')
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         error_keys = listing_keys
 
         errors, values = keys_missing(error_keys, self.request.POST)
