@@ -5,6 +5,8 @@ import {
     NavController, ToastController, ViewController, LoadingController,
     Loading, AlertController
 } from "ionic-angular";
+
+import { Facebook, Toast } from 'ionic-native';
 import {SignUpPage} from "../sign-up/sign-up";
 import {KasperService} from "../../app/providers/kasper-service";
 import {User} from "../../app/models/user";
@@ -18,6 +20,7 @@ let assert = require('assert-plus');
     providers: [KasperService]
 })
 export class SignInPage {
+    FB_APP_ID: number = 623532211163253;
     loginForm: FormGroup;
     private emailAttempted: boolean = false;
 
@@ -29,6 +32,8 @@ export class SignInPage {
                 public loadingCtrl: LoadingController,
                 public formBuilder: FormBuilder,
                 public kasperService: KasperService) {
+        Facebook.browserInit(this.FB_APP_ID, "v2.8");
+        console.log("initialized");
         this.loginForm = formBuilder.group({
             email: ['', Validators.compose([Validators.pattern("^(.+)@(.+){2,}\.(.+){2,}"), Validators.required])],
             password: ['', Validators.compose([Validators.required])],
@@ -80,7 +85,31 @@ export class SignInPage {
         }
     }
 
-    facebookLogin(): void{}
+    facebookLogin(): void{
+        let permissions = new Array();
+        let nav = this.navCtrl;
+    //the permissions your facebook app needs from the user
+    permissions = ["public_profile", "email"];
+    Facebook.login(permissions)
+    .then(function(response){
+      let userId = response.authResponse.userID;
+      let params = new Array();
+
+      //Getting name and gender properties
+      Facebook.api("/me?fields=first_name,last_name,email", params)
+      .then(function(user) {
+          console.log("Printing user stuff");
+          console.log(user);
+          console.log(userId);
+          console.log(user.name);
+          console.log(user.gender);
+
+      })
+    }, function(error){
+        Toast.show("I'm a good toast", '5000', 'center');
+        console.log(error);
+    });
+    }
 
     /**
      * Handle data from the login request
