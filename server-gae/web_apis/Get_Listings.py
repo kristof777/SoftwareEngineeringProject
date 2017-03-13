@@ -31,7 +31,7 @@ class GetListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         # every field (userId, valuesRequired, filter) is optional
         errors, values = keys_missing({}, self.request.POST)
-
+        print self.request.POST
         invalid = key_validation(values)
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid, missing_invalid_parameter)
@@ -267,6 +267,7 @@ def get_listingIds_with_numeric_bounds():
                                            Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'])
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
+    print 'bedrooms_keys_len is ' + bedrooms_keys_len
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
@@ -274,6 +275,7 @@ def get_listingIds_with_numeric_bounds():
                                         Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'])
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
+    print 'sqft_keys_len is ' + sqft_keys_len
 
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
