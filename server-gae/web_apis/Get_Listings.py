@@ -133,11 +133,16 @@ class GetListing(webapp2.RequestHandler):
         ##############################################################
         # write_success_to_response(self.response, listing_info_list)
         ##############################################################
+        sqft_keys_list = []
+        valid_bd_sqft_keys_list = []
+        for sqft in sqft_keys:
+            sqft_keys_list.append(sqft.id())
+        for valid in valid_bd_sqft_keys:
+            valid_bd_sqft_keys_list.append(valid.id())
         write_success_to_response(self.response, {
-            "sqft_keys ": sqft_keys,
-            "valid_bd_sqft_keys ": valid_bd_sqft_keys
+            "sqft_keys ": sqft_keys_list,
+            "valid_bd_sqft_keys ": valid_bd_sqft_keys_list
         })
-
 
 
 def create_returned_values_dict(listing_object, values_dict):
