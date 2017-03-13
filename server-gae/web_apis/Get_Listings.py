@@ -67,7 +67,7 @@ class GetListing(webapp2.RequestHandler):
             non_numeric_dict = decode_filter(values["filter"])
 
         # Now, send queries with all numeric bounds
-        final_valid_keys, bedrooms_keys_len, sqft_keys_len, valid_bd_sqft_keys = get_listingIds_with_numeric_bounds()
+        final_valid_keys, sqft_keys, valid_bd_sqft_keys = get_listingIds_with_numeric_bounds()
 
         # check un_numeric_fields
         returned_listing_ids = []
@@ -134,9 +134,8 @@ class GetListing(webapp2.RequestHandler):
         # write_success_to_response(self.response, listing_info_list)
         ##############################################################
         write_success_to_response(self.response, {
-            "bedrooms_keys_len ": str(bedrooms_keys_len),
-            "sqft_keys_len ": str(sqft_keys_len),
-            "valid_bd_sqft_keys_len": str(len(valid_bd_sqft_keys))
+            "sqft_keys ": sqft_keys,
+            "valid_bd_sqft_keys ": valid_bd_sqft_keys
         })
 
 
@@ -316,7 +315,7 @@ def get_listingIds_with_numeric_bounds():
     final_valid_keys = list(set(valid_bd_sqft_keys) & set(valid_bt_pr_keys))
     assert len(final_valid_keys) == min(bd_sqft_keys_len, bt_pr_keys_len)
 
-    return final_valid_keys, bedrooms_keys_len, sqft_keys_len, valid_bd_sqft_keys
+    return final_valid_keys, sqft_keys, valid_bd_sqft_keys
 
 
 def filter_favorite_listings(user_id, listing_ids):
