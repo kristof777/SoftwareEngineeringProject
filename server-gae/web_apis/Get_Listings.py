@@ -67,7 +67,7 @@ class GetListing(webapp2.RequestHandler):
             non_numeric_dict = decode_filter(values["filter"])
 
         # Now, send queries with all numeric bounds
-        final_valid_keys, sqft_keys, valid_bd_sqft_keys = get_listingIds_with_numeric_bounds()
+        final_valid_keys = get_listingIds_with_numeric_bounds()
 
         # check un_numeric_fields
         returned_listing_ids = []
@@ -130,19 +130,17 @@ class GetListing(webapp2.RequestHandler):
                 listing_info_list.append(create_returned_values_dict(listing_object, values))
 
         Listing.reset_filter()
-        ##############################################################
-        # write_success_to_response(self.response, listing_info_list)
-        ##############################################################
-        sqft_keys_list = []
-        valid_bd_sqft_keys_list = []
-        for sqft in sqft_keys:
-            sqft_keys_list.append(sqft.id())
-        for valid in valid_bd_sqft_keys:
-            valid_bd_sqft_keys_list.append(valid.id())
-        write_success_to_response(self.response, {
-            "sqft_keys ": sqft_keys_list,
-            "valid_bd_sqft_keys ": valid_bd_sqft_keys_list
-        })
+        write_success_to_response(self.response, listing_info_list)
+        # sqft_keys_list = []
+        # valid_bd_sqft_keys_list = []
+        # for sqft in sqft_keys:
+        #     sqft_keys_list.append(sqft.id())
+        # for valid in valid_bd_sqft_keys:
+        #     valid_bd_sqft_keys_list.append(valid.id())
+        # write_success_to_response(self.response, {
+        #     "sqft_keys ": sqft_keys_list,
+        #     "valid_bd_sqft_keys ": valid_bd_sqft_keys_list
+        # })
 
 
 def create_returned_values_dict(listing_object, values_dict):
@@ -307,20 +305,19 @@ def get_listingIds_with_numeric_bounds():
 
     # Get the common set of the first two key(listingId) sets
     valid_bd_sqft_keys = list(set(bedrooms_keys) & set(sqft_keys))
-    logging.info("valid_bd_sqft_keys_len is " + str(len(valid_bd_sqft_keys)))
-    # assert len(valid_bd_sqft_keys) == min(bedrooms_keys_len, sqft_keys_len)
+    assert len(valid_bd_sqft_keys) <= min(bedrooms_keys_len, sqft_keys_len)
     bd_sqft_keys_len = len(valid_bd_sqft_keys)
 
     # Get the common set of the next two key(listingId) sets
     valid_bt_pr_keys = list(set(price_keys) & set(bathrooms_keys))
-    assert len(valid_bt_pr_keys) == min(price_keys_len, bathrooms_keys_len)
+    assert len(valid_bt_pr_keys) <= min(price_keys_len, bathrooms_keys_len)
     bt_pr_keys_len = len(valid_bt_pr_keys)
 
     # Get the common set of the two key(listingId) sets above, this is the final common set we need
     final_valid_keys = list(set(valid_bd_sqft_keys) & set(valid_bt_pr_keys))
-    assert len(final_valid_keys) == min(bd_sqft_keys_len, bt_pr_keys_len)
+    assert len(final_valid_keys) <= min(bd_sqft_keys_len, bt_pr_keys_len)
 
-    return final_valid_keys, sqft_keys, valid_bd_sqft_keys
+    return final_valid_keys
 
 
 def filter_favorite_listings(user_id, listing_ids):
