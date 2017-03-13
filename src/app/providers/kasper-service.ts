@@ -265,13 +265,15 @@ export class KasperService {
     /**
      * Send a request to update a listing
      *
+     * @param listingId     the listingId to edit
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      province, city, address, price, sqft, bedrooms, bathrooms,
      *                      description, images, thumbnailImageIndex, isPublished
      */
-    editListing(changeValues: JSON): any {
+    editListing(listingId: number, changeValues: {}): any {
         let body: FormData = new FormData();
         this.appendAuthentication(body);
+        body.append('listingId', listingId);
         body.append('changeValues', changeValues);
 
         return this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)

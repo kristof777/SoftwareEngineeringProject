@@ -31,12 +31,10 @@ export class ListingProvider {
     /**
      * Edit an existing listing in the database
      */
-    editListing(){
+    editListing(listingId: number, changeValues: {}){
         this._logger.error("ListingProvider.editListing is not implemented.");
-        // this.kasperService.editListing(changeValues, this.editListingCallback);
+        // return this.kasperService.editListing(listingId, changeValues);
     }
-
-    editListingCallback(data: any){}
 
     /**
      * Remove a listing from the database
@@ -50,11 +48,12 @@ export class ListingProvider {
     /**
      * Dislike a listing
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
-    dislike(listingID : number){
-        this._logger.error("ListingProvider.dislike is not implemented.");
-        // this.kasperService.likeDislikeListing(listingID, false);
+    dislike(listingId : number): any{
+        assert.number(listingId, "listingID must be a number.");
+        // this._logger.error("ListingProvider.dislike is not implemented.");
+        this.kasperService.likeDislikeListing(listingId, false);
     }
 
     likeDislikeCallback(){}
@@ -62,11 +61,12 @@ export class ListingProvider {
     /**
      * Add a listing to a users favourites
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
-    addToFavourites(listingID : number){
-        this._logger.error("ListingProvider.addToFavourites is not implemented.");
-        // this.kasperService.likeDislikeListing(listingID, true);
+    addToFavourites(listingId : number): any{
+        assert.number(listingId, "listingID must be a number.");
+        // this._logger.error("ListingProvider.addToFavourites is not implemented.");
+        return this.kasperService.likeDislikeListing(listingId, true);
     }
 
     /**
@@ -74,7 +74,7 @@ export class ListingProvider {
      *
      * @param listingID the id of the listing
      */
-    removeFromFavourites(listingID : number){
+    removeFromFavourites(listingId : number){
         this._logger.error("ListingProvider.removeFromFavourites is not implemented.");
     }
 
@@ -123,19 +123,21 @@ export class ListingProvider {
     /**
      * Publish a listing
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
-    publishListing(listingID : number){
+    publishListing(listingId : number): any{
         this._logger.error("ListingProvider.publishListing is not implemented.");
+        return this.editListing(listingId, {'isPublished': true});
     }
 
     /**
      * Unpublish a listing
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
-    unpublishListing(listingID : number){
+    unpublishListing(listingId : number): any{
         this._logger.error("ListingProvider.unpublishListing is not implemented.");
+        return this.editListing(listingId, {'isPublished': false});
     }
 }
 
