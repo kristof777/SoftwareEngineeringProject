@@ -1,6 +1,6 @@
 describe('Filter Listings',function(){
     let originalTimeout;
-
+    //TODO don't need this boi
     browser.get('/#/ionic-lab');
 
     beforeEach(function () {
@@ -18,7 +18,7 @@ describe('Filter Listings',function(){
 
     //filter options
     let provDrop = element(by.id('FlProv'));
-
+    //TODO Use naming convention
     let priceSliderMin = element(by.id('FlPrice')).element(by.css('#FlPrice > div:nth-child(2) > div:nth-child(3)'));
     let priceSliderMax = element(by.id('FlPrice'));
 
@@ -27,7 +27,7 @@ describe('Filter Listings',function(){
 
     let BedSliderMin = element(by.id('FlBed')).element(by.css('#FlBed > div:nth-child(2) > div:nth-child(13)'));
     let BedSliderMax = element(by.id('FlBed'));
-
+    //TODO fix id names to be all capitalized at first character
     let BathSliderMin = element(by.id('flBath')).element(by.css('#flBath > div:nth-child(2) > div:nth-child(13)'));
     let BathSliderMax = element(by.id('flBath'));
 
@@ -37,7 +37,7 @@ describe('Filter Listings',function(){
 
 
     it('should filter with nothing', function(done){
-
+        //TODO make macro for sleep time
         browser.driver.sleep(500);
         filtersBtn.click();
 
@@ -52,6 +52,8 @@ describe('Filter Listings',function(){
 
     it('should filter then cancel', function (done) {
         //open filters
+        
+        
         browser.driver.sleep(500);
         filtersBtn.click();
 
@@ -111,11 +113,11 @@ describe('Filter Listings',function(){
         let skBtn = element(by.buttonText('Saskatchewan'));
         browser.executeScript("arguments[0].scrollIntoView();", skBtn); //Sask needs to be in view to click
         skBtn.click();
-
+        //TODO fix this name for "okaybtn" consistency
         let okaybtn = element(by.buttonText('OK'));
         okaybtn.click();
         browser.driver.sleep(500);
-
+        // Make the x and y stuff macros
         //select price range from 100k to 1.3Mil
         browser.actions().dragAndDrop(priceSliderMax,{x:70,y:0}).perform();
         browser.actions().dragAndDrop(priceSliderMin,{x:80,y:0}).perform();
