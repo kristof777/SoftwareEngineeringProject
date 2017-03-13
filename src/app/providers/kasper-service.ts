@@ -394,7 +394,7 @@ export class KasperService {
      *
      * @returns {string[][]} an array of api routes, and error keys associated with them
      */
-    initErrors(): string[][]{ // TODO finish these declarations
+    initErrors(): string[][]{
         let result: string[][] = [[]];
 
         result['signIn'] = [];

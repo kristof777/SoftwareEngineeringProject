@@ -44,7 +44,6 @@ export class SignInPage {
         this.navCtrl.push(SignUpPage);
     }
 
-    // TODO make this function block
     /**
      * Attempt to log the user in with the provided information
      */
