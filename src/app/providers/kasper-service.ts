@@ -274,7 +274,7 @@ export class KasperService {
         let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
-        body.append('changeValues', changeValues);
+        body.append('changeValues', JSON.stringify(changeValues));
 
         return this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)
             .map(response => response.json());
