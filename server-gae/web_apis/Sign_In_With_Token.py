@@ -49,7 +49,7 @@ class SignInWithToken(BaseHandler):
         token = self.user_model.create_auth_token(values['userId'])
 
         assert token is not values['authToken']
-        user_dict = {'token': token,
+        user_dict = {'authToken': token,
                      'userId': user.get_id(),
                      'email': user.email,
                      'firstName': user.first_name,

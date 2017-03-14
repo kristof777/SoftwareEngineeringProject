@@ -110,7 +110,7 @@ class CreateUser(BaseHandler):
              """.format(verification_url)
             message.send()
 
-        write_success_to_response(self.response, {'token': token,
+        write_success_to_response(self.response, {'authToken': token,
                                                   "userId": user_id})
 
 

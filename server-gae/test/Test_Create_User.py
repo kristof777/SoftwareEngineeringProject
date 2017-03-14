@@ -114,7 +114,7 @@ class TestCreateUser(unittest.TestCase):
         response_body, status_int = get_response_from_post(Main, input,
                                                            self.api)
         self.assertEquals(status_int, success)
-        self.assertTrue("token" in response_body)
+        self.assertTrue("authToken" in response_body)
         self.assertTrue("userId" in response_body)
         user_saved = User.get_by_id(int(response_body["userId"]))
         self.assertEquals(user_saved.first_name,input["firstName"])
@@ -130,7 +130,7 @@ class TestCreateUser(unittest.TestCase):
         response_body, status_int = get_response_from_post(Main, input,
                                                            self.api)
         self.assertEquals(status_int, success)
-        self.assertTrue("token" in response_body)
+        self.assertTrue("authToken" in response_body)
         self.assertTrue("userId" in response_body)
         user_saved = User.get_by_id(int(response_body["userId"]))
         self.assertEquals(user_saved.first_name,input["firstName"])
