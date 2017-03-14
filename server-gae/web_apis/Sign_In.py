@@ -30,26 +30,17 @@ class SignIn(BaseHandler):
         error_keys = ['email', 'password']
 
         errors, values = keys_missing(error_keys, self.request.POST)
-        message = {}
-        user_email = self.request.POST.get('email')
 
-        # checking for empty fields
-        if user_email is None:
-            message[missing_email['error']] = 'Missing user email'
-        password = self.request.POST.get('password')
-        if password is None:
-            message[missing_password['error']] = 'Missing password'
-
-        if len(message.keys()) > 0:
-            write_error_to_response(self.response, message,
+        if len(errors) > 0:
+            write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
 
-        assert user_email is not None and password is not None
+        assert values['email'] is not None and values['password'] is not None
         try:
             # sign in and return user information.
             user = self.auth.get_user_by_password(
-                user_email.lower(), password, remember=True, save_session=True)
+                (values['email']).lower(), values['password'], remember=True, save_session=True)
 
             user_dict = {'token': user['token'],
                          'userId': user['user_id'],
@@ -64,15 +55,6 @@ class SignIn(BaseHandler):
 
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
-                         user_email, type(e))
+                         values['email'], type(e))
             write_error_to_response(self.response, not_authorized['error'],
                                     not_authorized['status'])
-
-    def _serve_page(self, failed=False):
-        user_email = self.request.get('email')
-        params = {
-            'user_email': user_email,
-            'failed': failed
-        }
-        self.response.write('Failed')
-        self.render_template('../webpages/Sign_In.html', params)
