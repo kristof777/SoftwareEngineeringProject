@@ -77,14 +77,14 @@ export class AddListingPage {
             // Pick image from library
             sourceType: 0,//Camera.PictureSourceType.PHOTOLIBRARY,
             // Dimensions to scale the image to
-            targetWidth: 1280,
-            targetHeight: 720
+            targetWidth: 1280, //make it const in kasper config
+            targetHeight: 720 //make it const in kasper config
         };
 
         Camera.getPicture(options).then((data) => {
             this.images[this.images.length] = data;
         }, (error) => {
-            this._logger.error("An error occurred while selecting an image.");
+            this._logger.error("An error occurred while selecting an image."); // can be one log
             this._logger.error(JSON.stringify(error));
         });
     }
@@ -95,7 +95,7 @@ export class AddListingPage {
             this.listerId,
             this.bedrooms,
             this.bathrooms,
-            this.squarefeet,
+            this.squarefeet, //refactor
             this.price,
             this.description,
             this.isPublished,
@@ -125,10 +125,10 @@ export class AddListingPage {
     }
 
     /**
-     * Save the listing to the device and the server
+     * Save the listing to the server 
      */
     saveWithoutPublishing(){
-        this._logger.error("AddListingPage.saveWithoutPublishing");
+        this._logger.error("AddListingPage.saveWithoutPublishing"); // TODO: shouldnt be a log error
         this.isPublished = false;
         this.saveListing();
     }
@@ -136,6 +136,7 @@ export class AddListingPage {
     /**
      * Set the listing to published
      */
+    //TODO: Remove
     saveAndPublish(){
         this._logger.error("AddListingPage.saveAndPublish is not implemented yet");
         this.isPublished = true;
