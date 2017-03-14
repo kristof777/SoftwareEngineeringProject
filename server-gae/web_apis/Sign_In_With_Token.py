@@ -35,14 +35,22 @@ class SignInWithToken(BaseHandler):
             return
         assert values['authToken'] is not None and values['userId'] is not None
 
-        user = (User.get_by_auth_token(int(values['userId']), values['authToken'], subject='auth'))[0]
-
-        if user is None:
-            write_error_to_response(self.response, not_authorized["error"],
+        if not(values['userId']).isdigit():
+            write_error_to_response(self.response, not_authorized['error'],
                                     not_authorized['status'])
             logging.info(
                 'Sign-in-with-token failed for user %s because of %s',
-                values['userId'])
+                values['userId'], 'invalid userId')
+            return
+
+        user = (User.get_by_auth_token(int(values['userId']), values['authToken'], subject='auth'))[0]
+
+        if user is None:
+            write_error_to_response(self.response, not_authorized['error'],
+                                    not_authorized['status'])
+            logging.info(
+                'Sign-in-with-token failed for user %s because of %s',
+                values['userId'], 'invalid token')
             return
 
         self.user_model.delete_auth_token(values['userId'], values['authToken'])
