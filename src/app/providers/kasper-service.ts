@@ -311,6 +311,7 @@ export class KasperService {
      * Appends required information for all calls
      */
     appendAuthentication(body: FormData): void{
+        if(!this.loginService.isLoggedIn()) return;
         body.append('userId', this.loginService.getUserId());
         body.append('authToken', this.loginService.getToken());
     }
