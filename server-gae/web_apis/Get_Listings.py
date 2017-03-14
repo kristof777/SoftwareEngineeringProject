@@ -33,7 +33,6 @@ class GetListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         # every field (userId, valuesRequired, filter) is optional
         errors, values = keys_missing({}, self.request.POST)
-        print self.request.POST
         invalid = key_validation(values)
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid, missing_invalid_parameter)
@@ -131,16 +130,6 @@ class GetListing(webapp2.RequestHandler):
 
         Listing.reset_filter()
         write_success_to_response(self.response, listing_info_list)
-        # sqft_keys_list = []
-        # valid_bd_sqft_keys_list = []
-        # for sqft in sqft_keys:
-        #     sqft_keys_list.append(sqft.id())
-        # for valid in valid_bd_sqft_keys:
-        #     valid_bd_sqft_keys_list.append(valid.id())
-        # write_success_to_response(self.response, {
-        #     "sqft_keys ": sqft_keys_list,
-        #     "valid_bd_sqft_keys ": valid_bd_sqft_keys_list
-        # })
 
 
 def create_returned_values_dict(listing_object, values_dict):
@@ -276,7 +265,8 @@ def get_listingIds_with_numeric_bounds():
     # query all the listings in db that satisfies the bedroom bound condition,
     # only fetch their key(listingId) for efficiency
     bedroom_query = Listing.query().filter(Listing.bedrooms >= Listing.numeric_filter_bounds['bedrooms_min'],
-                                           Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'])
+                                           Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'],
+                                           Listing.isPublished == True)
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
     logging.info("bedrooms_keys_len is " + str(bedrooms_keys_len))
@@ -284,7 +274,8 @@ def get_listingIds_with_numeric_bounds():
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
     sqft_query = Listing.query().filter(Listing.squarefeet >= Listing.numeric_filter_bounds['sqft_min'],
-                                        Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'])
+                                        Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'],
+                                        Listing.isPublished == True)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))
@@ -292,14 +283,16 @@ def get_listingIds_with_numeric_bounds():
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
     price_query = Listing.query().filter(Listing.price >= Listing.numeric_filter_bounds['price_min'],
-                                         Listing.price <= Listing.numeric_filter_bounds['price_max'])
+                                         Listing.price <= Listing.numeric_filter_bounds['price_max'],
+                                         Listing.isPublished == True)
     price_keys = price_query.fetch(keys_only=True)
     price_keys_len = len(price_keys)
 
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
     bathrooms_query = Listing.query().filter(Listing.bathrooms >= Listing.numeric_filter_bounds['bathrooms_min'],
-                                             Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'])
+                                             Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'],
+                                             Listing.isPublished == True)
     bathrooms_keys = bathrooms_query.fetch(keys_only=True)
     bathrooms_keys_len = len(bathrooms_keys)
 
