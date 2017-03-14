@@ -44,7 +44,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         #Check output
         output = json.loads(response.body)
-        self.assertTrue('token' in output)
+        self.assertTrue('authToken' in output)
         self.assertTrue('userId' in output)
         user_saved = User.get_by_id(int(output['userId']))
         self.assertEquals(user_saved.first_name, 'Student')
@@ -65,7 +65,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         #Check output
         output = json.loads(response.body)
-        self.assertTrue('token' in output)
+        self.assertTrue('authToken' in output)
         self.assertTrue('userId' in output)
         user_saved = User.get_by_id(int(output['userId']))
         self.assertEquals(user_saved.first_name, 'Student')

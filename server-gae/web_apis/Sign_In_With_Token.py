@@ -24,32 +24,31 @@ class SignInWithToken(BaseHandler):
         self._serve_page()
 
     def post(self):
+        # validating if request has all required keys
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        message = {}
-        token = self.request.POST.get('token')
-        if token is None:
-            message[missing_token['error']] = "Missing user token"
+        error_keys = ['authToken', 'userId']
+        errors, values = keys_missing(error_keys, self.request.POST)
 
-        user_id = self.request.POST.get('userId')
-        if user_id is None:
-            message[missing_user_id['error']] = "Missing user id"
-        if len(message.keys()) != 0:
-            write_error_to_response(self.response, message,
+        if len(errors) > 0:
+            write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
+        assert values['authToken'] is not None and values['userId'] is not None
 
-        assert token is not None
-        user = (User.get_by_auth_token(int(user_id), token, subject='auth'))[0]
+        user = (User.get_by_auth_token(int(values['userId']), values['authToken'], subject='auth'))[0]
 
         if user is None:
             write_error_to_response(self.response, not_authorized["error"],
                                     not_authorized['status'])
             logging.info(
                 'Sign-in-with-token failed for user %s because of %s',
-                user_id)
+                values['userId'])
             return
-        self.user_model.delete_auth_token(user_id, token)
-        token = self.user_model.create_auth_token(user_id)
+
+        self.user_model.delete_auth_token(values['userId'], values['authToken'])
+        token = self.user_model.create_auth_token(values['userId'])
+
+        assert token is not values['authToken']
         user_dict = {'token': token,
                      'userId': user.get_id(),
                      'email': user.email,
@@ -61,10 +60,3 @@ class SignInWithToken(BaseHandler):
                      'province': user.province}
         self.response.out.write(json.dumps(user_dict))
         self.response.set_status(success)
-
-    def _serve_page(self, failed=False):
-        params = {
-            'failed': failed
-        }
-        self.response.write("Failed")
-        self.render_template('../webpages/Sign_In_With_Token.html', params)

@@ -42,7 +42,7 @@ class SignIn(BaseHandler):
             user = self.auth.get_user_by_password(
                 (values['email']).lower(), values['password'], remember=True, save_session=True)
 
-            user_dict = {'token': user['token'],
+            user_dict = {'authToken': user['token'],
                          'userId': user['user_id'],
                          'email': user['email'],
                          'firstName': user['first_name'],

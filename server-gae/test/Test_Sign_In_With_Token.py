@@ -38,7 +38,7 @@ class TestHandlerSignIn(unittest.TestCase):
         # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, 200)
         user_id = json.loads(response.body)['userId']
-        token = json.loads(response.body)['token']
+        token = json.loads(response.body)['authToken']
 
         # Test1: when no paramaters are given
         input1 = {}  # Json object to send
@@ -55,7 +55,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Test2: When incorrect token
         input2 = {"userId": user_id,
-                  "token": "ThisTokenIsNoGood"}
+                  "authToken": "ThisTokenIsNoGood"}
         request = webapp2.Request.blank('/signInWithToken', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, 401)
@@ -67,7 +67,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Test3: with correct e-mail and password
         input3 = {"userId": user_id,
-                  "token": token}
+                  "authToken": token}
 
         request = webapp2.Request.blank('/signInWithToken', POST=input3)
         response = request.get_response(Main.app)
@@ -75,11 +75,11 @@ class TestHandlerSignIn(unittest.TestCase):
 
         #Check output
         output = json.loads(response.body)
-        self.assertTrue("token" in output)
+        self.assertTrue("authToken" in output)
         self.assertTrue("userId" in output)
 
         #should be a different token.
-        self.assertNotEqual(output['token'], token)
+        self.assertNotEqual(output['authToken'], token)
 
         user_saved = User.get_by_id(int(output["userId"]))
         self.assertEquals(user_saved.first_name, "Student")
