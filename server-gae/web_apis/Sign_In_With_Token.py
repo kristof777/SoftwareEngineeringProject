@@ -61,10 +61,3 @@ class SignInWithToken(BaseHandler):
                      'province': user.province}
         self.response.out.write(json.dumps(user_dict))
         self.response.set_status(success)
-
-    def _serve_page(self, failed=False):
-        params = {
-            'failed': failed
-        }
-        self.response.write("Failed")
-        self.render_template('../webpages/Sign_In_With_Token.html', params)
