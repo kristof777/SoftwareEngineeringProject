@@ -22,13 +22,11 @@ export class ListingProvider {
     /**
      * Add a listing to the database
      */
-    addListing(newListing: Listing){
+    addListing(newListing: Listing): any{
         assert.object(newListing, "Received a null listing");
 
-        this._logger.error("ListingProvider.addListing is not implemented.");
+        return this.kasperService.createListings(newListing);
     }
-
-    addListingCallback(data: any){}
 
     /**
      * Edit an existing listing in the database
@@ -95,12 +93,13 @@ export class ListingProvider {
     /**
      * Get the full information about a listing
      *
-     * @param listingID
+     * @param filter            the filter to apply to the search
+     * @param requiredFields    the fields we want returned from the server
+     * @param limit             the max number of returned results
      * @return a listing
      */
-    getListings() : void{
-        this._logger.error("ListingProvider.getListing is not implemented.");
-        return null;
+    getListings(filter: Filter, requiredFields: string[], limit: number) : any{
+        return this.kasperService.getListings(filter, requiredFields, limit);
     }
 
     /**

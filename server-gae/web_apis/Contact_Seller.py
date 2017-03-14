@@ -16,7 +16,7 @@ class ContactSeller(BaseHandler):
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         error_keys = ['senderId', 'listingId', 'message', 'phone',
-                      'email', 'authToken']
+                      'email', 'authToken', 'receiverId']
         errors, values = keys_missing(error_keys, self.request.POST)
         if len(errors) != 0:
             write_error_to_response(self.response, errors, missing_invalid_parameter)
@@ -65,6 +65,10 @@ class ContactSeller(BaseHandler):
                           listingId=int(values['listingId']),
                           message=values['message'],
                           phone=values['phone'],
-                          email=values['email'])
+                          email=values['email'],
+                          receiverId = int(listing.userId)
+                          )
+        message.put()
+        message.messageId = message.key.id()
         message.put()
         write_success_to_response(self.response, {})

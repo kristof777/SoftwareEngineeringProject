@@ -1,18 +1,20 @@
 import sys
+
 from extras.utils import *
-from models.Listing import Listing
 from models.Message import Message
 from models.User import User
+
 sys.path.append("../")
 
 
-class GetMessages(webapp2.RequestHandler):
+class EditMessage(webapp2.RequestHandler):
     """
      Class used to handle get and post.
      Get:  do nothing
      Post:
-         @pre-cond: Expecting keys to be userId
-         @post-cond: all the messages that sent to me
+         @pre-cond: Expecting keys to be messageId, readDel
+         @post-cond: Message is either deleted for modified
+         @return-api: Nothing is being returned in this API
      """
 
     def options(self, *args, **kwargs):
@@ -27,8 +29,7 @@ class GetMessages(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['userId', 'authToken']
-
+        error_keys = ['messageId', 'userId', 'authToken', 'readDel']
         errors, values = keys_missing(error_keys, self.request.POST)
         if len(errors) != 0:
             write_error_to_response(self.response, errors,
@@ -61,52 +62,25 @@ class GetMessages(webapp2.RequestHandler):
                                                         "not authorized to get my messages"},
                                     not_authorized['status'])
             return
+        message = Message.get_by_id(int(values["messageId"]))
 
-        user_id = int(values['userId'])
-        my_messages = Message.query(Message.receiverId == user_id).fetch()
-        returned_array = []
-        for my_message in my_messages:
-            template_values = {
-                'messageId': my_message.messageId,
-                'listingId': my_message.listingId,
-                'senderId': my_message.senderId,
-                'message': my_message.message,
-                'phone': my_message.phone,
-                'email': my_message.email,
-                'received': my_message.received,
-                'createdDate': str(my_message.createdDate)
-            }
-            returned_array.append(template_values)
+        if message is None:
+            write_error_to_response(self.response, {
+                invalid_message_id['error']:
+                    "Message doesn't exist with this message id"},
+                                    invalid_message_id['status'])
+            return
 
-        write_success_to_response(self.response, {"messages": returned_array})
+        if message.receiverId != int(values['userId']):
+            write_error_to_response(self.response, {
+                not_authorized['error']: "not authorized to edit this message"},
+                                    not_authorized['status'])
+            return
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if values["readDel"] in ["r", "R"]:
+            #TODO: Not sure if we want to return error if message is already read
+            message.received = True
+            message.put()
+        elif values["readDel"] in ["d", "D"]:
+            message.key.delete()
+        write_success_to_response(self.response, {})

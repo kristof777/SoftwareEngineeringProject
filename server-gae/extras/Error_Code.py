@@ -176,6 +176,9 @@ missing_image_index = {"error": "missingImageIndex",
 missing_senderId = {"error": "missingSenderId",
                     "status": missing_invalid_parameter}
 
+missing_receiverId = {"error": "missingReceiverId",
+                      "status": missing_invalid_parameter}
+
 missing_message = {"error": "missingMessage",
                    "status": missing_invalid_parameter}
 
@@ -193,6 +196,24 @@ invalid_values_required = {"error": "invalidValuesRequired",
 
 unallowed_message_send = {"error": "unallowedMessageSend",
                           "status": processing_failed}
+
+invalid_message_id = {"error": "invalidMessageId",
+                      "status": missing_invalid_parameter}
+
+missing_message_id = {"error": "missingMessageId",
+                      "status": missing_invalid_parameter}
+
+missing_read_del = {"error": "missingReadDel",
+                   "status": missing_invalid_parameter}
+
+invalid_read_del = {"error": "invalidReadDel",
+                   "status": missing_invalid_parameter}
+
+missing_fb_id = {"error": "missingFbId",
+                 "status": missing_invalid_parameter}
+
+invalid_fb_id = {"error": "invalidFbId",
+                 "status": missing_invalid_parameter}
 
 invalids = {
     "phone1": invalid_phone1,
@@ -215,7 +236,10 @@ invalids = {
     "longitude": invalid_longitude,
     "latitude": invalid_latitude,
     "senderId": invalid_user_id,
-    "phone": invalid_phone
+    "phone": invalid_phone,
+    "messageId": invalid_message_id,
+    "readDel": missing_read_del,
+    "fbId": missing_fb_id
 }
 
 missing = {
@@ -248,4 +272,8 @@ missing = {
     "senderId": missing_senderId,
     "message": missing_message,
     "phone": missing_phone_number,
+    "readDel": missing_read_del,
+    "messageId": missing_message_id,
+    "fbId": invalid_fb_id,
+    "receiverId": missing_receiverId
 }

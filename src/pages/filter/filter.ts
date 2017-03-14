@@ -13,16 +13,16 @@ let assert = require('assert-plus');
 export class FilterPage {
     private _priceMin = 100000;
     private _priceMax = 1600000;
-    private _squareFeetMin = 100;
-    private _squareFeetMax = 10000;
+    private _squarefeetMin = 100;
+    private _squarefeetMax = 10000;
     private _bedroomsMin = 1;
     private _bedroomsMax = 10;
     private _bathroomsMin = 1;
     private _bathroomsMax = 10;
 
-    province: string[];
+    province: string;
     price: Bound = {lower: this._priceMin, upper: this._priceMax};
-    squareFeet: Bound = {lower: this._squareFeetMin, upper: this._squareFeetMax};
+    squarefeet: Bound = {lower: this._squarefeetMin, upper: this._squarefeetMax};
     bedrooms: Bound = {lower: this._bedroomsMin, upper: this._bedroomsMax};
     bathrooms: Bound = {lower: this._bathroomsMin, upper: this._bathroomsMax};
 
@@ -36,9 +36,7 @@ export class FilterPage {
     }
 
     loadFilter(filter: Filter): void{
-        this.province = [];
-        for(let i=0; i<filter.provinces.length; i++)
-            this.province.push(filter.provinces[i].abbr);
+        this.province = (filter.province) ? filter.province.abbr : "";
 
         // If we're given a bound, use the bound, otherwise use the default.
         if(filter.price.upper)
@@ -46,10 +44,10 @@ export class FilterPage {
         if(filter.price.lower)
             this.price.lower = filter.price.lower;
 
-        if(filter.squareFeet.lower)
-            this.squareFeet.lower = filter.squareFeet.lower;
-        if(filter.squareFeet.upper)
-            this.squareFeet.upper = filter.squareFeet.upper;
+        if(filter.squarefeet.lower)
+            this.squarefeet.lower = filter.squarefeet.lower;
+        if(filter.squarefeet.upper)
+            this.squarefeet.upper = filter.squarefeet.upper;
 
         if(filter.bedrooms.lower)
             this.bedrooms.lower = filter.bedrooms.lower;
@@ -64,30 +62,20 @@ export class FilterPage {
         this._logger.debug("Loaded filter: " + JSON.stringify(filter));
     }
 
-    getProvinces(): Province[]{
-        let provinces: Province[] = [];
-        if(this.province && this.province.length > 0) {
-            for (let i = 0; i < this.province.length; i++)
-                provinces.push(Province.fromAbbr(this.province[i]));
-        }
-
-        return provinces;
-    }
-
     /**
      * Close this modal and pass the filter data back
      */
     applyFilter(): void{
         // Turn the province strings into an array of provinces
-        let provinces: Province[] = this.getProvinces();
+        let province: Province = Province.fromAbbr(this.province);
 
         let tempPrice: Bound = {};
         if(this.price.lower != this._priceMin) tempPrice['lower'] = this.price.lower;
         if(this.price.upper != this._priceMax) tempPrice['upper'] = this.price.upper;
 
         let tempSquareFeet: Bound = {};
-        if(this.squareFeet.lower != this._squareFeetMin) tempSquareFeet['lower'] = this.squareFeet.lower;
-        if(this.squareFeet.upper != this._squareFeetMax) tempSquareFeet['upper'] = this.squareFeet.upper;
+        if(this.squarefeet.lower != this._squarefeetMin) tempSquareFeet['lower'] = this.squarefeet.lower;
+        if(this.squarefeet.upper != this._squarefeetMax) tempSquareFeet['upper'] = this.squarefeet.upper;
 
         let tempBedrooms: Bound = {};
         if(this.bedrooms.lower != this._bedroomsMin) tempBedrooms['lower'] = this.bedrooms.lower;
@@ -98,7 +86,7 @@ export class FilterPage {
         if(this.bathrooms.upper != this._bathroomsMax) tempBathrooms['upper'] = this.bathrooms.upper;
 
         let data: Filter = new Filter(
-            provinces, tempPrice, tempSquareFeet, tempBedrooms, tempBathrooms
+            province, tempPrice, tempSquareFeet, tempBedrooms, tempBathrooms
         );
 
         this.viewCtrl.dismiss(data);

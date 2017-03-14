@@ -52,6 +52,8 @@ export class Province{
      * @returns null        if the abbreviation provided was not valid
      */
     static fromAbbr(abbr: string): Province{
+        if(!abbr) return null;
+
         let provinces: Province[] = Province.asArray;
 
         for(let i=0; i<provinces.length; i++){

@@ -13,10 +13,14 @@ import {Province} from "../../app/models/province";
     providers: [ListingProvider]
 })
 export class AddListingPage {
-    curListing: Listing;
+    private listingId: number;
+    private listerId: number;
+    private modifiedDate: string;
+    private createdDate: string;
+    private isPublished: boolean;
+    private longitude: number;
+    private latitude: number;
 
-    private listingId;
-    private listerId;
     bathrooms: number;
     province: string;
     city: string;
@@ -36,34 +40,21 @@ export class AddListingPage {
 
         if(this.navParams.get('listing')){
             this.loadListingInfo(this.navParams.get('listing'));
+        } else {
+            this.loadListingInfo(Listing.emptyListing());
         }
     }
 
     loadListingInfo(listing: Listing): void{
         assert.object(listing, "listing should never be null");
 
-        this.curListing = new Listing(
-            listing.listingId,
-            listing.listerId,
-            listing.bedrooms,
-            listing.bathrooms,
-            listing.squarefeet,
-            listing.price,
-            listing.description,
-            listing.isPublished,
-            listing.createdDate,
-            listing.modifiedDate,
-            listing.images,
-            Province.fromAbbr(listing.province.abbr),
-            listing.city,
-            listing.address,
-            listing.postalCode,
-            listing.latitude,
-            listing.longitude,
-        );
-
         this.listingId = listing.listingId;
         this.listerId = listing.listerId;
+        this.modifiedDate = listing.modifiedDate;
+        this.createdDate = listing.createdDate;
+        this.isPublished = listing.isPublished;
+        this.longitude = listing.longitude;
+        this.latitude = listing.latitude;
         this.bathrooms = listing.bathrooms;
         this.province = listing.province.abbr;
         this.city = listing.city;
@@ -98,11 +89,48 @@ export class AddListingPage {
         });
     }
 
+    getCurListing(): Listing{
+        return new Listing(
+            this.listingId,
+            this.listerId,
+            this.bedrooms,
+            this.bathrooms,
+            this.squarefeet,
+            this.price,
+            this.description,
+            this.isPublished,
+            this.createdDate,
+            this.modifiedDate,
+            this.images,
+            Province.fromAbbr(this.province),
+            this.city,
+            this.address,
+            this.postalCode,
+            this.latitude,
+            this.longitude,
+        );
+    }
+
+    saveListing(){
+        let result = this.listingProvider.addListing(this.getCurListing());
+
+        result.subscribe(data => {
+            this._logger.info("Data from addListing");
+            this._logger.info(JSON.stringify(data));
+        }, error => {
+            this.listingProvider.kasperService.handleError("createListing", error.json());
+        });
+
+        this.navCtrl.pop();
+    }
+
     /**
      * Save the listing to the device and the server
      */
     saveWithoutPublishing(){
-        this._logger.error("AddListingPage.saveWithoutPublishing is not implemented yet");
+        this._logger.error("AddListingPage.saveWithoutPublishing");
+        this.isPublished = false;
+        this.saveListing();
     }
 
     /**
@@ -110,6 +138,8 @@ export class AddListingPage {
      */
     saveAndPublish(){
         this._logger.error("AddListingPage.saveAndPublish is not implemented yet");
+        this.isPublished = true;
+        this.saveListing();
     }
 
     /**

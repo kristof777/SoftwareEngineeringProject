@@ -107,7 +107,7 @@ export class SignInPage {
 
             }, error => {
                 this._logger.error("signIn error: " + JSON.stringify(error));
-                this.kasperService.handleError(error.json());
+                this.kasperService.handleError("signIn", error.json());
             });
         this.loading.dismiss();
     }
