@@ -63,7 +63,22 @@ class GetMessages(webapp2.RequestHandler):
             return
 
         user_id = int(values['userId'])
-        my_messages = Message.query(Message)
+        my_messages = Message.query(Message.receiverId == user_id).fetch()
+        returned_array = []
+        for my_message in my_messages:
+            template_values = {
+                'messageId': my_message.messageId,
+                'listingId': my_message.listingId,
+                'senderId': my_message.senderId,
+                'message': my_message.message,
+                'phone': my_message.phone,
+                'email': my_message.email,
+                'received': my_message.received,
+                'createdDate': str(my_message.createdDate)
+            }
+            returned_array.append(template_values)
+
+        write_success_to_response(self.response, {"messages": returned_array})
 
 
 

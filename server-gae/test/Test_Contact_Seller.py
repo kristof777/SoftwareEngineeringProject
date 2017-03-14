@@ -25,7 +25,8 @@ class TestHandlers(unittest.TestCase):
             "authToken": self.user_buyer['token'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
-            "email": self.user_buyer['email']
+            "email": self.user_buyer['email'],
+            "receiverId": self.user_seller['userId']
         }
 
         request = webapp2.Request.blank('/contactSeller', POST=correct_input)
@@ -37,6 +38,7 @@ class TestHandlers(unittest.TestCase):
         unallowed_input = {
             "senderId": self.user_seller['userId'],
             "listingId": self.listing['listingId'],
+            "receiverId": self.user_seller['userId'],
             "authToken": self.user_seller['token'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
@@ -58,6 +60,7 @@ class TestHandlers(unittest.TestCase):
             "senderId": 111,
             "listingId": self.listing['listingId'],
             "authToken": self.user_buyer['token'],
+            "receiverId": self.user_seller['userId'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']
@@ -77,6 +80,7 @@ class TestHandlers(unittest.TestCase):
         unauthorized_input = {
             "senderId": self.user_buyer['userId'],
             "listingId": 111,
+            "receiverId": self.user_seller['userId'],
             "authToken": self.user_buyer['token'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
@@ -105,7 +109,8 @@ class TestHandlers(unittest.TestCase):
                            missing_message['error'],
                            missing_phone_number['error'],
                            missing_email['error'],
-                           missing_token['error']]
+                           missing_token['error'],
+                           missing_receiverId['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
