@@ -1,3 +1,5 @@
+import logging
+
 from google.appengine.ext import ndb
 
 from models.Listing import Listing
@@ -31,7 +33,7 @@ class GetListing(webapp2.RequestHandler):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         # every field (userId, valuesRequired, filter) is optional
         errors, values = keys_missing({}, self.request.POST)
-
+        print self.request.POST
         invalid = key_validation(values)
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid, missing_invalid_parameter)
@@ -129,6 +131,16 @@ class GetListing(webapp2.RequestHandler):
 
         Listing.reset_filter()
         write_success_to_response(self.response, listing_info_list)
+        # sqft_keys_list = []
+        # valid_bd_sqft_keys_list = []
+        # for sqft in sqft_keys:
+        #     sqft_keys_list.append(sqft.id())
+        # for valid in valid_bd_sqft_keys:
+        #     valid_bd_sqft_keys_list.append(valid.id())
+        # write_success_to_response(self.response, {
+        #     "sqft_keys ": sqft_keys_list,
+        #     "valid_bd_sqft_keys ": valid_bd_sqft_keys_list
+        # })
 
 
 def create_returned_values_dict(listing_object, values_dict):
@@ -267,6 +279,7 @@ def get_listingIds_with_numeric_bounds():
                                            Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'])
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
+    logging.info("bedrooms_keys_len is " + str(bedrooms_keys_len))
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
@@ -274,6 +287,7 @@ def get_listingIds_with_numeric_bounds():
                                         Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'])
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
+    logging.info("sqft_keys_len is " + str(sqft_keys_len))
 
     # query all the listings in db that satisfies the price bound condition
     # only fetch their key(listingId) for efficiency
@@ -291,17 +305,17 @@ def get_listingIds_with_numeric_bounds():
 
     # Get the common set of the first two key(listingId) sets
     valid_bd_sqft_keys = list(set(bedrooms_keys) & set(sqft_keys))
-    assert len(valid_bd_sqft_keys) == min(bedrooms_keys_len, sqft_keys_len)
+    assert len(valid_bd_sqft_keys) <= min(bedrooms_keys_len, sqft_keys_len)
     bd_sqft_keys_len = len(valid_bd_sqft_keys)
 
     # Get the common set of the next two key(listingId) sets
     valid_bt_pr_keys = list(set(price_keys) & set(bathrooms_keys))
-    assert len(valid_bt_pr_keys) == min(price_keys_len, bathrooms_keys_len)
+    assert len(valid_bt_pr_keys) <= min(price_keys_len, bathrooms_keys_len)
     bt_pr_keys_len = len(valid_bt_pr_keys)
 
     # Get the common set of the two key(listingId) sets above, this is the final common set we need
     final_valid_keys = list(set(valid_bd_sqft_keys) & set(valid_bt_pr_keys))
-    assert len(final_valid_keys) == min(bd_sqft_keys_len, bt_pr_keys_len)
+    assert len(final_valid_keys) <= min(bd_sqft_keys_len, bt_pr_keys_len)
 
     return final_valid_keys
 
