@@ -501,7 +501,9 @@ valid_check = {
     "longitude": is_valid_longitude,
     "messageId": is_valid_integer,
     "readDel": is_valid_read_del,
-    "fbId": is_valid_integer
+    "fbId": is_valid_integer,
+    "senderId": is_valid_integer,
+    "receiverId": is_valid_integer
 }
 
 

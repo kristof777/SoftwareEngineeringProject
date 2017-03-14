@@ -102,8 +102,6 @@ class TestGetFavouriteListing(unittest.TestCase):
 
         self.assertEquals(invalid_user_id['error'], errors_expected)
 
-
-
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
         # completed. If the testbed is not deactivated, the original

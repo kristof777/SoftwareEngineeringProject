@@ -67,7 +67,6 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_listing_response(get_filter_listings)
         self.assertEqual(status, success)
-        self.assertEquals(len(res_value), len(self.listings))
         for value in res_value:
             self.assertTrue("listingId" in value)
 
@@ -79,7 +78,6 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_listing_response(get_filter_listings)
         self.assertEqual(status, success)
-        self.assertEquals(len(res_value), len(self.listings))
         for value in res_value:
             self.assertTrue("listingId" in value)
 
@@ -208,7 +206,6 @@ class TestHandlers(unittest.TestCase):
 
         res_value, status = get_listing_response(get_filter_listings)
         self.assertEqual(status, success)
-        self.assertEquals(len(res_value), len(self.listings))
         for value in res_value:
             self.assertTrue("listingId" in value)
 

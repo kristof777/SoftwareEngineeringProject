@@ -65,7 +65,7 @@
         <!--Bathrooms Range-->
         <ion-item>
             <ion-label stacked>Bathrooms</ion-label>
-            <ion-range [(ngModel)]="bathrooms" id="flBath" dualKnobs="true" step="0.5" snaps="true" min="{{_bathroomsMin}}" max="{{_bathroomsMax}}" pin="true">
+            <ion-range [(ngModel)]="bathrooms" id="FlBath" dualKnobs="true" step="0.5" snaps="true" min="{{_bathroomsMin}}" max="{{_bathroomsMax}}" pin="true">
                 <ion-label *ngIf="bathrooms?.lower == 1" range-left>No Min</ion-label>
                 <ion-label *ngIf="bathrooms?.lower != 1" range-left>1</ion-label>
                 <ion-label *ngIf="bathrooms?.upper != 10" range-right>10</ion-label>
@@ -75,8 +75,8 @@
 
         <!--Apply the Filter-->
         <ion-item>
-            <button ion-button block (click)="applyFilter()" id="flApply">Apply Filter</button>
-            <button ion-button block (click)="cancel()" id="flCancel">Cancel</button>
+            <button ion-button block (click)="applyFilter()" id="FlApply">Apply Filter</button>
+            <button ion-button block (click)="cancel()" id="FlCancel">Cancel</button>
         </ion-item>
 
     </ion-list>

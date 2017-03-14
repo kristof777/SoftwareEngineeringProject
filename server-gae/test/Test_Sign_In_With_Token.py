@@ -6,7 +6,7 @@ import sys
 
 sys.path.append("../")
 import unittest
-import extras.Error_Code as Error_Code
+from extras.Error_Code import *
 import Main
 import webapp2
 from models.User import *
@@ -20,9 +20,6 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def setUp(self):
         setup_testbed(self)
-
-
-    def test_sign_in(self):
         database_entry1 = {"email": "student@usask.ca",
                            "password": "aaAA1234",
                            "firstName": "Student",
@@ -36,51 +33,63 @@ class TestHandlerSignIn(unittest.TestCase):
         request = webapp2.Request.blank('/createUser', POST=database_entry1)
         response = request.get_response(Main.app)
         # If this assert fails then create user unit tests should be run
-        self.assertEquals(response.status_int, 200)
-        user_id = json.loads(response.body)['userId']
-        token = json.loads(response.body)['token']
+        self.assertEquals(response.status_int, success)
+        self.user_id = json.loads(response.body)['userId']
+        self.token = json.loads(response.body)['authToken']
 
-        # Test1: when no paramaters are given
+    def test_sign_in_missing_params(self):
+        # No input parameters
         input1 = {}  # Json object to send
         request = webapp2.Request.blank('/signInWithToken', POST=input1)
         response = request.get_response(Main.app)  # get response back
-        self.assertEquals(response.status_int, 400)
-        errors_expected = [Error_Code.missing_user_id['error'],
-                           Error_Code.missing_token['error']]
+        self.assertEquals(response.status_int, missing_invalid_parameter)
+        errors_expected = [missing_user_id['error'],
+                           missing_token['error']]
         error_keys = [str(x) for x in json.loads(response.body)]
 
         # checking if there is a difference between error_keys and what we got
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
+    def test_sign_in_incorrect_token(self):
         # Test2: When incorrect token
-        input2 = {"userId": user_id,
-                  "token": "ThisTokenIsNoGood"}
+        input2 = {"userId": self.user_id,
+                  "authToken": "ThisTokenIsNoGood"}
         request = webapp2.Request.blank('/signInWithToken', POST=input2)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 401)
+        self.assertEquals(response.status_int, unauthorized_access)
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-        self.assertEquals(Error_Code.not_authorized['error'], error_message)
+        self.assertEquals(not_authorized['error'], error_message)
 
-        # Test3: with correct e-mail and password
-        input3 = {"userId": user_id,
-                  "token": token}
+    def test_sign_in_incorrect_user_id(self):
+        # Test2: When incorrect user_id
+        input2 = {"userId": "thisIsWrongId",
+                  "authToken": self.token}
+        request = webapp2.Request.blank('/signInWithToken', POST=input2)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, unauthorized_access)
+        try:
+            error_message = str(json.loads(response.body))
+        except IndexError as _:
+            self.assertFalse()
+        self.assertEquals(not_authorized['error'], error_message)
 
+    def test_sign_in_success(self):
+        # Correct user_id and authToken
+        input3 = {"userId": self.user_id,
+                  "authToken": self.token}
         request = webapp2.Request.blank('/signInWithToken', POST=input3)
         response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, 200)
-
-        #Check output
+        self.assertEquals(response.status_int, success)
+        # Check output
         output = json.loads(response.body)
-        self.assertTrue("token" in output)
+        self.assertTrue("authToken" in output)
         self.assertTrue("userId" in output)
-
-        #should be a different token.
-        self.assertNotEqual(output['token'], token)
-
+        # should be a different token.
+        self.assertNotEqual(output['authToken'], self.token)
         user_saved = User.get_by_id(int(output["userId"]))
         self.assertEquals(user_saved.first_name, "Student")
         self.assertEquals(user_saved.last_name, "USASK")
@@ -89,12 +98,7 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(int(user_saved.phone1), 1111111111)
         self.assertEquals(user_saved.province, "SK")
 
-
-
     def tearDown(self):
-        # Don't forget to deactivate the testbed after the tests are
-        # completed. If the testbed is not deactivated, the original
-        # stubs will not be restored.
         self.testbed.deactivate()
 
 

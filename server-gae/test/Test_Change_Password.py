@@ -52,7 +52,7 @@ class TestHandlerChangePassword(unittest.TestCase):
         self.assertEquals(response.status_int, success)
 
         output = json.loads(response.body)
-        self.assertTrue("token" in output)
+        self.assertTrue("authToken" in output)
 
     def test_missing_fields(self):
         # Test case: One or more fields were not entered

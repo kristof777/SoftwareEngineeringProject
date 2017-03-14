@@ -176,6 +176,9 @@ missing_image_index = {"error": "missingImageIndex",
 missing_senderId = {"error": "missingSenderId",
                     "status": missing_invalid_parameter}
 
+missing_receiverId = {"error": "missingReceiverId",
+                      "status": missing_invalid_parameter}
+
 missing_message = {"error": "missingMessage",
                    "status": missing_invalid_parameter}
 
@@ -271,5 +274,6 @@ missing = {
     "phone": missing_phone_number,
     "readDel": missing_read_del,
     "messageId": missing_message_id,
-    "fbId": invalid_fb_id
+    "fbId": invalid_fb_id,
+    "receiverId": missing_receiverId
 }

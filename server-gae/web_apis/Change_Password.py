@@ -71,7 +71,7 @@ class ChangePassword(BaseHandler):
             return
 
         # Get a new token
-        token = user_dict['token']
+        token = user_dict['authToken']
         self.user_model.delete_auth_token((values['userId']), token)
         token = self.user_model.create_auth_token((values['userId']))
 
@@ -103,6 +103,6 @@ class ChangePassword(BaseHandler):
             # set_password failed. This should never happen
             assert False
         # self.auth.store.delete_auth_token(user['userId'], user['token'])
-        user_dict = {'token': token}
+        user_dict = {'authToken': token}
 
         write_success_to_response(self.response,user_dict)
