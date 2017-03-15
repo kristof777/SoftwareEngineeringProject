@@ -22,7 +22,7 @@ class TestHandlers(unittest.TestCase):
         correct_input = {
             "senderId": self.user_buyer['userId'],
             "listingId": self.listing['listingId'],
-            "authToken": self.user_buyer['token'],
+            "authToken": self.user_buyer['authToken'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email'],
@@ -39,7 +39,7 @@ class TestHandlers(unittest.TestCase):
             "senderId": self.user_seller['userId'],
             "listingId": self.listing['listingId'],
             "receiverId": self.user_seller['userId'],
-            "authToken": self.user_seller['token'],
+            "authToken": self.user_seller['authToken'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']
@@ -59,7 +59,7 @@ class TestHandlers(unittest.TestCase):
         unauthorized_input = {
             "senderId": 111,
             "listingId": self.listing['listingId'],
-            "authToken": self.user_buyer['token'],
+            "authToken": self.user_buyer['authToken'],
             "receiverId": self.user_seller['userId'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
@@ -81,7 +81,7 @@ class TestHandlers(unittest.TestCase):
             "senderId": self.user_buyer['userId'],
             "listingId": 111,
             "receiverId": self.user_seller['userId'],
-            "authToken": self.user_buyer['token'],
+            "authToken": self.user_buyer['authToken'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']

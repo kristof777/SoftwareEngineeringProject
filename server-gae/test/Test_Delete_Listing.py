@@ -31,7 +31,7 @@ class TestHandlers(unittest.TestCase):
         owner = users[0]
         listing = listings[0]
         self.ownerId = owner['userId']
-        self.ownerToken = owner['token']
+        self.ownerToken = owner['authToken']
         self.listingId = listing['listingId']
 
         # now create a new user as an editor
@@ -39,10 +39,10 @@ class TestHandlers(unittest.TestCase):
         assert len(users) == 2
         deleter = users[0]
         self.deleterId = deleter['userId']
-        self.deleterToken = deleter['token']
+        self.deleterToken = deleter['authToken']
         liker = users[1]
         self.likerId = liker['userId']
-        self.likerToken = liker['token']
+        self.likerToken = liker['authToken']
 
         # Make the liker like the listing
         res_value, status = get_like_response(get_like_post_dictionary(self.likerId, self.listingId,

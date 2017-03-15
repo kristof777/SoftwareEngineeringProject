@@ -32,7 +32,7 @@ class TestHandlers(unittest.TestCase):
         owner = users[0]
         listing = listings[0]
         self.owner_id = owner['userId']
-        self.owner_token = owner['token']
+        self.owner_token = owner['authToken']
         self.listing_id = listing['listingId']
 
         # now create a new user as a liker
@@ -40,7 +40,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(len(users), 1)
         liker = users[0]
         self.liker_id = liker['userId']
-        self.liker_token = liker['token']
+        self.liker_token = liker['authToken']
 
     def test_owner_liking_listing(self):
         like_the_listing = {

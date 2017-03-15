@@ -35,7 +35,7 @@ class TestHandlers(unittest.TestCase):
         owner = users[0]
         listing = listings[0]
         self.ownerId = owner['userId']
-        self.token = owner['token']
+        self.token = owner['authToken']
         self.listingId = listing['listingId']
 
         # now create a new user as an editor
@@ -43,7 +43,7 @@ class TestHandlers(unittest.TestCase):
         assert len(users) == 1
         editors = users[0]
         self.editorId = editors['userId']
-        self.editorToken = editors['token']
+        self.editorToken = editors['authToken']
 
 
     def test_missing_input(self):

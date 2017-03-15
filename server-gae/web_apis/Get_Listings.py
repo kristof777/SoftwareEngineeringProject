@@ -148,6 +148,9 @@ def create_returned_values_dict(listing_object, values_dict):
         values_required = json.loads(values_dict["valuesRequired"])
         for key in values_required:
             listing_dict[key] = listing_object.get_value_from_key(key)
+        if "listingId" not in values_required:
+            listing_dict["listingId"] = listing_object.get_value_from_key("listingId")
+
     else:
         # only returns listingIds
         listing_dict["listingId"] = listing_object.listingId
