@@ -113,7 +113,7 @@ export class ListingProvider {
                 "province",
                 "city",
                 "address",
-                // "postalCode" // broken
+                // "postalCode" // Back end does not support postalCode.
             );
         }
         console.log(requiredFields);
