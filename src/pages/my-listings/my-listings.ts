@@ -25,7 +25,7 @@ export class MyListingsPage {
 
         this.listings = Array();
     }
-
+   //Documentation for this please in diff file 
     ionViewDidEnter(){
         let me = this;
 
@@ -37,7 +37,7 @@ export class MyListingsPage {
             });
         }
     }
-
+//add precondition & assert \/ 
     /**
      * Display the detailed view for the selected listing
      *
@@ -48,24 +48,24 @@ export class MyListingsPage {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
-        this._logger.debug("Listing  " + listing + " was clicked")
+        this._logger.debug("Listing  " + listing + " was clicked") //probably changed to listing id and semicolon
     }
-
+    //precondition that listing is null \/
     /**
      * Display the edit listing view for the selected listing
      *
      * @param listing: listing to be edited
      */
-    editListing(listing:Listing){
-        this.navCtrl.push(AddListingPage,{
+    editListing(listing:Listing){ //add asserts to methods
+        this.navCtrl.push(AddListingPage,{ //add comment to explain that addListingPage is the same as edit...
             listing:listing
         });
-        this._logger.debug("Trying to edit...")
+        this._logger.debug("Trying to edit...") //a better explaination  for debug
 
-    }
-
+    }//semicolon
+//pre condition assert logging
     /**
-     *
+     * fixx me
      * @param listing: listing to be deleted
      */
     deleteListing(listing:Listing){
@@ -79,6 +79,7 @@ export class MyListingsPage {
     addListing(){
 
         this.navCtrl.push(AddListingPage);
+        //gimme a log
     }
 
     /**

@@ -265,14 +265,16 @@ export class KasperService {
     /**
      * Send a request to update a listing
      *
+     * @param listingId     the listingId to edit
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      province, city, address, price, sqft, bedrooms, bathrooms,
      *                      description, images, thumbnailImageIndex, isPublished
      */
-    editListing(changeValues: JSON): any {
+    editListing(listingId: number, changeValues: {}): any {
         let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('changeValues', changeValues);
+        body.append('listingId', listingId);
+        body.append('changeValues', JSON.stringify(changeValues));
 
         return this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)
             .map(response => response.json());
@@ -309,6 +311,7 @@ export class KasperService {
      * Appends required information for all calls
      */
     appendAuthentication(body: FormData): void{
+        if(!this.loginService.isLoggedIn()) return;
         body.append('userId', this.loginService.getUserId());
         body.append('authToken', this.loginService.getToken());
     }
@@ -392,7 +395,7 @@ export class KasperService {
      *
      * @returns {string[][]} an array of api routes, and error keys associated with them
      */
-    initErrors(): string[][]{ // TODO finish these declarations
+    initErrors(): string[][]{
         let result: string[][] = [[]];
 
         result['signIn'] = [];

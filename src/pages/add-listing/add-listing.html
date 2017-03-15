@@ -13,7 +13,7 @@
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ngModel)]="province" id="alProvince">
+            <ion-select [(ngModel)]="province" id="alProvince"> <!--select from ionmodel -->
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
                 <ion-option value="MB">Manitoba</ion-option>
@@ -21,7 +21,7 @@
                 <ion-option value="NL">Newfoundland and Labrador</ion-option>
                 <ion-option value="NS">Nova Scotia</ion-option>
                 <ion-option value="NU">Nunavut</ion-option>
-                <ion-option value="NW">North West Territories</ion-option>
+                <ion-option value="NW">North West Territories</ion-option> <!-- Spelln (Northwest) and abv NT change in other files someone -->
                 <ion-option value="ON">Ontario</ion-option>
                 <ion-option value="PE">Prince Edward Island</ion-option>
                 <ion-option value="QC">Quebec</ion-option>
@@ -52,28 +52,30 @@
 
         <ion-item>
             <ion-label stacked>Square Feet</ion-label>
-            <ion-input [(ngModel)]="squarefeet" type = "text" id='alSqFeet'></ion-input>
+            <ion-input [(ngModel)]="squarefeet" type = "text" id='alSqft'></ion-input> <!-- i'll (not you) fix the ids friends :)-->
         </ion-item>
 
         <ion-item>
-            <ion-label stacked>Bed Rooms </ion-label>
+            <ion-label stacked>Bedrooms </ion-label>
             <ion-input [(ngModel)]="bedrooms" type = "text" id='alBed'></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label stacked>Bath Rooms </ion-label>
-            <ion-input [(ngModel)]="bathrooms" type="text" id="alBathRoom"></ion-input>
+            <ion-label stacked>Bathrooms </ion-label>
+            <ion-input [(ngModel)]="bathrooms" type="text" id="alBath"></ion-input>
         </ion-item>
 
         <ion-item>
-            <ion-label floating stacked>Description </ion-label>
+            <ion-label floating stacked>Description </ion-label> <!-- fixx me floating stacked is not a thang -->
             <ion-textarea [(ngModel)]="description" id="alDesc" text-wrap ></ion-textarea>
         </ion-item>
 
         <ion-item>
             <button item-left ion-button small (click)="addImage()" id="alImage">Add Image</button>
         </ion-item>
-
+        <!--curListing ngIf should never be null now fixx please
+        and buttons [save without publishing] | [publish] and add a preview
+        -->
         <ion-item>
             <button ion-button block (click)="saveWithoutPublishing()" id="alSave">Save without Publishing</button>
             <button *ngIf="curListing == null || ((curListing != null) && !curListing.isPublished)" ion-button block (click)="saveAndPublish()" id="alPublish">Publish</button>

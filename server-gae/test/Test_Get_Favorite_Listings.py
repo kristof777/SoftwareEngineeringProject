@@ -30,7 +30,7 @@ class TestGetFavouriteListing(unittest.TestCase):
         assert len(users) == 1
         liker = users[0]
         self.likerId = liker['userId']
-        self.likerToken = liker['token']
+        self.likerToken = liker['authToken']
 
         # make the liker likes the first five of the listings
 

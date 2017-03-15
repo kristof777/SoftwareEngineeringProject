@@ -32,7 +32,7 @@ class TestGetMessages(unittest.TestCase):
         res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[0]['userId'],
                                                                                  self.seller['userId'],
                                                                                  self.listings[0]['listingId'],
-                                                                                 self.messagers[0]['token'],
+                                                                                 self.messagers[0]['authToken'],
                                                                                  "Interested in your listing!",
                                                                                  self.messagers[0]['phone1'],
                                                                                  self.messagers[0]['email']))
@@ -42,7 +42,7 @@ class TestGetMessages(unittest.TestCase):
         res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[1]['userId'],
                                                                                  self.seller['userId'],
                                                                                  self.listings[1]['listingId'],
-                                                                                 self.messagers[1]['token'],
+                                                                                 self.messagers[1]['authToken'],
                                                                                  "Any time we can meet up?",
                                                                                  self.messagers[1]['phone1'],
                                                                                  self.messagers[1]['email']))
@@ -52,7 +52,7 @@ class TestGetMessages(unittest.TestCase):
         res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[2]['userId'],
                                                                                  self.seller['userId'],
                                                                                  self.listings[2]['listingId'],
-                                                                                 self.messagers[2]['token'],
+                                                                                 self.messagers[2]['authToken'],
                                                                                  "Nice house!",
                                                                                  self.messagers[2]['phone1'],
                                                                                  self.messagers[2]['email']))
@@ -62,7 +62,7 @@ class TestGetMessages(unittest.TestCase):
     def test_success(self):
         get_messages = {
             "userId": self.seller['userId'],
-            "authToken": self.seller['token']
+            "authToken": self.seller['authToken']
         }
         request = webapp2.Request.blank('/getMessages', POST=get_messages)
         response = request.get_response(Main.app)
@@ -73,7 +73,7 @@ class TestGetMessages(unittest.TestCase):
     def test_invalid_userid(self):
         invalid_userId_messages = {
             "userId": "blablabla",
-            "authToken": self.seller['token']
+            "authToken": self.seller['authToken']
         }
 
         request = webapp2.Request.blank('/getMessages', POST=invalid_userId_messages)

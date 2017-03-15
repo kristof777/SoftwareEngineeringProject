@@ -4,33 +4,24 @@ import json
 import os
 import sys
 
-sys.path.append("../")
+sys.path.append('../')
 import unittest
 from extras.Error_Code import *
 import Main
 import webapp2
 from models.User import *
-from extras.utils import setup_testbed
+from extras.utils import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
 
 class TestHandlerSignIn(unittest.TestCase):
     # Set up the testbeddegod7642q5
 
     def setUp(self):
         setup_testbed(self)
-        database_entry1 = {"email": "student@usask.ca",
-                           "password": "aaAA1234",
-                           "firstName": "Student",
-                           "lastName": "USASK",
-                           "city": "Saskatoon",
-                           "postalCode": "S7N 4P7",
-                           "province": "Saskatchewan",
-                           "phone1": "1111111111",
-                           "confirmedPassword": "aaAA1234"}
+        self.database_entry = self.database_user = create_random_user()
 
-        request = webapp2.Request.blank('/createUser', POST=database_entry1)
+        request = webapp2.Request.blank('/createUser', POST=self.database_entry)
         response = request.get_response(Main.app)
         # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, success)
@@ -53,8 +44,8 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_sign_in_incorrect_token(self):
         # Test2: When incorrect token
-        input2 = {"userId": self.user_id,
-                  "authToken": "ThisTokenIsNoGood"}
+        input2 = {'userId': self.user_id,
+                  'authToken': 'ThisTokenIsNoGood'}
         request = webapp2.Request.blank('/signInWithToken', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
@@ -66,8 +57,8 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_sign_in_incorrect_user_id(self):
         # Test2: When incorrect user_id
-        input2 = {"userId": "thisIsWrongId",
-                  "authToken": self.token}
+        input2 = {'userId': 'thisIsWrongId',
+                  'authToken': self.token}
         request = webapp2.Request.blank('/signInWithToken', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
@@ -79,24 +70,15 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_sign_in_success(self):
         # Correct user_id and authToken
-        input3 = {"userId": self.user_id,
-                  "authToken": self.token}
+        input3 = {'userId': self.user_id,
+                  'authToken': self.token}
         request = webapp2.Request.blank('/signInWithToken', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
         # Check output
         output = json.loads(response.body)
-        self.assertTrue("authToken" in output)
-        self.assertTrue("userId" in output)
-        # should be a different token.
         self.assertNotEqual(output['authToken'], self.token)
-        user_saved = User.get_by_id(int(output["userId"]))
-        self.assertEquals(user_saved.first_name, "Student")
-        self.assertEquals(user_saved.last_name, "USASK")
-        self.assertEquals(user_saved.city, "Saskatoon")
-        self.assertEquals(user_saved.email, "student@usask.ca")
-        self.assertEquals(int(user_saved.phone1), 1111111111)
-        self.assertEquals(user_saved.province, "SK")
+        check_output_for_sign_in(self,output,self.database_user)
 
     def tearDown(self):
         self.testbed.deactivate()

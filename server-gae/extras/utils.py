@@ -3,6 +3,7 @@ import string
 import webapp2
 import json
 from Error_Code import *
+from models.User import *
 from validate_email import validate_email
 from google.appengine.ext import testbed
 
@@ -28,6 +29,7 @@ listing_keys contains all the valid keys for a listing
 listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex", "latitude", "longitude", "authToken"]
+
 
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
@@ -116,7 +118,7 @@ def create_dummy_users_for_testing(main, n):
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
         del new_user["password"]
-        new_user["token"] = str(output["token"])
+        new_user["authToken"] = str(output["authToken"])
         new_user["userId"] = str(output["userId"])
         users.append(new_user)
         n -= 1
@@ -147,7 +149,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
         user = users[i]
         for j in range(0, distribution):
             random_listing_info = {"userId": user["userId"],
-                                   "authToken": user["token"],
+                                   "authToken": user["authToken"],
                                    "bedrooms": str(random.randint(1, 10)),
                                    "longitude": str(random.randint(-180, 180)),
                                    "latitude": str(random.randint(-90, 90)),
@@ -177,7 +179,6 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
 
     return listings, users
 
-
 def create_random_user():
     """
     :return: a randomly generated user profile
@@ -193,7 +194,6 @@ def create_random_user():
             "phone2": get_random_string(10, numbers=10)
             if random.randint(0, 1) else "", "confirmedPassword": password}
     return user
-
 
 def create_random_listing(user_id, token):
     """
@@ -573,6 +573,26 @@ def get_response_from_post(Main, post, api):
         if json_body:
             return json_body, response.status_int
     return None, response.status_int
+
+
+def check_output_for_sign_in(self,output, database_user):
+    """
+    This function will assert false if the signed in user does not match
+    the original user information.
+    :param output: The output user dict to be checked
+    :param database_user: The originally generated user dict
+    """
+
+    self.assertTrue('authToken' in output)
+    self.assertTrue('userId' in output)
+    user_saved = User.get_by_id(int(output['userId']))
+    self.assertEquals(user_saved.first_name, database_user['firstName'])
+    self.assertEquals(user_saved.last_name, database_user['lastName'])
+    self.assertEquals(user_saved.city, database_user['city'])
+    self.assertEquals(user_saved.email, database_user['email'])
+    self.assertEquals(user_saved.phone1, database_user['phone1'])
+    self.assertEquals(user_saved.phone2, database_user['phone2'])
+    self.assertEquals(user_saved.province, database_user['province'])
 
 def get_keys_from_values(values):
     return [str(x) for x in values]

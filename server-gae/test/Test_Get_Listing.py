@@ -34,7 +34,7 @@ class TestHandlers(unittest.TestCase):
         users = create_dummy_users_for_testing(Main, 1)
         self.assertEquals(len(users), 1)
         self.userId = users[0]['userId']
-        self.token = users[0]['token']
+        self.token = users[0]['authToken']
 
         # make the user like a few listings
         res_value, status = get_like_response(get_like_post_dictionary(self.userId, self.listings[0]['listingId'],
@@ -186,7 +186,7 @@ class TestHandlers(unittest.TestCase):
         res_value, status = get_listing_response(get_filter_listings)
         self.assertEqual(status, success)
         for value in res_value:
-            self.assertEquals(len(value), 4)
+            self.assertEquals(len(value), 5)
             self.assertTrue(int(value['price']) <=
                             int(json.loads(get_filter_listings['filter'])['price']['upper']))
             self.assertTrue(int(value['price']) >=

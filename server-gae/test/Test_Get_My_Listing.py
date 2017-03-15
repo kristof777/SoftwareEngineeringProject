@@ -24,7 +24,7 @@ class TestGetMyListing(unittest.TestCase):
         assert len(users) == 1
         assert len(self.listings) == 10
         self.ownerId = users[0]['userId']
-        self.ownerToken = users[0]['token']
+        self.ownerToken = users[0]['authToken']
 
     def test_success_info(self):
         get_my_listings = {

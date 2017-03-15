@@ -16,12 +16,12 @@ describe('Registering new user as a user would', function() {
 
         let myProfileTab = element(by.id('tab-t0-2'));
         myProfileTab.click();
-        browser.driver.sleep(1500);
+        sleep();
 
         let registerButton;
         registerButton = element(by.css('.register'));
         registerButton.click();
-        browser.driver.sleep(1500);
+        sleep();
 
         let email, password, confirmPassword;
         email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
@@ -54,7 +54,7 @@ describe('Registering new user as a user would', function() {
         confirmPassword.sendKeys('Password123');
          nextButton.click();
 
-        browser.driver.sleep(1500);
+        sleep();
 
         let firstName, lastName, phoneNumber;
         nextButton = element(by.buttonText('Next'));
@@ -79,19 +79,19 @@ describe('Registering new user as a user would', function() {
         phoneNumber.sendKeys("3065551234");
 
         nextButton.click();
-        browser.driver.sleep(1500);
+        sleep();
 
         let province, city, ABoption;
 
         province = element(by.id('signUpProvinceSelect')).click();
-        browser.driver.sleep(500);
+        sleep();
         ABoption = element(by.buttonText('Alberta'));
         ABoption.click();
-        browser.driver.sleep(500);
+        sleep();
         let okButton;
         okButton = element(by.buttonText('OK'));
         okButton.click();
-        browser.driver.sleep(500);
+        sleep();
         city = element(by.id('signUpCity')).all(by.tagName('input')).first();
         city.sendKeys('Edmonton');
 
@@ -104,7 +104,7 @@ describe('Registering new user as a user would', function() {
         // else continue with my profile
        /* if(finish.isDisplayed()){
             myProfileTab.click();
-            browser.driver.sleep(500);
+            sleep();
             email = element(by.id('email')).all(by.tagName('input')).first();
             password = element(by.id('password')).all(by.tagName('input')).first();
             let signInButton = element(by.buttonText('Sign In'));
@@ -114,14 +114,14 @@ describe('Registering new user as a user would', function() {
             password.sendKeys().clear();
             password.sendKeys('Password123');
             signInButton.click();
-            browser.driver.sleep(500);
+            sleep();
 
         }*/
 
         finish.isPresent().then(function(present) {
           if (present) {
                         myProfileTab.click();
-                        browser.driver.sleep(500);
+                        sleep();
                         email = element(by.id('email')).all(by.tagName('input')).first();
                         password = element(by.id('password')).all(by.tagName('input')).first();
                         let signInButton = element(by.buttonText('Sign In'));
@@ -132,7 +132,7 @@ describe('Registering new user as a user would', function() {
                         //password.sendKeys().clear();
                         password.sendKeys('Password123');
                         signInButton.click();
-                        browser.driver.sleep(500);
+                        sleep();
           } else {
             //
           }
@@ -147,14 +147,14 @@ describe('Registering new user as a user would', function() {
 
         let browseButton = element(by.id('tab-t0-0'));
         browseButton.click();
-        browser.driver.sleep(500);
+        sleep();
 
         let browseImage;
         browseImage = element(by.id('image'));
         // drag and drop not working
        // browser.actions().dragAndDrop(browseImage,{x:50,y:0}).perform();
         browseImage.click();
-        browser.driver.sleep(500);
+        sleep();
         let rightArrowButton = element(by.id('nextProperty'));
         let leftArrowButton = element(by.id('previousProperty'));
         let likeButton = element(by.id('likeButton'));
@@ -168,7 +168,7 @@ describe('Registering new user as a user would', function() {
                      if(i%2 == 0)
                      {
                          browser.executeScript("arguments[0].scrollIntoView();", description);
-                         browser.driver.sleep(100);
+                         sleep();
                          browser.executeScript("arguments[0].scrollIntoView();", likeButton);
                          likeButton.click();
                      }
@@ -189,30 +189,30 @@ describe('Registering new user as a user would', function() {
     it('Should add listing', function(done){
 
       // testing "add listing" functionality
-        browser.driver.sleep(500);
+        sleep();
         let myListings = element(by.id('tab-t0-3'));
         myListings.click();
-        browser.driver.sleep(500);
+        sleep();
         let addListingButton;
         addListingButton= element(by.id('addButton'));
         addListingButton.click();
-        browser.driver.sleep(500);
+        sleep();
 
 
                 let provinceDropList = element(by.id('alProvince'));
                 provinceDropList.click();
 
-                browser.driver.sleep(500);
+                sleep();
 
                 let skOption = element(by.buttonText('Saskatchewan'));
                 browser.executeScript("arguments[0].scrollIntoView();", skOption);
                 skOption.click();
-                browser.driver.sleep(500);
+                sleep();
                 let okaybtn = element(by.buttonText('OK'));
                 okaybtn.click();
-                browser.driver.sleep(500);
+                sleep();
 
-                 let bath = element(by.id('alBathRoom')).all(by.tagName('input')).first();
+                 let bath = element(by.id('alBath')).all(by.tagName('input')).first();
 
 
                 let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
@@ -229,7 +229,7 @@ describe('Registering new user as a user would', function() {
                 let price = element(by.id('alPrice')).all(by.tagName('input')).first();
                 price.sendKeys('13000000');
 
-                let feet = element(by.id('alSqFeet')).all(by.tagName('input')).first();
+                let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
                 feet.sendKeys('600');
 
                 let bed = element(by.id('alBed')).all(by.tagName('input')).first();
@@ -237,18 +237,21 @@ describe('Registering new user as a user would', function() {
 
                 bath.sendKeys('2');
 
-                browser.driver.sleep(500);
+                sleep();
 
                 let desc2 = element(by.id('alDesc')).all(by.tagName('textarea')).first();
-                browser.driver.sleep(500);
+                sleep();
                 desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
 
                 let saveButton = element(by.id('alSave'));
                 saveButton.click();
 
-                browser.driver.sleep(500);
+                sleep();
                 done();
 
         });
+    function sleep(){
+        browser.driver.sleep(500)
+    }
 
 });

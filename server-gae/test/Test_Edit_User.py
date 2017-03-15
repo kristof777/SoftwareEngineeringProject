@@ -30,7 +30,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_nothing_requsted_to_change(self):
         user_id = self.users[0]["userId"]
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         change_values = {}
 
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
@@ -41,7 +41,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_unrecognized_key(self):
         user_id = self.users[0]["userId"]
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         change_values = {"unRecongnized" :"key"}
 
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
@@ -51,7 +51,7 @@ class TestEditUser(unittest.TestCase):
         self.assertTrue(unrecognized_key["error"] in res_value)
 
     def test_invalid_user_id(self):
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         change_values = {"phone1" :"1234567891"}
         user_id = 1000
 
@@ -62,7 +62,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_missing_user_id(self):
         change_values = {"phone1" :"1234567891"}
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         user_id = ""
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
                                                              change_values), self.api)
@@ -71,7 +71,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_passoword_change(self):
         user_id = self.users[0]["userId"]
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         change_values = {"password" :"1234567891"}
 
 
@@ -82,7 +82,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_change_one_item(self):
         user_id = self.users[0]["userId"]
-        token = self.users[0]["token"]
+        token = self.users[0]["authToken"]
         change_values = {"phone1": "1234567891"}
 
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
@@ -94,7 +94,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_two_item_change(self):
         user_id = self.users[1]["userId"]
-        token = self.users[1]["token"]
+        token = self.users[1]["authToken"]
         change_values = {"phone1": "1234567891", "firstName": "Hello"}
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
                                                              change_values), self.api)
@@ -106,7 +106,7 @@ class TestEditUser(unittest.TestCase):
 
     def test_multi_item_change(self):
         user_id = self.users[2]["userId"]
-        token = self.users[2]["token"]
+        token = self.users[2]["authToken"]
         change_values = {"phone1": "1234567891", "firstName": "hello",
                          "lastName": "world"}
         res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
