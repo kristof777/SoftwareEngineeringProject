@@ -28,40 +28,50 @@ class TestEditMessage(unittest.TestCase):
         listings, user_sellers = create_dummy_listings_for_testing(Main,1)
         self.user_seller = user_sellers[0]
         self.listing = listings[0]
-
         message_input = {
             "senderId": self.user_buyer['userId'],
             "listingId": self.listing['listingId'],
+            "receiverId": self.listing['userId'],
             "authToken": self.user_buyer['authToken'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']
         }
         utils.get_response_from_post(Main, message_input, 'contactSeller')
-        #TODO assert response here
-        # Will need get my listing here to make this testing work
-        self.message_id_1 = 4
-        self.message_id_2 = 2
 
+        get_message_input = {
+            "userId": self.listing['userId'],
+            "authToken": self.user_seller['authToken'],
+
+        }
+
+        messages, _ = utils.get_response_from_post(Main, get_message_input,
+                                                   'getMessages')
+        assert "messages" in messages
+        assert len(messages["messages"]) == 1
+        assert "messageId" in messages["messages"][0]
+
+        self.valid_message_id_1 = int(messages["messages"][0]["messageId"])
+        self.invalid_message_id_2 = 2
 
     def test_correct_input_read(self):
         testing_input = get_testing_input(self.user_seller["userId"],
                                           self.user_seller["authToken"],
-                                          self.message_id_1, 'r')
+                                          self.valid_message_id_1, 'r')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')
         self.assertEquals(response_status, success)
-        message = Message.get_by_id(self.message_id_1)
+        message = Message.get_by_id(self.valid_message_id_1)
         self.assertTrue(message.received)
 
     def test_correct_input_delete(self):
         testing_input = get_testing_input(self.user_seller["userId"],
                                           self.user_seller["authToken"],
-                                          self.message_id_1, 'd')
+                                          self.valid_message_id_1, 'd')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')
         self.assertEquals(response_status, success)
-        message = Message.get_by_id(self.message_id_1)
+        message = Message.get_by_id(self.valid_message_id_1)
         self.assertIsNone(message)
 
     def test_missing_fields(self):
@@ -88,7 +98,7 @@ class TestEditMessage(unittest.TestCase):
     def test_incorrect_message_id(self):
         testing_input = get_testing_input(self.user_seller["userId"],
                                           self.user_seller["authToken"],
-                                          self.message_id_2, 'd')
+                                          self.invalid_message_id_2, 'd')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')
         expected_errors = [invalid_message_id["error"]]
