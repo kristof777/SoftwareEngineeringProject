@@ -94,7 +94,7 @@ export class SignInPage {
 
             // Set the login data for the user
             this.kasperService.loginService.setUser(user);
-            this.kasperService.loginService.setToken(data.token);
+            this.kasperService.loginService.setToken(data.authToken);
 
             // Set the root of the current tab to the MyProfile page.
             this.navCtrl.setRoot(MyProfilePage);

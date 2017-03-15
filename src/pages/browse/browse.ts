@@ -38,6 +38,7 @@ export class BrowsePage {
         let me = this;
 
         this.listingProvider.getListings(this.filter, ['price', 'images'], 5).subscribe(data => {
+            console.log(data);
             me.listings = data['listings'];
         }, error => {
             this._logger.error(JSON.stringify(error));

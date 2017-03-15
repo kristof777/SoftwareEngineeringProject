@@ -84,7 +84,7 @@ export class SignUpPage {
         data.subscribe(data => {
             user.id = data.userId;
             this.kasperService.loginService.setUser(user);
-            this.kasperService.loginService.setToken(data.token);
+            this.kasperService.loginService.setToken(data.authToken);
             this.navCtrl.setRoot(MyProfilePage);
         }, error => {
             this._logger.error("There was an error registering: ");

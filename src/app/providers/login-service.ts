@@ -17,7 +17,7 @@ export class LoginService {
 
     // The data previously stored in the database
     private userId: number;
-    private token: string;
+    private authToken: string;
 
     // The user object returned after logging in
     public static user: User;
@@ -48,17 +48,17 @@ export class LoginService {
     }
 
     /**
-     * Update the token for the currently logged in user.
+     * Update the auth token for the currently logged in user.
      *
-     * @param token the new token
+     * @param authToken the new token
      */
-    public setToken(token: string): void{
-        assert.string(token, "The received token was not a string");
+    public setToken(authToken: string): void{
+        assert.string(authToken, "The received token was not a string");
 
-        this.token = token;
-        this.updateToken(token);
+        this.authToken = authToken;
+        this.updateAuthToken(authToken);
 
-        this._logger.debug("New token has been set: " + token);
+        this._logger.debug("New auth token has been set: " + authToken);
     }
 
     /**
@@ -73,45 +73,45 @@ export class LoginService {
     }
 
     /**
-     * Get the currently stored token
-     * @returns {string}    the token
+     * Get the currently stored authtoken
+     * @returns {string}    the auth token
      */
-    public getToken(): string{
-        assert.string(this.token, "The token is not defined");
+    public getAuthToken(): string{
+        assert.string(this.authToken, "The token is not defined");
 
-        return this.token;
+        return this.authToken;
     }
 
     /**
-     * Insert a new userId/token pair into the users.
+     * Insert a new userId/authToken pair into the users.
      *
-     * @param token the token to insert
+     * @param authToken the token to insert
      */
-    private updateToken(token: string){
-        assert.object(LoginService.user, "A user must be logged in to update the token.");
+    private updateAuthToken(authToken: string){
+        assert.object(LoginService.user, "A user must be logged in to update the auth token.");
         assert.object(this.db, "A database connection was not established.");
 
-        this.db.executeSql("INSERT INTO session (userId, token, created_date) VALUES (?, ?, datetime(now))", [
-            this.userId, this.token]).then(() => {
-            this._logger.debug("New session token was saved successfully.");
+        this.db.executeSql("INSERT INTO session (userId, authToken, created_date) VALUES (?, ?, datetime(now))", [
+            this.userId, this.authToken]).then(() => {
+            this._logger.debug("New session auth token was saved successfully.");
         }, error => {
-            this._logger.error("Could not insert new session token: ");
+            this._logger.error("Could not insert new session auth token: ");
             this._logger.error(JSON.stringify(error));
         });
     }
 
     /**
-     * Load the most recent userId and token from the users phone.
+     * Load the most recent userId and auth token from the users phone.
      */
     private loadSessionInfo(){
-        assert.object(LoginService.user, "A user must be logged in to update the token.");
+        assert.object(LoginService.user, "A user must be logged in to update the auth token.");
         assert.object(this.db, "A database connection was not established.");
 
-        this.db.executeSql("SELECT userId, token FROM session ORDER BY created_date DESC LIMIT 1", {}).then((data) => {
+        this.db.executeSql("SELECT userId, authToken FROM session ORDER BY created_date DESC LIMIT 1", {}).then((data) => {
             if(!data.rows) {
                 this.userId = data.rows.item(0).userId;
-                this.token = data.rows.item(0).token;
-                this._logger.debug(`Loaded previous session info: {userId: ${this.userId}, token: ${this.token}`);
+                this.authToken = data.rows.item(0).authToken;
+                this._logger.debug(`Loaded previous session info: {userId: ${this.userId}, token: ${this.authToken}`);
             } else {
                 this._logger.debug("There was no login session stored on the device");
             }

@@ -26,7 +26,7 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string,
+     *      authToken: string,
      *      userId: int,
      *      email: string,
      *      firstName: string,
@@ -50,11 +50,11 @@ export class KasperService {
     }
 
     /**
-     * Send a login request to the server using a token
+     * Send a login request to the server using a auth token
      *
      * The return data is as follows
      * {
-     *      token: string
+     *      authToken: string
      * }
      */
     loginWithToken(): any{
@@ -78,7 +78,7 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string,
+     *      authToken: string,
       *     useId: int
      * }
      *
@@ -129,7 +129,7 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string
+     *      authToken: string
      * }
      *
      * @param oldPassword           the current password of the user
@@ -313,7 +313,7 @@ export class KasperService {
     appendAuthentication(body: FormData): void{
         if(!this.loginService.isLoggedIn()) return;
         body.append('userId', this.loginService.getUserId());
-        body.append('authToken', this.loginService.getToken());
+        body.append('authToken', this.loginService.getAuthToken());
     }
 
     /**
