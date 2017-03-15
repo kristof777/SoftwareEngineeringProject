@@ -10,24 +10,17 @@ from extras.Error_Code import *
 import Main
 import webapp2
 from models.User import *
-from extras.utils import setup_testbed
+from extras.utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestHandlerSignIn(unittest.TestCase):
     def setUp(self):
         setup_testbed(self)
-        database_entry1 = {'email': 'student@usask.ca',
-                           'password': 'aaAA1234',
-                           'firstName': 'Student',
-                           'lastName': 'USASK',
-                           'city': 'Saskatoon',
-                           'postalCode': 'S7N 4P7',
-                           'province': 'Saskatchewan',
-                           'phone1': '1111111111',
-                           'confirmedPassword': 'aaAA1234'}
-
-        request = webapp2.Request.blank('/createUser', POST=database_entry1)
+        self.database_user = create_random_user()
+        # explicitly set the email to this so that we can test case sensitivity
+        self.database_user['email'] = 'student@usask.ca'
+        request = webapp2.Request.blank('/createUser', POST=self.database_user)
         response = request.get_response(Main.app)
         # If this assert fails then create user unit tests should be run
         self.assertEquals(response.status_int, success)
@@ -36,7 +29,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
         # Test with correct e-mail and password
         input3 = {'email': 'student@usask.ca',
-                  'password': 'aaAA1234'}
+                  'password': self.database_user['password']}
 
         request = webapp2.Request.blank('/signIn', POST=input3)
         response = request.get_response(Main.app)
@@ -44,36 +37,17 @@ class TestHandlerSignIn(unittest.TestCase):
 
         #Check output
         output = json.loads(response.body)
-        self.assertTrue('authToken' in output)
-        self.assertTrue('userId' in output)
-        user_saved = User.get_by_id(int(output['userId']))
-        self.assertEquals(user_saved.first_name, 'Student')
-        self.assertEquals(user_saved.last_name, 'USASK')
-        self.assertEquals(user_saved.city, 'Saskatoon')
-        self.assertEquals(user_saved.email, 'student@usask.ca')
-        self.assertEquals(int(user_saved.phone1), 1111111111)
-        self.assertEquals(user_saved.province, 'SK')
+        check_output_for_sign_in(self, json.loads(response.body), self.database_user)
 
     def test_sign_in_uppercase_email(self):
-        # Test with correct e-mail and password
+        # Test with correct e-mail and password, but email is capitalized.
         input3 = {'email': 'STUDENT@usask.ca',
-                  'password': 'aaAA1234'}
+                  'password': self.database_user['password']}
 
         request = webapp2.Request.blank('/signIn', POST=input3)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
-
-        #Check output
-        output = json.loads(response.body)
-        self.assertTrue('authToken' in output)
-        self.assertTrue('userId' in output)
-        user_saved = User.get_by_id(int(output['userId']))
-        self.assertEquals(user_saved.first_name, 'Student')
-        self.assertEquals(user_saved.last_name, 'USASK')
-        self.assertEquals(user_saved.city, 'Saskatoon')
-        self.assertEquals(user_saved.email, 'student@usask.ca')
-        self.assertEquals(int(user_saved.phone1), 1111111111)
-        self.assertEquals(user_saved.province, 'SK')
+        check_output_for_sign_in(self,json.loads(response.body), self.database_user)
 
     def test_no_params(self):
         # Test1: when no paramaters are given
@@ -92,7 +66,7 @@ class TestHandlerSignIn(unittest.TestCase):
     def test_incorrect_password(self):
         # Test2: When incorrect password is entered
         input2 = {'email': 'student@usask.ca',
-                  'password': 'notRighpassword123'}
+                  'password': self.database_user['password'] + 'wrongPassword'}
         request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
@@ -114,6 +88,9 @@ class TestHandlerSignIn(unittest.TestCase):
         except IndexError as _:
             self.assertFalse()
         self.assertEquals(not_authorized['error'], error_message)
+
+
+
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
