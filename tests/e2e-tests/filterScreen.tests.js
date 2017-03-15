@@ -17,23 +17,23 @@ describe('Filter Listings',function(){
     //button to open myListings
 
     //filter options
-    let provDrop = element(by.id('FlProv'));
+    let provDrop = element(by.id('flProv'));
 
-    let priceSliderMin = element(by.id('FlPrice')).element(by.css('#FlPrice > div:nth-child(2) > div:nth-child(3)'));
-    let priceSliderMax = element(by.id('FlPrice'));
+    let priceSliderMin = element(by.id('flPrice')).element(by.css('#flPrice > div:nth-child(2) > div:nth-child(3)'));
+    let priceSliderMax = element(by.id('flPrice'));
 
-    let sqftSliderMin = element(by.id('FlSqft')).element(by.css('#FlSqft > div:nth-child(2) > div:nth-child(3)'));
-    let sqftSliderMax = element(by.id('FlSqft'));
+    let sqftSliderMin = element(by.id('flSqft')).element(by.css('#flSqft > div:nth-child(2) > div:nth-child(3)'));
+    let sqftSliderMax = element(by.id('flSqft'));
 
-    let bedSliderMin = element(by.id('FlBed')).element(by.css('#FlBed > div:nth-child(2) > div:nth-child(13)'));
-    let bedSliderMax = element(by.id('FlBed'));
+    let bedSliderMin = element(by.id('flBed')).element(by.css('#flBed > div:nth-child(2) > div:nth-child(13)'));
+    let bedSliderMax = element(by.id('flBed'));
 
-    let bathSliderMin = element(by.id('FlBath')).element(by.css('#flBath > div:nth-child(2) > div:nth-child(13)'));
-    let bathSliderMax = element(by.id('FlBath'));
+    let bathSliderMin = element(by.id('flBath')).element(by.css('#flBath > div:nth-child(2) > div:nth-child(13)'));
+    let bathSliderMax = element(by.id('flBath'));
 
     // apply and cancel filter
-    let applyBtn = element(by.id('FlApply'));
-    let cancelBtn = element(by.id('FlCancel'));
+    let applyBtn = element(by.id('flApply'));
+    let cancelBtn = element(by.id('flCancel'));
 
 
     it('should filter with nothing', function(done){

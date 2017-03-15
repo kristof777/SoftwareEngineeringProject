@@ -1,4 +1,4 @@
-<ion-header> 
+<ion-header>
     <ion-navbar color="primary">
         <ion-title *ngIf="curListing == null">
             Add Listing
@@ -52,7 +52,7 @@
 
         <ion-item>
             <ion-label stacked>Square Feet</ion-label>
-            <ion-input [(ngModel)]="squarefeet" type = "text" id='alSqFeet'></ion-input> <!-- i'll (not you) fix the ids friends :)-->
+            <ion-input [(ngModel)]="squarefeet" type = "text" id='alSqft'></ion-input> <!-- i'll (not you) fix the ids friends :)-->
         </ion-item>
 
         <ion-item>
@@ -61,8 +61,8 @@
         </ion-item>
 
         <ion-item>
-            <ion-label stacked>Bathrooms </ion-label> 
-            <ion-input [(ngModel)]="bathrooms" type="text" id="alBathRoom"></ion-input>
+            <ion-label stacked>Bathrooms </ion-label>
+            <ion-input [(ngModel)]="bathrooms" type="text" id="alBath"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -73,8 +73,8 @@
         <ion-item>
             <button item-left ion-button small (click)="addImage()" id="alImage">Add Image</button>
         </ion-item>
-        <!--curListing ngIf should never be null now fixx please 
-        and buttons [save without publishing] | [publish] and add a preview 
+        <!--curListing ngIf should never be null now fixx please
+        and buttons [save without publishing] | [publish] and add a preview
         -->
         <ion-item>
             <button ion-button block (click)="saveWithoutPublishing()" id="alSave">Save without Publishing</button>
