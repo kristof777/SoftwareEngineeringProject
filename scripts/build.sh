@@ -38,7 +38,7 @@ android_build(){
     ionic build android --release
   else
     ionic build android
-    /home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd   
+    xvfb-run /home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd   
     ionic emulate android
   fi
 }
