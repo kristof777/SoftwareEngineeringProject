@@ -3,6 +3,7 @@ import string
 import webapp2
 import json
 from Error_Code import *
+from models.User import *
 from validate_email import validate_email
 from google.appengine.ext import testbed
 
@@ -572,6 +573,26 @@ def get_response_from_post(Main, post, api):
         if json_body:
             return json_body, response.status_int
     return None, response.status_int
+
+
+def check_output_for_sign_in(self,output, database_user):
+    """
+    This function will assert false if the signed in user does not match
+    the original user information.
+    :param output: The output user dict to be checked
+    :param database_user: The originally generated user dict
+    """
+
+    self.assertTrue('authToken' in output)
+    self.assertTrue('userId' in output)
+    user_saved = User.get_by_id(int(output['userId']))
+    self.assertEquals(user_saved.first_name, database_user['firstName'])
+    self.assertEquals(user_saved.last_name, database_user['lastName'])
+    self.assertEquals(user_saved.city, database_user['city'])
+    self.assertEquals(user_saved.email, database_user['email'])
+    self.assertEquals(user_saved.phone1, database_user['phone1'])
+    self.assertEquals(user_saved.phone2, database_user['phone2'])
+    self.assertEquals(user_saved.province, database_user['province'])
 
 def get_keys_from_values(values):
     return [str(x) for x in values]
