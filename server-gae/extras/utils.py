@@ -178,9 +178,9 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
 
     return listings, users
 
-def create_random_user_with_password():
+def create_random_user():
     """
-    :return: a randomly generated user profile and that user's password
+    :return: a randomly generated user profile
     """
     password = get_random_password()
     user = {"email": get_random_email(),
@@ -192,15 +192,7 @@ def create_random_user_with_password():
             "phone1": get_random_string(10, numbers=10),
             "phone2": get_random_string(10, numbers=10)
             if random.randint(0, 1) else "", "confirmedPassword": password}
-    return user, password
-
-def create_random_user():
-    """
-    :return: a randomly generated user profile
-    """
-    user,password = create_random_user_with_password()
     return user
-
 
 def create_random_listing(user_id, token):
     """
