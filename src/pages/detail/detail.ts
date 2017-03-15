@@ -35,13 +35,6 @@ export class DetailPage {
     }
 
     /**
-     * Navigate to the My Listings page.
-     */
-    goToFavourites(): void{
-        this._logger.debug("Favourites was clicked");
-    }
-
-    /**
      * Add the house to the users dislike list
      */
     unlike(): void{

@@ -99,6 +99,24 @@ export class ListingProvider {
      * @return a listing
      */
     getListings(filter: Filter, requiredFields: string[], limit: number) : any{
+        // If we want all fields
+        if(requiredFields.indexOf("all") != -1){
+            requiredFields.splice(requiredFields.indexOf("all"), 1);
+            requiredFields.push(
+                "bedrooms",
+                "bathrooms",
+                "squarefeet",
+                "price",
+                "description",
+                "isPublished",
+                "images",
+                "province",
+                "city",
+                "address",
+                // "postalCode" // broken
+            );
+        }
+        console.log(requiredFields);
         return this.kasperService.getListings(filter, requiredFields, limit);
     }
 

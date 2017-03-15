@@ -39,15 +39,15 @@
     </ion-item>
 
     <ion-list>
-        <button ion-item detail-push (click)="goToContact()">
-                Contact
-        </button>
+        <!--<button ion-item detail-push (click)="goToContact()">-->
+                <!--Contact-->
+        <!--</button>-->
         <ion-item>
             <span item-left>
                 Location
             </span>
             <span item-right>
-                {{ data[cursor].city }}, {{ data[cursor].province.abbr }}
+                {{ data[cursor].city }}, {{ data[cursor].province }}
             </span>
         </ion-item>
         <ion-item>
