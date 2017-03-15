@@ -21,10 +21,10 @@ if [[ ${BACK_END_TEST} > 0 ]]; then
   echo ${BACK_END_TEST}
   exit 1
 fi
-if [[ ${FRONT_END_TEST} > 0 ]]; then
-  echo ${FRONT_END_TEST}
+if [[ ${FRONT_END_FF} > 0 ]]; then
+  echo ${FRONT_END_FF}
   exit 2
 fi
-if [[ ${FRONT_END_TEST} > 0 ]]; then
+if [[ ${FRONT_END_CHROME} > 0 ]]; then
   exit 3
 fi
