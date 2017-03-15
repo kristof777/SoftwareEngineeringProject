@@ -32,7 +32,7 @@ class TestEditMessage(unittest.TestCase):
         message_input = {
             "senderId": self.user_buyer['userId'],
             "listingId": self.listing['listingId'],
-            "authToken": self.user_buyer['token'],
+            "authToken": self.user_buyer['authToken'],
             "message": "Hey, I'm interested in your property.",
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']
@@ -46,7 +46,7 @@ class TestEditMessage(unittest.TestCase):
 
     def test_correct_input_read(self):
         testing_input = get_testing_input(self.user_seller["userId"],
-                                          self.user_seller["token"],
+                                          self.user_seller["authToken"],
                                           self.message_id_1, 'r')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')
@@ -56,7 +56,7 @@ class TestEditMessage(unittest.TestCase):
 
     def test_correct_input_delete(self):
         testing_input = get_testing_input(self.user_seller["userId"],
-                                          self.user_seller["token"],
+                                          self.user_seller["authToken"],
                                           self.message_id_1, 'd')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')
@@ -87,7 +87,7 @@ class TestEditMessage(unittest.TestCase):
 
     def test_incorrect_message_id(self):
         testing_input = get_testing_input(self.user_seller["userId"],
-                                          self.user_seller["token"],
+                                          self.user_seller["authToken"],
                                           self.message_id_2, 'd')
         values, response_status = \
             utils.get_response_from_post(Main, testing_input, 'editMessage')

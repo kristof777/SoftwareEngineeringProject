@@ -71,7 +71,7 @@ class ChangePassword(BaseHandler):
             return
 
         # Get a new token
-        token = user_dict['authToken']
+        token = user_dict['token']
         self.user_model.delete_auth_token((values['userId']), token)
         token = self.user_model.create_auth_token((values['userId']))
 

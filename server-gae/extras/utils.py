@@ -116,7 +116,7 @@ def create_dummy_users_for_testing(main, n):
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
         del new_user["password"]
-        new_user["token"] = str(output["token"])
+        new_user["authToken"] = str(output["authToken"])
         new_user["userId"] = str(output["userId"])
         users.append(new_user)
         n -= 1
@@ -147,7 +147,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
         user = users[i]
         for j in range(0, distribution):
             random_listing_info = {"userId": user["userId"],
-                                   "authToken": user["token"],
+                                   "authToken": user["authToken"],
                                    "bedrooms": str(random.randint(1, 10)),
                                    "longitude": str(random.randint(-180, 180)),
                                    "latitude": str(random.randint(-90, 90)),
