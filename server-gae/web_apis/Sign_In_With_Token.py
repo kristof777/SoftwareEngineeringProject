@@ -3,7 +3,7 @@ import logging
 from extras.utils import *
 from models.User import *
 import sys
-sys.path.append("../")
+sys.path.append('../')
 from extras.Base_Handler import BaseHandler
 from extras.Error_Code import *
 
@@ -16,7 +16,7 @@ class SignInWithToken(BaseHandler):
     that the corresponding field can be pre-filled.
 
     @pre-condition: Post has email and password
-    @post-condition:
+    @post-condition: The user's token
     @return-api:
     """
 
@@ -53,6 +53,7 @@ class SignInWithToken(BaseHandler):
                 values['userId'], 'invalid token')
             return
 
+        assert user is not None
         self.user_model.delete_auth_token(values['userId'], values['authToken'])
         token = self.user_model.create_auth_token(values['userId'])
 
