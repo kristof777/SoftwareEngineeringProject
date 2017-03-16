@@ -28,6 +28,8 @@ describe('Regression tests: functionality while not signed in', function() {
         done();
     });
 
+    //TODO: Test if using Browse and Filter functionality allows a non-logged-in user to use My Profile or My Listings pages
+
     it('should test if "Confirm Password" field on register page allows incorrect matches', function(done) {
         let registerButton = element(by.css('.register'));
         registerButton.click().then(function(){
