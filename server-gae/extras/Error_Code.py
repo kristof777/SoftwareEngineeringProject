@@ -11,7 +11,7 @@ missing_city = {"error": "missingCity",
 missing_email = {"error": "missingEmail",
                  "status": missing_invalid_parameter}
 
-not_authorized = {"error": "invalid credentials",
+not_authorized = {"error": "invalidCredentials",
                   "status": unauthorized_access}
 
 email_alreadyExists = {"error": "emailAlreadyExists",
