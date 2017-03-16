@@ -47,16 +47,20 @@ class InitializeDB(BaseHandler):
             response, _ = get_response_from_post(Main, user, 'createUser')
             responses.append(response)
 
+        number_of_responses = len(responses)
         for i in range(len(listings_published)):
             listing = listings_published[i]
-            listing["userId"] = responses[i]["userId"]
-            listing["authToken"] = responses[i]["authToken"]
+            listing["userId"] = responses[i % number_of_responses]["userId"]
+            listing["authToken"] = responses[i % number_of_responses][
+                "authToken"]
             get_response_from_post(Main, listing, 'createListing')
 
         for i in range(len(listing_unpublished)):
             listing = listing_unpublished[i]
-            listing["userId"] = responses[i]["userId"]
-            listing["authToken"] = responses[i]["authToken"]
+            listing["userId"] = responses[i % number_of_responses]["userId"]
+            listing["authToken"] = responses[i % number_of_responses][
+                "authToken"]
             get_response_from_post(Main, listing, 'createListing')
 
+        create_dummy_listings_for_testing(Main, random_listings, random_users)
         write_success_to_response(self.response, {})
