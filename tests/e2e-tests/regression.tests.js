@@ -4,7 +4,7 @@ describe('Regression tests: functionality while not signed in', function() {
 
     beforeEach(function () {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000; //20 seconds
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000; //10 seconds
     });
 
     afterEach(function () {
@@ -17,12 +17,12 @@ describe('Regression tests: functionality while not signed in', function() {
 
         browseTab.click().then(function(){
             let filterButton = element(by.id('goToFilters'));
-            expect(filterButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
+            checkDisplayed(filterButton, "the 'Browse' page");
             myProfileTab.click().then(function(){
                 let registerButton = element(by.css('.register'));
                 for(i = 0; i < 10; i++)
                     myProfileTab.click();
-                expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Sign-In" page to be displayed, but was not');
+                checkDisplayed(registerButton, "the 'Sign-In' page");
             });
         });
         done();
@@ -38,16 +38,16 @@ describe('Regression tests: functionality while not signed in', function() {
             nextButton = element(by.buttonText('Next'));
 
             email.sendKeys('test@test.com').then(function(){
-                expect(email.getAttribute('value')).toContain("test@test.com");
+                checkAttribute(email, "test@test.com");
             });
             password.sendKeys('Password123').then(function(){
-                expect(password.getAttribute('value')).toContain("Password123");
+                checkAttribute(password, "Password123");
             });
             confirmPassword.sendKeys('Password1234').then(function(){
-                expect(confirmPassword.getAttribute('value')).toContain("Password1234");
+                checkAttribute(confirmPassword, "Password1234");
             });
             nextButton.click().then(function(){
-                expect(nextButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
+                checkDisplayed(nextButton, "the 'Browse' page");
                 email.sendKeys().clear();
                 password.sendKeys().clear();
                 confirmPassword.sendKeys().clear();
@@ -55,7 +55,7 @@ describe('Regression tests: functionality while not signed in', function() {
 
             let myProfileTab = element(by.id('tab-t0-2'));
             myProfileTab.click().then(function(){
-                expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+                checkDisplayed(registerButton, "the 'Register' page");
             });
         });
         done();
@@ -68,17 +68,18 @@ describe('Regression tests: functionality while signed in', function(){
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
         email.sendKeys('test@usask.ca').then(function(){
-            expect(email.getAttribute('value')).toContain("test@usask.ca");
+            checkAttribute(email, "test@usask.ca");
         });
         password.sendKeys('WrongPassword').then(function(){
-            expect(password.getAttribute('value')).toContain("WrongPassword");
+            checkAttribute(password, "WrongPassword");
         });
         signInButton.click();
 
         //Dismiss invalid credentials alert
-        browser.driver.sleep(1000);
-        let enter = browser.actions().sendKeys(protractor.Key.ENTER).perform();
-        browser.driver.sleep(1000);
+        sleep(1000);
+        let enter = browser.actions().sendKeys(protractor.Key.ENTER);
+        enter.perform();
+        sleep(1000);
 
         email.sendKeys().clear();
         password.sendKeys().clear();
@@ -89,25 +90,51 @@ describe('Regression tests: functionality while signed in', function(){
         let email = element(by.id('email')).all(by.tagName('input')).first();
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
-        expect(email.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+        checkDisplayed(email, "the 'Register' page");
 
         email.sendKeys('test@usask.ca').then(function(){
-            expect(email.getAttribute('value')).toContain("test@usask.ca");
+            checkAttribute(email, "test@usask.ca");
         });
         password.sendKeys('Password123').then(function(){
-            expect(password.getAttribute('value')).toContain("Password123");
+            checkAttribute(password, "Password123");
         });
 
         signInButton.click().then(function(){
             let filterButton = element(by.id('goToFilters'));
-            browser.driver.sleep(1000);
-            expect(filterButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
+            sleep(1000);
+            checkDisplayed(filterButton, "the 'Browse' page");
             let myProfileTab = element(by.id('tab-t0-2'));
             for(i = 0; i < 10; i++)
                 myProfileTab.click();
             let profileEmail = element(by.id('settingsEmail')).all(by.tagName('input')).first();
-            expect(profileEmail.isDisplayed()).toBe(true, 'Expected the "My Profile" page to be displayed, but was not');
+            checkDisplayed(profileEmail, "the 'My Profile' page");
         });
         done();
     });
 });
+
+/**
+ * Force the browser to sleep for a specified amount of time.
+ * @param {number} time - The amount of time to sleep (in milliseconds)
+ */
+function sleep(time){
+    browser.driver.sleep(time);
+}
+
+/**
+ * Check if the input value was entered properly.
+ * @param {element} element - The element with the value.
+ * @param {string} expectedValue - The expected value that should be contained in the element input.
+ */
+function checkAttribute(element, expectedValue){
+    expect(element.getAttribute('value')).toContain(expectedValue);
+}
+
+/**
+ * Check if the element is currently being displayed.
+ * @param {element} element - The element to check.
+ * @param {string} item - The item that should be displayed.
+ */
+function checkDisplayed(element, item){
+    expect(element.isDisplayed()).toBe(true, "Expected " + item + " to be displayed, but was not");
+}
