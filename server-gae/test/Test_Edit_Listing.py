@@ -76,7 +76,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(are_two_lists_same(res_value, errors_expected), True)
 
     def test_unrecognized_key(self):
-        change_values = { "blablabla": "blablabla"}
+        change_values = { "unrecognizedKey": "unrecognizedKey"}
         res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
         self.assertEqual(status, unrecognized_key["status"])
         error_expected = Error_Code.unrecognized_key['error']
