@@ -212,7 +212,7 @@ describe('Registering new user as a user would', function() {
                 okaybtn.click();
                 sleep();
 
-                 let bath = element(by.id('alBath')).all(by.tagName('input')).first();
+                 let bath = element(by.id('alBathroom')).all(by.tagName('input')).first();
 
 
                 let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
@@ -232,7 +232,7 @@ describe('Registering new user as a user would', function() {
                 let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
                 feet.sendKeys('600');
 
-                let bed = element(by.id('alBed')).all(by.tagName('input')).first();
+                let bed = element(by.id('alBedroom')).all(by.tagName('input')).first();
                 bed.sendKeys('5');
 
                 bath.sendKeys('2');
