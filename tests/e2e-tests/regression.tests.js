@@ -1,15 +1,15 @@
+let originalTimeout;
+beforeEach(function () {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000; //10 seconds
+});
+
+afterEach(function () {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+});
+
 describe('Regression tests: functionality while not signed in', function() {
     browser.get('');
-    let originalTimeout;
-
-    beforeEach(function () {
-        originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000; //10 seconds
-    });
-
-    afterEach(function () {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-    });
 
     it('should test if multiple "My Profile" tab clicks removes all UI from the page', function(done) {
         let browseTab = element(by.id('tab-t0-0'));
