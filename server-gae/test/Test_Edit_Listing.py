@@ -93,7 +93,7 @@ class TestHandlers(unittest.TestCase):
 
     def invalid_user_id(self):
         change_values = {"bathrooms": 10}
-        res_value, status = get_response(get_post_dictionary("blabla", "blabla", self.token, change_values))
+        res_value, status = get_response(get_post_dictionary("invalidUserId", "invalidUserId", self.token, change_values))
         self.assertEquals(status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error'],
                            Error_Code.invalid_listing_id['error']]
