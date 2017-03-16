@@ -3,10 +3,11 @@ import {ChangePasswordPage} from "../change-password/change-password";
 import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../../app/models/province";
-import {NavController, ModalController, Platform} from "ionic-angular";
+import {NavController, ModalController, Platform, AlertController} from "ionic-angular";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {LoginService} from "../../app/providers/login-service";
 import {SignInPage} from "../sign-in/sign-in";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
 
 @Component({
@@ -31,6 +32,8 @@ export class MyProfilePage {
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public formBuilder: FormBuilder,
+                public alertCtrl: AlertController,
+                public kasperService: KasperService,
                 public loginService: LoginService,
                 public platform: Platform,
                 private _logger: Logger) {
@@ -66,7 +69,7 @@ export class MyProfilePage {
             this._logger.debug("Password change was submitted");
             // If the user saves the change
             if(data) {
-                this.updatePassword(data.oldPassword, data.newPassword);
+                this.updatePassword(data.oldPassword, data.newPassword, data.confirmPassword);
             }
         });
 
@@ -79,10 +82,21 @@ export class MyProfilePage {
      * @param currentPassword   users input for their current password
      * @param newPassword       the new password
      */
-    updatePassword(currentPassword: string, newPassword: string): void{
-        // Need to verify currentPassword is correct
-        // newPassword has already been checked for strength.
+    updatePassword(currentPassword: string, newPassword: string, newPasswordConfirmed: string): void{
+        let me = this;
         this._logger.debug("Verifying and changing password");
+
+        this.kasperService.changePassword(currentPassword, newPassword, newPasswordConfirmed).subscribe(data => {
+            this.alertCtrl.create({
+                title: "Success",
+                subTitle: "Your password has been changed",
+                buttons: ['Dismiss']
+            }).present();
+
+            me.loginService.setToken(data.authToken);
+        }, error => {
+            this.kasperService.handleError("changePassword", error.json());
+        });
     }
 
     /**

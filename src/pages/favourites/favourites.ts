@@ -5,6 +5,7 @@ import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail";
 import {LoginService} from "../../app/providers/login-service";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
 
 @Component({
@@ -29,7 +30,7 @@ export class FavouritesPage {
 
         if(this.loginService.isLoggedIn()) {
             this.listingProvider.getFavourites().subscribe(data => {
-                me.listings = data['listings'];
+                me.listings = KasperService.fromData(data['listings']);
             }, error => {
                 this._logger.error(JSON.stringify(error));
             });

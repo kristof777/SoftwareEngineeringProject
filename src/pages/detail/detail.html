@@ -14,7 +14,7 @@
 <ion-content>
     <ion-toolbar>
         <ion-item no-lines id="voteBar" *ngIf="!belongsToUser()">
-            <button ion-button item-left color="second" clear icon-only (click)="unlike()" id="unlikeButton">
+            <button ion-button item-left color="second" clear icon-only (click)="dislike()" id="unlikeButton">
                 <ion-icon ios="ios-thumbs-down" md="md-thumbs-down"></ion-icon>
             </button>
             <button ion-button item-right color="danger" clear icon-only (click)="like()" id="likeButton">
@@ -47,7 +47,7 @@
                 Location
             </span>
             <span item-right>
-                {{ data[cursor].city }}, {{ data[cursor].province }}
+                {{ data[cursor].city }}, {{ data[cursor].province.abbr }}
             </span>
         </ion-item>
         <ion-item>

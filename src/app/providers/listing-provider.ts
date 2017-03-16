@@ -50,7 +50,7 @@ export class ListingProvider {
      *
      * @param listingId the id of the listing
      */
-    dislike(listingId : number): any{
+    dislikeListing(listingId : number): any{
         assert.number(listingId, "listingID must be a number.");
         // this._logger.error("ListingProvider.dislike is not implemented.");
         this.kasperService.likeDislikeListing(listingId, false);
@@ -63,7 +63,7 @@ export class ListingProvider {
      *
      * @param listingId the id of the listing
      */
-    addToFavourites(listingId : number): any{
+    likeListing(listingId : number): any{
         assert.number(listingId, "listingID must be a number.");
         // this._logger.error("ListingProvider.addToFavourites is not implemented.");
         return this.kasperService.likeDislikeListing(listingId, true);
@@ -72,7 +72,7 @@ export class ListingProvider {
     /**
      * Remove a listing from a users favourites
      *
-     * @param listingID the id of the listing
+     * @param listingId the id of the listing
      */
     removeFromFavourites(listingId : number){
         this._logger.error("ListingProvider.removeFromFavourites is not implemented.");
@@ -113,10 +113,9 @@ export class ListingProvider {
                 "province",
                 "city",
                 "address",
-                // "postalCode" // Back end does not support postalCode.
+                "postalCode"
             );
         }
-        console.log(requiredFields);
         return this.kasperService.getListings(filter, requiredFields, limit);
     }
 
