@@ -14,6 +14,7 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
   BUILD_TYPE=test
   RELEASE_ID=ID4
+  TESTING_BRANCH=id4_ReadyForTesting
   
 
 
