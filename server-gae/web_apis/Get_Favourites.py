@@ -90,6 +90,7 @@ class GetFavourites(webapp2.RequestHandler):
                     'images': listing.images,
                     'longitude': listing.longitude,
                     'latitude': listing.latitude,
+                    'postalCode': listing.postalCode,
                     'thumbnailImageIndex': listing.thumbnailImageIndex
                 }
                 returned_array.append(template_values)

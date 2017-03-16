@@ -233,7 +233,10 @@ def get_like_response(POST):
 def get_listing_response(POST):
     request = webapp2.Request.blank('/getListings', POST=POST)
     response = request.get_response(Main.app)
-    if response.body:
+    print json.loads(response.body)
+    if response.body and (response.status_int == success):
+        return json.loads(response.body)['listings'], response.status_int
+    elif response.body:
         return json.loads(response.body), response.status_int
     else:
         return None, response.status_int

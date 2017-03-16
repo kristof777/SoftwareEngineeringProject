@@ -48,7 +48,8 @@ class TestHandlers(unittest.TestCase):
                            missing_published['error'],
                            missing_token['error'],
                            missing_longitude['error'],
-                           missing_latitude['error']]
+                           missing_latitude['error'],
+                           missing_postal_code['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -68,7 +69,8 @@ class TestHandlers(unittest.TestCase):
                  "thumbnailImageIndex": "",
                  "longitude": "",
                  "latitude": "",
-                 "images": ''
+                 "images": '',
+                 "postalCode": ""
                  }
 
         request = webapp2.Request.blank('/createListing', POST=input)
@@ -90,7 +92,8 @@ class TestHandlers(unittest.TestCase):
                            missing_published['error'],
                            missing_token['error'],
                            missing_longitude['error'],
-                           missing_latitude['error']]
+                           missing_latitude['error'],
+                           missing_postal_code['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -110,7 +113,8 @@ class TestHandlers(unittest.TestCase):
                  "longitude": "   ",
                  "latitude": "   ",
                  "thumbnailImageIndex": "      ",
-                 "images": '    '
+                 "images": "    ",
+                 "postalCode": "   ",
                  }
 
         request = webapp2.Request.blank('/createListing',
@@ -133,7 +137,8 @@ class TestHandlers(unittest.TestCase):
                            missing_published['error'],
                            missing_token['error'],
                            missing_longitude['error'],
-                           missing_latitude['error']]
+                           missing_latitude['error'],
+                           missing_postal_code['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -183,6 +188,7 @@ class TestHandlers(unittest.TestCase):
         input['thumbnailImageIndex'] = 'supposed to be int'
         input['longitude'] = 'supposed to be float'
         input['latitude'] = 'supposed to be float'
+        input['postalCode'] = 'supposed to be float'
 
         request = webapp2.Request.blank('/createListing', POST=input)
         response = request.get_response(Main.app)
@@ -196,6 +202,7 @@ class TestHandlers(unittest.TestCase):
                            invalid_price['error'],
                            invalid_longitude['error'],
                            invalid_latitude['error'],
+                           invalid_postal_code['error'],
                            invalid_thumbnail_image_index['error']
                            ]
 

@@ -81,7 +81,8 @@ class GetMyListing(webapp2.RequestHandler):
                 'longitude': listing.longitude,
                 'latitude': listing.latitude,
                 'images': listing.images,
-                'thumbnailImageIndex': listing.thumbnailImageIndex
+                'thumbnailImageIndex': listing.thumbnailImageIndex,
+                'postalCode': listing.postalCode
             }
             returned_array.append(template_values)
 

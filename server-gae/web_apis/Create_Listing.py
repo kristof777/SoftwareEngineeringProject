@@ -92,7 +92,8 @@ class CreateListing(webapp2.RequestHandler):
                           longitude=float(values['longitude']),
                           latitude=float(values['latitude']),
                           thumbnailImageIndex=int(
-                              values['thumbnailImageIndex']))
+                              values['thumbnailImageIndex']),
+                          postalCode=values['postalCode'])
         listing.put()
         listing.set_property('listingId', listing.key.id())
         listing.put()

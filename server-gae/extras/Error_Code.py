@@ -140,6 +140,9 @@ invalid_longitude = {"error": "invalidLongitude",
 invalid_latitude = {"error": "invalidLatitude",
                     "status": missing_invalid_parameter}
 
+invalid_postal_code = {"error": "invalidPostalCode",
+                    "status": missing_invalid_parameter}
+
 missing_address = {"error": "missingAddress",
                    "status": missing_invalid_parameter}
 
@@ -163,6 +166,9 @@ missing_longitude = {"error": "missingLongitude",
 
 missing_latitude = {"error": "missingLatitude",
                     "status": missing_invalid_parameter}
+
+missing_postal_code = {"error": "missingPostalCode",
+                       "status": missing_invalid_parameter}
 
 missing_description = {"error": "missingDescription",
                        "status": missing_invalid_parameter}
@@ -235,6 +241,7 @@ invalids = {
     'images': invalid_images,
     "longitude": invalid_longitude,
     "latitude": invalid_latitude,
+    "postalCode": invalid_postal_code,
     "senderId": invalid_user_id,
     "phone": invalid_phone,
     "messageId": invalid_message_id,
@@ -269,6 +276,7 @@ missing = {
     "liked": missing_liked,
     "longitude": missing_longitude,
     "latitude": missing_latitude,
+    "postalCode": missing_postal_code,
     "senderId": missing_senderId,
     "message": missing_message,
     "phone": missing_phone_number,

@@ -6,6 +6,7 @@ from Error_Code import *
 from models.User import *
 from validate_email import validate_email
 from google.appengine.ext import testbed
+import re
 
 
 """
@@ -28,7 +29,7 @@ listing_keys contains all the valid keys for a listing
 """
 listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
-                "thumbnailImageIndex", "latitude", "longitude", "authToken"]
+                "thumbnailImageIndex", "latitude", "longitude", "postalCode", "authToken"]
 
 
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
@@ -87,6 +88,16 @@ def get_random_password():
 
     return get_random_string(random.randint(8, 16), 1, 1, 1)
 
+def get_random_postal_code():
+    """
+    a random postalCode
+    :return: a string containing a random password
+    """
+    postalCode = ''
+    for i in range(0,3):
+        postalCode += (get_random_string(1, 0, 1, 0) + str(random.randint(0,9)))
+    return postalCode
+
 
 def create_dummy_users_for_testing(main, n):
     """
@@ -105,8 +116,6 @@ def create_dummy_users_for_testing(main, n):
                     "firstName": get_random_string(),
                     "lastName": get_random_string(),
                     "city": get_random_string(),
-                    "postalCode": get_random_string(
-                        3) + " " + get_random_string(3),
                     "province": "SK",
                     "phone1": get_random_string(10, numbers=10),
                     "phone2": get_random_string(10, numbers=10)
@@ -153,6 +162,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
                                    "bedrooms": str(random.randint(1, 10)),
                                    "longitude": str(random.randint(-180, 180)),
                                    "latitude": str(random.randint(-90, 90)),
+                                   "postalCode": get_random_postal_code(),
                                    "squarefeet": str(random.randint(200, 2000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
@@ -205,6 +215,7 @@ def create_random_listing(user_id, token):
                       "bedrooms": str(random.randint(1, 10)),
                       "longitude": str(random.randint(-180, 180)),
                       "latitude": str(random.randint(-90, 90)),
+                      "postalCode": get_random_postal_code(),
                       "squarefeet": str(random.randint(200, 2000)),
                       "bathrooms": str(random.randint(1, 10)),
                       "price": str(random.randint(20000, 20000000)),
@@ -411,6 +422,14 @@ def is_valid_latitude(latitude):
         return False
 
 
+def is_valid_postal_code(postal_code):
+    # Postal code must be in the form A1A1A1 with no spaces in between
+    # characters.
+    assert postal_code is not None
+    postal_code_re = re.compile(r"\s*(\w\d\s*){3}\s*")
+    return postal_code_re.match(postal_code)
+
+
 def is_valid_longitude(longitude):
     assert longitude is not None
     try:
@@ -499,6 +518,7 @@ valid_check = {
     "images": is_valid_images,
     "latitude": is_valid_latitude,
     "longitude": is_valid_longitude,
+    "postalCode": is_valid_postal_code,
     "messageId": is_valid_integer,
     "readDel": is_valid_read_del,
     "fbId": is_valid_integer,

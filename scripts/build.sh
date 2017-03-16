@@ -14,7 +14,7 @@ ios_build(){
   ionic platform add ios
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
     ionic build ios
-    ionic emulate ios
+    #ionic emulate ios
   fi
 }
 
@@ -38,7 +38,8 @@ android_build(){
     ionic build android --release
   else
     ionic build android
-    ionic emulate android
+    #xvfb-run /home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd   
+    #ionic emulate android
   fi
 }
 

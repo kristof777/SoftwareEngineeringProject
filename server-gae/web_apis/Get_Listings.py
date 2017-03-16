@@ -51,9 +51,12 @@ class GetListing(webapp2.RequestHandler):
             return
 
         # This part should never be called
+        #TODO this part is called by the 4th test case. Is this expected? Why should it noe be called?
         if is_existing_and_non_empty("listingIdList", values):
             listing_info_list = get_listings_from_listing_ids(values)
-            write_success_to_response(self.response, listing_info_list)
+            output_dict = {}
+            output_dict['listings'] = listing_info_list
+            write_success_to_response(self.response, output_dict)
             return
 
         # Now time to deal with the filter
@@ -128,8 +131,10 @@ class GetListing(webapp2.RequestHandler):
             if listing_object is not None:
                 listing_info_list.append(create_returned_values_dict(listing_object, values))
 
+        output_dict = {}
+        output_dict['listings'] = listing_info_list
         Listing.reset_filter()
-        write_success_to_response(self.response, listing_info_list)
+        write_success_to_response(self.response, output_dict)
 
 
 def create_returned_values_dict(listing_object, values_dict):

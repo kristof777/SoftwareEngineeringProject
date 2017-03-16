@@ -14,21 +14,22 @@ DEFAULT_PRICE_MIN = 10
 
 class Listing(ndb.Model):
     """Models an individual Guestbook entry with content and date."""
-    bedrooms = ndb.IntegerProperty(required=True)
-    squarefeet = ndb.IntegerProperty(required=True)
-    bathrooms = ndb.FloatProperty(required=True)
-    price = ndb.IntegerProperty(required=True)
-    description = ndb.StringProperty(required=True)
-    isPublished = ndb.BooleanProperty(required=True, default=False)
-    province = ndb.StringProperty(required=True)
-    city = ndb.StringProperty(required=True)
+    bedrooms = ndb.IntegerProperty(required=False)
+    squarefeet = ndb.IntegerProperty(required=False)
+    bathrooms = ndb.FloatProperty(required=False)
+    price = ndb.IntegerProperty(required=False)
+    description = ndb.StringProperty(required=False)
+    isPublished = ndb.BooleanProperty(required=False, default=False)
+    province = ndb.StringProperty(required=False)
+    city = ndb.StringProperty(required=False)
     images = ndb.BlobProperty(repeated=True)
-    thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
-    userId = ndb.IntegerProperty(required=True)
-    address = ndb.StringProperty(required=True)
-    listingId = ndb.IntegerProperty(required=True,default=0)
-    longitude = ndb.FloatProperty(required=True, default=0)
-    latitude = ndb.FloatProperty(required=True, default=0)
+    thumbnailImageIndex = ndb.IntegerProperty(required=False, default=0)
+    userId = ndb.IntegerProperty(required=False)
+    address = ndb.StringProperty(required=False)
+    listingId = ndb.IntegerProperty(required=False,default=0)
+    longitude = ndb.FloatProperty(required=False, default=0)
+    latitude = ndb.FloatProperty(required=False, default=0)
+    postalCode = ndb.StringProperty(required=False)
 
     numeric_filter_bounds = {
         "bedrooms_min": DEFAULT_BEDROOMS_MIN,
@@ -94,6 +95,9 @@ class Listing(ndb.Model):
     def set_latitude(self, latitude):
         self.latitude = float(latitude)
 
+    def set_postalCode(self, postal_code):
+        self.postalCode = postal_code
+
     def set_property(self, key, value):
         _key_to_set = {
             "price": self.set_price,
@@ -108,8 +112,9 @@ class Listing(ndb.Model):
             "images": self.set_images,
             "listingId": self.set_listing_id,
             "city": self.set_city,
-            "longitude": self.longitude,
-            "latitude": self.latitude
+            "longitude": self.set_longitude,
+            "latitude": self.set_latitude,
+            "postalCode": self.set_postalCode
         }
         _key_to_set[key](value)
 
@@ -129,7 +134,8 @@ class Listing(ndb.Model):
             "images": self.images,
             "listingId": self.listingId,
             "longitude": self.longitude,
-            "latitude": self.latitude
+            "latitude": self.latitude,
+            "postalCode": self.latitude
         }
         return _key_to_get_value[key]
 
@@ -163,5 +169,7 @@ class Listing(ndb.Model):
             return cls.longitude
         if key == 'latitude':
             return cls.latitude
+        if key == 'postalCode':
+            return cls.postalCode
 
 
