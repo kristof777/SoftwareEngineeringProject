@@ -57,7 +57,7 @@ class SignIn(BaseHandler):
             logging.info('Sign-in failed for user %s because of %s',
                          values['email'], type(e))
             error = {
-                not_authorized['error']: 'Listing can\'t be liked by owner'
+                not_authorized['error']: 'email or password was incorrect'
             }
             write_error_to_response(self.response, error,
                                     not_authorized['status'])
