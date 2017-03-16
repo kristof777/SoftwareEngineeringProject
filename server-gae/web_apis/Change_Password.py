@@ -32,7 +32,6 @@ class ChangePassword(BaseHandler):
 
         error_keys = ['oldPassword', 'newPassword', 'confirmedPassword',
                       'userId']
-
         # validating if request has all required keys
 
         errors, values = keys_missing(error_keys, self.request.POST)
@@ -41,7 +40,6 @@ class ChangePassword(BaseHandler):
             write_error_to_response(self.response, errors,
                                     missing_invalid_parameter)
             return
-
         #check if user_id is not a valid int
         if not is_valid_integer(values['userId']):
             write_error_to_response(self.response, missing_invalid_parameter['error'],
