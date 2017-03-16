@@ -1,6 +1,10 @@
 exports.config = {
+    onPrepare: function(){
+        let SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+        jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+    },
+
     capabilities: {
-        
         'browserName': 'chrome',
         'chromeOptions': {
             args: ['--disable-web-security']
