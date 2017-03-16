@@ -47,6 +47,7 @@ from web_apis.Contact_Seller import ContactSeller
 from web_apis.Edit_Message import EditMessage
 from web_apis.FB_Login import FacebookLogin
 from web_apis.Get_Messages import GetMessages
+from web_apis.Initialize_DB_Testers import InitializeDB
 
 # configuration
 config = {
@@ -84,7 +85,10 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/contactSeller', ContactSeller),
     webapp2.Route('/editMessage', EditMessage),
     webapp2.Route('/fbLogin', FacebookLogin),
-    webapp2.Route('/getMessages', GetMessages)
+    webapp2.Route('/getMessages', GetMessages),
+    webapp2.Route('/initDBTESTERS', InitializeDB)
+
+
 
 
 

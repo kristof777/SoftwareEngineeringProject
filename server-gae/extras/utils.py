@@ -592,6 +592,7 @@ def get_response_from_post(Main, post, api):
     request = webapp2.Request.blank('/' + api,POST=post)
     response = request.get_response(Main.app)
     if response.body:
+        # print(response.body)
         json_body = json.loads(response.body)
         if json_body:
             return json_body, response.status_int
@@ -616,6 +617,7 @@ def check_output_for_sign_in(self,output, database_user):
     self.assertEquals(user_saved.phone1, database_user['phone1'])
     self.assertEquals(user_saved.phone2, database_user['phone2'])
     self.assertEquals(user_saved.province, database_user['province'])
+
 
 def get_keys_from_values(values):
     return [str(x) for x in values]
