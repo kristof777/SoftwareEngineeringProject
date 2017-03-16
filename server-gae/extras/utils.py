@@ -303,7 +303,7 @@ def is_valid_integer(input_string):
         return False
 
 
-def is_valid_float(input_string):
+def is_valid_bathroom(input_string):
     """
 
     Checks if input_string is float or not
@@ -312,8 +312,11 @@ def is_valid_float(input_string):
     """
     assert input_string is not None
     try:
-        float(input_string)
-        return True
+        br = float(input_string)
+        if round(br) - br == 0 or round(br) - br == 0.5:
+            return True
+        else:
+            return False
     except ValueError:
         return False
 
@@ -504,7 +507,7 @@ valid_check = {
     "userId": is_valid_integer,
     "listingId": is_valid_integer,
     "price": is_valid_integer,
-    "bathrooms": is_valid_float,
+    "bathrooms": is_valid_bathroom,
     "bedrooms": is_valid_integer,
     "squarefeet": is_valid_integer,
     "isPublished": is_valid_bool,
