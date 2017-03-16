@@ -1,6 +1,6 @@
-describe('Regression tests', function() {
-    let originalTimeout;
+describe('Regression tests: functionality while not signed in', function() {
     browser.get('');
+    let originalTimeout;
 
     beforeEach(function () {
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
@@ -38,13 +38,15 @@ describe('Regression tests', function() {
         confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
         nextButton = element(by.buttonText('Next'));
 
-        email.sendKeys('test@test.com');
-        expect(email.getAttribute('value')).toContain("test@test.com");
-        password.sendKeys('Password123');
-        expect(password.getAttribute('value')).toContain("Password123");
-        confirmPassword.sendKeys('Password1234');
-        expect(confirmPassword.getAttribute('value')).toContain("Password1234");
-
+        email.sendKeys('test@test.com').then(function(){
+            expect(email.getAttribute('value')).toContain("test@test.com");
+        });
+        password.sendKeys('Password123').then(function(){
+            expect(password.getAttribute('value')).toContain("Password123");
+        });
+        confirmPassword.sendKeys('Password1234').then(function(){
+            expect(confirmPassword.getAttribute('value')).toContain("Password1234");
+        });
         nextButton.click().then(function(){
             expect(nextButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
             email.sendKeys().clear();
@@ -53,21 +55,24 @@ describe('Regression tests', function() {
         });
 
         let myProfileTab = element(by.id('tab-t0-2'));
-        myProfileTab.click();
-        expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+        myProfileTab.click().then(function(){
+            expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+        });
         done();
     });
+});
 
+describe('Regression tests: functionality while signed in', function(){
     it('should test if a prompt is given after an incorrect login', function(done) {
         let email = element(by.id('email')).all(by.tagName('input')).first();
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
-
-        expect(email.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
-        email.sendKeys('test@usask.ca');
-        expect(email.getAttribute('value')).toContain("test@usask.ca");
-        password.sendKeys('WrongPassword');
-        expect(password.getAttribute('value')).toContain("WrongPassword");
+        email.sendKeys('test@usask.ca').then(function(){
+            expect(email.getAttribute('value')).toContain("test@usask.ca");
+        });
+        password.sendKeys('WrongPassword').then(function(){
+            expect(password.getAttribute('value')).toContain("WrongPassword");
+        });
         signInButton.click();
 
         //Dismiss invalid credentials alert
@@ -86,8 +91,12 @@ describe('Regression tests', function() {
         let signInButton = element(by.buttonText('Sign In'));
         expect(email.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
 
-        email.sendKeys('test@usask.ca');
-        password.sendKeys('Password123');
+        email.sendKeys('test@usask.ca').then(function(){
+            expect(email.getAttribute('value')).toContain("test@usask.ca");
+        });
+        password.sendKeys('Password123').then(function(){
+            expect(password.getAttribute('value')).toContain("Password123");
+        });
 
         signInButton.click().then(function(){
             let filterButton = element(by.id('goToFilters'));
@@ -101,5 +110,4 @@ describe('Regression tests', function() {
         });
         done();
     });
-
 });
