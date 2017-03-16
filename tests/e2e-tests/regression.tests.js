@@ -22,7 +22,7 @@ describe('Regression tests: functionality while not signed in', function() {
                 let registerButton = element(by.css('.register'));
                 for(i = 0; i < 10; i++)
                     myProfileTab.click();
-                expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+                expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Sign-In" page to be displayed, but was not');
             });
         });
         done();
@@ -30,33 +30,33 @@ describe('Regression tests: functionality while not signed in', function() {
 
     it('should test if "Confirm Password" field on register page allows incorrect matches', function(done) {
         let registerButton = element(by.css('.register'));
-        registerButton.click();
+        registerButton.click().then(function(){
+            let email, password, confirmPassword, nextButton;
+            email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
+            password = element(by.id('signUpPassword')).all(by.tagName('input')).first();
+            confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
+            nextButton = element(by.buttonText('Next'));
 
-        let email, password, confirmPassword, nextButton;
-        email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
-        password = element(by.id('signUpPassword')).all(by.tagName('input')).first();
-        confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
-        nextButton = element(by.buttonText('Next'));
+            email.sendKeys('test@test.com').then(function(){
+                expect(email.getAttribute('value')).toContain("test@test.com");
+            });
+            password.sendKeys('Password123').then(function(){
+                expect(password.getAttribute('value')).toContain("Password123");
+            });
+            confirmPassword.sendKeys('Password1234').then(function(){
+                expect(confirmPassword.getAttribute('value')).toContain("Password1234");
+            });
+            nextButton.click().then(function(){
+                expect(nextButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
+                email.sendKeys().clear();
+                password.sendKeys().clear();
+                confirmPassword.sendKeys().clear();
+            });
 
-        email.sendKeys('test@test.com').then(function(){
-            expect(email.getAttribute('value')).toContain("test@test.com");
-        });
-        password.sendKeys('Password123').then(function(){
-            expect(password.getAttribute('value')).toContain("Password123");
-        });
-        confirmPassword.sendKeys('Password1234').then(function(){
-            expect(confirmPassword.getAttribute('value')).toContain("Password1234");
-        });
-        nextButton.click().then(function(){
-            expect(nextButton.isDisplayed()).toBe(true, 'Expected the "Browse" page to be displayed, but was not');
-            email.sendKeys().clear();
-            password.sendKeys().clear();
-            confirmPassword.sendKeys().clear();
-        });
-
-        let myProfileTab = element(by.id('tab-t0-2'));
-        myProfileTab.click().then(function(){
-            expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+            let myProfileTab = element(by.id('tab-t0-2'));
+            myProfileTab.click().then(function(){
+                expect(registerButton.isDisplayed()).toBe(true, 'Expected the "Register" page to be displayed, but was not');
+            });
         });
         done();
     });
