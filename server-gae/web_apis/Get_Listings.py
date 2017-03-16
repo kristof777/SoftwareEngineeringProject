@@ -114,6 +114,9 @@ class GetListing(webapp2.RequestHandler):
 
             returned_listing_ids = filter_favorite_listings(values["userId"], returned_listing_ids)
 
+            # get rid of my listings
+            returned_listing_ids = filter_my_listings(values["userId"], returned_listing_ids)
+
         # now we decide the number of items to  return
         max_limit = DEFAULT_MAX_LIMIT
 
@@ -347,6 +350,32 @@ def filter_favorite_listings(user_id, listing_ids):
     for seen_listing_id in seen_listing_ids:
         if seen_listing_id in listing_ids:
             filtered_listing_ids.remove(seen_listing_id)
+
+    return filtered_listing_ids
+
+
+def filter_my_listings(user_id, listing_ids):
+    """
+    This function is removing all listings that belongs to that user
+
+    @pre-cond: user_id and listing_ids are not none
+    @post-cond: none
+
+    :parameter user_id: the userId in order to find all his listings
+    :parameter listing_ids: the list of listingIds
+    :return the list of listingIds after this filter
+    """
+    user_id = int(json.loads(user_id))
+    my_listings = Listing.query(user_id == Listing.userId).fetch()
+    my_listing_ids = []
+    for my_listing in my_listings:
+        my_listing_ids.append(my_listing.listingId)
+
+    # delete those listingIds in listing_ids which are in the my_listing_ids
+    filtered_listing_ids = listing_ids
+    for my_listing_id in my_listing_ids:
+        if my_listing_id in listing_ids:
+            filtered_listing_ids.remove(my_listing_id)
 
     return filtered_listing_ids
 
