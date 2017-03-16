@@ -1,3 +1,4 @@
+import json
 import sys
 from google.appengine.ext import ndb
 sys.path.append("../")
@@ -19,12 +20,12 @@ class Listing(ndb.Model):
     bathrooms = ndb.FloatProperty(required=False)
     price = ndb.IntegerProperty(required=False)
     description = ndb.StringProperty(required=False)
-    isPublished = ndb.BooleanProperty(required=False, default=False)
+    isPublished = ndb.BooleanProperty(required=True)
     province = ndb.StringProperty(required=False)
     city = ndb.StringProperty(required=False)
-    images = ndb.BlobProperty(repeated=True)
+    images = ndb.BlobProperty(required=False, repeated=True)
     thumbnailImageIndex = ndb.IntegerProperty(required=False, default=0)
-    userId = ndb.IntegerProperty(required=False)
+    userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=False)
     listingId = ndb.IntegerProperty(required=False,default=0)
     longitude = ndb.FloatProperty(required=False, default=0)

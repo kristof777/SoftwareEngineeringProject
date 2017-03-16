@@ -213,6 +213,7 @@ class TestHandlers(unittest.TestCase):
     def test_correct_input(self):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
+        correct_input["isPublished"] = "True"
         request = webapp2.Request.blank('/createListing', POST=correct_input)
         response = request.get_response(Main.app)
 
@@ -233,6 +234,48 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_created.address, correct_input['address'])
         self.assertEquals(listing_created.thumbnailImageIndex, int(correct_input['thumbnailImageIndex']))
         self.assertEquals(listing_created.images, json.loads(correct_input['images']))
+
+    def test_correct_create_unpublished_listing(self):
+        inputs, users = create_dummy_listings_for_testing(Main, 1)
+        correct_input = inputs[0]
+        correct_input['isPublished'] = "False"
+        del correct_input['bedrooms']
+        del correct_input['bathrooms']
+        del correct_input['description']
+        del correct_input['images']
+        del correct_input['address']
+        del correct_input['squarefeet']
+        del correct_input['price']
+        request = webapp2.Request.blank('/createListing', POST=correct_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, success)
+
+        output = json.loads(response.body)
+        self.assertTrue("listingId" in output)
+
+        listing_created = Listing.get_by_id(int(output["listingId"]))
+        self.assertEquals(None, listing_created.bedrooms)
+        self.assertEquals(None, listing_created.bathrooms)
+        self.assertEquals(None, listing_created.description)
+        self.assertEquals([], listing_created.images)
+        self.assertEquals(None, listing_created.address)
+        self.assertEquals(None, listing_created.squarefeet)
+        self.assertEquals(None, listing_created.price)
+
+    def test_missing_is_published(self):
+        inputs, users = create_dummy_listings_for_testing(Main, 1)
+        correct_input = inputs[0]
+        del correct_input['isPublished']
+        request = webapp2.Request.blank('/createListing', POST=correct_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, missing_invalid_parameter)
+        errors_expected = [missing_published['error']]
+
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def tearDown(self):
         self.testbed.deactivate()
