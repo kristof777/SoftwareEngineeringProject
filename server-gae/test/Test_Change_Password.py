@@ -53,12 +53,8 @@ class TestHandlerChangePassword(unittest.TestCase):
         request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-            print error_message
-        except IndexError as _:
-            self.assertFalse()
-        self.assertEquals(not_authorized['error'], error_message)
+        error_keys = [str(x) for x in json.loads(response.body)]
+        self.assertTrue(are_two_lists_same(error_keys[0], not_authorized['error']))
 
 
     def test_missing_fields(self):

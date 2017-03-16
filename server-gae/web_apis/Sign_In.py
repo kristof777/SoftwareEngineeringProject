@@ -56,5 +56,8 @@ class SignIn(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          values['email'], type(e))
-            write_error_to_response(self.response, not_authorized['error'],
+            error = {
+                not_authorized['error']: 'email or password was incorrect'
+            }
+            write_error_to_response(self.response, error,
                                     not_authorized['status'])

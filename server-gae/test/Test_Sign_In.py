@@ -70,11 +70,8 @@ class TestHandlerSignIn(unittest.TestCase):
         request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse()
-        self.assertEquals(not_authorized['error'], error_message)
+        error_keys = [str(x) for x in json.loads(response.body)]
+        self.assertEquals(not_authorized['error'], error_keys[0])
 
     def test_incorrect_userName(self):
         # Test2: When incorrect user_name, but correct password
@@ -83,13 +80,9 @@ class TestHandlerSignIn(unittest.TestCase):
         request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse()
-        self.assertEquals(not_authorized['error'], error_message)
 
-
+        error_keys = [str(x) for x in json.loads(response.body)]
+        self.assertTrue(are_two_lists_same(error_keys[0], not_authorized['error']))
 
 
     def tearDown(self):
