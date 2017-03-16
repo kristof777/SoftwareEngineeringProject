@@ -54,7 +54,7 @@ class EditListing(webapp2.RequestHandler):
         # check if there's any unrecognized key presented in changeValues
         if any(key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
                            "province", "address", "description", "isPublished",
-                           "images","thumbnailImageIndex"] for key in
+                           "images","thumbnailImageIndex", "postalCode"] for key in
                change_values.keys()):
             write_error_to_response(self.response, {unrecognized_key['error']:
                                                         "Unrecognized key found"},
