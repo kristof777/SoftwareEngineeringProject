@@ -35,21 +35,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
-                           missing_bedrooms['error'],
-                           missing_squarefeet['error'],
-                           missing_bathrooms['error'],
-                           missing_price['error'],
-                           missing_description['error'],
-                           missing_province['error'],
-                           missing_city['error'],
-                           missing_address['error'],
-                           missing_image['error'],
-                           missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error'],
-                           missing_longitude['error'],
-                           missing_latitude['error'],
-                           missing_postal_code['error']]
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -79,21 +66,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
-                           missing_bedrooms['error'],
-                           missing_squarefeet['error'],
-                           missing_bathrooms['error'],
-                           missing_price['error'],
-                           missing_description['error'],
-                           missing_province['error'],
-                           missing_city['error'],
-                           missing_address['error'],
-                           missing_image['error'],
-                           missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error'],
-                           missing_longitude['error'],
-                           missing_latitude['error'],
-                           missing_postal_code['error']]
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -124,21 +98,8 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
-                           missing_bedrooms['error'],
-                           missing_squarefeet['error'],
-                           missing_bathrooms['error'],
-                           missing_price['error'],
-                           missing_description['error'],
-                           missing_province['error'],
-                           missing_city['error'],
-                           missing_address['error'],
-                           missing_image['error'],
-                           missing_image_index['error'],
                            missing_published['error'],
-                           missing_token['error'],
-                           missing_longitude['error'],
-                           missing_latitude['error'],
-                           missing_postal_code['error']]
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
@@ -157,11 +118,7 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(response.status_int, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
-                           missing_token['error'],
-                           missing_squarefeet['error'],
-                           missing_description['error'],
-                           missing_city['error'],
-                           missing_image['error']]
+                           missing_token['error']]
 
         error_keys = [str(x) for x in json.loads(response.body)]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))

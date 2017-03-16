@@ -24,12 +24,12 @@ class Listing(ndb.Model):
     province = ndb.StringProperty(required=False)
     city = ndb.StringProperty(required=False)
     images = ndb.BlobProperty(required=False, repeated=True)
-    thumbnailImageIndex = ndb.IntegerProperty(required=False, default=0)
+    thumbnailImageIndex = ndb.IntegerProperty(required=False)
     userId = ndb.IntegerProperty(required=True)
     address = ndb.StringProperty(required=False)
-    listingId = ndb.IntegerProperty(required=False,default=0)
-    longitude = ndb.FloatProperty(required=False, default=0)
-    latitude = ndb.FloatProperty(required=False, default=0)
+    listingId = ndb.IntegerProperty(required=False)
+    longitude = ndb.FloatProperty(required=False)
+    latitude = ndb.FloatProperty(required=False)
     postalCode = ndb.StringProperty(required=False)
 
     numeric_filter_bounds = {

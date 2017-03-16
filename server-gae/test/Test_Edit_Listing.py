@@ -29,14 +29,19 @@ class TestHandlers(unittest.TestCase):
         setup_testbed(self)
 
         # create a user as well as a listing that the user owns
-        listings, users = create_dummy_listings_for_testing(Main, 1)
-        assert len(listings) == 1
+        users = create_dummy_users_for_testing(Main, 1)
         assert len(users) == 1
         owner = users[0]
-        listing = listings[0]
         self.ownerId = owner['userId']
         self.token = owner['authToken']
-        self.listingId = listing['listingId']
+
+        listing_info = create_random_listing(self.ownerId, self.token)
+        listing_info['isPublished'] = 'False'
+        request = webapp2.Request.blank('/createListing',
+                                        POST=listing_info)
+        response = request.get_response(Main.app)
+        output = json.loads(response.body)
+        self.listingId = output["listingId"]
 
         # now create a new user as an editor
         users = create_dummy_users_for_testing(Main, 1)
@@ -44,7 +49,6 @@ class TestHandlers(unittest.TestCase):
         editors = users[0]
         self.editorId = editors['userId']
         self.editorToken = editors['authToken']
-
 
     def test_missing_input(self):
         res_value, status = get_response(get_post_dictionary("", "", "", {}))
@@ -136,7 +140,7 @@ class TestHandlers(unittest.TestCase):
                          "squarefeet": "1500",
                          "bathrooms": "5",
                          "price": "2050000",
-                         "isPublished": "False",
+                         "isPublished": "True",
                          "city": "Regina",
                          "address": "312 Summer Place",
                          "thumbnailImageIndex": 1
@@ -158,6 +162,61 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_changed.address, change_values['address'])
         self.assertEquals(listing_changed.thumbnailImageIndex,
                           int(change_values['thumbnailImageIndex']))
+
+    def test_unpublishing_input(self):
+        change_values = {"isPublished": "False"}
+        res_value, status = get_response(
+            get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
+        self.assertEquals(status, success)
+        listing_changed = Listing.get_by_id(self.listingId)
+        self.assertEquals(str(listing_changed.isPublished),
+                          change_values['isPublished'])
+
+    def test_publish_unpublished_input_with_missing_fields(self):
+        listing_info = create_random_listing(self.ownerId, self.token)
+        listing_info['isPublished'] = 'False'
+        del listing_info['description']
+        del listing_info['bedrooms']
+        del listing_info['bathrooms']
+        del listing_info['thumbnailImageIndex']
+        del listing_info['images']
+        del listing_info['address']
+        del listing_info['squarefeet']
+        del listing_info['price']
+        del listing_info['longitude']
+        del listing_info['latitude']
+        del listing_info['postalCode']
+        del listing_info['city']
+        del listing_info['province']
+
+        request = webapp2.Request.blank('/createListing',
+                                        POST=listing_info)
+        response = request.get_response(Main.app)
+        output = json.loads(response.body)
+        listingId2 = output["listingId"]
+
+        change_values = {"isPublished": "True"}
+        res_value, status = get_response(
+            get_post_dictionary(self.ownerId, listingId2, self.token, change_values))
+
+        self.assertEquals(status, missing_invalid_parameter)
+
+        errors_expected = [Error_Code.missing_bedrooms['error'],
+                           Error_Code.missing_bathrooms['error'],
+                           Error_Code.missing_description['error'],
+                           Error_Code.missing_image['error'],
+                           Error_Code.missing_image_index['error'],
+                           Error_Code.missing_address['error'],
+                           Error_Code.missing_squarefeet['error'],
+                           Error_Code.missing_price['error'],
+                           Error_Code.missing_longitude['error'],
+                           Error_Code.missing_latitude['error'],
+                           Error_Code.missing_postal_code['error'],
+                           Error_Code.missing_city['error'],
+                           Error_Code.missing_province['error']]
+
+        # checking if there is a difference between error_keys and what we got
+        self.assertEquals(are_two_lists_same(res_value, errors_expected), True)
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are

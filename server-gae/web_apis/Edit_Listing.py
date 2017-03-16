@@ -1,3 +1,5 @@
+import copy
+
 from extras.utils import *
 import datetime
 from models.Listing import Listing
@@ -134,7 +136,44 @@ class EditListing(webapp2.RequestHandler):
             return
 
         for key in change_values:
-            listing.set_property(key, change_values[key])
+            if key != "isPublished":
+                listing.set_property(key, change_values[key])
+        # if isPublished field is changed from false to true, check missing fields
+        if is_existing_and_non_empty("isPublished", change_values):
+            if (not listing.isPublished) and (convert_to_bool(change_values["isPublished"])):
+                errors = fields_missing(listing)
+                if len(errors) != 0:
+                    write_error_to_response(self.response,
+                                            errors,
+                                            missing_invalid_parameter)
+                    return
+            listing.isPublished = convert_to_bool(change_values["isPublished"])
+
         listing.put()
         write_success_to_response(self.response, {
             'modifiedDate': str(datetime.datetime.now())})
+
+
+def fields_missing(listing):
+    """
+    check if there's any fields that are None or empty
+
+    :param required_keys: List of keys
+    :param post: Post request
+    :return: errors and post values converted to string
+    """
+    errors = {}
+    listing_keys_clone = copy.deepcopy(listing_keys)
+    listing_keys_clone.remove("authToken")
+    diffs = set(listing_keys_clone) - set(listing.__dict__['_values'].keys())
+    if diffs != 0:
+        for diff in diffs:
+            error = missing[diff]['error']
+            errors[error] = str(diff) + " is Missing"
+        if not listing.__dict__['_values']['images']:
+            image_error = missing['images']['error']
+            errors[image_error] = "images is Missing"
+
+    return errors
+
+
