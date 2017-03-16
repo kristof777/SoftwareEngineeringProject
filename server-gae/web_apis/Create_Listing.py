@@ -40,18 +40,16 @@ class CreateListing(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = listing_keys
 
+        error_keys = ["isPublished", "userId", "authToken"]
         errors, values = keys_missing(error_keys, self.request.POST)
         if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+            write_error_to_response(self.response, errors, missing_invalid_parameter)
             return
 
         invalid = key_validation(values)
         if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
+            write_error_to_response(self.response, invalid, missing_invalid_parameter)
             return
 
         # find the correct user with userId
@@ -66,27 +64,58 @@ class CreateListing(webapp2.RequestHandler):
 
         # Check if it is the valid user
         valid_user = user.validate_token(int(values["userId"]),
-                                                    "auth",
-                                                    values["authToken"])
+                                         "auth",
+                                         values["authToken"])
         if not valid_user:
             write_error_to_response(self.response, {not_authorized['error']:
                                                         "not authorized to create listings"},
                                     not_authorized['status'])
             return
 
-        values['province'] = scale_province(str(values['province']))
         is_published = convert_to_bool(values["isPublished"])
+        if not is_published:
+            listing = Listing(userId=int(values['userId']), isPublished=False)
+            for key in values:
+                if key not in ["authToken", "listingId", "userId", "isPublished"]:
+                    if key == 'images':
+                        listing.images = format_images_from_request(values)
+                    elif key == 'province':
+                        listing.province = scale_province(str(values['province']))
+                    else:
+                        listing.set_property(key, values[key])
+            listing.put()
+            listing.set_property('listingId', listing.key.id())
+            listing.put()
+            write_success_to_response(self.response,
+                                      {'listingId': listing.listingId})
+            return
+
+        # create a published listing
+        error_keys = listing_keys
+        errors, values = keys_missing(error_keys, self.request.POST)
+        if len(errors) != 0:
+            write_error_to_response(self.response, errors,
+                                    missing_invalid_parameter)
+            return
+
+        invalid = key_validation(values)
+        if len(invalid) != 0:
+            write_error_to_response(self.response, invalid,
+                                    missing_invalid_parameter)
+            return
+
+        values['province'] = scale_province(str(values['province']))
 
         # all set
-        values['images'] = json.loads(values['images'])
-        values['images'] = [str(image) for image in values['images']]
+        format_images_from_request(values)
+
         listing = Listing(userId=int(values['userId']),
                           bedrooms=int(values['bedrooms']),
                           squarefeet=int(values['squarefeet']),
                           bathrooms=float(values['bathrooms']),
                           price=int(values['price']),
                           description=values['description'],
-                          isPublished=is_published, province=values['province'],
+                          isPublished=True, province=values['province'],
                           city=values['city'],
                           address=values['address'], images=values['images'],
                           longitude=float(values['longitude']),
@@ -99,3 +128,10 @@ class CreateListing(webapp2.RequestHandler):
         listing.put()
         write_success_to_response(self.response,
                                   {'listingId': listing.listingId})
+
+
+def format_images_from_request(values):
+    values['images'] = json.loads(values['images'])
+    values['images'] = [str(image) for image in values['images']]
+    return values['images']
+
