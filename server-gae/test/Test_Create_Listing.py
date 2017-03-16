@@ -170,6 +170,7 @@ class TestHandlers(unittest.TestCase):
     def test_correct_input(self):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
+        correct_input["bathrooms"] = 5.5
         correct_input["isPublished"] = "True"
         request = webapp2.Request.blank('/createListing', POST=correct_input)
         response = request.get_response(Main.app)
@@ -191,6 +192,22 @@ class TestHandlers(unittest.TestCase):
         self.assertEquals(listing_created.address, correct_input['address'])
         self.assertEquals(listing_created.thumbnailImageIndex, int(correct_input['thumbnailImageIndex']))
         self.assertEquals(listing_created.images, json.loads(correct_input['images']))
+
+    def test_invalid_bathroom_input(self):
+        inputs, users = create_dummy_listings_for_testing(Main, 1)
+        correct_input = inputs[0]
+        correct_input["bathrooms"] = 5.25
+        request = webapp2.Request.blank('/createListing', POST=correct_input)
+        response = request.get_response(Main.app)
+
+        self.assertEquals(response.status_int, missing_invalid_parameter)
+
+        errors_expected = [invalid_bathrooms['error']]
+
+        error_keys = [str(x) for x in json.loads(response.body)]
+
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
 
     def test_correct_create_unpublished_listing(self):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
