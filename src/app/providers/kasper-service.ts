@@ -402,7 +402,7 @@ export class KasperService {
         result['general']['missingUserId'] = "You must be logged in to perform this action";
 
         result['signIn'] = [];
-        result['signIn']['notAuthorized'] = "Looks like you entered the wrong email or password";
+        result['signIn']['invalidCredentials'] = "Looks like you entered the wrong email or password";
         result['signIn']['missingEmail'] = "Please enter your email to continue";
         result['signIn']['missingPassword'] = "Please enter your password to continue";
 
