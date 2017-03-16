@@ -12,7 +12,7 @@ import Main
 import webapp2
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import setup_testbed
+from extras.utils import *
 
 
 class TestHandlerChangePassword(unittest.TestCase):
@@ -20,17 +20,12 @@ class TestHandlerChangePassword(unittest.TestCase):
         setup_testbed(self)
         # I need to create the database entry manually because I need access
         # to the password.
-        database_entry1 = {"email": "student@usask.ca",
-                           "password": "aaAA1234",
-                           "firstName": "Student",
-                           "lastName": "USASK",
-                           "city": "Saskatoon",
-                           "postalCode": "S7N 4P7",
-                           "province": "Saskatchewan",
-                           "phone1": 1111111111,
-                           "confirmedPassword": "aaAA1234"}
+        self.database_user = create_random_user()
+        self.database_user['password'] = 'aaAA1234'
+        self.database_user['confirmedPassword'] = 'aaAA1234'
+        self.database_user['email'] = 'student@usask.ca'
 
-        request = webapp2.Request.blank('/createUser', POST=database_entry1)
+        request = webapp2.Request.blank('/createUser', POST=self.database_user)
         response = request.get_response(Main.app)
 
         self.user = json.loads(response.body)
@@ -42,17 +37,29 @@ class TestHandlerChangePassword(unittest.TestCase):
 
     def test_change_password(self):
         # Test Case: Success case
-        input5 = {"oldPassword": "aaAA1234",
+        input = {"oldPassword": "aaAA1234",
                   "newPassword": "newPass123",
                   "confirmedPassword": "newPass123",
                   "userId": self.user_id}
-
-        request = webapp2.Request.blank('/changePassword', POST=input5)
+        request = webapp2.Request.blank('/changePassword', POST=input)
         response = request.get_response(Main.app)
         self.assertEquals(response.status_int, success)
-
         output = json.loads(response.body)
         self.assertTrue("authToken" in output)
+
+        #Check to make sure old password no longer works
+        input2 = {'email': 'student@usask.ca',
+                  'password': 'aaAA1234'}
+        request = webapp2.Request.blank('/signIn', POST=input2)
+        response = request.get_response(Main.app)
+        self.assertEquals(response.status_int, unauthorized_access)
+        try:
+            error_message = str(json.loads(response.body))
+            print error_message
+        except IndexError as _:
+            self.assertFalse()
+        self.assertEquals(not_authorized['error'], error_message)
+
 
     def test_missing_fields(self):
         # Test case: One or more fields were not entered
