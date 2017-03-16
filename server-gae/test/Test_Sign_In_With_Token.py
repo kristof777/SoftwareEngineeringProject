@@ -1,9 +1,7 @@
 from __future__ import absolute_import
-
 import json
 import os
 import sys
-
 sys.path.append('../')
 import unittest
 from extras.Error_Code import *
@@ -27,6 +25,10 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(response.status_int, success)
         self.user_id = json.loads(response.body)['userId']
         self.token = json.loads(response.body)['authToken']
+
+    def test_initdb(self):
+        get_response_from_post(Main, {}, "initDBTESTERS")
+
 
     def test_sign_in_missing_params(self):
         # No input parameters
