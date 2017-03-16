@@ -26,7 +26,7 @@ export class MyListingsPage {
 
         this.listings = Array();
     }
-   //Documentation for this please in diff file 
+   //Documentation for this please in diff file
     ionViewDidEnter(){
         let me = this;
 
@@ -38,7 +38,7 @@ export class MyListingsPage {
             });
         }
     }
-//add precondition & assert \/ 
+//add precondition & assert \/
     /**
      * Display the detailed view for the selected listing
      *
@@ -49,7 +49,7 @@ export class MyListingsPage {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
-        this._logger.debug("Listing  " + listing + " was clicked") //probably changed to listing id and semicolon
+        this._logger.debug("ListingId  " + listing + " was clicked"); //probably changed to listing id and semicolon
     }
     //precondition that listing is null \/
     /**
@@ -65,7 +65,7 @@ export class MyListingsPage {
             listing: listing
         });
 
-    }//semicolon
+    };
 //pre condition assert logging
     /**
      * fixx me
