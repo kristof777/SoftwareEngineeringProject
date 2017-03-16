@@ -105,7 +105,6 @@ export class SignInPage {
             this.navCtrl.parent.select(0);
 
             }, error => {
-                this._logger.error("signIn error: " + JSON.stringify(error));
                 this.kasperService.handleError("signIn", error.json());
             });
         this.loading.dismiss();

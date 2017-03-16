@@ -35,17 +35,15 @@ export class DetailPage {
     }
 
     /**
-     * Navigate to the My Listings page.
-     */
-    goToFavourites(): void{
-        this._logger.debug("Favourites was clicked");
-    }
-
-    /**
      * Add the house to the users dislike list
      */
-    unlike(): void{
-        this._logger.debug("Unlike was clicked");
+    dislike(): void{
+        this._logger.debug("Dislike was clicked");
+        this.listingProvider.dislikeListing(this.data[this.cursor].listingId).subscribe(data => {
+            this._logger.debug("Dislike was successful.");
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.toJson());
+        });
     }
 
     /**
@@ -53,6 +51,11 @@ export class DetailPage {
      */
     like(): void{
         this._logger.debug("Like was clicked.");
+        this.listingProvider.likeListing(this.data[this.cursor].listingId).subscribe(data => {
+            this._logger.debug("Like was successful.");
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.toJson());
+        });
     }
 
     /**

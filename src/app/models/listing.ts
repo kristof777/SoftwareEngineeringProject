@@ -34,7 +34,7 @@ export class Listing {
      * @param createdDate   the date this listing was created
      * @param modifiedDate  the last time this listing was modified
      * @param images        an array of images in byte64
-     * @param province      the province of the listing
+     * @param province      the abbreviation of the province of the listing
      * @param city          the city of the listing
      * @param address       the address of the listing
      * @param postalCode    the postal code of the listing
@@ -44,7 +44,7 @@ export class Listing {
     constructor(listingId: number, listerId: number, bedrooms: number,
                 bathrooms: number, squarefeet: number, price: number, description: string,
                 isPublished: boolean, createdDate: string, modifiedDate: string,
-                images: string[], province: Province, city: string, address: string,
+                images: string[], province: string, city: string, address: string,
                 postalCode: string, longitude: number, latitude: number) {
         this.listingId = listingId;
         this.listerId = listerId;
@@ -58,7 +58,7 @@ export class Listing {
         this.modifiedDate = modifiedDate;
         this.images = images;
 
-        this.province = province;
+        this.province = Province.fromAbbr(province);
         this.city = city;
         this.address = address;
         this.postalCode = postalCode;
@@ -68,6 +68,6 @@ export class Listing {
 
     static emptyListing(): Listing{
         return new Listing(-1, -1, 0, 0, 0, 0, "", false, "0000-00-00", "0000-00-00", [],
-            Province.SK, "", "", "", 0.0, 0.0);
+            "SK", "", "", "", 0.0, 0.0);
     }
 }

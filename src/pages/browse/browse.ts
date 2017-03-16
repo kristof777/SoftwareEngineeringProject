@@ -6,6 +6,7 @@ import {Listing} from "../../app/models/listing";
 import {FilterPage} from "../filter/filter";
 import {DetailPage} from "../detail/detail";
 import {Filter} from "../../app/models/filter";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
 
 @Component({
@@ -37,11 +38,10 @@ export class BrowsePage {
     loadListings(): void{
         let me = this;
 
-        this.listingProvider.getListings(this.filter, ['price', 'images'], 5).subscribe(data => {
-            console.log(data);
-            me.listings = data['listings'];
+        this.listingProvider.getListings(this.filter, ['all'], 5).subscribe(data => {
+            me.listings = KasperService.fromData(data['listings']);
         }, error => {
-            this._logger.error(JSON.stringify(error));
+            this.listingProvider.kasperService.handleError("getListings", error.json());
         });
     }
 
@@ -53,10 +53,11 @@ export class BrowsePage {
      */
     onDrag(event: ItemSliding, index: number){
         if(!this.canVote) return;
+        let me = this;
         if (event.getOpenAmount() < -100) {
-            this.likeListing(index);
+            me.likeListing(index);
         } else if (event.getOpenAmount() > 100) {
-            this.dislikeListing(index);
+            me.dislikeListing(index);
         }
     }
 
@@ -73,13 +74,17 @@ export class BrowsePage {
 
         this._logger.debug("Disliking slide at index " + index);
 
-        this.toastCtrl.create({
-            message: "Disliked the selected listing.",
-            duration: 3000,
-            position: 'top'
-        }).present();
+        this.listingProvider.likeListing(this.listings[index].listingId).subscribe(data => {
+            this.toastCtrl.create({
+                message: "Disliked the selected listing.",
+                duration: 3000,
+                position: 'top'
+            }).present();
 
-        this.listings.splice(index, 1);
+            this.listings.splice(index, 1);
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+        });
     }
 
     /**
@@ -95,13 +100,18 @@ export class BrowsePage {
 
         this._logger.debug("Liking slide at index " + index);
 
-        this.toastCtrl.create({
-            message: "Liked the selected listing.",
-            duration: 3000,
-            position: 'top'
-        }).present();
+        this.listingProvider.likeListing(this.listings[index].listingId).subscribe(data => {
+            this.toastCtrl.create({
+                message: "Liked the selected listing.",
+                duration: 3000,
+                position: 'top'
+            }).present();
 
-        this.listings.splice(index, 1);
+            this.listings.splice(index, 1);
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+        });
+
     }
 
     /**

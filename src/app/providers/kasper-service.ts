@@ -132,16 +132,16 @@ export class KasperService {
      *      authToken: string
      * }
      *
-     * @param oldPassword           the current password of the user
-     * @param newPassword           the new password for the user
-     * @param newPasswordConfirmed  the new password for the user
+     * @param oldPassword       the current password of the user
+     * @param newPassword       the new password for the user
+     * @param confirmedPassword the new password for the user
      */
-    changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string): any{
+    changePassword(oldPassword: string, newPassword: string, confirmedPassword: string): any{
         let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
         body.append('newPassword', newPassword);
-        body.append('newPasswordConfirmed', newPasswordConfirmed);
+        body.append('confirmedPassword', confirmedPassword);
 
         return this.http.post(KasperConfig.API_URL + "/changePassword", body, ResponseContentType.Json)
             .map(response => response.json());
@@ -152,7 +152,7 @@ export class KasperService {
      */
     signOut(): any{
         let body: FormData = new FormData();
-        this.appendAuthentication(body)
+        this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
             .map(response => response.json());
@@ -187,7 +187,7 @@ export class KasperService {
         body.append('listingId', listingId);
         body.append('liked', liked);
 
-        return this.http.post(KasperConfig.API_URL + "/likeDislikeListing", body, ResponseContentType.Json)
+        return this.http.post(KasperConfig.API_URL + "/like", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -398,6 +398,9 @@ export class KasperService {
     initErrors(): string[][]{
         let result: string[][] = [[]];
 
+        result['general'] = [];
+        result['general']['missingUserId'] = "You must be logged in to perform this action";
+
         result['signIn'] = [];
         result['signIn']['notAuthorized'] = "Looks like you entered the wrong email or password";
         result['signIn']['missingEmail'] = "Please enter your email to continue";
@@ -454,6 +457,7 @@ export class KasperService {
         result['getMyListings']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['likeDislikeListing'] = [];
+        result['likeDislikeListing']['unallowedLiked'] = "You cannot like your own listing.";
         result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
@@ -486,18 +490,54 @@ export class KasperService {
         return result;
     }
 
-    handleError(route: string, key: any){
-        if(!KasperService.errorMessages[route][key]) {
-            this._logger.error("Unhandled error : [" + route + ", " + JSON.stringify(key) + "]");
+    handleError(route: string, errors: any) {
+        console.log(errors);
+        let firstKey = Object.keys(errors)[0];
+
+        if(KasperService.errorMessages['general'][firstKey]){
+            route = "general";
+        } else if(!KasperService.errorMessages[route][firstKey]) {
+            this._logger.error("Unhandled error : [" + route + ", " + JSON.stringify(firstKey) + "]");
             return;
         }
 
-        let message: string = KasperService.errorMessages[route][key];
+        let message: string = KasperService.errorMessages[route][firstKey];
 
         this.alertCtrl.create({
             title: "Oops...",
             subTitle: message,
             buttons: ['Dismiss']
         }).present();
+    }
+
+    static fromData(data: any): Listing[]{
+        let result: Listing[] = [];
+
+        for(let i=0; i<data.length; i++){
+            result.push(
+                new Listing(
+                    data[i].listingId,
+                    data[i].listerId,
+                    data[i].bedrooms,
+                    data[i].bathrooms,
+                    data[i].squarefeet,
+                    data[i].price,
+                    data[i].description,
+                    data[i].isPublished,
+                    data[i].createdDate,
+                    data[i].modifiedDate,
+                    data[i].images,
+
+                    data[i].province,
+                    data[i].city,
+                    data[i].address,
+                    data[i].postalCode,
+                    data[i].longitude,
+                    data[i].latitude,
+                )
+            );
+        }
+
+        return result;
     }
 }

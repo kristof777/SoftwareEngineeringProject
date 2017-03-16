@@ -13,6 +13,8 @@ import {Province} from "../../app/models/province";
     providers: [ListingProvider]
 })
 export class AddListingPage {
+    editMode: boolean;
+
     private listingId: number;
     private listerId: number;
     private modifiedDate: string;
@@ -40,8 +42,10 @@ export class AddListingPage {
 
         if(this.navParams.get('listing')){
             this.loadListingInfo(this.navParams.get('listing'));
+            this.editMode = true;
         } else {
             this.loadListingInfo(Listing.emptyListing());
+            this.editMode = false;
         }
     }
 
@@ -102,7 +106,7 @@ export class AddListingPage {
             this.createdDate,
             this.modifiedDate,
             this.images,
-            Province.fromAbbr(this.province),
+            this.province,
             this.city,
             this.address,
             this.postalCode,
@@ -112,6 +116,14 @@ export class AddListingPage {
     }
 
     saveListing(){
+        if(this.editMode){
+            this.updateListing();
+        } else {
+            this.addListing();
+        }
+    }
+
+    addListing(){
         let result = this.listingProvider.addListing(this.getCurListing());
 
         result.subscribe(data => {
@@ -122,6 +134,9 @@ export class AddListingPage {
         });
 
         this.navCtrl.pop();
+    }
+
+    updateListing(){
     }
 
     /**

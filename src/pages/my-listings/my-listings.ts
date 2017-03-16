@@ -6,6 +6,7 @@ import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail";
 import {AddListingPage} from "../add-listing/add-listing";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
 
 @Component({
@@ -31,7 +32,7 @@ export class MyListingsPage {
 
         if(this.loginService.isLoggedIn()) {
             this.listingProvider.getMyListings().subscribe(data => {
-                me.listings = data['listings'];
+                me.listings = KasperService.fromData(data['listings']);
             }, error => {
                 this._logger.error(JSON.stringify(error));
             });
@@ -57,10 +58,12 @@ export class MyListingsPage {
      * @param listing: listing to be edited
      */
     editListing(listing:Listing){ //add asserts to methods
+        this._logger.debug("Trying to edit...");
+        assert.object(listing, "Listing cannot be null.");
+
         this.navCtrl.push(AddListingPage,{ //add comment to explain that addListingPage is the same as edit...
-            listing:listing
+            listing: listing
         });
-        this._logger.debug("Trying to edit...") //a better explaination  for debug
 
     }//semicolon
 //pre condition assert logging
