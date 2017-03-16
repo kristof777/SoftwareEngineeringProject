@@ -7,7 +7,7 @@ echo $'\n\n\n\n*******RUNNING BACK-END SMOKE TESTS*******'
 python -m unittest discover -s server-gae/ -p 'Test*.py'
 export BACK_END_TEST=$?
 
-curl -v -H "Content-Type: application/json" -X POST -d '{}' https://cmpt371g1.usask.ca:4040/initDBTESTERS
+curl -v -H "Content-Type: application/json" -X POST -d '{}' http://cmpt371g1.usask.ca:4040/initDBTESTERS
 
 echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS FOR FIREFOX*******'
 screen -d -m -L ionic serve --firefox@47.0.1
