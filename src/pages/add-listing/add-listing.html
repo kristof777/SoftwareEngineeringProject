@@ -13,7 +13,7 @@
     <ion-list inset>
         <ion-item>
             <ion-label stacked>Province</ion-label>
-            <ion-select [(ionmodel)]="province" id="alProvince"> <!--select from ionmodel -->
+            <ion-select [(ngModel)]="province" id="alProvince">
                 <ion-option value="AB">Alberta</ion-option>
                 <ion-option value="BC">British Columbia</ion-option>
                 <ion-option value="MB">Manitoba</ion-option>
@@ -52,7 +52,7 @@
 
         <ion-item>
             <ion-label stacked>Square Feet</ion-label>
-            <ion-input [(ngModel)]="squareFeet" type = "text" id='alSqft'></ion-input> <!-- i'll (not you) fix the ids friends :)-->
+            <ion-input [(ngModel)]="squareFeet" type = "text" id='alSqft'></ion-input>
         </ion-item>
 
         <ion-item>
@@ -73,9 +73,8 @@
         <ion-item>
             <button item-left ion-button small (click)="addImage()" id="alImage">Add Image</button>
         </ion-item>
-        <!--curListing ngIf should never be null now fixx please
-        and buttons [save without publishing] | [publish] and add a preview
-        -->
+
+
         <ion-item>
             <button ion-button block (click)="saveWithoutPublishing()" id="alSave">Save without Publishing</button>
             <button *ngIf="curListing == null || ((curListing != null) && !curListing.isPublished)" ion-button block (click)="saveAndPublish()" id="alPublish">Publish</button>
