@@ -1,5 +1,6 @@
 let originalTimeout;
 beforeEach(function () {
+    sleep(2000);
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000; //10 seconds
 });
