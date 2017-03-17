@@ -33,12 +33,12 @@ describe('Regression tests: functionality while not signed in', function() {
     it('should test if "Confirm Password" field on register page allows incorrect matches', function(done) {
         let registerButton = element(by.css('.register'));
         registerButton.click().then(function(){
+            sleep(1000);
             let email, password, confirmPassword, nextButton;
             email = element(by.id('signUpEmail')).all(by.tagName('input')).first();
             password = element(by.id('signUpPassword')).all(by.tagName('input')).first();
             confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
             nextButton = element(by.buttonText('Next'));
-
             email.sendKeys('test@test.com').then(function(){
                 checkAttribute(email, "test@test.com");
             });
