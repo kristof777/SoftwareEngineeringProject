@@ -1,4 +1,8 @@
 exports.config = {
+    onPrepare: function(){
+        let SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+        jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
+    },
     capabilities: {
         //platformName: 'iOS',
         'browserName': 'chrome',
@@ -9,7 +13,7 @@ exports.config = {
     },
     baseUrl: 'http://localhost:8100',
     specs: [
-        'filterScreen.tests.js'
+        'registerBrowseAddListing.tests.js'
     ],
     jasmineNodeOpts: {
         isVerbose: true,
