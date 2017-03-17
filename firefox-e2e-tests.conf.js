@@ -11,8 +11,7 @@ exports.config = {
     },
     baseUrl: 'http://localhost:8100',
     specs: [
-        //'./tests/e2e-tests/*.tests.js'
-        './tests/e2e-tests/regression.tests.js'
+        './tests/e2e-tests/*.tests.js'
     ],
     jasmineNodeOpts: {
         isVerbose: true,
