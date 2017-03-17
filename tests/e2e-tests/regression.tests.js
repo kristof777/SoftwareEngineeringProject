@@ -95,17 +95,17 @@ describe('Regression tests: functionality while signed in', function(){
         checkDisplayed(signInButton, "the 'Register' page");
         password.sendKeys('123abcABC').then(function(){
             checkAttribute(password, "123abcABC");
-        });
-        signInButton.click().then(function(){
-            let filterButton = element(by.id('goToFilters'));
-            sleep(1000);
-            //todo Fix smoke test
-            checkDisplayed(filterButton, "the 'Browse' page");
-            let myProfileTab = element(by.id('tab-t0-2'));
-            for(i = 0; i < 10; i++)
-                myProfileTab.click();
-            let profileEmail = element(by.id('settingsEmail')).all(by.tagName('input')).first();
-            checkDisplayed(profileEmail, "the 'My Profile' page");
+            signInButton.click().then(function(){
+                let filterButton = element(by.id('goToFilters'));
+                sleep(1000);
+                //todo Fix smoke test
+                checkDisplayed(filterButton, "the 'Browse' page");
+                let myProfileTab = element(by.id('tab-t0-2'));
+                for(i = 0; i < 10; i++)
+                    myProfileTab.click();
+                let profileEmail = element(by.id('settingsEmail')).all(by.tagName('input')).first();
+                checkDisplayed(profileEmail, "the 'My Profile' page");
+            });
         });
         done();
     });
