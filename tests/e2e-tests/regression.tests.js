@@ -69,8 +69,8 @@ describe('Regression tests: functionality while signed in', function(){
         let email = element(by.id('email')).all(by.tagName('input')).first();
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
-        email.sendKeys('test@usask.ca').then(function(){
-            checkAttribute(email, "test@usask.ca");
+        email.sendKeys('test1@test.com').then(function(){
+            checkAttribute(email, "test1@test.com");
         });
         password.sendKeys('WrongPassword').then(function(){
             checkAttribute(password, "WrongPassword");
@@ -83,22 +83,17 @@ describe('Regression tests: functionality while signed in', function(){
         enter.perform();
         sleep(1000);
 
-        email.sendKeys().clear();
         password.sendKeys().clear();
         done();
     });
 
     it('should test if multiple "My Profile" tab clicks while signed-in returns user to Sign-In screen', function(done) {
-        let email = element(by.id('email')).all(by.tagName('input')).first();
+        //let email = element(by.id('email')).all(by.tagName('input')).first();
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
-        checkDisplayed(email, "the 'Register' page");
-
-        email.sendKeys('test@usask.ca').then(function(){
-            checkAttribute(email, "test@usask.ca");
-        });
-        password.sendKeys('Password123').then(function(){
-            checkAttribute(password, "Password123");
+        checkDisplayed(signInButton, "the 'Register' page");
+        password.sendKeys('123abcABC').then(function(){
+            checkAttribute(password, "123abcABC");
         });
 
         signInButton.click().then(function(){

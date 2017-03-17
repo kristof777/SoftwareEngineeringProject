@@ -14,11 +14,10 @@ describe('Filter Listings',function(){
 
     //Button to open the filters menu
     let filtersBtn = element(by.id('goToFilters'));
-    //button to open myListings
 
     //filter options
     let provDrop = element(by.id('flProv'));
-
+    //The css is the generated css made by ionic copied from firefox inspect
     let priceSliderMin = element(by.id('flPrice')).element(by.css('#flPrice > div:nth-child(2) > div:nth-child(3)'));
     let priceSliderMax = element(by.id('flPrice'));
 
@@ -63,7 +62,7 @@ describe('Filter Listings',function(){
         done();
     });
 
-    // There is an issue with clicking outside of the filter screen
+    // This was the test for clicking outside the filter model it is no longer needed
     /*
     it('should filter then click outside Filter Menu', function(done){
 
@@ -97,7 +96,9 @@ describe('Filter Listings',function(){
         //TODO: When filter updates results add an expect that results equal what is filtered
         done();
     });
-
+    /*
+    Fills in the filter model selections as described in the Filter Use Case
+     */
     function selectFilterOptions (){
         //set up the x coord for sliders
         let priceMax =70;
@@ -113,22 +114,22 @@ describe('Filter Listings',function(){
         let bathMin =80;
 
 
-        //select AB and SK in Provinces Menu
+        //select SK in Provinces Menu
         sleep();
         provDrop.click();
         sleep();
 
         //The province Drop menu
-        let ABBtn = element(by.buttonText('Alberta'));
-        ABBtn.click();
 
-        let SKBtn = element(by.buttonText('Saskatchewan'));
-        browser.executeScript("arguments[0].scrollIntoView();", SKBtn); //Sask needs to be in view to click
-        SKBtn.click();
+        let YTBtn = element(by.buttonText('Yukon'));
+        browser.executeScript("arguments[0].scrollIntoView();", YTBtn); //Sask needs to be in view to click
+        YTBtn.click();
 
         let okBtn = element(by.buttonText('OK'));
         okBtn.click();
         sleep();
+        //These drag the sliders a certain distance X from the opposite end the slider started
+        //for example the max will go to min and min towards max
 
         //select price range from 100k to 1.3Mil
         browser.actions().dragAndDrop(priceSliderMax,{x:priceMax,y:0}).perform();
@@ -148,6 +149,9 @@ describe('Filter Listings',function(){
 
         sleep();
     }
+    /*
+    Puts the browser to sleep to allow the website to load before protractor performs an action
+     */
     function sleep(){
         browser.driver.sleep(500);
     }

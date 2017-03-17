@@ -186,70 +186,72 @@ describe('Registering new user as a user would', function() {
      });
      */
 
-    it('Should add listing', function(done){
-
-      // testing "add listing" functionality
-        sleep();
+    it('should go to the Add Listing Screen',function () {
+        //go to myListings tab
         let myListings = element(by.id('tab-t0-3'));
         myListings.click();
         sleep();
-        let addListingButton;
-        addListingButton= element(by.id('addButton'));
+
+        //go to the addListings screen
+        let addListingButton= element(by.id('addButton'));
         addListingButton.click();
+        sleep();
+        //TODO: Add expect
+        done();
+    });
+
+    it('Should add listing', function(done){
+
+        //filter options
+        let provinceDropList = element(by.id('alProvince'));
+        // .all(by,tageName ('')).first() is needed to input text into the text box
+        let bath = element(by.id('alBathroom')).all(by.tagName('input')).first();
+        let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
+        let address = element(by.id('alAddress')).all(by.tagName('input')).first();
+        let postalCode = element(by.id('alPostalCode')).all(by.tagName('input')).first();
+        let price = element(by.id('alPrice')).all(by.tagName('input')).first();
+        let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
+        let bed = element(by.id('alBedroom')).all(by.tagName('input')).first();
+        let desc2 = element(by.id('alDesc')).all(by.tagName('textarea')).first();
+
+        //save button
+        let saveButton = element(by.id('alSave'));
+
+        //open province drop down
+        provinceDropList.click();
+        sleep();
+
+        let skOption = element(by.buttonText('Saskatchewan'));
+        let OKbtn = element(by.buttonText('OK'));
+
+        //select SK and press OK
+        browser.executeScript("arguments[0].scrollIntoView();", skOption);
+        skOption.click();
+        OKbtn.click();
         sleep();
 
 
-                let provinceDropList = element(by.id('alProvince'));
-                provinceDropList.click();
+        city.sendKeys('Saskatoon');
+        address.sendKeys('123 First Street East');
+        postalCode.sendKeys('f1s 9u8');
 
-                sleep();
+        browser.executeScript("arguments[0].scrollIntoView();", bath); //scroll into view
 
-                let skOption = element(by.buttonText('Saskatchewan'));
-                browser.executeScript("arguments[0].scrollIntoView();", skOption);
-                skOption.click();
-                sleep();
-                let okaybtn = element(by.buttonText('OK'));
-                okaybtn.click();
-                sleep();
+        price.sendKeys('13000000');
+        feet.sendKeys('600');
+        bed.sendKeys('5');
+        bath.sendKeys('2');
+        desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
 
-                 let bath = element(by.id('alBathroom')).all(by.tagName('input')).first();
+        //submit listing
+        saveButton.click();
 
+        sleep();
+        //TODO: add expect
+        done();
 
-                let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
-                city.sendKeys('Saskatoon');
+    });
 
-                let address = element(by.id('alAddress')).all(by.tagName('input')).first();
-                address.sendKeys('123 First Street East');
-
-                let postalCode = element(by.id('alPostalCode')).all(by.tagName('input')).first();
-                postalCode.sendKeys('f1s 9u8');
-
-                browser.executeScript("arguments[0].scrollIntoView();", bath);
-
-                let price = element(by.id('alPrice')).all(by.tagName('input')).first();
-                price.sendKeys('13000000');
-
-                let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
-                feet.sendKeys('600');
-
-                let bed = element(by.id('alBedroom')).all(by.tagName('input')).first();
-                bed.sendKeys('5');
-
-                bath.sendKeys('2');
-
-                sleep();
-
-                let desc2 = element(by.id('alDesc')).all(by.tagName('textarea')).first();
-                sleep();
-                desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
-
-                let saveButton = element(by.id('alSave'));
-                saveButton.click();
-
-                sleep();
-                done();
-
-        });
     function sleep(){
         browser.driver.sleep(500)
     }
