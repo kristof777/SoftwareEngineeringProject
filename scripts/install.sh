@@ -24,7 +24,7 @@ ios_install(){
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default screen xvfb
   npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core
-  npm install -g jasmine-spec-reporter --save-dev
+  npm install jasmine-spec-reporter --save-dev
   # installs packages specified in the ionic json
   npm install
   webdriver-manager update
