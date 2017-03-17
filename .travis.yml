@@ -32,11 +32,11 @@ cache:
 node_js:
 - 6.9.4
 
-#matrix:
-#  include:
-#  - os: android
-#  - os: osx
-#    osx_image: xcode7 
+matrix:
+  include:
+  - os: android
+  - os: osx
+    osx_image: xcode7 
 
 addons:
   firefox: "47.0.1"
