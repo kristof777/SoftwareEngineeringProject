@@ -99,7 +99,7 @@ describe('Regression tests: functionality while signed in', function(){
 
         signInButton.click().then(function(){
             let filterButton = element(by.id('goToFilters'));
-            sleep(1000);
+            sleep(5000);
             checkDisplayed(filterButton, "the 'Browse' page");
             let myProfileTab = element(by.id('tab-t0-2'));
             for(i = 0; i < 10; i++)
