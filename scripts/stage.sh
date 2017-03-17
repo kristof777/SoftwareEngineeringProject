@@ -22,9 +22,9 @@ setup_git(){
   git config --global user.email "clm972@mail.usask.ca"
   git config --global user.name "ChrisMykotaReid"
   git remote set-url origin git@github.com:CMPT371Team1/Project.git
-  git branch id3_ReadyForTesting
-  git checkout id3_ReadyForTesting
-  git pull --no-commit origin id3_ReadyForTesting
+  git branch "${TESTING_BRANCH}"
+  git checkout "${TESTING_BRANCH}"
+  git pull --no-commit origin "${TESTING_BRANCH}"
   git commit -m "smoke tests passed, merging into testing ready branch [ci skip]"
   git push
 }
