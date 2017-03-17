@@ -303,6 +303,19 @@ def is_valid_integer(input_string):
         return False
 
 
+def is_valid_float(input_string):
+    """
+    :param input_string: A floating number
+    :return: True if float, otherwise false
+    """
+    assert input_string is not None
+    try:
+        value = float(input_string)
+        return True
+    except ValueError:
+        return False
+
+
 def is_valid_bathroom(input_string):
     """
 
