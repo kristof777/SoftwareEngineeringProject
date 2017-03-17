@@ -23,7 +23,7 @@ ios_build(){
 # on this platform.
 browser_build(){
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
-    sduo du / | grep 'jasmine-spec-reporter'
+    sudo du / | grep 'jasmine-spec-reporter'
     ./scripts/smoke_test.sh
     # sudo du / | grep "geckodriver"
   fi
