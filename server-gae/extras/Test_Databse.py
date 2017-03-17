@@ -39,7 +39,8 @@ listings_published = [
     get_listings(12, 1213515, 8, True, "AB", 100101230),
     get_listings(9, 62346234, 9, True, "SK", 4000033),
     get_listings(1, 123412, 5, True, "AB", 100100123),
-    get_listings(22, 7534634, 40, True, "SK", 4000001234)
+    get_listings(22, 7534634, 40, True, "SK", 4000001234),
+    get_listings(4,120000,5,True,"YT",5000)
 ]
 
 listing_unpublished = [

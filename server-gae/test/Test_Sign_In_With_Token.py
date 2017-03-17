@@ -26,10 +26,6 @@ class TestHandlerSignIn(unittest.TestCase):
         self.user_id = json.loads(response.body)['userId']
         self.token = json.loads(response.body)['authToken']
 
-    def test_initdb(self):
-        get_response_from_post(Main, {}, "initDBTESTERS")
-
-
     def test_sign_in_missing_params(self):
         # No input parameters
         input1 = {}  # Json object to send

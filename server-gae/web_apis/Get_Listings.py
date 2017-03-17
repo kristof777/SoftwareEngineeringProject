@@ -1,7 +1,6 @@
 import logging
 
 from google.appengine.ext import ndb
-
 from models.Listing import Listing
 from models.User import User
 from models.Favorite import Favorite

@@ -186,7 +186,8 @@ describe('Registering new user as a user would', function() {
      });
      */
 
-    it('should go to the Add Listing Screen',function () {
+    it('Should add listing', function(done){
+
         //go to myListings tab
         let myListings = element(by.id('tab-t0-3'));
         myListings.click();
@@ -195,12 +196,6 @@ describe('Registering new user as a user would', function() {
         //go to the addListings screen
         let addListingButton= element(by.id('addButton'));
         addListingButton.click();
-        sleep();
-        //TODO: Add expect
-        done();
-    });
-
-    it('Should add listing', function(done){
 
         //filter options
         let provinceDropList = element(by.id('alProvince'));
