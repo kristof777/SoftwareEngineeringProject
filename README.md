@@ -2,7 +2,7 @@
 
 ---
 
-####Smoke Test Build Status:
+#### Smoke Test Build Status:
 Please click here:
   [![Build Status](https://travis-ci.org/CMPT371Team1/Project.svg?branch=id4)](https://travis-ci.org/CMPT371Team1/Project)
 
