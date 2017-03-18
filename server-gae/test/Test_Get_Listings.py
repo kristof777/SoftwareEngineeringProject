@@ -6,6 +6,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import Main
 from web_apis.Create_User import *
 from extras.utils import get_response_from_post
+from API_NAME import *
 
 
 class TestGetListings(unittest.TestCase):
@@ -23,7 +24,6 @@ class TestGetListings(unittest.TestCase):
 
     def setUp(self):
         setup_testbed(self)
-        self.api = "getListings"
 
         # create 10 listings for one user
         self.listings, users = create_dummy_listings_for_testing(Main, 20)
@@ -230,8 +230,8 @@ def get_like_response(POST):
     return get_response_from_post(Main, POST, 'like')
 
 
-def get_listing_response(POST):
-    request = webapp2.Request.blank('/getListings', POST=POST)
+def get_listing_response(post):
+    request = webapp2.Request.blank('/getListings', POST=post)
     response = request.get_response(Main.app)
     if response.body and (response.status_int == success):
         return json.loads(response.body)['listings'], response.status_int

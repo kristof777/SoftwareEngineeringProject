@@ -8,6 +8,7 @@ import Main
 import extras.Error_Code as Error_Code
 from models.Listing import Listing
 from web_apis.Create_User import *
+from API_NAME import *
 
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -38,11 +39,11 @@ class TestEditListing(unittest.TestCase):
         listing_info = create_random_listing(self.ownerId, self.token)
         listing_info['isPublished'] = 'False'
 
-        request = webapp2.Request.blank('/createListing',
-                                        POST=listing_info)
-        response = request.get_response(Main.app)
+        response, response_status = get_create_listing_response(listing_info)
 
-        output = json.loads(response.body)
+        assert response_status == success
+
+        output = response
         self.listingId = output["listingId"]
 
         # now create a new user as an editor
@@ -70,7 +71,9 @@ class TestEditListing(unittest.TestCase):
                 "description": "  ",
         }
 
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
+        res_value, status = get_response(get_post_dictionary
+                                         (self.ownerId, self.listingId,
+                                          self.token, change_values))
 
         self.assertEqual(status, missing_invalid_parameter)
 
@@ -83,7 +86,11 @@ class TestEditListing(unittest.TestCase):
 
     def test_unrecognized_key(self):
         change_values = { "unrecognizedKey": "unrecognizedKey"}
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
+
+        res_value, status = get_response(
+            get_post_dictionary(self.ownerId, self.listingId,
+                                self.token, change_values))
+
         self.assertEqual(status, unrecognized_key["status"])
         error_expected = Error_Code.unrecognized_key['error']
         self.assertTrue(error_expected in res_value)
@@ -92,14 +99,18 @@ class TestEditListing(unittest.TestCase):
         change_values = {"bathrooms": 10}
 
         res_value, status = get_response(
-            get_post_dictionary(self.editorId, self.listingId, self.editorToken, change_values))
+            get_post_dictionary(self.editorId, self.listingId, self.editorToken,
+                                change_values))
         self.assertEquals(status, not_authorized['status'])
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
 
     def invalid_user_id(self):
         change_values = {"bathrooms": 10}
-        res_value, status = get_response(get_post_dictionary("invalidUserId", "invalidUserId", self.token, change_values))
+        res_value, status = get_response(
+            get_post_dictionary("invalidUserId", "invalidUserId",
+                                self.token, change_values))
+
         self.assertEquals(status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error'],
                            Error_Code.invalid_listing_id['error']]
@@ -107,7 +118,9 @@ class TestEditListing(unittest.TestCase):
 
     def test_unauthorized_userid_listing_id(self):
         change_values = {"bathrooms": 10}
-        res_value, status = get_response(get_post_dictionary(1111111, 4444444, self.token, change_values))
+        res_value, status = get_response(
+            get_post_dictionary(1111111, 4444444, self.token, change_values))
+
         self.assertEquals(status, not_authorized['status'])
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
@@ -123,7 +136,9 @@ class TestEditListing(unittest.TestCase):
                             "thumbnailImageIndex": "supposed to be a number"
                           }
 
-        res_value, status = get_response(get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
+        res_value, status = get_response(
+            get_post_dictionary(self.ownerId, self.listingId, self.token,
+                                change_values))
 
         self.assertEquals(status, missing_invalid_parameter)
 
@@ -199,7 +214,8 @@ class TestEditListing(unittest.TestCase):
 
         change_values = {"isPublished": "True"}
         res_value, status = get_response(
-            get_post_dictionary(self.ownerId, listingId2, self.token, change_values))
+            get_post_dictionary(self.ownerId, listingId2, self.token,
+                                change_values))
 
         self.assertEquals(status, missing_invalid_parameter)
 
@@ -227,19 +243,18 @@ class TestEditListing(unittest.TestCase):
         self.testbed.deactivate()
 
 
-def get_post_dictionary(userId, listingId, token, change_values):
-    return {"userId": userId, "listingId":
-        listingId, "authToken": token, "changeValues": json.dumps(change_values)}
+def get_post_dictionary(user_id, listing_id, token, change_values):
+    return {"userId": user_id, "listingId": listing_id, "authToken": token,
+            "changeValues": json.dumps(change_values)}
 
 
-def get_response(POST):
-    request = webapp2.Request.blank('/editListing', POST=POST)
-    response = request.get_response(Main.app)
-    return json.loads(response.body), response.status_int
+def get_response(post):
+    return get_response_from_post(Main, post, edit_listing_api)
 
 
-def run_tests():
-    unittest.main()
+def get_listing_response(post):
+    return get_response_from_post(Main, post, get_listing_api)
 
-if __name__ == "__main__":
-    run_tests()
+
+def get_create_listing_response(post):
+    return get_response_from_post(Main, post, create_listing_api)

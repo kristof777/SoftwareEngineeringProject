@@ -10,7 +10,7 @@ import Main
 from web_apis.Create_User import *
 
 
-class TestHandlers(unittest.TestCase):
+class TestSignOut(unittest.TestCase):
     def setUp(self):
         setup_testbed(self)
         self.users = create_dummy_users_for_testing(Main, 1)
@@ -21,6 +21,7 @@ class TestHandlers(unittest.TestCase):
         # Test2: User signed in with token
         :return:
         """
+        pass
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
@@ -39,11 +40,3 @@ def get_response(POST):
     response = request.get_response(Main.app)
     return json.loads(response.body), response.status_int
 
-
-
-
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()

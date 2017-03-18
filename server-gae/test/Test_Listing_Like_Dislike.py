@@ -5,7 +5,8 @@ import unittest
 
 import Main
 from web_apis.Like_Dislike_Listing import *
-
+from API_NAME import *
+from extras.utils import get_response_from_post
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -50,13 +51,10 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": "True"
         }
 
-        request = webapp2.Request.blank('/like', POST=like_the_listing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, processing_failed)
-
+        response, response_status = get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, processing_failed)
         errors_expected = [unallowed_liked['error']]
-        error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_like_listing(self):
         like_the_listing = {
@@ -66,9 +64,8 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": "True"
         }
 
-        request = webapp2.Request.blank('/like', POST=like_the_listing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+        _, response_status = get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, success)
 
     def test_already_liked_listing(self):
 
@@ -78,17 +75,13 @@ class TestLikeListingApi(unittest.TestCase):
             "authToken": self.liker_token,
             "liked": "True"
         }
-        request = webapp2.Request.blank('/like', POST=like_the_listing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+        _, response_status = get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, success)
 
-        request = webapp2.Request.blank('/like', POST=like_the_listing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, processing_failed)
+        response, response_status = get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, processing_failed)
         errors_expected = [duplicated_liked['error']]
-
-        error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_dislike_listing(self):
         dislike_the_listing = {
@@ -98,9 +91,9 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": "False"
         }
 
-        request = webapp2.Request.blank('/like', POST=dislike_the_listing)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+        response, response_status = \
+            get_like_listing_response(dislike_the_listing)
+        self.assertEquals(response_status, success)
 
     def test_disliking_like(self):
 
@@ -111,16 +104,15 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": "False"
         }
 
-        request = webapp2.Request.blank('/like', POST=dislike_the_listing_again)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+        response, response_status = \
+            get_like_listing_response(dislike_the_listing_again)
+        self.assertEquals(response_status, success)
 
-        request = webapp2.Request.blank('/like', POST=dislike_the_listing_again)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, processing_failed)
+        response, response_status = \
+            get_like_listing_response(dislike_the_listing_again)
+        self.assertEquals(response_status, processing_failed)
         errors_expected = [duplicated_liked['error']]
-        error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_missing_user_input(self):
         like_with_missing_input = {
@@ -130,16 +122,16 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": ""
         }
 
-        request = webapp2.Request.blank('/like', POST=like_with_missing_input)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        response, response_status = \
+            get_like_listing_response(like_with_missing_input)
+
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_user_id['error'],
                            missing_listing_id['error'],
                            missing_liked['error'],
                            missing_token['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_invalid_user_input(self):
         like_with_invalid_input = {
@@ -149,20 +141,18 @@ class TestLikeListingApi(unittest.TestCase):
             "liked": "supposed to be a boolean"
         }
 
-        request = webapp2.Request.blank('/like',
-                                        POST=like_with_invalid_input)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        response, response_status = \
+            get_like_listing_response(like_with_invalid_input)
+        self.assertEquals(response_status, missing_invalid_parameter)
+
         errors_expected = [invalid_user_id['error'],
                            invalid_listing_id['error'],
                            invalid_liked['error']]
-
-        error_keys = [str(x) for x in json.loads(response.body)]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def tearDown(self):
         self.testbed.deactivate()
 
 
-if __name__ == '__main__':
-    unittest.main()
+def get_like_listing_response(post):
+    return get_response_from_post(Main, post, like_listing_api)

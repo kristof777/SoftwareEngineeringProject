@@ -7,6 +7,9 @@ import Main
 import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
 from extras.utils import get_response_from_post
+from API_NAME import *
+
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -64,32 +67,25 @@ class TestGetMessages(unittest.TestCase):
             "userId": self.seller['userId'],
             "authToken": self.seller['authToken']
         }
-        request = webapp2.Request.blank('/getMessages', POST=get_messages)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
-        output = json.loads(response.body)
+        output, response_status = get_messages_response(get_messages)
+        self.assertEquals(response_status, success)
         self.assertEquals(len(output['messages']), 3)
 
     def test_invalid_userid(self):
-        invalid_userId_messages = {
+        invalid_user_id_messages = {
             "userId": "blablabla",
             "authToken": self.seller['authToken']
         }
 
-        request = webapp2.Request.blank('/getMessages', POST=invalid_userId_messages)
-        response = request.get_response(Main.app)
+        response, response_status = get_messages_response(
+            invalid_user_id_messages)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 
-        # checking if there is a difference between error_keys and what we got
-        try:
-            errors_expected = str(json.loads(response.body).keys()[0])
-        except IndexError as _:
-            self.assertFalse()
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
-        self.assertEquals(invalid_user_id['error'], errors_expected)
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are
@@ -110,5 +106,9 @@ def get_contact_seller_post_dictionary(sender_id, receiver_id, listing_id, auth_
         }
 
 
-def get_contact_response(POST):
-    return get_response_from_post(Main, POST, 'contactSeller')
+def get_contact_response(post):
+    return get_response_from_post(Main, post, contact_seller_api)
+
+
+def get_messages_response(post):
+    return get_response_from_post(Main, post, get_messages_api)

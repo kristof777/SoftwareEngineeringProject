@@ -12,7 +12,7 @@ sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlers(unittest.TestCase):
+class TestCreateListing(unittest.TestCase):
     """
         test case 1: empty object as input
         test case 2
@@ -28,8 +28,7 @@ class TestHandlers(unittest.TestCase):
 
     def test_empty_input(self):
         empty_input = {}
-        response, response_status = \
-            get_response_from_post(Main, empty_input, create_listing_api)
+        response, response_status = get_listing_api_response(empty_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -58,8 +57,7 @@ class TestHandlers(unittest.TestCase):
                  "images": '',
                  "postalCode": ""
                  }
-        response, response_status = \
-            get_response_from_post(Main, input, create_listing_api)
+        response, response_status = get_listing_api_response(input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -89,8 +87,7 @@ class TestHandlers(unittest.TestCase):
                  "postalCode": "   ",
                  }
 
-        response, response_status = \
-            get_response_from_post(Main, input, create_listing_api)
+        response, response_status = get_listing_api_response(input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -108,8 +105,7 @@ class TestHandlers(unittest.TestCase):
         missing_input['city'] = ""
         missing_input['images'] = ''
 
-        response, response_status = \
-            get_response_from_post(Main, missing_input, create_listing_api)
+        response, response_status = get_listing_api_response(missing_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_user_id['error'],
@@ -121,8 +117,7 @@ class TestHandlers(unittest.TestCase):
     def test_invalid_user_id(self):
         input = create_random_listing("1111", "sfasdtr54523df")
 
-        response, response_status = \
-            get_response_from_post(Main, input, create_listing_api)
+        response, response_status = get_listing_api_response(input)
         self.assertEquals(response_status, unauthorized_access)
 
         errors_expected = [not_authorized['error']]
@@ -141,8 +136,7 @@ class TestHandlers(unittest.TestCase):
         input['latitude'] = 'supposed to be float'
         input['postalCode'] = 'supposed to be float'
 
-        response, response_status = \
-            get_response_from_post(Main, input, create_listing_api)
+        response, response_status = get_listing_api_response(input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -167,8 +161,7 @@ class TestHandlers(unittest.TestCase):
         correct_input["bathrooms"] = 5.5
         correct_input["isPublished"] = "True"
 
-        response, response_status = \
-            get_response_from_post(Main, correct_input, create_listing_api)
+        response, response_status = get_listing_api_response(correct_input)
 
         self.assertEquals(response_status, success)
 
@@ -192,8 +185,7 @@ class TestHandlers(unittest.TestCase):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
         correct_input["bathrooms"] = 5.25
-        response, response_status = \
-            get_response_from_post(Main, correct_input, create_listing_api)
+        response, response_status = get_listing_api_response(correct_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -215,8 +207,7 @@ class TestHandlers(unittest.TestCase):
         del correct_input['address']
         del correct_input['squarefeet']
         del correct_input['price']
-        response, response_status = \
-            get_response_from_post(Main, correct_input, create_listing_api)
+        response, response_status = get_listing_api_response(correct_input)
 
         self.assertEquals(response_status, success)
 
@@ -236,8 +227,7 @@ class TestHandlers(unittest.TestCase):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
         del correct_input['isPublished']
-        response, response_status = \
-            get_response_from_post(Main, correct_input, create_listing_api)
+        response, response_status = get_listing_api_response(correct_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_published['error']]
@@ -250,8 +240,5 @@ class TestHandlers(unittest.TestCase):
         self.testbed.deactivate()
 
 
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()
+def get_listing_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, create_listing_api)

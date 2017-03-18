@@ -12,7 +12,7 @@ import Main
 from web_apis.Create_User import *
 
 
-class TestHandlers(unittest.TestCase):
+class TestContactSeller(unittest.TestCase):
     def setUp(self):
         setup_testbed(self)
         self.user_buyer = create_dummy_users_for_testing(Main, 1)[0]
@@ -31,9 +31,8 @@ class TestHandlers(unittest.TestCase):
             "receiverId": self.user_seller['userId']
         }
 
-        response, response_status = get_response_from_post(Main,
-                                                           correct_input,
-                                                           contact_seller_api)
+        response, response_status = \
+            get_contact_seller_api_response(correct_input)
         self.assertEquals(response_status, success)
 
     def test_unallowed_input(self):
@@ -47,9 +46,9 @@ class TestHandlers(unittest.TestCase):
             "email": self.user_buyer['email']
         }
 
-        response, response_status = get_response_from_post(Main,
-                                                           unallowed_input,
-                                                           contact_seller_api)
+        response, response_status = \
+            get_contact_seller_api_response(unallowed_input)
+
         self.assertEquals(response_status, processing_failed)
         errors_expected = [unallowed_message_send['error']]
         error_keys = [str(x) for x in response]
@@ -66,9 +65,8 @@ class TestHandlers(unittest.TestCase):
             "email": self.user_buyer['email']
         }
 
-        response, response_status = get_response_from_post(Main,
-                                                           unauthorized_input,
-                                                           contact_seller_api)
+        response, response_status = \
+            get_contact_seller_api_response(unauthorized_input)
 
         self.assertEquals(response_status, not_authorized['status'])
         errors_expected = [not_authorized['error']]
@@ -86,9 +84,9 @@ class TestHandlers(unittest.TestCase):
             "email": self.user_buyer['email']
         }
 
-        response, response_status = get_response_from_post(Main,
-                                                           unauthorized_input,
-                                                           contact_seller_api)
+        response, response_status = \
+            get_contact_seller_api_response(unauthorized_input)
+
         self.assertEquals(response_status, un_auth_listing['status'])
         errors_expected = [un_auth_listing['error']]
         error_keys = [str(x) for x in response]
@@ -96,9 +94,8 @@ class TestHandlers(unittest.TestCase):
 
     def test_missing_input(self):
         missing_input = {}
-        response, response_status = get_response_from_post(Main,
-                                                           missing_input,
-                                                           contact_seller_api)
+        response, response_status = \
+            get_contact_seller_api_response(missing_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -114,3 +111,7 @@ class TestHandlers(unittest.TestCase):
 
     def tearDown(self):
         self.testbed.deactivate()
+
+
+def get_contact_seller_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, contact_seller_api)

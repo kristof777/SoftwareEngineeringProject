@@ -7,6 +7,7 @@ import Main
 import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
 from extras.utils import get_response_from_post
+from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
@@ -18,7 +19,6 @@ class TestGetFavouriteListing(unittest.TestCase):
     """
     def setUp(self):
         setup_testbed(self)
-
 
         # create 10 listings for one user
         listings, users = create_dummy_listings_for_testing(Main, 10)
@@ -64,58 +64,44 @@ class TestGetFavouriteListing(unittest.TestCase):
 
 
     def test_success(self):
-        getFavs = {
+
+        get_favs = {
             "userId": self.likerId,
             "authToken": self.likerToken
         }
-        request = webapp2.Request.blank('/getFavourites', POST=getFavs)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
-        output = json.loads(response.body)
-
+        output, response_status = get_favourites_response(get_favs)
+        self.assertEquals(response_status, success)
         # get the number of published listings
-        isPublishes = 0
+        is_published = 0
         for listing in self.likedListings:
             if listing['isPublished'] == 'True':
-                isPublishes += 1
-
-        self.assertEquals(len(output["listings"]), isPublishes)
+                is_published += 1
+        self.assertEquals(len(output["listings"]), is_published)
 
     def test_invalid_userid(self):
-        invalidFavs = {
+        invalid_favs = {
             "userId": "blablabla",
             "authToken": self.likerToken
         }
-
-        request = webapp2.Request.blank('/getFavourites', POST=invalidFavs)
-        response = request.get_response(Main.app)
-
-        self.assertEquals(response.status_int, missing_invalid_parameter)
-
+        response, response_status = get_favourites_response(invalid_favs)
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error']]
-
         # checking if there is a difference between error_keys and what we got
-        try:
-            errors_expected = str(json.loads(response.body).keys()[0])
-        except IndexError as _:
-            self.assertFalse()
+        self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
 
-        self.assertEquals(invalid_user_id['error'], errors_expected)
 
     def tearDown(self):
         self.testbed.deactivate()
 
 
-def get_like_post_dictionary(userId, listingId, authToken, liked):
-    return {"userId": userId, "listingId":
-        listingId, "authToken": authToken, "liked": liked}
+def get_like_post_dictionary(user_id, listing_id, authToken, liked):
+    return {"userId": user_id, "listingId": listing_id,
+            "authToken": authToken, "liked": liked}
 
 
-def get_like_response(POST):
-    return get_response_from_post(Main, POST, 'like')
+def get_like_response(post):
+    return get_response_from_post(Main, post, like_listing_api)
 
-def run_tests():
-    unittest.main()
 
-if __name__ == "__main__":
-    run_tests()
+def get_favourites_response(post):
+    return get_response_from_post(Main, post, get_favourites_listing_api)

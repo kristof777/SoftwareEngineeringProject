@@ -9,7 +9,7 @@ import extras.Error_Code as Error_Code
 from models import Favorite
 from models.Listing import Listing
 from web_apis.Create_User import *
-from API_NAME import delete_listing_api
+from API_NAME import *
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -45,8 +45,9 @@ class TestDeleteListing(unittest.TestCase):
         self.likerToken = liker['authToken']
 
         # Make the liker like the listing
-        res_value, status = get_like_response(get_like_post_dictionary(self.likerId, self.listingId,
-                                                                       self.likerToken, "True"))
+        res_value, status = get_like_response(
+            get_like_post_dictionary(self.likerId, self.listingId,
+                                     self.likerToken, "True"))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
@@ -105,11 +106,3 @@ def get_delete_response(post):
     response, response_status = \
         get_response_from_post(Main, post, delete_listing_api)
     return response, response_status
-
-
-
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()

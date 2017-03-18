@@ -6,6 +6,8 @@ import unittest
 import Main
 import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
+from API_NAME import *
+from extras.utils import get_response_from_post
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -31,12 +33,10 @@ class TestGetMyListing(unittest.TestCase):
             "userId": self.ownerId,
             "authToken": self.ownerToken
         }
-
-        request = webapp2.Request.blank('/getMyListings', POST=get_my_listings)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
-        output = json.loads(response.body)
+        output, status_int = get_my_listing_api_response(get_my_listings)
+        self.assertEquals(status_int, success)
         self.assertEquals(len(output["listings"]), 10)
+
 
     def test_invalid_userid(self):
         invalid_my_listings = {
@@ -44,20 +44,15 @@ class TestGetMyListing(unittest.TestCase):
             "authToken": self.ownerToken
         }
 
-        request = webapp2.Request.blank('/getMyListings',
-                                        POST=invalid_my_listings)
-        response = request.get_response(Main.app)
+        response, status_int = get_my_listing_api_response(invalid_my_listings)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(status_int, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_user_id['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
-
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
 
 
-
-
+def get_my_listing_api_response(post):
+    return get_response_from_post(Main, post, get_my_listings_api)
