@@ -6,6 +6,8 @@ sys.path.append('../')
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.Base_Handler import BaseHandler
 from extras.Error_Code import *
+from extras.api_required_fields import check_required_valid
+from API_NAME import *
 
 
 class SignIn(BaseHandler):
@@ -28,15 +30,10 @@ class SignIn(BaseHandler):
 
     def post(self):
         setup_post(self.response)
+        valid, values = \
+            check_required_valid(sign_in_api, self.request.POST, self.response)
 
-        # validating if request has all required keys
-        error_keys = ['email', 'password']
-
-        errors, values = keys_missing(error_keys, self.request.POST)
-
-        if len(errors) > 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+        if not valid:
             return
 
         assert values['email'] is not None and values['password'] is not None

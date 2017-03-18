@@ -2,6 +2,8 @@ from extras.utils import *
 from models.Listing import Listing
 from models.User import User
 import sys
+from API_NAME import contact_seller_api
+from extras.api_required_fields import check_required_valid
 
 from models.Message import Message
 
@@ -18,16 +20,13 @@ class ContactSeller(BaseHandler):
 
     def post(self):
         setup_post(self.response)
-        error_keys = ['senderId', 'listingId', 'message', 'phone',
-                      'email', 'authToken', 'receiverId']
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors, missing_invalid_parameter)
-            return
 
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter)
+        valid, values = \
+            check_required_valid(contact_seller_api, self.request.POST,
+                                 self.response)
+
+        if not valid:
+            return
 
         # find the correct sender with senderId
         sender = User.get_by_id(int(values['senderId']))

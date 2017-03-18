@@ -7,7 +7,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
 from extras.utils import *
 from models.User import User
-
+from API_NAME import edit_user_api
+from extras.api_required_fields import check_required_valid
 
 class EditUser(BaseHandler):
     """
@@ -24,16 +25,13 @@ class EditUser(BaseHandler):
 
     def post(self):
         setup_post(self.response)
-        # check if user id and token are present
-        error_keys = ['changeValues', 'userId', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
 
+        valid, values = \
+            check_required_valid(edit_user_api, self.request.POST,
+                                 self.response, True)
 
-        if len(errors) != 0:
-            write_error_to_response(self.response,
-                                    errors, missing_invalid_parameter)
+        if not valid:
             return
-
 
         change_values = json.loads(values['changeValues'])
         if len(change_values) == 0:
@@ -41,14 +39,6 @@ class EditUser(BaseHandler):
                                     {nothing_requested_to_change['error']:
                                          "Nothing requested to change"},
                                     nothing_requested_to_change['status'])
-            return
-        valid_user = self.user_model.validate_token(int(values["userId"]),
-                                                    "auth",
-                                                    values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to change user"},
-                                    not_authorized['status'])
             return
 
         if "password" in change_values.keys():
@@ -67,11 +57,6 @@ class EditUser(BaseHandler):
             return
 
         invalid = key_validation(change_values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
 
         user = User.get_by_id(int(values["userId"]))
         for key in change_values:

@@ -5,6 +5,8 @@ from extras.Base_Handler import BaseHandler
 from models.User import *
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
 from extras.utils import *
+from API_NAME import *
+from extras.api_required_fields import check_required_valid
 
 
 class ChangePassword(BaseHandler):
@@ -34,20 +36,11 @@ class ChangePassword(BaseHandler):
         # For each required field, making sure it is non-null, non-empty
         # and contains more than space characters
 
-        error_keys = ['oldPassword', 'newPassword', 'confirmedPassword',
-                      'userId']
-        # validating if request has all required keys
+        valid, values = \
+            check_required_valid(change_password_api, self.request.POST,
+                                 self.response)
 
-        errors, values = keys_missing(error_keys, self.request.POST)
-        # If there exists error then return the response, and stop the function
-        if len(errors) > 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
-            return
-        #check if user_id is not a valid int
-        if not is_valid_integer(values['userId']):
-            write_error_to_response(self.response, missing_invalid_parameter['error'],
-                                    missing_invalid_parameter['status'])
+        if not valid:
             return
 
         user = User.get_by_id(int(values['userId']))

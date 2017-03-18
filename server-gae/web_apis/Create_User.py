@@ -2,6 +2,8 @@ from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
 from extras.utils import *
 from models.FB import FBLogin
+from extras.api_required_fields import check_required_valid
+from API_NAME import create_user_api
 
 
 class CreateUser(BaseHandler):
@@ -32,17 +34,11 @@ class CreateUser(BaseHandler):
 
     def post(self):
         setup_post(self.response)
+        valid, values = \
+            check_required_valid(create_user_api, self.request.POST,
+                                 self.response)
 
-        error_keys = ['email', 'firstName', 'password',
-                      'confirmedPassword', 'phone1', 'province', 'city']
-
-        # validating if request has all required key
-        errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+        if not valid:
             return
 
         phone2 = self.request.POST.get('phone2')
@@ -53,12 +49,6 @@ class CreateUser(BaseHandler):
         if not is_empty(last_name):
             values['lastName'] = last_name
 
-        invalid = key_validation(values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
 
         if values['password'] != values['confirmedPassword']:
             error = {

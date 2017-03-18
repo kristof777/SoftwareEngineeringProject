@@ -1,11 +1,10 @@
 import logging
-
-from google.appengine.ext import ndb
 from models.Listing import Listing
-from models.User import User
 from models.Favorite import Favorite
 from extras.utils import *
 import sys
+from API_NAME import get_listing_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 
 DEFAULT_MAX_LIMIT = 20 # max number of listings required, by default (if not provided)
@@ -27,17 +26,20 @@ class GetListing(webapp2.RequestHandler):
 
     def post(self):
         setup_post(self.response)
-        # every field (userId, valuesRequired, filter) is optional
-        errors, values = keys_missing({}, self.request.POST)
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter)
-            return
+        valid, values = \
+            check_required_valid(get_listing_api, self.request.POST,
+                                 self.response)
 
+        if not valid:
+            return
+        # every field (userId, valuesRequired, filter) is optional
+
+        invalid = {}
         if "filter" in values:
             invalid.update(is_valid_filter(values["filter"]))
             if len(invalid) != 0:
-                write_error_to_response(self.response, invalid, missing_invalid_parameter)
+                write_error_to_response(self.response, invalid,
+                                        missing_invalid_parameter)
                 return
 
         # make sure that "listingIdList" and "filter" fields are not being passed in in the request

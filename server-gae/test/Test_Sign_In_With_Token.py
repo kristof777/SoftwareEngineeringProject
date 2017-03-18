@@ -12,7 +12,8 @@ from extras.utils import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-class TestHandlerSignIn(unittest.TestCase):
+
+class TestSignInWithToken(unittest.TestCase):
     # Set up the testbeddegod7642q5
 
     def setUp(self):
@@ -50,12 +51,12 @@ class TestHandlerSignIn(unittest.TestCase):
         try:
             error_message = str(json.loads(response.body))
         except IndexError as _:
-            self.assertFalse()
-        self.assertEquals(not_authorized['error'], error_message)
+            self.assertFalse(True)
+        self.assertTrue(not_authorized['error'] in error_message)
 
     def test_sign_in_incorrect_user_id(self):
         # Test2: When incorrect user_id
-        input2 = {'userId': 'thisIsWrongId',
+        input2 = {'userId': '12341',
                   'authToken': self.token}
         request = webapp2.Request.blank('/signInWithToken', POST=input2)
         response = request.get_response(Main.app)
@@ -64,7 +65,7 @@ class TestHandlerSignIn(unittest.TestCase):
             error_message = str(json.loads(response.body))
         except IndexError as _:
             self.assertFalse()
-        self.assertEquals(not_authorized['error'], error_message)
+        self.assertTrue(not_authorized['error'] in error_message)
 
     def test_sign_in_success(self):
         # Correct user_id and authToken

@@ -6,6 +6,8 @@ import sys
 sys.path.append('../')
 from extras.Base_Handler import BaseHandler
 from extras.Error_Code import *
+from API_NAME import sign_in_token_api
+from extras.api_required_fields import check_required_valid
 
 
 class SignInWithToken(BaseHandler):
@@ -29,14 +31,13 @@ class SignInWithToken(BaseHandler):
     def post(self):
         setup_post(self.response)
 
-        # validating if request has all required keys
-        error_keys = ['authToken', 'userId']
-        errors, values = keys_missing(error_keys, self.request.POST)
+        valid, values = \
+            check_required_valid(sign_in_token_api, self.request.POST,
+                                 self.response, True)
 
-        if len(errors) > 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+        if not valid:
             return
+
         assert values['authToken'] is not None and values['userId'] is not None
 
         if not(values['userId']).isdigit():
@@ -49,15 +50,8 @@ class SignInWithToken(BaseHandler):
 
         user = (User.get_by_auth_token(int(values['userId']), values['authToken'], subject='auth'))[0]
 
-        if user is None:
-            write_error_to_response(self.response, not_authorized['error'],
-                                    not_authorized['status'])
-            logging.info(
-                'Sign-in-with-token failed for user %s because of %s',
-                values['userId'], 'invalid token')
-            return
-
         assert user is not None
+
         self.user_model.delete_auth_token(values['userId'], values['authToken'])
         token = self.user_model.create_auth_token(values['userId'])
 

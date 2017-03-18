@@ -3,6 +3,8 @@ import sys
 from models import User
 sys.path.append("../")
 from extras.Base_Handler import BaseHandler
+from API_NAME import sign_out_api
+from extras.api_required_fields import check_required_valid
 
 
 class SignOut(BaseHandler):
@@ -15,41 +17,10 @@ class SignOut(BaseHandler):
 
     def post(self):
         setup_post(self.response)
-        error_keys = ['userId', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
+        valid, values = \
+            check_required_valid(sign_out_api, self.request.POST, self.response)
 
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
-            return
-
-        # check validity for integer fields (userId)
-        invalid = key_validation(values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error, not_authorized)
-            return
-
-        # Check if it is the valid user
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized"},
-                                    not_authorized['status'])
+        if not valid:
             return
 
         self.auth.unset_session()

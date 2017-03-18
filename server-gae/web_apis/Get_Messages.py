@@ -3,6 +3,8 @@ from extras.utils import *
 from models.Listing import Listing
 from models.Message import Message
 from models.User import User
+from API_NAME import get_messages_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 
 
@@ -23,39 +25,12 @@ class GetMessages(webapp2.RequestHandler):
 
     def post(self):
         setup_post(self.response)
-        error_keys = ['userId', 'authToken']
 
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
-            return
+        valid, values = \
+            check_required_valid(get_messages_api, self.request.POST,
+                                 self.response, True)
 
-        # check validity for integer fields (userId)
-        invalid = key_validation(values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error, not_authorized)
-            return
-
-        # Check if it is the valid user
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to get my messages"},
-                                    not_authorized['status'])
+        if not valid:
             return
 
         user_id = int(values['userId'])

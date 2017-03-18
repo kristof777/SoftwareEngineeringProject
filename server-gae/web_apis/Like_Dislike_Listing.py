@@ -4,6 +4,8 @@ from models.Favorite import Favorite
 from models.Listing import Listing
 from models.User import User
 import sys
+from API_NAME import like_listing_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -34,36 +36,11 @@ class LikeDislikeListing(webapp2.RequestHandler):
     def post(self):
         setup_post(self.response)
 
-        error_keys = ['userId', 'listingId', 'liked', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
-            return
+        valid, values = \
+            check_required_valid(like_listing_api, self.request.POST,
+                                 self.response)
 
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error,
-                                    unauthorized_access)
-            return
-
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to like/dislike listings"},
-                                    not_authorized['status'])
+        if not valid:
             return
 
         listing = Listing.get_by_id(int(values['listingId']))

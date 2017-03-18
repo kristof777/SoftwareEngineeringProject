@@ -37,9 +37,6 @@ class TestFacebookLogin(unittest.TestCase):
         self.assertEquals(fb_e.user_id,int(response_body["userId"]))
         self.assertEquals(fb_e.fb_id, int(input["fbId"]))
 
-
-
-
     def test_success_facebook_login(self):
         get_response_from_post(Main, {"fbId":1212312398}, "fbLogin")
 
