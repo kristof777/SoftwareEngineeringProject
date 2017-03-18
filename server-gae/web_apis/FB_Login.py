@@ -4,6 +4,8 @@ from models.FB import FBLogin
 from models.User import User
 import sys
 from extras.Base_Handler import BaseHandler
+from API_NAME import fb_login_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -24,32 +26,19 @@ class FacebookLogin(BaseHandler):
                     Return nothing.
     """
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     def get(self):
         pass
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
 
-        error_keys = ['fbId']
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+        valid, values = \
+            check_required_valid(fb_login_api, self.request.POST, self.response)
+
+        if not valid:
             return
-
-
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
 
         # find the correct user with userId
         fb_query = FBLogin.query().filter(FBLogin.fb_id == int(values["fbId"])).fetch(keys_only = True)
@@ -67,4 +56,5 @@ class FacebookLogin(BaseHandler):
                      'phone2': fb_user.phone2,
                      'city': fb_user.city,
                      'province': fb_user.province}
+
         write_success_to_response(self.response, user_dict)

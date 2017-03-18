@@ -75,7 +75,7 @@ class TestHandlerSignIn(unittest.TestCase):
 
     def test_incorrect_userName(self):
         # Test2: When incorrect user_name, but correct password
-        input2 = {'email': 'WrongEmail.com',
+        input2 = {'email': 'WrongEmail@g.com',
                   'password': 'aaAA1234'}
         request = webapp2.Request.blank('/signIn', POST=input2)
         response = request.get_response(Main.app)

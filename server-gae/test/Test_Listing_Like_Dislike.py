@@ -10,7 +10,7 @@ sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlers(unittest.TestCase):
+class TestLikeListingApi(unittest.TestCase):
     """
         test case 1: the owner can't like their listings
         now user want to like the listing

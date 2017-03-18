@@ -1,11 +1,12 @@
 import copy
-
 from extras.utils import *
 import datetime
 from models.Listing import Listing
 from models.User import User
 import sys
 import os
+from API_NAME import edit_listing_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -21,34 +22,18 @@ class EditListing(webapp2.RequestHandler):
         @post-cond: a timestamp of modified date should be returned
     """
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     def get(self):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
+        valid, values = \
+            check_required_valid(edit_listing_api, self.request.POST,
+                                 self.response, True)
 
-        # check if there's any missing field, if so, just return to the user what all is missing
-        error_keys = ['changeValues', 'userId', 'listingId', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
-
-        # If there exists error then return the response, and stop the function
-        if len(errors) != 0:
-            write_error_to_response(self.response,
-                                    errors, missing_invalid_parameter)
-            return
-
-        # check if "changeValues" is empty
-        if len(values['changeValues']) == 0:
-            write_error_to_response(self.response,
-                                    {nothing_requested_to_change['error']:
-                                         "Nothing requested to change"},
-                                    nothing_requested_to_change['status'])
+        if not valid:
             return
 
         change_values = json.loads(values['changeValues'])
@@ -88,9 +73,7 @@ class EditListing(webapp2.RequestHandler):
             return
 
         # check invalidity
-        invalid = key_validation(values)  # the whole dictionary
-        invalid.update(
-            key_validation(change_values))  # the change_values dictionary
+        invalid = key_validation(change_values)  # the change_values dictionary
 
         if len(invalid) != 0:
             write_error_to_response(self.response, invalid,
@@ -98,23 +81,6 @@ class EditListing(webapp2.RequestHandler):
             return
 
         user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error, unauthorized_access)
-            return
-
-        # Check if it is the valid user
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to edit listings"},
-                                    not_authorized['status'])
-            return
-
         listing = Listing.get_by_id(int(values['listingId']))
         if listing is None:
             error = {

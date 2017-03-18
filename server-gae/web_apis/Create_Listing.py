@@ -3,6 +3,8 @@ from models.User import User
 import sys
 import os
 from extras.utils import *
+from API_NAME import create_listing_api
+from extras.api_required_fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -28,48 +30,18 @@ class CreateListing(webapp2.RequestHandler):
 
     """
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     # this GET method is only used for the testing browser
     def get(self):
         self.render_template('../webpages/Create_Listing.html')
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-
-        error_keys = ["isPublished", "userId", "authToken"]
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors, missing_invalid_parameter)
-            return
-
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid, missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error,
-                                    unauthorized_access)
-            return
-
-        # Check if it is the valid user
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to create listings"},
-                                    not_authorized['status'])
+        setup_post(self.response)
+        valid, values = \
+            check_required_valid(create_listing_api, self.request.POST,
+                                 self.response, True)
+        if not valid:
             return
 
         is_published = convert_to_bool(values["isPublished"])

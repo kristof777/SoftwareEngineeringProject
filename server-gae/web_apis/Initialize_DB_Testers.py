@@ -31,6 +31,9 @@ class InitializeDB(BaseHandler):
                     object.
     """
 
+    def options(self, *args, **kwargs):
+        setup_api_options(self)
+
     def get(self):
         pass
 

@@ -89,7 +89,6 @@ describe('Regression tests: functionality while signed in', function(){
     });
 
     it('should test if multiple "My Profile" tab clicks while signed-in returns user to Sign-In screen', function(done) {
-        //let email = element(by.id('email')).all(by.tagName('input')).first();
         let password = element(by.id('password')).all(by.tagName('input')).first();
         let signInButton = element(by.buttonText('Sign In'));
         checkDisplayed(signInButton, "the 'Register' page");

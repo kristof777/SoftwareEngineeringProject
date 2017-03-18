@@ -1,8 +1,9 @@
 import sys
-
 from extras.utils import *
 from models.Message import Message
 from models.User import User
+from API_NAME import edit_message_api
+from extras.api_required_fields import check_required_valid
 
 sys.path.append("../")
 
@@ -18,50 +19,20 @@ class EditMessage(webapp2.RequestHandler):
      """
 
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     def get(self):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['messageId', 'userId', 'authToken', 'readDel']
-        errors, values = keys_missing(error_keys, self.request.POST)
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
+        setup_post(self.response)
+        valid, values = \
+            check_required_valid(edit_message_api, self.request.POST,
+                                 self.response, True)
+
+        if not valid:
             return
 
-        # check validity for integer fields (userId)
-        invalid = key_validation(values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error, not_authorized)
-            return
-
-        # Check if it is the valid user
-        valid_user = user.validate_token(int(values["userId"]),
-                                         "auth",
-                                         values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to get my messages"},
-                                    not_authorized['status'])
-            return
         message = Message.get_by_id(int(values["messageId"]))
 
         if message is None:
@@ -78,7 +49,6 @@ class EditMessage(webapp2.RequestHandler):
             return
 
         if values["readDel"] in ["r", "R"]:
-            #TODO: Not sure if we want to return error if message is already read
             message.received = True
             message.put()
         elif values["readDel"] in ["d", "D"]:

@@ -8,7 +8,7 @@ from web_apis.Create_User import *
 from extras.utils import get_response_from_post
 
 
-class TestHandlers(unittest.TestCase):
+class TestGetListings(unittest.TestCase):
     """
         test case 1: empty input, only return listingIds
         test case 2: empty filer and valuesRequired, only return listingIds

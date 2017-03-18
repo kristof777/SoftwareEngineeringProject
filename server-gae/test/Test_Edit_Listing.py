@@ -13,7 +13,7 @@ sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
-class TestHandlers(unittest.TestCase):
+class TestEditListing(unittest.TestCase):
     """
         test case 1: missing input
         test case 2: missing key-value pair
