@@ -3,6 +3,7 @@ describe('Registering new user as a user would', function() {
     browser.get('/#/ionic-lab');
 
     beforeEach(function () {
+        sleep();
         originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000; //100 seconds
 
@@ -125,12 +126,12 @@ describe('Registering new user as a user would', function() {
                         email = element(by.id('email')).all(by.tagName('input')).first();
                         password = element(by.id('password')).all(by.tagName('input')).first();
                         let signInButton = element(by.buttonText('Sign In'));
-                        email.sendKeys('test@usask.ca');
+                        email.sendKeys('test1@test.com');
                         //TODO Fix to accomodate new sign-in error prompt
                         //password.sendKeys('wrongPassword123');
                         //signInButton.click();
                         //password.sendKeys().clear();
-                        password.sendKeys('Password123');
+                        password.sendKeys('123abcABC');
                         signInButton.click();
                         sleep();
           } else {
@@ -195,51 +196,57 @@ describe('Registering new user as a user would', function() {
 
         //go to the addListings screen
         let addListingButton= element(by.id('addButton'));
-        addListingButton.click();
+        addListingButton.click().then(function(){
+            //filter options
+            let provinceDropList = element(by.id('alProvince'));
+            // .all(by,tageName ('')).first() is needed to input text into the text box
+            let bath = element(by.id('alBathroom')).all(by.tagName('input')).first();
+            let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
+            let address = element(by.id('alAddress')).all(by.tagName('input')).first();
+            let postalCode = element(by.id('alPostalCode')).all(by.tagName('input')).first();
+            let price = element(by.id('alPrice')).all(by.tagName('input')).first();
+            let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
+            let bed = element(by.id('alBedroom')).all(by.tagName('input')).first();
+            let desc2 = element(by.id('alDesc')).all(by.tagName('textarea')).first();
 
-        //filter options
-        let provinceDropList = element(by.id('alProvince'));
-        // .all(by,tageName ('')).first() is needed to input text into the text box
-        let bath = element(by.id('alBathroom')).all(by.tagName('input')).first();
-        let city = element(by.id('alCityTown')).all(by.tagName('input')).first();
-        let address = element(by.id('alAddress')).all(by.tagName('input')).first();
-        let postalCode = element(by.id('alPostalCode')).all(by.tagName('input')).first();
-        let price = element(by.id('alPrice')).all(by.tagName('input')).first();
-        let feet = element(by.id('alSqft')).all(by.tagName('input')).first();
-        let bed = element(by.id('alBedroom')).all(by.tagName('input')).first();
-        let desc2 = element(by.id('alDesc')).all(by.tagName('textarea')).first();
+            //save button
+            let saveButton = element(by.id('alSave'));
 
-        //save button
-        let saveButton = element(by.id('alSave'));
+            //open province drop down
+            sleep();
+            provinceDropList.click().then(function(){
+                let skOption = element(by.buttonText('Saskatchewan'));
+                //let OKbtn = element(by.buttonText('OK'));
+                //select SK and press OK
+                browser.executeScript("arguments[0].scrollIntoView();", skOption);
+                sleep();
+                skOption.click();
+                //OKbtn.click();
+                //sleep();
+                sleep();
+                let enter = browser.actions().sendKeys(protractor.Key.ENTER);
+                enter.perform();
+                sleep();
 
-        //open province drop down
-        provinceDropList.click();
-        sleep();
+                city.sendKeys('Saskatoon');
+                address.sendKeys('123 First Street East');
+                postalCode.sendKeys('f1s 9u8');
 
-        let skOption = element(by.buttonText('Saskatchewan'));
-        let OKbtn = element(by.buttonText('OK'));
+                browser.executeScript("arguments[0].scrollIntoView();", bath); //scroll into view
 
-        //select SK and press OK
-        browser.executeScript("arguments[0].scrollIntoView();", skOption);
-        skOption.click();
-        OKbtn.click();
-        sleep();
+                price.sendKeys('13000000');
+                feet.sendKeys('600');
+                bed.sendKeys('5');
+                bath.sendKeys('2');
+                desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
+
+                //submit listing
+                saveButton.click();
+            });
+        });
 
 
-        city.sendKeys('Saskatoon');
-        address.sendKeys('123 First Street East');
-        postalCode.sendKeys('f1s 9u8');
 
-        browser.executeScript("arguments[0].scrollIntoView();", bath); //scroll into view
-
-        price.sendKeys('13000000');
-        feet.sendKeys('600');
-        bed.sendKeys('5');
-        bath.sendKeys('2');
-        desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
-
-        //submit listing
-        saveButton.click();
 
         sleep();
         //TODO: add expect
