@@ -15,6 +15,8 @@ import {Province} from "../../app/models/province";
 export class AddListingPage {
     editMode: boolean;
 
+    private _provinces: Province[];
+
     private listingId: number;
     private listerId: number;
     private modifiedDate: string;
@@ -38,6 +40,8 @@ export class AddListingPage {
                 public listingProvider: ListingProvider,
                 public navParams: NavParams,
                 private _logger: Logger) {
+        this._provinces = Province.asArray;
+        
         this.images = [];
 
         if(this.navParams.get('listing')){
