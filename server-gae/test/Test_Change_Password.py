@@ -1,15 +1,13 @@
 from __future__ import absolute_import
-
 import sys
-
 from extras.Error_Code import *
-
 sys.path.append("../")
-import json
 import os
 import unittest
 import Main
-import webapp2
+from extras.utils import get_response_from_post
+from API_NAME import *
+
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *

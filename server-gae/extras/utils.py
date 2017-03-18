@@ -605,7 +605,6 @@ def get_response_from_post(Main, post, api):
     request = webapp2.Request.blank('/' + api,POST=post)
     response = request.get_response(Main.app)
     if response.body:
-        # print(response.body)
         json_body = json.loads(response.body)
         if json_body:
             return json_body, response.status_int
