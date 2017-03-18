@@ -461,9 +461,10 @@ export class KasperService {
         result['likeDislikeListing']['unallowedLiked'] = "You cannot like your own listing.";
         result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
-        result['likeDislikeListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingUserId'] = "You must be logged in to like or dislike a listing.";
         result['likeDislikeListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['missingLiked'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingToken'] = "You must be logged in to like or dislike a listing.";
 
         result['getListings'] = [];
         result['getListings']['noListingsLeft'] = "Looks like you've hit the end of your search. To see more listings, adjust your filter settings.";
