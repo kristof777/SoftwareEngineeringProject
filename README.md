@@ -1,5 +1,14 @@
 # Project
 
+---
+
+####Smoke Test Build Status:
+Please click here:
+  [![Build Status](https://travis-ci.org/CMPT371Team1/Project.svg?branch=id4)](https://travis-ci.org/CMPT371Team1/Project)
+
+---
+
+
 ### Running the project in a browser
 1. Install NodeJS (https://nodejs.org/en/download/)  
 If you already have NodeJS, verify you have version 6 or greater by using `node -v` in your command line.
