@@ -506,11 +506,15 @@ export class KasperService {
 
         let message: string = KasperService.errorMessages[route][firstKey];
 
-        this.alertCtrl.create({
+        let alert = this.alertCtrl.create({
             title: "Oops...",
             subTitle: message,
             buttons: ['Dismiss']
-        }).present();
+        });
+
+        alert.present();
+
+        return alert;
     }
 
     static fromData(data: any): Listing[]{

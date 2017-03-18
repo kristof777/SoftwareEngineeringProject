@@ -1,6 +1,6 @@
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from "@angular/core";
-import {NavController, ModalController, ItemSliding, ToastController} from "ionic-angular";
+import {NavController, ModalController, ItemSliding, ToastController, Alert} from "ionic-angular";
 import {Logger} from "angular2-logger/core";
 import {Listing} from "../../app/models/listing";
 import {FilterPage} from "../filter/filter";
@@ -15,6 +15,7 @@ let assert = require('assert-plus');
     providers: [ListingProvider]
 })
 export class BrowsePage {
+    alert: Alert;
     listings: Listing[];
     filter: Filter;
 
@@ -55,18 +56,19 @@ export class BrowsePage {
         if(!this.canVote) return;
         let me = this;
         if (event.getOpenAmount() < -100) {
-            me.likeListing(index);
+            me.likeListing(event, index);
         } else if (event.getOpenAmount() > 100) {
-            me.dislikeListing(index);
+            me.dislikeListing(event, index);
         }
     }
 
     /**
      * Send request to dislike a listing
      *
+     * @param event the event that called this listing
      * @param index the index of the listing
      */
-    dislikeListing(index: number): void{
+    dislikeListing(event: ItemSliding, index: number): void{
         assert(index > -1 && index < this.listings.length,
             "Index should be within the bounds of available listings");
 
@@ -86,16 +88,24 @@ export class BrowsePage {
             if(this.listings.length == 0)
                 this.loadListings();
         }, error => {
-            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+            if(this.alert) return;
+
+
+            this.alert = this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+            this.alert.onDidDismiss(() => {
+                event.close();
+                this.alert = null;
+            });
         });
     }
 
     /**
      * Send request to like a listing
      *
+     * @param event the event that called this listing
      * @param index the index of the listing
      */
-    likeListing(index: number): void{
+    likeListing(event: ItemSliding, index: number): void{
         assert(index > -1 && index < this.listings.length,
             "Index should be within the bounds of available listings");
 
@@ -115,7 +125,13 @@ export class BrowsePage {
             if(this.listings.length == 0)
                 this.loadListings();
         }, error => {
-            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+            if(this.alert) return;
+
+            this.alert = this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+            this.alert.onDidDismiss(() => {
+                event.close();
+                this.alert = null;
+            });
         });
     }
 
