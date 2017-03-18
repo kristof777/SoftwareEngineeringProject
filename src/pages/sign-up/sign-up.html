@@ -66,19 +66,7 @@
             <ion-item>
                 <ion-label stacked>Province</ion-label>
                 <ion-select formControlName="province" id="signUpProvinceSelect">
-                    <ion-option value="AB">Alberta</ion-option>
-                    <ion-option value="BC" id="signUpBC">British Columbia</ion-option>
-                    <ion-option value="MB">Manitoba</ion-option>
-                    <ion-option value="NB">New Brunswick</ion-option>
-                    <ion-option value="NL">Newfoundland and Labrador</ion-option>
-                    <ion-option value="NS">Nova Scotia</ion-option>
-                    <ion-option value="NU">Nunavut</ion-option>
-                    <ion-option value="NW">North West Territories</ion-option>
-                    <ion-option value="ON">Ontario</ion-option>
-                    <ion-option value="PE">Prince Edward Island</ion-option>
-                    <ion-option value="QC">Quebec</ion-option>
-                    <ion-option value="SK">Saskatchewan</ion-option>
-                    <ion-option value="YT">Yukon</ion-option>
+                    <ion-option *ngFor="let province of _provinces" value="{{ province.abbr }}">{{ province.name }}</ion-option>
                 </ion-select>
             </ion-item>
 

@@ -16,7 +16,7 @@ export class Province{
     static NL = new Province("NL", "Newfoundland and Labrador");
     static NS = new Province("NS", "Nova Scotia");
     static NU = new Province("NU", "Nunavut");
-    static NW = new Province("NW", "North West Territories");
+    static NT = new Province("NT", "Northwest Territories");
     static ON = new Province("ON", "Ontario");
     static PE = new Province("PE", "Prince Edward Island");
     static QC = new Province("QC", "Quebec");
@@ -36,7 +36,7 @@ export class Province{
         Province.NL,
         Province.NS,
         Province.NU,
-        Province.NW,
+        Province.NT,
         Province.ON,
         Province.PE,
         Province.QC,

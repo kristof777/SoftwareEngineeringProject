@@ -46,7 +46,6 @@ class TestEditMessage(unittest.TestCase):
         }
 
         messages, _ = get_message_api_response(get_message_input)
-
         assert "messages" in messages
         assert len(messages["messages"]) == 1
         assert "messageId" in messages["messages"][0]

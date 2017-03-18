@@ -1,15 +1,14 @@
 #!/bin/bash
-set -v
+set -ve
 
 # Author: Chris Mykota-Reid ~.u 
 # Installs all the packages required for whatever build is being done.
+# Versions for the packages can be found under system_info in the build log.
 # Travis is a bad influence on Ionic and got it drunk
 # and now needs it's hand held through the build.  That's what 'mkdir www' is for.
 
 
 # Downloads and installs all the files required to run ios.
-# You can find the versions inside the doc or posted at the end 
-# of the build log
 ios_install(){
   brew update
   brew cask install java
@@ -19,23 +18,17 @@ ios_install(){
 }
 
 # Downloads and installs all the common files required to run android/linux.
-# You can find the versions inside the doc or posted at the end 
-# of the build log.
 lindroid_install(){
   sudo apt-get install oracle-java8-set-default screen xvfb
-  npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core
+  npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core gulp gulp-cli
   npm install jasmine-spec-reporter --save-dev
   # installs packages specified in the ionic json
   npm install
   webdriver-manager update
   sudo apt-get install sshpass
-  # commented out for now, we could use chrome at some point and this might be needed for it
-  # chrome_install
 }
 
 # Downloads and installs all the files required to run android.
-# You can find the versions inside the doc or posted at the end 
-# of the build log.
 android_install(){
   ionic state restore
   wget http://dl.google.com/android/android-sdk_r24.4-linux.tgz
@@ -68,7 +61,6 @@ if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
   echo "got to linux install"
   lindroid_install
-  sudo apt-get install sshpass
   
   # prevent dialogue messages from appearing in gooogle app engine install
   export CLOUDSDK_INSTALL_DIR=/$HOME

@@ -52,8 +52,8 @@ export class ListingProvider {
      */
     dislikeListing(listingId : number): any{
         assert.number(listingId, "listingID must be a number.");
-        // this._logger.error("ListingProvider.dislike is not implemented.");
-        this.kasperService.likeDislikeListing(listingId, false);
+
+        return this.kasperService.likeDislikeListing(listingId, false);
     }
 
     likeDislikeCallback(){}
@@ -65,7 +65,7 @@ export class ListingProvider {
      */
     likeListing(listingId : number): any{
         assert.number(listingId, "listingID must be a number.");
-        // this._logger.error("ListingProvider.addToFavourites is not implemented.");
+
         return this.kasperService.likeDislikeListing(listingId, true);
     }
 
