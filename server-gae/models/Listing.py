@@ -129,6 +129,8 @@ class Listing(ndb.Model):
         _key_to_set[key](value)
 
     def get_value_from_key(self, key):
+        assert key is not None
+        assert key != ""
         _key_to_get_value = {
             "price": self.price,
             "city": self.city,
