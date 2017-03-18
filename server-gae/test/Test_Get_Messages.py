@@ -112,10 +112,3 @@ def get_contact_seller_post_dictionary(sender_id, receiver_id, listing_id, auth_
 
 def get_contact_response(POST):
     return get_response_from_post(Main, POST, 'contactSeller')
-
-
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()

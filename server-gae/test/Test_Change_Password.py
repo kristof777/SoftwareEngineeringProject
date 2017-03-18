@@ -7,8 +7,6 @@ import unittest
 import Main
 from extras.utils import get_response_from_post
 from API_NAME import *
-
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *
 
@@ -54,7 +52,7 @@ class TestChangePassword(unittest.TestCase):
             get_response_from_post(Main, input2, sign_in_api)
 
         self.assertEquals(response_status, unauthorized_access)
-        error_keys = [str(x) for x in response]
+        error_keys = response.keys()
         self.assertTrue(are_two_lists_same(error_keys[0], not_authorized['error']))
 
 
@@ -83,12 +81,8 @@ class TestChangePassword(unittest.TestCase):
         response, response_status = \
             get_response_from_post(Main, input2, change_password_api)
         self.assertEquals(response_status, unauthorized_access)
-        try:
-            error_message = response
-        except IndexError as _:
-            self.assertFalse(True)
-            return
-        self.assertEquals(not_authorized['error'], error_message)
+        self.assertTrue(are_two_lists_same([not_authorized['error']],
+                                           response.keys()))
 
     def test_missmatched_passwords(self):
         # Case3: Passwords do not match
@@ -99,12 +93,8 @@ class TestChangePassword(unittest.TestCase):
         response, response_status = \
             get_response_from_post(Main, input3, change_password_api)
         self.assertEquals(response_status, unauthorized_access)
-        error_message = ""
-        try:
-            error_message = response
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(password_mismatch['error'], error_message)
+        self.assertTrue(are_two_lists_same([password_mismatch['error']],
+                                           response.keys()))
 
     def test_weak_passwords(self):
         # Case4: new passwords match but are not strong
@@ -113,17 +103,11 @@ class TestChangePassword(unittest.TestCase):
                   "confirmedPassword": "weakmatch",
                   "userId": self.user_id}
 
-        response, response_status = \
-            get_response_from_post(Main, input4, change_password_api)
+        response, response_status = get_change_password_api_response(input4)
 
         self.assertEquals(response_status, processing_failed)
-        error_message = ""
-        try:
-            error_message = response
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(password_not_strong['error'], error_message)
-
+        self.assertTrue(are_two_lists_same([password_not_strong['error']],
+                                           response.keys()))
     def test_change_to_same_password(self):
         # Case5: new passwords and old password are the same
         input4 = {"oldPassword": "aaAA1234",
@@ -132,25 +116,15 @@ class TestChangePassword(unittest.TestCase):
                   "userId": self.user_id}
 
         response, response_status = \
-            get_response_from_post(Main, input4, change_password_api)
+            get_change_password_api_response(input4)
 
         self.assertEquals(response_status, processing_failed)
-        error_message = ""
-        try:
-            error_message = response
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(new_password_is_the_same_as_old['error'],
-                          error_message)
-
-
-
+        self.assertTrue(are_two_lists_same(
+            [new_password_is_the_same_as_old['error']], response.keys()))
 
     def tearDown(self):
         self.testbed.deactivate()
 
 
-
-
-if __name__ == '__main__':
-    unittest.main()
+def get_change_password_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, change_password_api)

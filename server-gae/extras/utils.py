@@ -601,13 +601,15 @@ def setup_testbed(test_handler):
     test_handler.mail_stub = test_handler.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
 
 
-def get_response_from_post(Main, post, api):
+def get_response_from_post(main, post, api):
     request = webapp2.Request.blank('/' + api,POST=post)
-    response = request.get_response(Main.app)
+    response = request.get_response(main.app)
     if response.body:
         json_body = json.loads(response.body)
         if json_body:
-            return json_body, response.status_int
+            dictionary = {str(key): str(json_body[str(key)]) for key in
+                          json_body}
+            return dictionary, response.status_int
     return None, response.status_int
 
 
