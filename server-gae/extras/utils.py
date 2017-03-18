@@ -216,9 +216,9 @@ def create_random_listing(user_id, token):
                       "longitude": str(random.randint(-180, 180)),
                       "latitude": str(random.randint(-90, 90)),
                       "postalCode": get_random_postal_code(),
-                      "squarefeet": str(random.randint(200, 2000)),
+                      "squarefeet": str(random.randint(50, 12000)),
                       "bathrooms": str(random.randint(1, 10)),
-                      "price": str(random.randint(20000, 20000000)),
+                      "price": str(random.randint(100000, 2000000)),
                       "description": " ".join(
                           [get_random_string() for _ in
                            range(random.randint(15, 45))]) + ".",
