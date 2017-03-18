@@ -9,7 +9,7 @@ import extras.Error_Code as Error_Code
 from models import Favorite
 from models.Listing import Listing
 from web_apis.Create_User import *
-
+from API_NAME import delete_listing_api
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -101,10 +101,10 @@ def get_delete_post_dictionary(userId, listingId, token):
         listingId, "authToken": token}
 
 
-def get_delete_response(POST):
-    request = webapp2.Request.blank('/deleteListing', POST=POST)
-    response = request.get_response(Main.app)
-    return json.loads(response.body), response.status_int
+def get_delete_response(post):
+    response, response_status = \
+        get_response_from_post(Main, post, delete_listing_api)
+    return response, response_status
 
 
 

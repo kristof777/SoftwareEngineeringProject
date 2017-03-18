@@ -34,7 +34,6 @@ class TestHandlers(unittest.TestCase):
         response, response_status = get_response_from_post(Main,
                                                            correct_input,
                                                            contact_seller_api)
-
         self.assertEquals(response_status, success)
 
     def test_unallowed_input(self):
@@ -115,11 +114,3 @@ class TestHandlers(unittest.TestCase):
 
     def tearDown(self):
         self.testbed.deactivate()
-
-
-def run_tests():
-    unittest.main()
-
-
-if __name__ == "__main__":
-    run_tests()

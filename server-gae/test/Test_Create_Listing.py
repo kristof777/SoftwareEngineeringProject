@@ -7,7 +7,7 @@ import unittest
 import Main
 from models.Listing import Listing
 from web_apis.Create_User import *
-
+from API_NAME import create_listing_api
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -28,17 +28,16 @@ class TestHandlers(unittest.TestCase):
 
     def test_empty_input(self):
         empty_input = {}
-        request = webapp2.Request.blank('/createListing',
-                                        POST=empty_input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, empty_input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_published['error'],
                            missing_token['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_empty_fields(self):
@@ -59,17 +58,16 @@ class TestHandlers(unittest.TestCase):
                  "images": '',
                  "postalCode": ""
                  }
+        response, response_status = \
+            get_response_from_post(Main, input, create_listing_api)
 
-        request = webapp2.Request.blank('/createListing', POST=input)
-        response = request.get_response(Main.app)
-
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_published['error'],
                            missing_token['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_multiple_spaces_input(self):
@@ -91,17 +89,16 @@ class TestHandlers(unittest.TestCase):
                  "postalCode": "   ",
                  }
 
-        request = webapp2.Request.blank('/createListing',
-                                        POST=input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [missing_user_id['error'],
                            missing_published['error'],
                            missing_token['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_some_missing_fields(self):
@@ -111,28 +108,25 @@ class TestHandlers(unittest.TestCase):
         missing_input['city'] = ""
         missing_input['images'] = ''
 
-        request = webapp2.Request.blank('/createListing',
-                                        POST=missing_input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, missing_input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
-
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_user_id['error'],
                            missing_token['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_invalid_user_id(self):
         input = create_random_listing("1111", "sfasdtr54523df")
 
-        request = webapp2.Request.blank('/createListing', POST=input)
-        response = request.get_response(Main.app)
-
-        self.assertEquals(response.status_int, unauthorized_access)
+        response, response_status = \
+            get_response_from_post(Main, input, create_listing_api)
+        self.assertEquals(response_status, unauthorized_access)
 
         errors_expected = [not_authorized['error']]
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
@@ -147,10 +141,10 @@ class TestHandlers(unittest.TestCase):
         input['latitude'] = 'supposed to be float'
         input['postalCode'] = 'supposed to be float'
 
-        request = webapp2.Request.blank('/createListing', POST=input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [invalid_user_id['error'],
                            invalid_bedrooms['error'],
@@ -163,7 +157,7 @@ class TestHandlers(unittest.TestCase):
                            invalid_thumbnail_image_index['error']
                            ]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
@@ -172,12 +166,13 @@ class TestHandlers(unittest.TestCase):
         correct_input = inputs[0]
         correct_input["bathrooms"] = 5.5
         correct_input["isPublished"] = "True"
-        request = webapp2.Request.blank('/createListing', POST=correct_input)
-        response = request.get_response(Main.app)
 
-        self.assertEquals(response.status_int, success)
+        response, response_status = \
+            get_response_from_post(Main, correct_input, create_listing_api)
 
-        output = json.loads(response.body)
+        self.assertEquals(response_status, success)
+
+        output = response
         self.assertTrue("listingId" in output)
 
         listing_created = Listing.get_by_id(int(output["listingId"]))
@@ -197,14 +192,14 @@ class TestHandlers(unittest.TestCase):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
         correct_input["bathrooms"] = 5.25
-        request = webapp2.Request.blank('/createListing', POST=correct_input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, correct_input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
 
         errors_expected = [invalid_bathrooms['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
@@ -220,12 +215,12 @@ class TestHandlers(unittest.TestCase):
         del correct_input['address']
         del correct_input['squarefeet']
         del correct_input['price']
-        request = webapp2.Request.blank('/createListing', POST=correct_input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, correct_input, create_listing_api)
 
-        self.assertEquals(response.status_int, success)
+        self.assertEquals(response_status, success)
 
-        output = json.loads(response.body)
+        output = response
         self.assertTrue("listingId" in output)
 
         listing_created = Listing.get_by_id(int(output["listingId"]))
@@ -241,13 +236,13 @@ class TestHandlers(unittest.TestCase):
         inputs, users = create_dummy_listings_for_testing(Main, 1)
         correct_input = inputs[0]
         del correct_input['isPublished']
-        request = webapp2.Request.blank('/createListing', POST=correct_input)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_response_from_post(Main, correct_input, create_listing_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_published['error']]
 
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 

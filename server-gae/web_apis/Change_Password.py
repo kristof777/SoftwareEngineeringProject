@@ -53,12 +53,18 @@ class ChangePassword(BaseHandler):
         except (InvalidAuthIdError, InvalidPasswordError) as e:
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
-            write_error_to_response(self.response, not_authorized['error'],
+            error = {
+                not_authorized['error']: "Invalid credentials"
+            }
+            write_error_to_response(self.response, error,
                                     not_authorized['status'])
             return
 
         if user is None:
-            write_error_to_response(self.response, not_authorized['error'],
+            error = {
+                not_authorized['error']: "Invalid credentials"
+            }
+            write_error_to_response(self.response, error,
                                     not_authorized['status'])
             logging.info(
                 'Sign-in-with-token failed for user %s because of %s',
@@ -71,18 +77,28 @@ class ChangePassword(BaseHandler):
         token = self.user_model.create_auth_token((values['userId']))
 
         if not is_valid_password(values['newPassword']):
-            write_error_to_response(self.response, password_not_strong['error'],
+            error = {
+                password_not_strong['error']: "Password not strong enough"
+            }
+            write_error_to_response(self.response, error,
                                     password_not_strong['status'])
             return
 
         if values['newPassword'] != values['confirmedPassword']:
-            write_error_to_response(self.response, password_mismatch['error'],
+            error = {
+                password_mismatch['error']:
+                    "Password and confirmed password do not match"
+            }
+            write_error_to_response(self.response, error,
                                     password_mismatch['status'])
             return
 
         if values['newPassword'] == values['oldPassword']:
-            write_error_to_response(self.response,
-                                    new_password_is_the_same_as_old['error'],
+            error = {
+                new_password_is_the_same_as_old['error']:
+                    "New password is same as the old password"
+            }
+            write_error_to_response(self.response, error,
                                     new_password_is_the_same_as_old['status'])
             return
 

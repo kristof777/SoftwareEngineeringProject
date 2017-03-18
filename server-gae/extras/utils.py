@@ -179,10 +179,10 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
                                    "longitude": str(random.randint(-180, 180)),
                                    "latitude": str(random.randint(-90, 90)),
                                    "postalCode": get_random_postal_code(),
-                                   "squarefeet": str(random.randint(200, 2000)),
+                                   "squarefeet": str(random.randint(50, 12000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
-                                       random.randint(20000, 20000000)),
+                                       random.randint(100000, 2000000)),
                                    "description": " ".join(
                                        [get_random_string() for _ in
                                         range(random.randint(15, 45))]) + ".",
@@ -236,9 +236,9 @@ def create_random_listing(user_id, token):
                       "longitude": str(random.randint(-180, 180)),
                       "latitude": str(random.randint(-90, 90)),
                       "postalCode": get_random_postal_code(),
-                      "squarefeet": str(random.randint(200, 2000)),
+                      "squarefeet": str(random.randint(50, 12000)),
                       "bathrooms": str(random.randint(1, 10)),
-                      "price": str(random.randint(20000, 20000000)),
+                      "price": str(random.randint(100000, 2000000)),
                       "description": " ".join(
                           [get_random_string() for _ in
                            range(random.randint(15, 45))]) + ".",
@@ -673,13 +673,15 @@ def setup_testbed(test_handler):
     test_handler.mail_stub = test_handler.testbed.get_stub(testbed.MAIL_SERVICE_NAME)
 
 
-def get_response_from_post(Main, post, api):
+def get_response_from_post(main, post, api):
     request = webapp2.Request.blank('/' + api,POST=post)
-    response = request.get_response(Main.app)
+    response = request.get_response(main.app)
     if response.body:
         json_body = json.loads(response.body)
         if json_body:
-            return json_body, response.status_int
+            dictionary = {str(key): json_body[str(key)] for key in
+                          json_body}
+            return dictionary, response.status_int
     return None, response.status_int
 
 

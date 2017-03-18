@@ -16,6 +16,8 @@ let assert = require('assert-plus');
 export class SignUpPage {
     @ViewChild(Slides) slides: Slides;
 
+    private _provinces: Province[];
+
     // Form validation
     signUpStep1: FormGroup;
     private emailAttempted: boolean = false;
@@ -33,6 +35,8 @@ export class SignUpPage {
                 public toastCtrl: ToastController,
                 public kasperService: KasperService,
                 public platform: Platform) {
+
+        this._provinces = Province.asArray;
 
         // Create validation for step 1
         this.signUpStep1 = formBuilder.group({
@@ -85,7 +89,19 @@ export class SignUpPage {
             user.id = data.userId;
             this.kasperService.loginService.setUser(user);
             this.kasperService.loginService.setToken(data.authToken);
+
             this.navCtrl.setRoot(MyProfilePage);
+
+            this.toastCtrl.create({
+                message: "Registered successfully.",
+                duration: 3000,
+                position: 'top'
+            }).present();
+
+            // Move back to the browse page.
+            // This is currently required as selecting the My Profile tab a second time (before
+            // changing to another tab) will bring the user back to the SignInPage page.
+            this.navCtrl.parent.select(0);
         }, error => {
             this._logger.error("There was an error registering: ");
             this._logger.error(JSON.stringify(error));

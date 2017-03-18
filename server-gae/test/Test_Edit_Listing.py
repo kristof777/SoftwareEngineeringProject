@@ -37,9 +37,11 @@ class TestEditListing(unittest.TestCase):
 
         listing_info = create_random_listing(self.ownerId, self.token)
         listing_info['isPublished'] = 'False'
+
         request = webapp2.Request.blank('/createListing',
                                         POST=listing_info)
         response = request.get_response(Main.app)
+
         output = json.loads(response.body)
         self.listingId = output["listingId"]
 

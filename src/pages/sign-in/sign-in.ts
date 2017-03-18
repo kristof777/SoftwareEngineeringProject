@@ -10,6 +10,7 @@ import {KasperService} from "../../app/providers/kasper-service";
 import {User} from "../../app/models/user";
 import {Province} from "../../app/models/province";
 import {MyProfilePage} from "../my-profile/my-profile";
+import {BrowsePage} from "../browse/browse";
 let assert = require('assert-plus');
 
 @Component({
@@ -98,6 +99,8 @@ export class SignInPage {
 
             // Set the root of the current tab to the MyProfile page.
             this.navCtrl.setRoot(MyProfilePage);
+
+            BrowsePage.forceRefresh = true;
 
             // Move back to the browse page.
             // This is currently required as selecting the My Profile tab a second time (before

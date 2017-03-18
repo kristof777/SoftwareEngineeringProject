@@ -10,6 +10,7 @@ import Main
 from web_apis.Create_User import *
 import extras.utils as utils
 from models.Message import Message
+from API_NAME import *
 
 
 class TestEditMessage(unittest.TestCase):
@@ -37,16 +38,14 @@ class TestEditMessage(unittest.TestCase):
             "phone": self.user_buyer['phone1'],
             "email": self.user_buyer['email']
         }
-        utils.get_response_from_post(Main, message_input, 'contactSeller')
+        get_contact_seller_api_response(message_input)
 
         get_message_input = {
             "userId": self.listing['userId'],
-            "authToken": self.user_seller['authToken'],
-
+            "authToken": self.user_seller['authToken']
         }
 
-        messages, _ = utils.get_response_from_post(Main, get_message_input,
-                                                   'getMessages')
+        messages, _ = get_message_api_response(get_message_input)
         assert "messages" in messages
         assert len(messages["messages"]) == 1
         assert "messageId" in messages["messages"][0]
@@ -58,8 +57,7 @@ class TestEditMessage(unittest.TestCase):
         testing_input = get_testing_input(self.user_seller["userId"],
                                           self.user_seller["authToken"],
                                           self.valid_message_id_1, 'r')
-        values, response_status = \
-            utils.get_response_from_post(Main, testing_input, 'editMessage')
+        values, response_status = get_edit_message_api_response(testing_input)
         self.assertEquals(response_status, success)
         message = Message.get_by_id(self.valid_message_id_1)
         self.assertTrue(message.received)
@@ -111,9 +109,6 @@ class TestEditMessage(unittest.TestCase):
         self.test_correct_input_read()
 
 
-
-
-
     def tearDown(self):
         self.testbed.deactivate()
 
@@ -127,8 +122,17 @@ def get_testing_input(user_id, user_auth_token,message_id, read_del):
         "readDel": read_del
     }
 
-def run_tests():
-    unittest.main()
 
-if __name__ == "__main__":
-    run_tests()
+def get_contact_seller_api_response(input_dictionary):
+    return \
+        utils.get_response_from_post(Main, input_dictionary, contact_seller_api)
+
+
+def get_message_api_response(input_dictionary):
+    return \
+        utils.get_response_from_post(Main, input_dictionary, get_messages_api)
+
+
+def get_edit_message_api_response(input_dictionary):
+    return \
+        utils.get_response_from_post(Main, input_dictionary, edit_message_api)

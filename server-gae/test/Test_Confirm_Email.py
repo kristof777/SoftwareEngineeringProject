@@ -10,6 +10,7 @@ import webapp2
 from models.User import User
 from extras.utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from API_NAME import create_user_api
 
 
 class TestConfirmEmail(unittest.TestCase):
@@ -24,12 +25,11 @@ class TestConfirmEmail(unittest.TestCase):
     """
     def setUp(self):
         setup_testbed(self)
-        self.api = "createUser"
 
     def test_create_user_with_email_confirmation(self):
         random_user = create_random_user()
         response_body, status_int = get_response_from_post(Main, random_user,
-                                                           self.api)
+                                                           create_user_api)
         self.assertEquals(status_int, success)
         self.assertTrue("authToken" in response_body)
         self.assertTrue("userId" in response_body)
