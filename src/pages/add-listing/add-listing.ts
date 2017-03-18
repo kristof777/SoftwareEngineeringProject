@@ -1,7 +1,7 @@
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams, ToastController} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
@@ -14,6 +14,8 @@ import {Province} from "../../app/models/province";
 })
 export class AddListingPage {
     editMode: boolean;
+
+    private _provinces: Province[];
 
     private listingId: number;
     private listerId: number;
@@ -36,8 +38,11 @@ export class AddListingPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public toastCtrl: ToastController,
                 public navParams: NavParams,
                 private _logger: Logger) {
+        this._provinces = Province.asArray;
+
         this.images = [];
 
         if(this.navParams.get('listing')){
@@ -127,23 +132,19 @@ export class AddListingPage {
         let result = this.listingProvider.addListing(this.getCurListing());
 
         result.subscribe(data => {
-            this._logger.info("Data from addListing");
-            this._logger.info(JSON.stringify(data));
+            this.navCtrl.pop();
         }, error => {
             this.listingProvider.kasperService.handleError("createListing", error.json());
         });
 
-        this.navCtrl.pop();
     }
 
-    updateListing(){
-    }
+    updateListing(){}
 
     /**
      * Save the listing to the server 
      */
     saveWithoutPublishing(){
-        this._logger.error("AddListingPage.saveWithoutPublishing"); // TODO: shouldnt be a log error
         this.isPublished = false;
         this.saveListing();
     }
@@ -151,9 +152,7 @@ export class AddListingPage {
     /**
      * Set the listing to published
      */
-    //TODO: Remove
     saveAndPublish(){
-        this._logger.error("AddListingPage.saveAndPublish is not implemented yet");
         this.isPublished = true;
         this.saveListing();
     }
