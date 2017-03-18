@@ -2,13 +2,13 @@ from __future__ import absolute_import
 
 import os
 import sys
-
 sys.path.append("../")
 import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *
 from models.User import User
 import Main
+from API_NAME import *
 
 class TestEditUser(unittest.TestCase):
     """
@@ -26,15 +26,14 @@ class TestEditUser(unittest.TestCase):
     def setUp(self):
         setup_testbed(self)
         self.users = create_dummy_users_for_testing(Main, 3)
-        self.api = "editUser"
 
     def test_nothing_requsted_to_change(self):
         user_id = self.users[0]["userId"]
         token = self.users[0]["authToken"]
         change_values = {}
 
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
 
         self.assertEqual(status, nothing_requested_to_change["status"])
         self.assertTrue(nothing_requested_to_change["error"] in res_value)
@@ -44,8 +43,8 @@ class TestEditUser(unittest.TestCase):
         token = self.users[0]["authToken"]
         change_values = {"unRecongnized" :"key"}
 
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
 
         self.assertEqual(status, unrecognized_key["status"])
         self.assertTrue(unrecognized_key["error"] in res_value)
@@ -55,8 +54,8 @@ class TestEditUser(unittest.TestCase):
         change_values = {"phone1" :"1234567891"}
         user_id = 1000
 
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
         self.assertEqual(status, not_authorized["status"])
         self.assertTrue(not_authorized["error"] in res_value)
 
@@ -64,8 +63,8 @@ class TestEditUser(unittest.TestCase):
         change_values = {"phone1" :"1234567891"}
         token = self.users[0]["authToken"]
         user_id = ""
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
         self.assertEqual(status, missing_user_id["status"])
         self.assertTrue(missing_user_id["error"] in res_value)
 
@@ -73,10 +72,8 @@ class TestEditUser(unittest.TestCase):
         user_id = self.users[0]["userId"]
         token = self.users[0]["authToken"]
         change_values = {"password" :"1234567891"}
-
-
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
         self.assertEqual(status, password_cant_be_changed["status"])
         self.assertTrue(password_cant_be_changed["error"] in res_value)
 
@@ -85,8 +82,8 @@ class TestEditUser(unittest.TestCase):
         token = self.users[0]["authToken"]
         change_values = {"phone1": "1234567891"}
 
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
         self.assertEqual(status, success)
 
         new_user = User.get_by_id(int(self.users[0]["userId"]))
@@ -96,8 +93,8 @@ class TestEditUser(unittest.TestCase):
         user_id = self.users[1]["userId"]
         token = self.users[1]["authToken"]
         change_values = {"phone1": "1234567891", "firstName": "Hello"}
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
         self.assertEqual(status, success)
 
         new_user = User.get_by_id(int(self.users[1]["userId"]))
@@ -109,8 +106,9 @@ class TestEditUser(unittest.TestCase):
         token = self.users[2]["authToken"]
         change_values = {"phone1": "1234567891", "firstName": "hello",
                          "lastName": "world"}
-        res_value, status = get_response_from_post(Main,get_post_dictionary(user_id, token,
-                                                             change_values), self.api)
+        res_value, status = get_edit_message_response(
+            get_post_dictionary(user_id, token, change_values))
+
         self.assertEqual(status, success)
         new_user = User.get_by_id(int(self.users[2]["userId"]))
         self.assertEqual(new_user.phone1, change_values["phone1"])
@@ -129,11 +127,5 @@ def get_post_dictionary(userId, token, change_values):
         token,"changeValues": json.dumps(change_values)}
 
 
-
-
-
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()
+def get_edit_message_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, edit_user_api)

@@ -9,6 +9,7 @@ from extras.utils import *
 from models.User import User
 import Main
 from models.FB import FBLogin
+from API_NAME import *
 
 class TestFacebookLogin(unittest.TestCase):
     """
@@ -20,8 +21,9 @@ class TestFacebookLogin(unittest.TestCase):
         self.users = create_dummy_users_for_testing(Main, 3)
         input = create_random_user()
         input["fbId"] = "1212312398"
-        response_body, status_int = get_response_from_post(Main, input,
-                                                           "createUser")
+
+        response_body, status_int = get_create_user_response(input)
+
         self.assertEquals(status_int, success)
         self.assertTrue("authToken" in response_body)
         self.assertTrue("userId" in response_body)
@@ -38,19 +40,16 @@ class TestFacebookLogin(unittest.TestCase):
         self.assertEquals(fb_e.fb_id, int(input["fbId"]))
 
     def test_success_facebook_login(self):
-        get_response_from_post(Main, {"fbId":1212312398}, "fbLogin")
+        response, response_status = \
+            get_fb_login_response({"fbId": 1212312398})
+        self.assertEqual(response_status, success)
 
 
+def get_create_user_response(input_dictionary):
+    return \
+        get_response_from_post(Main, input_dictionary, create_user_api)
 
 
-
-
-
-
-
-
-def run_tests():
-    unittest.main()
-
-if __name__ == "__main__":
-    run_tests()
+def get_fb_login_response(input_dictionary):
+    return \
+        get_response_from_post(Main, input_dictionary, fb_login_api)

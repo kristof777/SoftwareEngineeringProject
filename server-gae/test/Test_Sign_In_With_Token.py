@@ -9,6 +9,7 @@ import Main
 import webapp2
 from models.User import *
 from extras.utils import *
+from API_NAME import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -30,52 +31,42 @@ class TestSignInWithToken(unittest.TestCase):
     def test_sign_in_missing_params(self):
         # No input parameters
         input1 = {}  # Json object to send
-        request = webapp2.Request.blank('/signInWithToken', POST=input1)
-        response = request.get_response(Main.app)  # get response back
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        output, response_status = get_sign_in_token_response(input1)
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_user_id['error'],
                            missing_token['error']]
-        error_keys = [str(x) for x in json.loads(response.body)]
-
         # checking if there is a difference between error_keys and what we got
-        self.assertEquals(len(set(errors_expected).
-                              difference(set(error_keys))), 0)
+        self.assertTrue(
+            are_two_lists_same(errors_expected, output.keys()))
 
     def test_sign_in_incorrect_token(self):
         # Test2: When incorrect token
         input2 = {'userId': self.user_id,
                   'authToken': 'ThisTokenIsNoGood'}
-        request = webapp2.Request.blank('/signInWithToken', POST=input2)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertTrue(not_authorized['error'] in error_message)
+        output, response_status = get_sign_in_token_response(input2)
+
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(
+            are_two_lists_same([not_authorized['error']], output.keys()))
 
     def test_sign_in_incorrect_user_id(self):
         # Test2: When incorrect user_id
         input2 = {'userId': '12341',
                   'authToken': self.token}
-        request = webapp2.Request.blank('/signInWithToken', POST=input2)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse()
-        self.assertTrue(not_authorized['error'] in error_message)
+        output, response_status = get_sign_in_token_response(input2)
+
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(
+            are_two_lists_same([not_authorized['error']], output.keys()))
 
     def test_sign_in_success(self):
         # Correct user_id and authToken
         input3 = {'userId': self.user_id,
                   'authToken': self.token}
-        request = webapp2.Request.blank('/signInWithToken', POST=input3)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+
+        output, response_status = get_sign_in_token_response(input3)
+        self.assertEquals(response_status, success)
         # Check output
-        output = json.loads(response.body)
         self.assertNotEqual(output['authToken'], self.token)
         check_output_for_sign_in(self,output,self.database_user)
 
@@ -83,5 +74,5 @@ class TestSignInWithToken(unittest.TestCase):
         self.testbed.deactivate()
 
 
-if __name__ == '__main__':
-    unittest.main()
+def get_sign_in_token_response(post):
+    return get_response_from_post(Main, post, sign_in_token_api)

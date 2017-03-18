@@ -5,7 +5,6 @@ sys.path.append("../")
 import os
 import unittest
 import Main
-from extras.utils import get_response_from_post
 from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.utils import *
@@ -22,7 +21,7 @@ class TestChangePassword(unittest.TestCase):
         self.database_user['email'] = 'student@usask.ca'
 
         response, response_status = \
-            get_response_from_post(Main, self.database_user, create_user_api)
+            get_create_user_api_response(self.database_user)
 
         self.user = response
         self.assertTrue("userId" in self.user)
@@ -78,8 +77,7 @@ class TestChangePassword(unittest.TestCase):
                   "confirmedPassword": "notImportant123",
                   "userId": self.user_id}
 
-        response, response_status = \
-            get_response_from_post(Main, input2, change_password_api)
+        response, response_status = get_change_password_api_response(input2)
         self.assertEquals(response_status, unauthorized_access)
         self.assertTrue(are_two_lists_same([not_authorized['error']],
                                            response.keys()))
@@ -90,8 +88,7 @@ class TestChangePassword(unittest.TestCase):
                   "newPassword": "NotMatching123",
                   "confirmedPassword": "doesntMatch123",
                   "userId": self.user_id}
-        response, response_status = \
-            get_response_from_post(Main, input3, change_password_api)
+        response, response_status = get_change_password_api_response(input3)
         self.assertEquals(response_status, unauthorized_access)
         self.assertTrue(are_two_lists_same([password_mismatch['error']],
                                            response.keys()))
@@ -115,8 +112,7 @@ class TestChangePassword(unittest.TestCase):
                   "confirmedPassword": "aaAA1234",
                   "userId": self.user_id}
 
-        response, response_status = \
-            get_change_password_api_response(input4)
+        response, response_status = get_change_password_api_response(input4)
 
         self.assertEquals(response_status, processing_failed)
         self.assertTrue(are_two_lists_same(
@@ -124,6 +120,10 @@ class TestChangePassword(unittest.TestCase):
 
     def tearDown(self):
         self.testbed.deactivate()
+
+
+def get_create_user_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, create_user_api)
 
 
 def get_change_password_api_response(input_dictionary):
