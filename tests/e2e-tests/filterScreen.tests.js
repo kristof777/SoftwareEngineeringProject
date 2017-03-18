@@ -34,54 +34,7 @@ describe('Filter Listings',function(){
     let applyBtn = element(by.id('flApply'));
     let cancelBtn = element(by.id('flCancel'));
 
-
-    it('should filter with nothing', function(done){
-
-        sleep();
-        filtersBtn.click();
-
-        sleep();
-        applyBtn.click();
-
-        sleep();
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-
-    it('should filter then cancel', function (done) {
-        //open filters
-        sleep();
-        filtersBtn.click();
-
-        selectFilterOptions();
-
-        cancelBtn.click();
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-
-    // This was the test for clicking outside the filter model it is no longer needed
-    /*
-    it('should filter then click outside Filter Menu', function(done){
-
-        //open filters
-        sleep();
-        filtersBtn.click();
-
-        //select filter options
-        selectFilterOptions();
-
-        //click outside of popup
-        browser.actions().mouseMove({x: 300, y: 100}).doubleClick().perform();
-        sleep();
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-    */
-    it('should filter then press apply filter', function(done){
+    it('should filter then press apply filter', function(){
 
         //open filters
         sleep();
@@ -92,17 +45,45 @@ describe('Filter Listings',function(){
 
         //click apply filter
         applyBtn.click();
-
+        sleep();
         //TODO: When filter updates results add an expect that results equal what is filtered
-        done();
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
     });
+    it('should filter with nothing', function(){
+
+        sleep();
+        filtersBtn.click();
+
+        sleep();
+        applyBtn.click();
+
+        sleep();
+
+        //TODO: when filter updates results add an expect that results have not changed
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
+    });
+
+    it('should filter then cancel', function () {
+        //open filters
+        sleep();
+        filtersBtn.click();
+
+        selectFilterOptions();
+
+        cancelBtn.click();
+
+        //TODO: when filter updates results add an expect that results have not changed
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
+    });
+
+
     /*
     Fills in the filter model selections as described in the Filter Use Case
      */
     function selectFilterOptions (){
         //set up the x coord for sliders
         let priceMax =70;
-        let priceMin =80;
+        let priceMin =5;
 
         let sqftMax =60;
         let sqftMin =70;
