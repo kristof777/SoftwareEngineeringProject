@@ -305,7 +305,7 @@ def is_valid_integer(input_string):
 
 def is_valid_float(input_string):
     """
-    :param input_string: A floating number
+    :param input_string: A floating point number
     :return: True if float, otherwise false
     """
     assert input_string is not None
@@ -318,7 +318,6 @@ def is_valid_float(input_string):
 
 def is_valid_bathroom(input_string):
     """
-
     Checks if input_string is float or not
     :param input_string: A number or a string.
     :return: True if float, otherwise false
