@@ -3,7 +3,9 @@ from google.appengine.ext import ndb
 
 
 class Message(ndb.Model):
-    """Models an individual Guestbook entry with content and date."""
+    """
+    Models an individual Guest book entry with content and date.
+    """
     messageId = ndb.IntegerProperty(required=True, default=0)
     listingId = ndb.IntegerProperty(required=True)
     senderId = ndb.IntegerProperty(required=True)
@@ -14,4 +16,3 @@ class Message(ndb.Model):
     received = ndb.BooleanProperty(required=True, default=False)
     createdDate = ndb.DateProperty(required=True,
                                    default=datetime.datetime.now())
-

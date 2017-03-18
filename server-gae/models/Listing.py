@@ -14,7 +14,9 @@ DEFAULT_PRICE_MIN = 10
 
 
 class Listing(ndb.Model):
-    """Models an individual Guestbook entry with content and date."""
+    """
+    Models an individual Guest book entry with content and date.
+    """
     bedrooms = ndb.IntegerProperty(required=False)
     squarefeet = ndb.IntegerProperty(required=False)
     bathrooms = ndb.FloatProperty(required=False)
@@ -32,6 +34,9 @@ class Listing(ndb.Model):
     latitude = ndb.FloatProperty(required=False)
     postalCode = ndb.StringProperty(required=False)
 
+    """
+    Assign the default values for min and max of bedrooms, bathrooms, sqFt, and price
+    """
     numeric_filter_bounds = {
         "bedrooms_min": DEFAULT_BEDROOMS_MIN,
         "bedrooms_max": DEFAULT_BEDROOMS_MAX,
@@ -45,6 +50,10 @@ class Listing(ndb.Model):
 
     @classmethod
     def reset_filter(cls):
+        """
+        Resets the filter to the default max and min values
+        :return: Nothing
+        """
         cls.numeric_filter_bounds['bedrooms_min'] = DEFAULT_BEDROOMS_MIN
         cls.numeric_filter_bounds['bedrooms_max'] = DEFAULT_BEDROOMS_MAX
         cls.numeric_filter_bounds['bathrooms_min'] = DEFAULT_BATHROOMS_MIN
@@ -142,35 +151,15 @@ class Listing(ndb.Model):
 
     @classmethod
     def get_key(cls, key):
-        if key == 'bedrooms':
-            return cls.bedrooms
-        if key == 'squarefeet':
-            return cls.squarefeet
-        if key == 'bathrooms':
-            return cls.bathrooms
-        if key == 'price':
-            return cls.price
-        if key == 'description':
-            return cls.description
-        if key == 'isPublished':
-            return cls.isPublished
-        if key == 'province':
-            return cls.province
-        if key == 'city':
-            return cls.city
-        if key == 'images':
-            return cls.images
-        if key == 'thumbnailImageIndex':
-            return cls.thumbnailImageIndex
-        if key == 'address':
-            return cls.address
-        if key == 'listingId':
-            return cls.listingId
-        if key == 'longitude':
-            return cls.longitude
-        if key == 'latitude':
-            return cls.latitude
-        if key == 'postalCode':
-            return cls.postalCode
+        """
+        Returns the desired key from the class.
+        :precond key is not null
+        :param key: A string representing the desired key in the class.
+        :return:  The key from the class
+        N.B. Python doesn't have switch cases.
+        """
+        assert key is not None
+        assert key != ''
+        return cls.get_value_from_key(cls, key)
 
 

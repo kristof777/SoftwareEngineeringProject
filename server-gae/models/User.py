@@ -14,16 +14,12 @@ class User(Webapp2User):
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=False)
 
-
     def set_password(self, raw_password):
         """Sets the password for the current user
-
         :param raw_password:
             The raw password which will be hashed and stored
         """
         self.password = security.generate_password_hash(raw_password)
-
-
 
     # @classmethod
     # def build_key(cls, email):
@@ -31,14 +27,12 @@ class User(Webapp2User):
 
     @classmethod
     def get_by_auth_token(cls, user_id, token, subject='auth'):
-        """Returns a user object based on a user ID and token
-
-        :param user_id:
-            The user_id of the requesting user
-        :param token:
-            The token string to be verified
-        :returns
-            A tuple ``(User, timestamp)``, with a user object and
+        """
+        Returns a Monad tuple of user object based on a user ID and token
+        :param user_id: The user_id of the requesting user
+        :param token: The token string to be verified
+        :param subject: the subject - default is "auth"
+        :returns A monad tuple ``(User, timestamp)``, with a user object and
         the token timestamp, or ``(None, None)`` if both were not found.
         """
 
@@ -84,7 +78,6 @@ class User(Webapp2User):
         "province": set_province,
         "city": set_city
     }
-
 
     def set_property(self, key, value):
         self._key_to_value[key](self, str(value))
