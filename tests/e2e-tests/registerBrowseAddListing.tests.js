@@ -216,33 +216,29 @@ describe('Registering new user as a user would', function() {
             sleep();
             provinceDropList.click().then(function(){
                 let skOption = element(by.buttonText('Saskatchewan'));
-                //let OKbtn = element(by.buttonText('OK'));
+                let OKbtn = element(by.buttonText('OK'));
                 //select SK and press OK
-                browser.executeScript("arguments[0].scrollIntoView();", skOption);
-                sleep();
-                skOption.click();
-                //OKbtn.click();
-                //sleep();
-                sleep();
-                let enter = browser.actions().sendKeys(protractor.Key.ENTER);
-                enter.perform();
-                sleep();
-
-                city.sendKeys('Saskatoon');
-                address.sendKeys('123 First Street East');
-                postalCode.sendKeys('f1s 9u8');
-
-                browser.executeScript("arguments[0].scrollIntoView();", bath); //scroll into view
-
-                price.sendKeys('13000000');
-                feet.sendKeys('600');
-                bed.sendKeys('5');
-                bath.sendKeys('2');
-                desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
-
-                //submit listing
-                saveButton.click();
+                browser.executeScript("arguments[0].scrollIntoView();", skOption).then(function(){
+                    sleep();
+                    skOption.click();
+                    sleep();
+                    OKbtn.click();
+                });
             });
+            city.sendKeys('Saskatoon');
+            address.sendKeys('123 First Street East');
+            postalCode.sendKeys('f1s 9u8');
+
+            browser.executeScript("arguments[0].scrollIntoView();", bath); //scroll into view
+
+            price.sendKeys('13000000');
+            feet.sendKeys('600');
+            bed.sendKeys('5');
+            bath.sendKeys('2');
+            desc2.sendKeys('Nice trailer with a little dust. Fixer Upper.');
+
+            //submit listing
+            saveButton.click();
         });
 
 
