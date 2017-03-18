@@ -59,5 +59,11 @@ export class FavouritesPage {
     unfavourite(listing:Listing) {
         let selectedIndex = this.listings.indexOf(listing);
         this.listings.splice(selectedIndex, 1);
+
+        this.listingProvider.dislikeListing(listing.listingId).subscribe(data => {
+            // Listing was removed
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+        });
     }
 }

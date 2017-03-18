@@ -12,10 +12,26 @@ afterEach(function () {
 describe('Regression tests: functionality while not signed in', function() {
     browser.get('');
 
+    it('should test if using Browse and Filter functionality allows a non-logged-in user to use MY Profile or My Listings pages', function(done) {
+        let listing = element(by.id('image'));
+        let myListingsTab = element(by.id('tab-t0-3'));
+        listing.click().then(function(){
+            sleep(1000);
+            myListingsTab.click().then(function(){
+                let addListingButton = element(by.id('addButton'));
+                expect(addListingButton.isPresent()).toBeFalsy();
+            });
+        });
+        done();
+    });
+
     it('should test if multiple "My Profile" tab clicks removes all UI from the page', function(done) {
         let browseTab = element(by.id('tab-t0-0'));
         let myProfileTab = element(by.id('tab-t0-2'));
 
+        // Go back to detailed Listings page
+        browseTab.click();
+        // Go back to Browse Page
         browseTab.click().then(function(){
             let filterButton = element(by.id('goToFilters'));
             checkDisplayed(filterButton, "the 'Browse' page");
@@ -28,8 +44,6 @@ describe('Regression tests: functionality while not signed in', function() {
         });
         done();
     });
-
-    //TODO: Test if using Browse and Filter functionality allows a non-logged-in user to use My Profile or My Listings pages
 
     it('should test if "Confirm Password" field on register page allows incorrect matches', function(done) {
         let registerButton = element(by.css('.register'));
@@ -109,6 +123,7 @@ describe('Regression tests: functionality while signed in', function(){
         done();
     });
 });
+
 
 /**
  * Force the browser to sleep for a specified amount of time.

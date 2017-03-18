@@ -1,7 +1,7 @@
 # Author: Chris Mykota-Reid
 # CMPT 371
-# prints, to the console, the packages and tool versions of the main
-# components of our system
+# Prints, to the build log, the packages and tool versions for the main
+# components of our system.
 
 echo "System info:"
 echo $TRAVIS_OS_NAME
@@ -18,7 +18,13 @@ java -version
 echo 'npm version:'
 npm -v
 firefox --version
-google-chrome --version
+#google-chrome --version
 echo "Protractor version:"
 protractor --version
+echo "Jasmine version:"
+npm view jasmine version
+echo "Gulp version:"
+npm view gulp version
 ionic info
+ssh -V
+sshpass -V

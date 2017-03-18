@@ -11,14 +11,15 @@ let assert = require('assert-plus');
     templateUrl: 'filter.html'
 })
 export class FilterPage {
-    private _priceMin = 100000;
-    private _priceMax = 1600000;
-    private _squarefeetMin = 100;
-    private _squarefeetMax = 10000;
-    private _bedroomsMin = 1;
-    private _bedroomsMax = 10;
-    private _bathroomsMin = 1;
-    private _bathroomsMax = 10;
+    private _provinces: Province[];
+    private _priceMin: number = 100000;
+    private _priceMax: number = 1600000;
+    private _squarefeetMin: number = 100;
+    private _squarefeetMax: number = 10000;
+    private _bedroomsMin: number = 1;
+    private _bedroomsMax: number = 10;
+    private _bathroomsMin: number = 1;
+    private _bathroomsMax: number = 10;
 
     province: string;
     price: Bound = {lower: this._priceMin, upper: this._priceMax};
@@ -30,6 +31,7 @@ export class FilterPage {
                 public params: NavParams,
                 private _logger: Logger) {
 
+        this._provinces = Province.asArray;
         // If we're given a filter, load it, otherwise use default values
         if(params.get("filter"))
             this.loadFilter(params.get("filter"));
