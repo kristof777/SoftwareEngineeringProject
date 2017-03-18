@@ -18,16 +18,24 @@ province.
 province_abbr = ["AB", "BC", "MB", "NB", "NL", "NS", "NU", "NT", "ON", "PE",
                  "QC", "SK", "YT"]
 
+
 province_complete = ["alberta", "british columbia", "manitoba", "new brunswick",
                      "newfoundland and labrador", "nova scotia", "nunavut",
                      "northwest territories", "ontario",
                      "prince edward island", "quebec", "saskatchewan", "yukon"]
 
+
 """
-valid_booleans is a list of all strings and integers that could represent a boolean value.
+valid_booleans is a list of all strings and integers that could represent a True boolean value.
 """
-valid_booleans = ["true", "True", "TRUE", "1", "t", "y", "Y", "yes",
-                  "false", "False", "FALSE", "0", "n", "no", "N", 1, 0]
+valid_true_booleans = ["true", "True", "TRUE", "1", "t", "y", "Y", "yes", 1, "T"]
+
+
+"""
+valid_booleans is a list of all strings and integers that could represent a True boolean value.
+"""
+valid_false_booleans = ["false", "False", "FALSE", "0", "f", "n", "no", "N", 0, "F"]
+
 
 """
 listing_keys contains all the valid keys for a listing
@@ -369,7 +377,7 @@ def is_valid_bool(input_string):
     assert input_string is not None
     input_string = str(input_string)
 
-    if input_string in valid_booleans:
+    if input_string in valid_true_booleans or input_string in valid_false_booleans:
         return True
     else:
         return False
@@ -553,7 +561,7 @@ def convert_to_bool(input_string):
     :return: True if the var is in the list, false otherwise
     """
     assert input_string is not None
-    return True if input_string in ["true", "True", "TRUE", "1", "t", "T", "Y", "y", "yes", 1] else False
+    return True if input_string in valid_true_booleans else False
 
 
 def is_existing_and_non_empty(existing_string, values):
@@ -674,7 +682,7 @@ def setup_testbed(test_handler):
 
 
 def get_response_from_post(main, post, api):
-    request = webapp2.Request.blank('/' + api,POST=post)
+    request = webapp2.Request.blank('/' + api, POST=post)
     response = request.get_response(main.app)
     if response.body:
         json_body = json.loads(response.body)
@@ -685,12 +693,13 @@ def get_response_from_post(main, post, api):
     return None, response.status_int
 
 
-def check_output_for_sign_in(self,output, database_user):
+def check_output_for_sign_in(self, output, database_user):
     """
     This function will assert false if the signed in user does not match
     the original user information.
     :precond the output contains authToken
     :precond the output contains userID
+    :param self: self.
     :param output: The output user dict to be checked
     :param database_user: The originally generated user dict
     """
