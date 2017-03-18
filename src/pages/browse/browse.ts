@@ -74,7 +74,7 @@ export class BrowsePage {
 
         this._logger.debug("Disliking slide at index " + index);
 
-        this.listingProvider.likeListing(this.listings[index].listingId).subscribe(data => {
+        this.listingProvider.dislikeListing(this.listings[index].listingId).subscribe(data => {
             this.toastCtrl.create({
                 message: "Disliked the selected listing.",
                 duration: 3000,
