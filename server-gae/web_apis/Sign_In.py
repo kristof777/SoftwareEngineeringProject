@@ -20,6 +20,9 @@ class SignIn(BaseHandler):
     @return-api:
     """
 
+    def options(self, *args, **kwargs):
+        setup_api_options(self)
+
     def get(self):
         self._serve_page()
 

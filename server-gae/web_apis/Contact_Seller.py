@@ -10,6 +10,9 @@ from extras.Base_Handler import BaseHandler
 
 
 class ContactSeller(BaseHandler):
+    def options(self, *args, **kwargs):
+        setup_api_options(self)
+
     def get(self):
         pass
 

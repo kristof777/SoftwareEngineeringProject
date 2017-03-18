@@ -6,12 +6,9 @@ from extras.Base_Handler import BaseHandler
 
 
 class SignOut(BaseHandler):
+
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     def get(self):
         pass

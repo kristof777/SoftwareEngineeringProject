@@ -14,11 +14,7 @@ class GetMyListing(webapp2.RequestHandler):
         @post-cond: all my listings
     """
     def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+        setup_api_options(self)
 
     def get(self):
         self.response.out.write()

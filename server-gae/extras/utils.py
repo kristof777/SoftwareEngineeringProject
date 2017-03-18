@@ -638,3 +638,10 @@ def get_keys_from_values(values):
 
 def setup_post(response):
     response.headers.add_header('Access-Control-Allow-Origin', '*')
+
+
+def setup_api_options(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = \
+        'Origin, X-Requested-With, Content-Type, Accept'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
