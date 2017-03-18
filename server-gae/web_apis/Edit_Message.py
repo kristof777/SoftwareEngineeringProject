@@ -28,7 +28,7 @@ class EditMessage(webapp2.RequestHandler):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         error_keys = ['messageId', 'userId', 'authToken', 'readDel']
         errors, values = keys_missing(error_keys, self.request.POST)
         if len(errors) != 0:

@@ -24,9 +24,9 @@ class SignIn(BaseHandler):
         self._serve_page()
 
     def post(self):
+        setup_post(self.response)
 
         # validating if request has all required keys
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
         error_keys = ['email', 'password']
 
         errors, values = keys_missing(error_keys, self.request.POST)

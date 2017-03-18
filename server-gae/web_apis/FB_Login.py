@@ -34,7 +34,7 @@ class FacebookLogin(BaseHandler):
         pass
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
 
         error_keys = ['fbId']
         errors, values = keys_missing(error_keys, self.request.POST)

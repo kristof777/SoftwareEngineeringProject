@@ -26,7 +26,7 @@ class GetMessages(webapp2.RequestHandler):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         error_keys = ['userId', 'authToken']
 
         errors, values = keys_missing(error_keys, self.request.POST)

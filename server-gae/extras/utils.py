@@ -635,3 +635,6 @@ def check_output_for_sign_in(self,output, database_user):
 def get_keys_from_values(values):
     return [str(x) for x in values]
 
+
+def setup_post(response):
+    response.headers.add_header('Access-Control-Allow-Origin', '*')

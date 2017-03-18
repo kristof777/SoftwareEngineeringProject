@@ -29,7 +29,7 @@ class GetListing(webapp2.RequestHandler):
         self.response.out.write()
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         # every field (userId, valuesRequired, filter) is optional
         errors, values = keys_missing({}, self.request.POST)
         invalid = key_validation(values)

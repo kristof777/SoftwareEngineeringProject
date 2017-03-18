@@ -20,7 +20,7 @@ class EditUser(BaseHandler):
         self.render_template('../webpages/Edit_User.html')
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
         # check if user id and token are present
         error_keys = ['changeValues', 'userId', 'authToken']
         errors, values = keys_missing(error_keys, self.request.POST)

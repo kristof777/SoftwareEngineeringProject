@@ -28,7 +28,7 @@ class CreateUser(BaseHandler):
         self.render_template('../webpages/Create_User.html')
 
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
+        setup_post(self.response)
 
         error_keys = ['email', 'firstName', 'password',
                       'confirmedPassword', 'phone1', 'province', 'city']
