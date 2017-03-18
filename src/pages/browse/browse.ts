@@ -15,6 +15,7 @@ let assert = require('assert-plus');
     providers: [ListingProvider]
 })
 export class BrowsePage {
+    public static forceRefresh: boolean = true;
     alert: Alert;
     listings: Listing[];
     filter: Filter;
@@ -32,8 +33,11 @@ export class BrowsePage {
         this.filter = new Filter(null, {}, {}, {}, {});
     }
 
-    ionViewDidLoad(){
-        this.loadListings();
+    ionViewDidEnter(){
+        if(BrowsePage.forceRefresh) {
+            this.loadListings();
+            BrowsePage.forceRefresh = false;
+        }
     }
 
     loadListings(): void{
