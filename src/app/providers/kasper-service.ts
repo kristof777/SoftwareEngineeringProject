@@ -251,6 +251,7 @@ export class KasperService {
         body.append('squarefeet', listing.squarefeet);
         body.append('bedrooms', listing.bedrooms);
         body.append('bathrooms', listing.bathrooms);
+        body.append('postalCode', listing.postalCode);
         body.append('longitude', 0.0);
         body.append('latitude', 0.0);
         body.append('description', listing.description);
@@ -471,6 +472,7 @@ export class KasperService {
         result['createListing']['invalidCity'] = "Looks like the city you entered was not recognized";
         result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
         result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
+        result['createListing']['missingPostalCode'] = "A postal code is required";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
