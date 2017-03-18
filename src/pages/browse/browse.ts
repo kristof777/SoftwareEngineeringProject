@@ -82,6 +82,9 @@ export class BrowsePage {
             }).present();
 
             this.listings.splice(index, 1);
+
+            if(this.listings.length == 0)
+                this.loadListings();
         }, error => {
             this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
         });
@@ -108,10 +111,12 @@ export class BrowsePage {
             }).present();
 
             this.listings.splice(index, 1);
+
+            if(this.listings.length == 0)
+                this.loadListings();
         }, error => {
             this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
         });
-
     }
 
     /**
