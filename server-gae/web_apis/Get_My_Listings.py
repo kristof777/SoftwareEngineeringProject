@@ -1,9 +1,9 @@
 import sys
-from extras.utils import *
+from extras.Utils import *
 from models.Listing import Listing
 from models.User import User
 from API_NAME import get_messages_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
 
@@ -41,7 +41,7 @@ class GetMyListing(webapp2.RequestHandler):
                 'listingId': listing.listingId,
                 'userId': listing.userId,
                 'bedrooms': listing.bedrooms,
-                'squarefeet': listing.squarefeet,
+                'squareFeet': listing.squareFeet,
                 'bathrooms': listing.bathrooms,
                 'price': listing.price,
                 'description': listing.description,

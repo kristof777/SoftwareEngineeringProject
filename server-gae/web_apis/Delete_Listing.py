@@ -1,11 +1,11 @@
 import os
-from extras.utils import *
+from extras.Utils import *
 from models.Favorite import Favorite
 from models.Listing import Listing
 from models.User import User
 import sys
 from API_NAME import delete_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

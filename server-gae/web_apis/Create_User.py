@@ -1,8 +1,8 @@
 from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
-from extras.utils import *
+from extras.Utils import *
 from models.FB import FBLogin
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 from API_NAME import create_user_api
 
 

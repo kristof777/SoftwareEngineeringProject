@@ -127,13 +127,13 @@ class TestEditListing(unittest.TestCase):
 
     def test_invalid_fields(self):
         change_values = { "bedrooms": "supposed to be a number",
-                            "squareFeet": "supposed to be a number",
-                            "bathrooms": "supposed to be a number",
-                            "price": "supposed to be a number",
-                            "isPublished": "supposed to be a boolean",
-                            "city": "Regina",
-                            "address": "312 Summer Place",
-                            "thumbnailImageIndex": "supposed to be a number"
+                          "squareFeet": "supposed to be a number",
+                          "bathrooms": "supposed to be a number",
+                          "price": "supposed to be a number",
+                          "isPublished": "supposed to be a boolean",
+                          "city": "Regina",
+                          "address": "312 Summer Place",
+                          "thumbnailImageIndex": "supposed to be a number"
                           }
 
         res_value, status = get_response(

@@ -1,12 +1,12 @@
 import copy
-from extras.utils import *
+from extras.Utils import *
 import datetime
 from models.Listing import Listing
 from models.User import User
 import sys
 import os
 from API_NAME import edit_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -39,7 +39,8 @@ class EditListing(webapp2.RequestHandler):
         change_values = json.loads(values['changeValues'])
 
         # check if there's any unrecognized key presented in changeValues
-        if any(key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
+        if any(key not in ["squareFeet", "bedrooms", "bathrooms", "price",
+                           "city",
                            "province", "address", "description", "isPublished",
                            "images","thumbnailImageIndex", "postalCode"] for key in
                change_values.keys()):

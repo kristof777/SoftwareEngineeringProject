@@ -1,9 +1,9 @@
-from extras.utils import *
+from extras.Utils import *
 from models.Listing import Listing
 from models.User import User
 import sys
 from API_NAME import contact_seller_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 
 from models.Message import Message
 

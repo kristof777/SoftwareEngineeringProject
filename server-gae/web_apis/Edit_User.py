@@ -1,14 +1,12 @@
 import sys
-
 sys.path.append("../")
 import os
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
-from extras.utils import *
+from extras.Utils import *
 from models.User import User
 from API_NAME import edit_user_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 
 class EditUser(BaseHandler):
     """
@@ -34,6 +32,7 @@ class EditUser(BaseHandler):
             return
 
         change_values = json.loads(values['changeValues'])
+
         if len(change_values) == 0:
             write_error_to_response(self.response,
                                     {nothing_requested_to_change['error']:
@@ -55,8 +54,6 @@ class EditUser(BaseHandler):
                                                         "Unrecognized key found"},
                                     unrecognized_key['status'])
             return
-
-        invalid = key_validation(change_values)
 
         user = User.get_by_id(int(values["userId"]))
         for key in change_values:

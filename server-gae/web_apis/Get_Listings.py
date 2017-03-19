@@ -1,10 +1,10 @@
 import logging
 from models.Listing import Listing
 from models.Favorite import Favorite
-from extras.utils import *
+from extras.Utils import *
 import sys
 from API_NAME import get_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
 DEFAULT_MAX_LIMIT = 20 # max number of listings required, by default (if not provided)
@@ -185,12 +185,12 @@ def is_valid_filter(filter_json):
     invalid = {}
 
     for key in filter_object:
-        if key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
+        if key not in ["squareFeet", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"]:
             invalid[unrecognized_key['error']] = "Unrecognized key " + key
             break
-        if key in ["bedrooms", "bathrooms", "squarefeet", "price"]:
+        if key in ["bedrooms", "bathrooms", "squareFeet", "price"]:
             if any(bound not in ["lower", "upper"] for bound in filter_object[key]):
                 invalid[invalid_filter_bound['error']] = str(key) + " upper/lower bound invalid"
                 break
@@ -225,13 +225,14 @@ def decode_filter(filter_json):
     non_numeric_dict = {}
 
     for key in filter_object:
-        if key in ["bedrooms", "squarefeet", "price", "bathrooms"]:  # if key is a numeric field
+        if key in ["bedrooms", "squareFeet", "price",
+                   "bathrooms"]:  # if key is a numeric field
             if key == "bedrooms":
                 if "lower" in filter_object[key]:
                     Listing.numeric_filter_bounds['bedrooms_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
                     Listing.numeric_filter_bounds['bedrooms_max'] = int(filter_object[key]["upper"])
-            elif key == "squarefeet":
+            elif key == "squareFeet":
                 if "lower" in filter_object[key]:
                     Listing.numeric_filter_bounds['sqft_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
@@ -282,9 +283,10 @@ def get_listingIds_with_numeric_bounds():
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
-    sqft_query = Listing.query().filter(Listing.squarefeet >= Listing.numeric_filter_bounds['sqft_min'],
-                                        Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'],
-                                        Listing.isPublished == True)
+    sqft_query = Listing.query().filter(
+        Listing.squareFeet >= Listing.numeric_filter_bounds['sqft_min'],
+        Listing.squareFeet <= Listing.numeric_filter_bounds['sqft_max'],
+        Listing.isPublished == True)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))

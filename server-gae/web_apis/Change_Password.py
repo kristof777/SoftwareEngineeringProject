@@ -4,9 +4,9 @@ import logging
 from extras.Base_Handler import BaseHandler
 from models.User import *
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-from extras.utils import *
+from extras.Utils import *
 from API_NAME import *
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 
 
 class ChangePassword(BaseHandler):
