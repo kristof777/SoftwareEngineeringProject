@@ -27,14 +27,15 @@ class TestLikeListingApi(unittest.TestCase):
         setup_testbed(self)
 
         # create a user as well as a listing that the user owns
-        listings, users = create_dummy_listings_for_testing(Main, 1)
-        self.assertEquals(len(listings), 1)
-        self.assertEquals(len(users), 1)
-        owner = users[0]
-        listing = listings[0]
-        self.owner_id = owner['userId']
-        self.owner_token = owner['authToken']
-        self.listing_id = listing['listingId']
+        # listings, users = create_dummy_listings_for_testing(Ma
+        owner = create_dummy_users_for_testing(Main, 1)
+        self.assertEquals(len(owner), 1)
+        self.owner_id = owner[0]['userId']
+        self.owner_token = owner[0]['authToken']
+        listing = create_random_listing(self.owner_id, self.owner_token)
+        listing['isPublished'] = 'True'
+        response, status = get_response_from_post(Main, listing, create_listing_api)
+        self.listing_id = response['listingId']
 
         # now create a new user as a liker
         users = create_dummy_users_for_testing(Main, 1)
@@ -114,6 +115,44 @@ class TestLikeListingApi(unittest.TestCase):
         errors_expected = [duplicated_liked['error']]
         self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
+    def test_like_in_fav_and_then_disliked_it_removed_from_favorites(self):
+        like_the_listing = {
+            "userId": self.liker_id,
+            "listingId": self.listing_id,
+            "authToken": self.liker_token,
+            "liked": "True"
+        }
+
+        response, response_status = \
+            get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, success)
+
+        get_favs = {
+            "userId": self.liker_id,
+            "authToken": self.liker_token
+        }
+        fav_response, fav_response_status = \
+            get_favorites_response(get_favs)
+        self.assertEquals(fav_response_status, success)
+        self.assertEquals(len(fav_response["listings"]), 1)
+
+        fav_dict = fav_response["listings"][0]
+        self.assertEquals(str(fav_dict['userId']), self.owner_id)
+        self.assertEquals(fav_dict['listingId'], self.listing_id)
+
+        dislike_the_listing = {
+            "userId": self.liker_id,
+            "listingId": self.listing_id,
+            "authToken": self.liker_token,
+            "liked": "False"
+        }
+
+        response, response_status = \
+            get_like_listing_response(dislike_the_listing)
+        self.assertEquals(response_status, success)
+        self.assertEquals(response, None)
+
+
     def test_missing_user_input(self):
         like_with_missing_input = {
             "userId": "",
@@ -156,3 +195,7 @@ class TestLikeListingApi(unittest.TestCase):
 
 def get_like_listing_response(post):
     return get_response_from_post(Main, post, like_listing_api)
+
+
+def get_favorites_response(post):
+    return get_response_from_post(Main, post, get_favourites_listing_api)
