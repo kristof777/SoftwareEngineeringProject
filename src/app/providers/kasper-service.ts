@@ -115,10 +115,10 @@ export class KasperService {
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      firstName, lastName, phone1, phone2, city, province, email
      */
-    editUser(changeValues: Object): any {
+    editUser(changeValues: any): any {
         let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('changeValues', changeValues);
+        body.append('changeValues', JSON.stringify(changeValues));
 
         return this.http.post(KasperConfig.API_URL + "/editUser", body, ResponseContentType.Json)
             .map(response => response.json());

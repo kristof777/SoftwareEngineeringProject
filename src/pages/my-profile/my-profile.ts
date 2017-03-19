@@ -21,14 +21,6 @@ export class MyProfilePage {
 
     currentUser: User;
 
-    email: string;
-    firstName: string;
-    lastName: string;
-    phone1: string;
-    phone2: string;
-    province: string;
-    city: string;
-
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public formBuilder: FormBuilder,
@@ -111,13 +103,44 @@ export class MyProfilePage {
         });
     }
 
+    getChangedValues(): any{
+        let changeValues: {} = {};
+
+        if(this.profileGroup.value.email) changeValues['email'] = this.profileGroup.value.email;
+        if(this.profileGroup.value.firstName) changeValues['firstName'] = this.profileGroup.value.firstName;
+        if(this.profileGroup.value.lastName) changeValues['lastName'] = this.profileGroup.value.lastName;
+        if(this.profileGroup.value.phone1) changeValues['phone1'] = this.profileGroup.value.phone1;
+        if(this.profileGroup.value.phone2) changeValues['phone2'] = this.profileGroup.value.phone2;
+        if(this.profileGroup.value.province) changeValues['province'] = this.profileGroup.value.province;
+        if(this.profileGroup.value.city) changeValues['city'] = this.profileGroup.value.city;
+
+        return changeValues;
+    }
+
     /**
      * Update the users information according to their input
-     *
-     * TODO updateUser
      */
     saveChanges(): void {
-        this._logger.debug("Save button was clicked.");
+        let changeValues: {} = this.getChangedValues();
+
+        this.kasperService.editUser(changeValues).subscribe(data => {
+            let keys = Object.keys(changeValues);
+
+            // update the current user settings to the new values
+            for(let i=0; i<keys.length; i++)
+                this.currentUser[keys[i]] = changeValues[keys[i]];
+
+            // Clear the form
+            this.profileGroup.reset();
+
+            this.alertCtrl.create({
+                title: "Success",
+                subTitle: "Your changes have been saved",
+                buttons: ['Ok']
+            }).present();
+        }, error => {
+            this.kasperService.handleError("editUser", error.json());
+        });
     }
 
     /**
