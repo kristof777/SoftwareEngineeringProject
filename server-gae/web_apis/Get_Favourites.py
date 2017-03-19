@@ -38,7 +38,7 @@ class GetFavourites(webapp2.RequestHandler):
         for favorite in favorites:
             fav_listingId = favorite.listingId
             listing = Listing.get_by_id(fav_listingId)
-
+            assert listing is not None
             if listing.isPublished:
                 template_values = {
                     'listingId': fav_listingId,
