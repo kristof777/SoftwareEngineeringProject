@@ -531,7 +531,7 @@ def is_empty(var):
     :param var:
     :return: True if the var is empty, false otherwise
     """
-    return var in ["", u'', '', None, [], {}] or str(var).isspace()
+    return var in ["", u'', '', None, u'[]', [], {}] or str(var).isspace()
 
 
 # def is_valid_filter(filter):
