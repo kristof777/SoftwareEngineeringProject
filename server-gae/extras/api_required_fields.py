@@ -4,7 +4,7 @@ import utils
 from models.User import User
 
 """
-    Creates a dictionary with all fields that are required per API call
+   Dictionary with all fields that are required per API call
 """
 
 required_api_dict = {
@@ -32,19 +32,30 @@ required_api_dict = {
 
 
 def check_required_valid(api, post, response, auth_required=False):
-    # TODO Complete this spec, Gaurav
     """
-    TODO
-    :param api:
-    :param post:
-    :param response:
-    :param auth_required:
-    :return:
+    Method check if the response post request does not have any missing fields,
+    and also check if all the present fields are valid or not. If auth_required
+    is true then post request is made sure to have a valid user, which has valid
+    userId and authToken.
+    If every field is present and user is authenticated (if required) then
+    dictionary of all values present in the post request is converted to python
+    dictionary.
+
+    :param api: api name to which post request is being made
+    :param post: post request that was sent by the user
+    :param response: response object on which error needs to be written
+    if required
+    :param auth_required: if user authentication is required in the post request
+    :return: A tuple of (bool, dictionary) is returned where bool represents if
+    fields are valid and dictionary is the converted values dictionary.
+    If post request has  missing fields, invalid fields or unauthenticated user
+    then (False, None) is returned otherwise (True, values) is returned.
     """
+
     # validating if request has all required key
     errors, values = utils.keys_missing(required_api_dict[api], post)
 
-    # If there exists error then return the response, and stop the function
+    # if any of the keys is missing then error is written to the response
     if len(errors) > 0:
         utils.write_error_to_response(response, errors,
                                       missing_invalid_parameter)
@@ -52,7 +63,7 @@ def check_required_valid(api, post, response, auth_required=False):
 
     invalid = utils.key_validation(values)
 
-    # If there exists an invalidation, return null and stop the function
+    # if any of the keys is invalid then error is written to the response
     if len(invalid) > 0:
         utils.write_error_to_response(response, invalid,
                                       missing_invalid_parameter)
@@ -62,6 +73,7 @@ def check_required_valid(api, post, response, auth_required=False):
     assert len(invalid) == 0
 
     if auth_required:
+        # checking if the user with userId provided exists in DB
         user = User.get_by_id(int(values['userId']))
         if user is None:
             error = {
@@ -71,12 +83,15 @@ def check_required_valid(api, post, response, auth_required=False):
                                           not_authorized["status"])
             return False, None
 
+        # checking if the user has provided valid token
         valid_user = user.validate_token(int(values["userId"]),
                                          "auth", values["authToken"])
 
         if not valid_user:
-            utils.write_error_to_response(response, {not_authorized['error']: "not authorized to create listings"},
-                                          not_authorized['status'])
+            utils.write_error_to_response \
+                (response,
+                 {not_authorized['error']: "not authorized to create listings"},
+                 not_authorized['status'])
             return False, None
 
         assert valid_user

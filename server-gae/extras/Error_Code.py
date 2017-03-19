@@ -1,3 +1,9 @@
+"""
+All the possible error that are possible for an API call are mentioned in this
+file
+"""
+
+
 # Error Codes
 missing_invalid_parameter = 400
 unauthorized_access = 401
@@ -169,9 +175,6 @@ missing_longitude = {"error": "missingLongitude",
 
 missing_latitude = {"error": "missingLatitude",
                     "status": missing_invalid_parameter}
-
-missing_postal_code = {"error": "missingPostalCode",
-                       "status": missing_invalid_parameter}
 
 missing_description = {"error": "missingDescription",
                        "status": missing_invalid_parameter}

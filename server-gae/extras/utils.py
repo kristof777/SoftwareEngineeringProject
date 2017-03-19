@@ -44,6 +44,12 @@ listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city"
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex", "latitude", "longitude", "postalCode", "authToken"]
 
+MIN_LATITUDE = -90
+MAX_LATITUDE = 90
+MIN_LONGITUDE = -180
+MAX_LONGITUDE = 180
+
+
 
 def get_random_string(n=random.randint(10, 20), lower_case=0, upper_case=0,
                       numbers=0):
@@ -485,7 +491,7 @@ def is_valid_latitude(latitude):
 
     try:
         if is_valid_float(latitude):
-            return -90 <= float(latitude) <= 90
+            return MIN_LATITUDE <= float(latitude) <= MAX_LATITUDE
         else:
             return False
         # return -90 <= latitude and latitude <= 90
@@ -518,7 +524,7 @@ def is_valid_longitude(longitude):
     assert longitude is not None
     try:
         if is_valid_float(longitude):
-            return -180 <= float(longitude) <= 180
+            return MIN_LONGITUDE <= float(longitude) <= MAX_LONGITUDE
         else:
             return False
         # return -180 <= longitude and longitude <= 180
@@ -532,17 +538,6 @@ def is_empty(var):
     :return: True if the var is empty, false otherwise
     """
     return var in ["", u'', '', None, [], {}] or str(var).isspace()
-
-
-# def is_valid_filter(filter):
-#     if any(key not in ["sqft", "bedrooms", "bathrooms", "price", "city",
-#                        "province", "address", "description", "isPublished", "images",
-#                        "thumbnailImageIndex"] for key in filter):
-#         return False
-#     for key in filter:
-#         if key in ["bedrooms", "bathrooms", "sqft", "price"]:
-#             if any(bound not in ["lower", "upper"] for bound in key):
-#                 return False
 
 
 def is_valid_images(images):

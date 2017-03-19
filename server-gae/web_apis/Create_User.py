@@ -24,6 +24,8 @@ class CreateUser(BaseHandler):
         @post-cond: An user with provided information is created in the
                     database. Token and userId is returned as an response
                     object.
+
+        @return:
     """
 
     def options(self, *args, **kwargs):
