@@ -1,7 +1,10 @@
+# Error Codes
 missing_invalid_parameter = 400
 unauthorized_access = 401
 processing_failed = 403
 success = 200
+
+# Errors with their status
 missing_province = {"error": "missingProvince",
                     "status": missing_invalid_parameter}
 
@@ -48,7 +51,7 @@ password_cant_be_changed = {"error": "passwordCantBeChanged",
                             "status": processing_failed}
 
 new_password_is_the_same_as_old = {"error": "newPasswordIsTheSameAsOld",
-                            "status": processing_failed}
+                                   "status": processing_failed}
 
 invalid_user_id = {"error": "invalidUserId",
                    "status": missing_invalid_parameter}
@@ -108,7 +111,7 @@ invalid_bedrooms = {"error": "invalidNumberOfBedrooms",
                     "status": missing_invalid_parameter}
 
 invalid_squarefeet = {"error": "invalidSquareFeet",
-                "status": missing_invalid_parameter}
+                      "status": missing_invalid_parameter}
 
 invalid_bathrooms = {"error": "invalidNumberOfBathrooms",
                      "status": missing_invalid_parameter}
@@ -141,7 +144,7 @@ invalid_latitude = {"error": "invalidLatitude",
                     "status": missing_invalid_parameter}
 
 invalid_postal_code = {"error": "invalidPostalCode",
-                    "status": missing_invalid_parameter}
+                       "status": missing_invalid_parameter}
 
 missing_address = {"error": "missingAddress",
                    "status": missing_invalid_parameter}
@@ -150,7 +153,7 @@ missing_price = {"error": "missingPrice",
                  "status": missing_invalid_parameter}
 
 missing_squarefeet = {"error": "missingSqft",
-                "status": missing_invalid_parameter}
+                      "status": missing_invalid_parameter}
 
 missing_bedrooms = {"error": "missingBedrooms",
                     "status": missing_invalid_parameter}
@@ -210,10 +213,10 @@ missing_message_id = {"error": "missingMessageId",
                       "status": missing_invalid_parameter}
 
 missing_read_del = {"error": "missingReadDel",
-                   "status": missing_invalid_parameter}
+                    "status": missing_invalid_parameter}
 
 invalid_read_del = {"error": "invalidReadDel",
-                   "status": missing_invalid_parameter}
+                    "status": missing_invalid_parameter}
 
 missing_fb_id = {"error": "missingFbId",
                  "status": missing_invalid_parameter}
