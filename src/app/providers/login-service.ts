@@ -152,4 +152,5 @@ export class LoginService {
     public isLoggedIn(): boolean{
         return !!LoginService.user;
     }
+
 }
