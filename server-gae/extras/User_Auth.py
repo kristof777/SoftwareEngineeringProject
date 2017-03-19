@@ -36,6 +36,12 @@ class SetPasswordHandler(BaseHandler):
         password = self.request.get('password')
         old_token = self.request.get('t')
 
+        assert password is not None
+        assert password != ''
+
+        assert old_token is not None
+        assert old_token != ''
+
         if not password or password != self.request.get('confirm_password'):
             self.display_message('passwords do not match')
             return
@@ -102,6 +108,12 @@ class ForgotPasswordHandler(BaseHandler):
         self.display_message(msg.format(url=verification_url))
 
     def _serve_page(self, not_found=False):
+        #TODO Write specs please
+        """
+
+        :param not_found:
+        :return:
+        """
         username = self.request.get('username')
         params = {
             'username': username,
