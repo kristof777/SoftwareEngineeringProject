@@ -39,6 +39,8 @@ export class FavouritesPage {
             }, error => {
                 this._logger.error(JSON.stringify(error));
             });
+        } else {
+            this.listings = Array();
         }
     }
 

@@ -100,6 +100,12 @@ export class LoginService {
         return this.authToken;
     }
 
+    public signOut(): void{
+        LoginService.user = null;
+        this.userId = null;
+        this.authToken = null;
+    }
+
     /**
      * Insert a new userId/authToken pair into the users.
      *

@@ -122,10 +122,16 @@ export class MyProfilePage {
 
     /**
      * Sign the user out of this device.
-     *
-     * TODO signOut
      */
     signOut(): void{
-        this._logger.debug("Sign-out was clicked.");
+        let me = this;
+
+        this.kasperService.signOut().subscribe(data => {
+            me.loginService.signOut();
+            me.navCtrl.setRoot(SignInPage);
+            // User is signed out
+        }, error => {
+            this.kasperService.handleError("signOut", error.json());
+        });
     }
 }
