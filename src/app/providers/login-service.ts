@@ -52,8 +52,8 @@ export class LoginService {
         LoginService.user = user;
         this.userId = user.id;
 
-        assert.equals(LoginService.user, user, "user was not set correctly.");
-        assert.equals(this.userId, user.id, "userId was not set correctly.");
+        assert.equal(LoginService.user, user, "user was not set correctly.");
+        assert.equal(this.userId, user.id, "userId was not set correctly.");
     }
 
     /**
@@ -67,7 +67,7 @@ export class LoginService {
      * @post-cond   authToken is inserted in the database
      */
     public setToken(authToken: string): void{
-        assert.object(authToken, "The received token was null");
+        assert(authToken, "The received token was null");
         assert.string(authToken, "The received token was not a string");
 
         this.authToken = authToken;
