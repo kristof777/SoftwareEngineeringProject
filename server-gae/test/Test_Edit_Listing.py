@@ -127,7 +127,7 @@ class TestEditListing(unittest.TestCase):
 
     def test_invalid_fields(self):
         change_values = { "bedrooms": "supposed to be a number",
-                            "squarefeet": "supposed to be a number",
+                            "squareFeet": "supposed to be a number",
                             "bathrooms": "supposed to be a number",
                             "price": "supposed to be a number",
                             "isPublished": "supposed to be a boolean",
@@ -143,7 +143,7 @@ class TestEditListing(unittest.TestCase):
         self.assertEquals(status, missing_invalid_parameter)
 
         errors_expected = [Error_Code.invalid_bedrooms['error'],
-                           Error_Code.invalid_squarefeet['error'],
+                           Error_Code.invalid_square_feet['error'],
                            Error_Code.invalid_bathrooms['error'],
                            Error_Code.invalid_price['error'],
                            Error_Code.invalid_thumbnail_image_index['error'],
@@ -154,7 +154,7 @@ class TestEditListing(unittest.TestCase):
 
     def test_correct_input(self):
         change_values = {"bedrooms": "4",
-                         "squarefeet": "1500",
+                         "squareFeet": "1500",
                          "bathrooms": "5",
                          "price": "2050000",
                          "isPublished": "True",
@@ -169,7 +169,7 @@ class TestEditListing(unittest.TestCase):
         listing_changed = Listing.get_by_id(self.listingId)
         self.assertEquals(listing_changed.bedrooms,
                           int(change_values['bedrooms']))
-        self.assertEquals(listing_changed.squarefeet, int(change_values['squarefeet']))
+        self.assertEquals(listing_changed.squareFeet, int(change_values['squareFeet']))
         self.assertEquals(listing_changed.bathrooms,
                           float(change_values['bathrooms']))
         self.assertEquals(listing_changed.price, int(change_values['price']))
@@ -198,7 +198,7 @@ class TestEditListing(unittest.TestCase):
         del listing_info['thumbnailImageIndex']
         del listing_info['images']
         del listing_info['address']
-        del listing_info['squarefeet']
+        del listing_info['squareFeet']
         del listing_info['price']
         del listing_info['longitude']
         del listing_info['latitude']
@@ -225,7 +225,7 @@ class TestEditListing(unittest.TestCase):
                            Error_Code.missing_image['error'],
                            Error_Code.missing_image_index['error'],
                            Error_Code.missing_address['error'],
-                           Error_Code.missing_squarefeet['error'],
+                           Error_Code.missing_square_feet['error'],
                            Error_Code.missing_price['error'],
                            Error_Code.missing_longitude['error'],
                            Error_Code.missing_latitude['error'],

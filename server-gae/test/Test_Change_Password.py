@@ -7,7 +7,7 @@ import unittest
 import Main
 from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import *
+from extras.Utils import *
 
 
 class TestChangePassword(unittest.TestCase):

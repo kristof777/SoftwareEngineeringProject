@@ -5,7 +5,7 @@ import sys
 sys.path.append("../")
 import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import *
+from extras.Utils import *
 from models.User import User
 import Main
 from API_NAME import *

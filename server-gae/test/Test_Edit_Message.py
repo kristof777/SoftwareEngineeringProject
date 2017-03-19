@@ -8,7 +8,7 @@ import unittest
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import Main
 from web_apis.Create_User import *
-import extras.utils as utils
+import extras.Utils as utils
 from models.Message import Message
 from API_NAME import *
 
