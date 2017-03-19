@@ -80,8 +80,8 @@ describe('Registering new user as a user would', function() {
                         let myProfileTab = element(by.id('tab-t0-2'));
                         myProfileTab.click();
                         sleep();
-                        attemptIncorrectSignIn('test1@test.com', '123abcABCc');
-                        attemptSignIn('test1@test.com', '123abcABC');
+                        attemptIncorrectSignIn('test1@test.ca', '123abcABCc');
+                        attemptSignIn('test1@test.ca', 'Password123');
                         sleep();
           } else {
             //
@@ -172,9 +172,10 @@ function attemptIncorrectSignIn(emailInput1, passwordInput1){
     password.sendKeys(passwordInput1);
     signInButton.click();
     browser.driver.sleep(500);
-    let dismissButton = element(by.buttonText('Dismiss'));
-    checkDisplayed(dismissButton, "the 'Dismiss' Button");
-    dismissButton.click();
+    sleep();
+    let enter = browser.actions().sendKeys(protractor.Key.ENTER);
+    enter.perform();
+    sleep();
 
 }
 
