@@ -25,6 +25,11 @@ export class FavouritesPage {
         this.listings = Array();
     }
 
+    /**
+     * Reload the users favourites when they open the page.
+     *
+     * TODO make this more efficient
+     */
     ionViewDidEnter(){
         let me = this;
 
@@ -41,9 +46,11 @@ export class FavouritesPage {
      * Shows up the information about listing, in browse mode
      *
      * @param listing listing clicked by user
+     * @pre-cond    listing is not null
      */
     selectListing(listing:Listing){
-        // open about that listing
+        assert(listing, "listing can not be null");
+
         this.navCtrl.push(DetailPage,{
             data:this.listings,
             cursor:this.listings.indexOf(listing)
@@ -55,8 +62,11 @@ export class FavouritesPage {
      * Remove a listing from the user's favourites
      *
      * @param listing: listing to unfavourited
+     * @pre-cond    listing is not null
      */
-    unfavourite(listing:Listing) {
+    unfavourite(listing: Listing) {
+        assert(listing, "listing can not be null");
+
         let selectedIndex = this.listings.indexOf(listing);
         this.listings.splice(selectedIndex, 1);
 

@@ -37,44 +37,31 @@ export class SignInPage {
     }
 
     /**
-     * Switch the user to the navigation screen.
+     * Switch the user to the sign up screen.
      */
     pushRegister(): void{
         this._logger.debug("Register was clicked.");
-        // This variable is injected through the constructor.
         this.navCtrl.push(SignUpPage);
     }
 
     /**
      * Attempt to log the user in with the provided information
+     *
+     * @post-cond   if there was no error, log the user in and move them to the browse screen, otherwise display an
+     *              error
      */
     doSignIn(): void{
         this._logger.debug("Sign In was clicked.");
 
-        if(this.loginForm.value.email == "test") {
-            let userID: number = 1;
-            let email: string = "john.doe@gmail.com";
-            let firstName: string = "John";
-            let lastName: string = "Doe";
-            let phone1: string = "3065555555";
-            let phone2: string = null;
-            let province = Province.SK;
-            let city = "Saskatoon";
-
-            let testUser = new User(userID, email, firstName, lastName, phone1, phone2, province, city);
-
-            this.kasperService.loginService.setUser(testUser);
-
-            this.navCtrl.setRoot(MyProfilePage);
-        } else if(this.loginForm.valid){
-            let test = this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password);
+        if(this.loginForm.valid){
+            let result = this.kasperService.login(this.loginForm.value.email, this.loginForm.value.password);
 
             this.loading = this.loadingCtrl.create({
                 content: "Logging in..."
             });
             this.loading.present();
 
-            this.signInCallback(test);
+            this.signInCallback(result);
         } else {
             this._logger.error("Tried to submit when fields do not pass validation.");
         }

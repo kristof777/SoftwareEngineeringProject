@@ -24,21 +24,14 @@ export class DetailPage {
                 public loginService: LoginService,
                 private _logger: Logger,
                 public navParams: NavParams) {
-        if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
-            this.data = listingProvider.listings;
-        } else {
-            this.data = navParams.get('data');
-            this.cursor = navParams.get('cursor');
-            this._logger.info(this.data);
-            this._logger.info(this.data[this.cursor]);
-        }
+        this.data = navParams.get('data');
+        this.cursor = navParams.get('cursor');
     }
 
     /**
      * Add the house to the users dislike list
      */
     dislike(): void{
-        this._logger.debug("Dislike was clicked");
         this.listingProvider.dislikeListing(this.data[this.cursor].listingId).subscribe(data => {
             this._logger.debug("Dislike was successful.");
         }, error => {
@@ -50,7 +43,6 @@ export class DetailPage {
      * Add the house to the users favourites list
      */
     like(): void{
-        this._logger.debug("Like was clicked.");
         this.listingProvider.likeListing(this.data[this.cursor].listingId).subscribe(data => {
             this._logger.debug("Like was successful.");
         }, error => {
@@ -62,15 +54,17 @@ export class DetailPage {
      * Return to the first image in the slides
      */
     goToFirstSlide(): void{
+        assert(this.slides, "slides can not be null");
+
         this.slides.slideTo(0, 0);
     }
 
     /**
      * Display the next property
+     *
+     * @pre-cond    there is a next property available
      */
     nextProperty(): void{
-        this._logger.debug("Next Property was clicked");
-
         this.goToFirstSlide();
 
         if(this.isNextProperty())
@@ -79,10 +73,10 @@ export class DetailPage {
 
     /**
      * Display the previous property
+     *
+     * @pre-cond    there is a previous property available
      */
     previousProperty(): void{
-        this._logger.debug("Previous Property was clicked");
-
         this.goToFirstSlide();
 
         if(this.isPreviousProperty())
@@ -128,6 +122,9 @@ export class DetailPage {
         return this.loginService.getUserId() == this.data[this.cursor].listerId;
     }
 
+    /**
+     * Display the contact page for the user who created the current property
+     */
     goToContact(): void{
         this.navCtrl.push(ContactPage, {listingId: this.data[this.cursor].listingId});
     }

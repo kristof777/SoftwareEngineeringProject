@@ -23,15 +23,18 @@ export class ListingProvider {
      * Add a listing to the database
      */
     addListing(newListing: Listing): any{
-        assert.object(newListing, "Received a null listing");
+        assert(newListing, "newListing can not be null");
 
         return this.kasperService.createListings(newListing);
     }
 
     /**
      * Edit an existing listing in the database
+     *
+     * @pre-cond    listingId is not null
      */
     editListing(listingId: number, changeValues: {}){
+        assert(listingId, "listingId can not be null.");
         this._logger.error("ListingProvider.editListing is not implemented.");
         // return this.kasperService.editListing(listingId, changeValues);
     }
@@ -40,8 +43,10 @@ export class ListingProvider {
      * Remove a listing from the database
      *
      * @param listingId the id of the listing
+     * @pre-cond    listingId is not null
      */
     removeListing(listingId : number){
+        assert(listingId, "listingId can not be null.");
         this._logger.error("ListingProvider.removeListing is not implemented.");
     }
 
@@ -49,9 +54,10 @@ export class ListingProvider {
      * Dislike a listing
      *
      * @param listingId the id of the listing
+     * @pre-cond    listingId is not null
      */
     dislikeListing(listingId : number): any{
-        assert.number(listingId, "listingID must be a number.");
+        assert(listingId, "listingId can not be null.");
 
         return this.kasperService.likeDislikeListing(listingId, false);
     }
@@ -62,9 +68,10 @@ export class ListingProvider {
      * Add a listing to a users favourites
      *
      * @param listingId the id of the listing
+     * @pre-cond    listingId is not null
      */
     likeListing(listingId : number): any{
-        assert.number(listingId, "listingID must be a number.");
+        assert(listingId, "listingId can not be null.");
 
         return this.kasperService.likeDislikeListing(listingId, true);
     }
@@ -141,9 +148,11 @@ export class ListingProvider {
      * Publish a listing
      *
      * @param listingId the id of the listing
+     * @pre-cond    listingId is not null
      */
     publishListing(listingId : number): any{
-        this._logger.error("ListingProvider.publishListing is not implemented.");
+        assert(listingId, "listingId can not be null");
+
         return this.editListing(listingId, {'isPublished': true});
     }
 
@@ -151,9 +160,11 @@ export class ListingProvider {
      * Unpublish a listing
      *
      * @param listingId the id of the listing
+     * @pre-cond    listingId is not null
      */
     unpublishListing(listingId : number): any{
-        this._logger.error("ListingProvider.unpublishListing is not implemented.");
+        assert(listingId, "listingId can not be null");
+
         return this.editListing(listingId, {'isPublished': false});
     }
 }

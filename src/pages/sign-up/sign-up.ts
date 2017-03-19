@@ -65,6 +65,12 @@ export class SignUpPage {
         });
     }
 
+    /**
+     * Send the request to the server to register a new user
+     *
+     * @post-cond   if there was no error from the server, log the user in and move them to the browse screen,
+     *              otherwise display an error
+     */
     doRegister(): void{
         let result = this.kasperService.signUp(this.signUpStep1.value.email,
                                 this.signUpStep1.value.password,
@@ -84,6 +90,12 @@ export class SignUpPage {
         this.registerCallback(result, user);
     }
 
+    /**
+     * Handle the data from the register request
+     *
+     * @param data  the data returned from the request
+     * @param user  the user object sent with the request
+     */
     registerCallback(data: any, user: User){
         data.subscribe(data => {
             user.id = data.userId;
@@ -110,6 +122,9 @@ export class SignUpPage {
 
     /**
      * Go to the next step if the fields are valid
+     *
+     * @pre-cond    the current step passed validation
+     * @pre-cond    there is a next step
      */
     nextStep(): void{
         if(this.confirmStep()){
@@ -132,6 +147,8 @@ export class SignUpPage {
 
     /**
      * Move back to the previous step.
+     *
+     * @pre-cond    there is a previous step
      */
     previousStep(): void{
         if(this.slides.getActiveIndex() != 0) {
@@ -146,6 +163,7 @@ export class SignUpPage {
      *
      * @returns {boolean}   true if the fields are valid
      *                      false otherwise
+     * @pre-cond    the current step index exists
      */
     confirmStep(): boolean {
         switch (this.slides.getActiveIndex()) {
@@ -163,6 +181,7 @@ export class SignUpPage {
 
     /////////////////////////////
     // Form Validation Helpers
+    // The following functions update variables that toggle the display of error messages
 
     attemptAll(){
         if(this.slides.getActiveIndex() == 0) {

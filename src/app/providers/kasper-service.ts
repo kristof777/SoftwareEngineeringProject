@@ -309,7 +309,7 @@ export class KasperService {
     }
 
     /**
-     * Appends required information for all calls
+     * Appends the userId and authToken to the call if the user is logged in.
      */
     appendAuthentication(body: FormData): void{
         if(!this.loginService.isLoggedIn()) return;
@@ -392,15 +392,19 @@ export class KasperService {
     }
 
     /**
-     * Error message to appear for the different calls.
+     * Creates the error messages to be displayed when an error is returned from the server.
      *
-     * @returns {string[][]} an array of api routes, and error keys associated with them
+     * <p>The value held at each route-error pair is the message to be displayed when this error occurs.
+     *
+     * @returns {string[][]}    a 2D array where the first key is the name of the API route, and the second key is
+     *                          the key of the error the server should return.
      */
     initErrors(): string[][]{
         let result: string[][] = [[]];
 
         result['general'] = [];
-        result['general']['missingUserId'] = "You must be logged in to perform this action";
+        result['general']['missingUserId'] = "You must be logged in to do this";
+        result['general']['missingToken'] = "You must be logged in to do this";
 
         result['signIn'] = [];
         result['signIn']['invalidCredentials'] = "Looks like you entered the wrong email or password";
@@ -493,13 +497,28 @@ export class KasperService {
         return result;
     }
 
+    /**
+     * Handles errors returned by the Kasper server by displaying an alert message.
+     *
+     * @param route the api route that the error was returned from
+     * @param errors    a dictionary of error keys and messages
+     * @returns {Alert} returns a reference to the created Alert
+     *
+     * @pre-cond    route is not null
+     * @pre-cond    errors is not null or empty
+     * @post-cond   if the message contained in KasperService.errorMessages is not empty, an alert will be shown.
+     */
     handleError(route: string, errors: any) {
-        console.log(errors);
+        assert(route, "route can not be null");
+        assert(errors, "errors can not be null");
+        assert(Object.keys(errors).length > 0, "errors can not be empty");
+
         let firstKey = Object.keys(errors)[0];
 
-        if(KasperService.errorMessages['general'][firstKey]){
+        // Check if the error key is in the General declarations
+        if(firstKey in KasperService.errorMessages['general']){
             route = "general";
-        } else if(!KasperService.errorMessages[route][firstKey]) {
+        } else if(!(firstKey in KasperService.errorMessages[route])) {
             this._logger.error("Unhandled error : [" + route + ", " + JSON.stringify(firstKey) + "]");
             return;
         }
@@ -512,12 +531,23 @@ export class KasperService {
             buttons: ['Dismiss']
         });
 
-        alert.present();
+        if(message)
+            alert.present();
 
         return alert;
     }
 
+    /**
+     * Takes in an object and parses it to a listing object.
+     *
+     * @param data  the data to parse into Listing objects.
+     * @returns {Listing[]} an array of Listings
+     *
+     * @pre-cond    data is not null
+     */
     static fromData(data: any): Listing[]{
+        assert(data, "data cannot be null");
+
         let result: Listing[] = [];
 
         for(let i=0; i<data.length; i++){

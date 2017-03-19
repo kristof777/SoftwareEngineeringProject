@@ -54,8 +54,14 @@ export class AddListingPage {
         }
     }
 
+    /**
+     * Move the information from a Listing object into the text areas of this page.
+     *
+     * @param listing   a listing
+     * @pre-cond    listing is not null
+     */
     loadListingInfo(listing: Listing): void{
-        assert.object(listing, "listing should never be null");
+        assert(listing, "listing can not be null");
 
         this.listingId = listing.listingId;
         this.listerId = listing.listerId;
@@ -78,6 +84,9 @@ export class AddListingPage {
 
     /**
      * Display the UI to add the image
+     *
+     * @pre-cond    the user give/has given us permission to use the photo library on their device
+     * @post-cond   the image is added to the images array
      */
     addImage(){
         const options = {
@@ -93,18 +102,22 @@ export class AddListingPage {
         Camera.getPicture(options).then((data) => {
             this.images[this.images.length] = data;
         }, (error) => {
-            this._logger.error("An error occurred while selecting an image."); // can be one log
-            this._logger.error(JSON.stringify(error));
+            this._logger.error("An error occurred while selecting an image: " + JSON.stringify(error));
         });
     }
 
+    /**
+     * Takes the values of the text areas of this page and parses it into a listing.
+     *
+     * @returns {Listing}   the listing as specified by the user
+     */
     getCurListing(): Listing{
         return new Listing(
             this.listingId,
             this.listerId,
             this.bedrooms,
             this.bathrooms,
-            this.squareFeet, //refactor
+            this.squareFeet,
             this.price,
             this.description,
             this.isPublished,
@@ -120,6 +133,12 @@ export class AddListingPage {
         );
     }
 
+    /**
+     * Update/Save the listing to the server.
+     *
+     * @post-cond   if the user is in edit mode, update a listing
+     *              if the user is in add mode, create a listing
+     */
     saveListing(){
         if(this.editMode){
             this.updateListing();
@@ -128,6 +147,9 @@ export class AddListingPage {
         }
     }
 
+    /**
+     * Add a new listing to the server, or display an error if the server denies the requset.
+     */
     addListing(){
         let result = this.listingProvider.addListing(this.getCurListing());
 
@@ -142,7 +164,7 @@ export class AddListingPage {
     updateListing(){}
 
     /**
-     * Save the listing to the server 
+     * Save the listing to the server without publishing
      */
     saveWithoutPublishing(){
         this.isPublished = false;
@@ -150,7 +172,7 @@ export class AddListingPage {
     }
 
     /**
-     * Set the listing to published
+     * Save the listing to the server as a published listing
      */
     saveAndPublish(){
         this.isPublished = true;
@@ -158,7 +180,7 @@ export class AddListingPage {
     }
 
     /**
-     * Set the listing to unpublished
+     * Update the listing on the server to be unpublished
      */
     unpublish(){
         this._logger.error("AddListingPage.unpublish is not implemented yet");

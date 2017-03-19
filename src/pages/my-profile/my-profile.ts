@@ -53,14 +53,19 @@ export class MyProfilePage {
         });
     }
 
+    /**
+     * Set the user object for this page to display
+     */
     loadUser(): void{
-        assert.object(LoginService.user, "Tried to load a user but no user was logged in.");
+        assert(LoginService.user, "Tried to load a user but no user was logged in.");
 
         this.currentUser = LoginService.user;
     }
 
     /**
      * Display the dialog for the user to update their password.
+     *
+     * @post-cond   if data is returned, send the request to change the password.
      */
     showChangePassword(): void{
         let changePasswordModal = this.modalCtrl.create(ChangePasswordPage);
@@ -81,12 +86,19 @@ export class MyProfilePage {
      *
      * @param currentPassword   users input for their current password
      * @param newPassword       the new password
+     * @param confirmedPassword the new password confirmed
+     *
+     * @pre-cond    no parameters are null
      */
-    updatePassword(currentPassword: string, newPassword: string, newPasswordConfirmed: string): void{
+    updatePassword(currentPassword: string, newPassword: string, confirmedPassword: string): void{
+        assert(currentPassword, "currentPassword can not be null");
+        assert(newPassword, "newPassword can not be null");
+        assert(confirmedPassword, "confirmedPassword can not be null");
+
         let me = this;
         this._logger.debug("Verifying and changing password");
 
-        this.kasperService.changePassword(currentPassword, newPassword, newPasswordConfirmed).subscribe(data => {
+        this.kasperService.changePassword(currentPassword, newPassword, confirmedPassword).subscribe(data => {
             this.alertCtrl.create({
                 title: "Success",
                 subTitle: "Your password has been changed",
@@ -101,6 +113,8 @@ export class MyProfilePage {
 
     /**
      * Update the users information according to their input
+     *
+     * TODO updateUser
      */
     saveChanges(): void {
         this._logger.debug("Save button was clicked.");
@@ -108,6 +122,8 @@ export class MyProfilePage {
 
     /**
      * Sign the user out of this device.
+     *
+     * TODO signOut
      */
     signOut(): void{
         this._logger.debug("Sign-out was clicked.");

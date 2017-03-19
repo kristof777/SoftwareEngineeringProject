@@ -80,19 +80,22 @@ export class LoginService {
      * Get the currently logged in user's id
      *
      * @returns {number}    the id
+     * @pre-cond    user must be logged in
      */
     public getUserId(): number{
-        assert.number(this.userId, "The userId is not defined");
+        assert(this.userId, "User must be logged in to get the userId");
 
         return this.userId;
     }
 
     /**
-     * Get the currently stored authtoken
+     * Get the currently stored authToken
+     *
      * @returns {string}    the auth token
+     * @pre-cond    user must be logged in
      */
     public getAuthToken(): string{
-        assert.string(this.authToken, "The token is not defined");
+        assert(this.authToken, "User must be logged in to get the authToken");
 
         return this.authToken;
     }

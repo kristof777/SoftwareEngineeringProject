@@ -33,6 +33,9 @@ export class BrowsePage {
         this.filter = new Filter(null, {}, {}, {}, {});
     }
 
+    /**
+     * When this tab is opened, reload the listings if it has been requested.
+     */
     ionViewDidEnter(){
         if(BrowsePage.forceRefresh) {
             this.loadListings();
@@ -40,6 +43,11 @@ export class BrowsePage {
         }
     }
 
+    /**
+     * Retrieve the listings from the server according to the filter on this page.
+     *
+     * @post-cond   listings on this page will be overridden with the result
+     */
     loadListings(): void{
         let me = this;
 
@@ -55,6 +63,7 @@ export class BrowsePage {
      *
      * @param event the drag event
      * @param index the index of the listing being dragged
+     * @pre-cond    the user has not voted in the last second.
      */
     onDrag(event: ItemSliding, index: number){
         if(!this.canVote) return;
@@ -71,6 +80,7 @@ export class BrowsePage {
      *
      * @param event the event that called this listing
      * @param index the index of the listing
+     * @pre-cond    index is not out of bounds
      */
     dislikeListing(event: ItemSliding, index: number): void{
         assert(index > -1 && index < this.listings.length,
@@ -108,6 +118,7 @@ export class BrowsePage {
      *
      * @param event the event that called this listing
      * @param index the index of the listing
+     * @pre-cond    index is not out of bounds
      */
     likeListing(event: ItemSliding, index: number): void{
         assert(index > -1 && index < this.listings.length,
@@ -141,9 +152,10 @@ export class BrowsePage {
 
     /**
      * Display the filters screen
+     *
+     * @post-cond   update the filter on this page if they apply the filter
      */
     goToFilters(): void{
-        this._logger.debug("Filters was clicked");
         let me = this;
 
         let filterModal = this.modalCtrl.create(FilterPage, { filter: this.filter });
@@ -163,7 +175,9 @@ export class BrowsePage {
 
     /**
      * Open the detailed page of a listing
+     *
      * @param index the index of the listing
+     * @pre-cond    index is not out of bounds
      */
     goToDetails(index): void{
         assert(index > -1 && index < this.listings.length,

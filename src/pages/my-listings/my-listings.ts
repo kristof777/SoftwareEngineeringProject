@@ -26,7 +26,12 @@ export class MyListingsPage {
 
         this.listings = Array();
     }
-   //Documentation for this please in diff file
+
+    /**
+     * Refresh the users listings when they open this tab
+     *
+     * TODO make this more efficient
+     */
     ionViewDidEnter(){
         let me = this;
 
@@ -38,57 +43,66 @@ export class MyListingsPage {
             });
         }
     }
-//add precondition & assert \/
+
     /**
      * Display the detailed view for the selected listing
      *
      * @param listing listing clicked by user
+     * @pre-cond    listing is not null
      */
     selectListing(listing:Listing){
+        assert(listing, "listing can not be null");
+
         this.navCtrl.push(DetailPage, {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
         this._logger.debug("ListingId  " + listing + " was clicked"); //probably changed to listing id and semicolon
     }
-    //precondition that listing is null \/
+
     /**
      * Display the edit listing view for the selected listing
      *
      * @param listing: listing to be edited
+     * @pre-cond    listing is not null
      */
     editListing(listing:Listing){ //add asserts to methods
-        this._logger.debug("Trying to edit...");
-        assert.object(listing, "Listing cannot be null.");
+        assert(listing, "listing can not be null");
 
         this.navCtrl.push(AddListingPage,{ //add comment to explain that addListingPage is the same as edit...
             listing: listing
         });
 
     };
-//pre condition assert logging
+
     /**
-     * fixx me
+     * Delete a listing from the users listings
+     *
      * @param listing: listing to be deleted
+     * @pre-cond    listing is not null
      */
     deleteListing(listing:Listing){
+        assert(listing, "listing can not be null");
+
         let selectedIndex = this.listings.indexOf(listing);
         this.listings.splice(selectedIndex, 1);
     }
 
     /**
-     * Takes you to listing page
+     * Display the add listing page.
+     *
+     * @pre-cond    the user is logged in
      */
     addListing(){
+        if(!this.loginService.isLoggedIn()) return;
 
         this.navCtrl.push(AddListingPage);
-        //gimme a log
     }
 
     /**
-     * Get the Unpublished listing
+     * Get the unpublished listings from the listings loaded on this page.
      *
-     * @returns {Listing[]}  Unpublished listing
+     * @returns {Listing[]}  the unpublished listings
      */
     getUnpublished(): Listing[]{
         let result: Listing[] = [];
@@ -102,9 +116,9 @@ export class MyListingsPage {
     }
 
     /**
-     * Get the published listing
+     * Get the published listings from the listings loaded on this page.
      *
-     * @returns {Listing[]}  Published listing
+     * @returns {Listing[]}  the published listings
      */
     getPublished(): Listing[]{
         let result: Listing[] = [];

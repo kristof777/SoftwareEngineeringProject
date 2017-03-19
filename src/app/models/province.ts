@@ -49,7 +49,7 @@ export class Province{
      *
      * @param abbr          the abbreviation of the province
      * @returns {Province}  the province with the specified abbreviation
-     * @returns null        if the abbreviation provided was not valid
+     * @returns null        if the abbreviation provided was not valid or null
      */
     static fromAbbr(abbr: string): Province{
         if(!abbr) return null;

@@ -37,7 +37,15 @@ export class FilterPage {
             this.loadFilter(params.get("filter"));
     }
 
+    /**
+     * Takes in a Filter object and copies its values to the sliders/fields on this page
+     *
+     * @param filter    the filter object to apply
+     * @pre-cond    filter is not null
+     */
     loadFilter(filter: Filter): void{
+        assert(filter, "filter can not be null");
+
         this.province = (filter.province) ? filter.province.abbr : "";
 
         // If we're given a bound, use the bound, otherwise use the default.

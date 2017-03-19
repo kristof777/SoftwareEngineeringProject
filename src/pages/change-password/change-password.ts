@@ -30,7 +30,7 @@ export class ChangePasswordPage {
     }
 
     /**
-     * Submit the form, sending the required data back to the Settings page.
+     * Submit the form, sending the required data back to the parent page.
      */
     save(): void{
         // Verify the new passwords match
