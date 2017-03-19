@@ -5,7 +5,7 @@ export class Listing {
     public listerId: number;
     public bedrooms: number;
     public bathrooms: number;
-    public squarefeet: number;
+    public squareFeet: number;
     public price: number;
     public description: string;
     public isPublished: boolean;
@@ -27,7 +27,7 @@ export class Listing {
      * @param listerId      id of the user who listed this listing
      * @param bedrooms      the amount of bedrooms
      * @param bathrooms     the amount of bathrooms
-     * @param squarefeet    the square feet
+     * @param squareFeet    the square feet
      * @param price         the price
      * @param description   a description
      * @param isPublished   whether or not thie listing will appear on the browse page
@@ -42,7 +42,7 @@ export class Listing {
      * @param latitude      the latitude of the listing
      */
     constructor(listingId: number, listerId: number, bedrooms: number,
-                bathrooms: number, squarefeet: number, price: number, description: string,
+                bathrooms: number, squareFeet: number, price: number, description: string,
                 isPublished: boolean, createdDate: string, modifiedDate: string,
                 images: string[], province: string, city: string, address: string,
                 postalCode: string, longitude: number, latitude: number) {
@@ -50,7 +50,7 @@ export class Listing {
         this.listerId = listerId;
         this.bedrooms = bedrooms;
         this.bathrooms = bathrooms;
-        this.squarefeet = squarefeet;
+        this.squareFeet = squareFeet;
         this.price = price;
         this.description = description;
         this.isPublished = isPublished;
@@ -66,6 +66,10 @@ export class Listing {
         this.latitude = latitude;
     }
 
+    /**
+     * Returns a listing with all of the values being 0
+     * @returns {Listing}
+     */
     static emptyListing(): Listing{
         return new Listing(-1, -1, 0, 0, 0, 0, "", false, "0000-00-00", "0000-00-00", [],
             "SK", "", "", "", 0.0, 0.0);

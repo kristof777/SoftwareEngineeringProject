@@ -29,7 +29,7 @@ export class AddListingPage {
     province: string;
     city: string;
     bedrooms: number;
-    squarefeet: number;
+    squareFeet: number;
     price: number;
     address: string;
     postalCode: string;
@@ -68,7 +68,7 @@ export class AddListingPage {
         this.province = listing.province.abbr;
         this.city = listing.city;
         this.bedrooms = listing.bedrooms;
-        this.squarefeet = listing.squarefeet;
+        this.squareFeet = listing.squareFeet;
         this.price = listing.price;
         this.address = listing.address;
         this.postalCode = listing.postalCode;
@@ -104,7 +104,7 @@ export class AddListingPage {
             this.listerId,
             this.bedrooms,
             this.bathrooms,
-            this.squarefeet, //refactor
+            this.squareFeet, //refactor
             this.price,
             this.description,
             this.isPublished,

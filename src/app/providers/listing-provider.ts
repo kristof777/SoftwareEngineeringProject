@@ -105,7 +105,7 @@ export class ListingProvider {
             requiredFields.push(
                 "bedrooms",
                 "bathrooms",
-                "squarefeet",
+                "squareFeet",
                 "price",
                 "description",
                 "isPublished",

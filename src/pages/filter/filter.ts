@@ -14,8 +14,8 @@ export class FilterPage {
     private _provinces: Province[];
     private _priceMin: number = 100000;
     private _priceMax: number = 1600000;
-    private _squarefeetMin: number = 100;
-    private _squarefeetMax: number = 10000;
+    private _squareFeetMin: number = 100;
+    private _squareFeetMax: number = 10000;
     private _bedroomsMin: number = 1;
     private _bedroomsMax: number = 10;
     private _bathroomsMin: number = 1;
@@ -23,7 +23,7 @@ export class FilterPage {
 
     province: string;
     price: Bound = {lower: this._priceMin, upper: this._priceMax};
-    squarefeet: Bound = {lower: this._squarefeetMin, upper: this._squarefeetMax};
+    squareFeet: Bound = {lower: this._squareFeetMin, upper: this._squareFeetMax};
     bedrooms: Bound = {lower: this._bedroomsMin, upper: this._bedroomsMax};
     bathrooms: Bound = {lower: this._bathroomsMin, upper: this._bathroomsMax};
 
@@ -46,10 +46,10 @@ export class FilterPage {
         if(filter.price.lower)
             this.price.lower = filter.price.lower;
 
-        if(filter.squarefeet.lower)
-            this.squarefeet.lower = filter.squarefeet.lower;
-        if(filter.squarefeet.upper)
-            this.squarefeet.upper = filter.squarefeet.upper;
+        if(filter.squareFeet.lower)
+            this.squareFeet.lower = filter.squareFeet.lower;
+        if(filter.squareFeet.upper)
+            this.squareFeet.upper = filter.squareFeet.upper;
 
         if(filter.bedrooms.lower)
             this.bedrooms.lower = filter.bedrooms.lower;
@@ -76,8 +76,8 @@ export class FilterPage {
         if(this.price.upper != this._priceMax) tempPrice['upper'] = this.price.upper;
 
         let tempSquareFeet: Bound = {};
-        if(this.squarefeet.lower != this._squarefeetMin) tempSquareFeet['lower'] = this.squarefeet.lower;
-        if(this.squarefeet.upper != this._squarefeetMax) tempSquareFeet['upper'] = this.squarefeet.upper;
+        if(this.squareFeet.lower != this._squareFeetMin) tempSquareFeet['lower'] = this.squareFeet.lower;
+        if(this.squareFeet.upper != this._squareFeetMax) tempSquareFeet['upper'] = this.squareFeet.upper;
 
         let tempBedrooms: Bound = {};
         if(this.bedrooms.lower != this._bedroomsMin) tempBedrooms['lower'] = this.bedrooms.lower;

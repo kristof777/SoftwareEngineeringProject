@@ -248,7 +248,7 @@ export class KasperService {
         body.append('city', listing.city);
         body.append('address', listing.address);
         body.append('price', listing.price);
-        body.append('squarefeet', listing.squarefeet);
+        body.append('squareFeet', listing.squareFeet);
         body.append('bedrooms', listing.bedrooms);
         body.append('bathrooms', listing.bathrooms);
         body.append('postalCode', listing.postalCode);
@@ -527,7 +527,7 @@ export class KasperService {
                     data[i].listerId,
                     data[i].bedrooms,
                     data[i].bathrooms,
-                    data[i].squarefeet,
+                    data[i].squareFeet,
                     data[i].price,
                     data[i].description,
                     data[i].isPublished,
