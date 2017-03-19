@@ -35,7 +35,7 @@ export class DetailPage {
         this.listingProvider.dislikeListing(this.data[this.cursor].listingId).subscribe(data => {
             this._logger.debug("Dislike was successful.");
         }, error => {
-            this.listingProvider.kasperService.handleError("likeDislikeListing", error.toJson());
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
         });
     }
 
@@ -46,7 +46,7 @@ export class DetailPage {
         this.listingProvider.likeListing(this.data[this.cursor].listingId).subscribe(data => {
             this._logger.debug("Like was successful.");
         }, error => {
-            this.listingProvider.kasperService.handleError("likeDislikeListing", error.toJson());
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
         });
     }
 
