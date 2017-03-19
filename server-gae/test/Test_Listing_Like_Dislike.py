@@ -6,7 +6,7 @@ import unittest
 import Main
 from web_apis.Like_Dislike_Listing import *
 from API_NAME import *
-from extras.utils import get_response_from_post
+from extras.Utils import get_response_from_post
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

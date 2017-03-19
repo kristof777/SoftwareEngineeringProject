@@ -1,6 +1,6 @@
 from Error_Code import *
 from API_NAME import *
-import utils
+import Utils
 from models.User import User
 
 """
@@ -53,19 +53,19 @@ def check_required_valid(api, post, response, auth_required=False):
     """
 
     # validating if request has all required key
-    errors, values = utils.keys_missing(required_api_dict[api], post)
+    errors, values = Utils.keys_missing(required_api_dict[api], post)
 
     # if any of the keys is missing then error is written to the response
     if len(errors) > 0:
-        utils.write_error_to_response(response, errors,
+        Utils.write_error_to_response(response, errors,
                                       missing_invalid_parameter)
         return False, None
 
-    invalid = utils.key_validation(values)
+    invalid = Utils.key_validation(values)
 
     # if any of the keys is invalid then error is written to the response
     if len(invalid) > 0:
-        utils.write_error_to_response(response, invalid,
+        Utils.write_error_to_response(response, invalid,
                                       missing_invalid_parameter)
         return False, None
 
@@ -79,7 +79,7 @@ def check_required_valid(api, post, response, auth_required=False):
             error = {
                 not_authorized['error']: 'User not authorized'
             }
-            utils.write_error_to_response(response, error,
+            Utils.write_error_to_response(response, error,
                                           not_authorized["status"])
             return False, None
 
@@ -88,7 +88,7 @@ def check_required_valid(api, post, response, auth_required=False):
                                          "auth", values["authToken"])
 
         if not valid_user:
-            utils.write_error_to_response \
+            Utils.write_error_to_response \
                 (response,
                  {not_authorized['error']: "not authorized to create listings"},
                  not_authorized['status'])

@@ -2,9 +2,9 @@ from models.Listing import Listing
 from models.User import User
 import sys
 import os
-from extras.utils import *
+from extras.Utils import *
 from API_NAME import create_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -83,7 +83,7 @@ class CreateListing(webapp2.RequestHandler):
 
         listing = Listing(userId=int(values['userId']),
                           bedrooms=int(values['bedrooms']),
-                          squarefeet=int(values['squarefeet']),
+                          squareFeet=int(values['squareFeet']),
                           bathrooms=float(values['bathrooms']),
                           price=int(values['price']),
                           description=values['description'],

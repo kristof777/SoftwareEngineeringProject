@@ -1,6 +1,6 @@
 from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
-from extras.utils import *
+from extras.Utils import *
 from models.FB import FBLogin
 from models.Favorite import Favorite
 from models.Listing import Listing

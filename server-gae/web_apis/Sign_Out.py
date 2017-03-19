@@ -1,10 +1,10 @@
-from extras.utils import *
+from extras.Utils import *
 import sys
 from models import User
 sys.path.append("../")
 from extras.Base_Handler import BaseHandler
 from API_NAME import sign_out_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 
 
 class SignOut(BaseHandler):

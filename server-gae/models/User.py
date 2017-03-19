@@ -55,7 +55,7 @@ class User(Webapp2User):
 
     def set_email(self, email):
         self.email = email
-        #TODO make verified false
+        self.verified = False
 
     def set_province(self, province):
         self.province = province

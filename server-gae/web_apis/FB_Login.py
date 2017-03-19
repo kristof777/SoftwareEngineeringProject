@@ -1,11 +1,11 @@
 import os
-from extras.utils import *
+from extras.Utils import *
 from models.FB import FBLogin
 from models.User import User
 import sys
 from extras.Base_Handler import BaseHandler
 from API_NAME import fb_login_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

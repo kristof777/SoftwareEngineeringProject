@@ -46,7 +46,7 @@ class TestCreateListing(unittest.TestCase):
         input = {"userId": "",
                  "authToken": "",
                  "bedrooms": "",
-                 "squarefeet": "",
+                 "squareFeet": "",
                  "bathrooms": "",
                  "price": "",
                  "description": "",
@@ -75,7 +75,7 @@ class TestCreateListing(unittest.TestCase):
         input = {"userId": "      ",
                  "authToken": "      ",
                  "bedrooms": "       ",
-                 "squarefeet": "        ",
+                 "squareFeet": "        ",
                  "bathrooms": "      ",
                  "price": "        ",
                  "description": "      ",
@@ -103,7 +103,7 @@ class TestCreateListing(unittest.TestCase):
 
     def test_some_missing_fields(self):
         missing_input = create_random_listing("", "")
-        missing_input['squarefeet'] = ""
+        missing_input['squareFeet'] = ""
         missing_input['description'] = ""
         missing_input['city'] = ""
         missing_input['images'] = ''
@@ -131,7 +131,7 @@ class TestCreateListing(unittest.TestCase):
     def test_invalid_numeric_field(self):
         input = create_random_listing("supposed to be int", "random token")
         input['bedrooms'] = "supposed to be int"
-        input['squarefeet'] = "supposed to be int"
+        input['squareFeet'] = "supposed to be int"
         input['bathrooms'] = "supposed to be float"
         input['price'] = "supposed to be int"
         input['thumbnailImageIndex'] = 'supposed to be int'
@@ -145,7 +145,7 @@ class TestCreateListing(unittest.TestCase):
 
         errors_expected = [invalid_user_id['error'],
                            invalid_bedrooms['error'],
-                           invalid_squarefeet['error'],
+                           invalid_square_feet['error'],
                            invalid_bathrooms['error'],
                            invalid_price['error'],
                            invalid_longitude['error'],
@@ -172,7 +172,7 @@ class TestCreateListing(unittest.TestCase):
 
         listing_created = Listing.get_by_id(int(output["listingId"]))
         self.assertEquals(listing_created.bedrooms, int(correct_input['bedrooms']))
-        self.assertEquals(listing_created.squarefeet, int(correct_input['squarefeet']))
+        self.assertEquals(listing_created.squareFeet, int(correct_input['squareFeet']))
         self.assertEquals(listing_created.bathrooms, float(correct_input['bathrooms']))
         self.assertEquals(listing_created.price, int(correct_input['price']))
         self.assertEquals(listing_created.description, correct_input['description'])
@@ -219,7 +219,7 @@ class TestCreateListing(unittest.TestCase):
         del correct_input['description']
         del correct_input['images']
         del correct_input['address']
-        del correct_input['squarefeet']
+        del correct_input['squareFeet']
         del correct_input['price']
         response, response_status = get_listing_api_response(correct_input)
 
@@ -234,7 +234,7 @@ class TestCreateListing(unittest.TestCase):
         self.assertEquals(None, listing_created.description)
         self.assertEquals([], listing_created.images)
         self.assertEquals(None, listing_created.address)
-        self.assertEquals(None, listing_created.squarefeet)
+        self.assertEquals(None, listing_created.squareFeet)
         self.assertEquals(None, listing_created.price)
 
     def test_missing_is_published(self):

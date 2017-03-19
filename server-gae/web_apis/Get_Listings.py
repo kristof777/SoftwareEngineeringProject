@@ -1,10 +1,10 @@
 import logging
 from models.Listing import Listing
 from models.Favorite import Favorite
-from extras.utils import *
+from extras.Utils import *
 import sys
 from API_NAME import get_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
 DEFAULT_MAX_LIMIT = 20 # max number of listings required, by default (if not provided)
@@ -282,9 +282,10 @@ def get_listingIds_with_numeric_bounds():
 
     # query all the listings in db that satisfies the sqft bound condition,
     # only fetch their key(listingId) for efficiency
-    sqft_query = Listing.query().filter(Listing.squarefeet >= Listing.numeric_filter_bounds['sqft_min'],
-                                        Listing.squarefeet <= Listing.numeric_filter_bounds['sqft_max'],
-                                        Listing.isPublished == True)
+    sqft_query = Listing.query().filter(
+        Listing.squareFeet >= Listing.numeric_filter_bounds['sqft_min'],
+        Listing.squareFeet <= Listing.numeric_filter_bounds['sqft_max'],
+        Listing.isPublished == True)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))

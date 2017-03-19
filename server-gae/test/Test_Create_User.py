@@ -5,7 +5,7 @@ sys.path.append("../")
 import unittest
 import Main
 from models.FB import FBLogin
-from extras.utils import *
+from extras.Utils import *
 from API_NAME import create_user_api
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

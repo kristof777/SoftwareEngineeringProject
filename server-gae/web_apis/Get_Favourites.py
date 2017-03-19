@@ -1,10 +1,10 @@
 import sys
-from extras.utils import *
+from extras.Utils import *
 from models.Favorite import Favorite
 from models.Listing import Listing
 from models.User import User
 from API_NAME import get_favourites_listing_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
 
@@ -44,7 +44,7 @@ class GetFavourites(webapp2.RequestHandler):
                     'listingId': fav_listingId,
                     'userId': listing.userId,
                     'bedrooms': listing.bedrooms,
-                    'squarefeet': listing.squarefeet,
+                    'squareFeet': listing.squareFeet,
                     'bathrooms': listing.bathrooms,
                     'price': listing.price,
                     'description': listing.description,

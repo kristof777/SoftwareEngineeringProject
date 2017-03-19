@@ -7,10 +7,10 @@ import sys
 sys.path.append('../')
 import unittest
 import Main
-from extras.utils import *
+from extras.Utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from API_NAME import *
-from extras.utils import get_response_from_post
+from extras.Utils import get_response_from_post
 
 
 class TestHandlerSignIn(unittest.TestCase):

@@ -18,7 +18,7 @@ class Listing(ndb.Model):
     Models an individual Guest book entry with content and date.
     """
     bedrooms = ndb.IntegerProperty(required=False)
-    squarefeet = ndb.IntegerProperty(required=False)
+    squareFeet = ndb.IntegerProperty(required=False)
     bathrooms = ndb.FloatProperty(required=False)
     price = ndb.IntegerProperty(required=False)
     description = ndb.StringProperty(required=False)
@@ -96,8 +96,8 @@ class Listing(ndb.Model):
     def set_listing_id(self, listing_id):
         self.listingId = listing_id
 
-    def set_squarefeet(self, squarefeet):
-        self.squarefeet = int(squarefeet)
+    def set_squareFeet(self, squareFeet):
+        self.squareFeet = int(squareFeet)
 
     def set_longitude(self, longitude):
         self.longitude = float(longitude)
@@ -111,7 +111,7 @@ class Listing(ndb.Model):
     def set_property(self, key, value):
         _key_to_set = {
             "price": self.set_price,
-            "squarefeet": self.set_squarefeet,
+            "squareFeet": self.set_squareFeet,
             "bathrooms": self.set_bathrooms,
             "bedrooms": self.set_bedrooms,
             "description": self.set_description,
@@ -134,7 +134,7 @@ class Listing(ndb.Model):
         _key_to_get_value = {
             "price": self.price,
             "city": self.city,
-            "squarefeet": self.squarefeet,
+            "squareFeet": self.squareFeet,
             "bathrooms": self.bathrooms,
             "bedrooms": self.bedrooms,
             "description": self.description,

@@ -6,7 +6,7 @@ import unittest
 import Main
 import extras.Error_Code as Error_Code
 from web_apis.Create_User import *
-from extras.utils import get_response_from_post
+from extras.Utils import get_response_from_post
 from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

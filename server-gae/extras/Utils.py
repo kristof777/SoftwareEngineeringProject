@@ -4,7 +4,7 @@ import webapp2
 import json
 from Error_Code import *
 from models.User import *
-from validate_email import validate_email
+from Validate_Email import validate_email
 from google.appengine.ext import testbed
 import re
 
@@ -40,7 +40,7 @@ valid_false_booleans = ["false", "False", "FALSE", "0", "f", "n", "no", "N", 0, 
 """
 listing_keys contains all the valid keys for a listing
 """
-listing_keys = ["userId", "squarefeet", "bedrooms", "bathrooms", "price", "city", "province",
+listing_keys = ["userId", "squareFeet", "bedrooms", "bathrooms", "price", "city", "province",
                 "address", "description", "isPublished", "images",
                 "thumbnailImageIndex", "latitude", "longitude", "postalCode", "authToken"]
 
@@ -193,7 +193,7 @@ def create_dummy_listings_for_testing(main, num_listings, num_users=1):
                                    "longitude": str(random.randint(-180, 180)),
                                    "latitude": str(random.randint(-90, 90)),
                                    "postalCode": get_random_postal_code(),
-                                   "squarefeet": str(random.randint(50, 12000)),
+                                   "squareFeet": str(random.randint(50, 12000)),
                                    "bathrooms": str(random.randint(1, 10)),
                                    "price": str(
                                        random.randint(100000, 2000000)),
@@ -250,7 +250,7 @@ def create_random_listing(user_id, token):
                       "longitude": str(random.randint(-180, 180)),
                       "latitude": str(random.randint(-90, 90)),
                       "postalCode": get_random_postal_code(),
-                      "squarefeet": str(random.randint(50, 12000)),
+                      "squareFeet": str(random.randint(50, 12000)),
                       "bathrooms": str(random.randint(1, 10)),
                       "price": str(random.randint(100000, 2000000)),
                       "description": " ".join(
@@ -594,7 +594,7 @@ valid_check = {
     "price": is_valid_integer,
     "bathrooms": is_valid_bathroom,
     "bedrooms": is_valid_integer,
-    "squarefeet": is_valid_integer,
+    "squareFeet": is_valid_integer,
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
     "liked": is_valid_bool,

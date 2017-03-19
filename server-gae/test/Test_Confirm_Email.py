@@ -8,7 +8,7 @@ from extras.Error_Code import *
 import Main
 import webapp2
 from models.User import User
-from extras.utils import *
+from extras.Utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from API_NAME import create_user_api
 

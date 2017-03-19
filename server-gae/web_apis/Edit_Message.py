@@ -1,9 +1,9 @@
 import sys
-from extras.utils import *
+from extras.Utils import *
 from models.Message import Message
 from models.User import User
 from API_NAME import edit_message_api
-from extras.api_required_fields import check_required_valid
+from extras.Required_Fields import check_required_valid
 
 sys.path.append("../")
 

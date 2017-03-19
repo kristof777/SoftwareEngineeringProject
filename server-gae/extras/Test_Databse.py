@@ -1,4 +1,4 @@
-from utils import *
+from Utils import *
 
 
 def get_user(name, email, password):
@@ -18,7 +18,7 @@ def get_listings(bedrooms, price, bathrooms, is_published, province,
     listing["bathrooms"] = bathrooms
     listing["isPublished"] = is_published
     listing["province"] = province
-    listing["squarefeet"] = square_feet
+    listing["squareFeet"] = square_feet
     return listing
 
 
