@@ -123,6 +123,7 @@ function attemptSignUp(email1, password1, confirmPassword1){
         let password = element(by.id('signUpPassword')).all(by.tagName('input')).first();
         let confirmPassword = element(by.id('signUpConfirmPassword')).all(by.tagName('input')).first();
         let nextButton = element(by.buttonText('Next'));
+        sleep();
 
         email.sendKeys().clear();
         password.sendKeys().clear();
