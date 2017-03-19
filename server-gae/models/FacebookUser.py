@@ -2,7 +2,7 @@ import datetime
 from google.appengine.ext import ndb
 
 
-class FBLogin(ndb.Model):
+class FacebookUser(ndb.Model):
     """
     Models an individual Guest book entry with content and date.
     """

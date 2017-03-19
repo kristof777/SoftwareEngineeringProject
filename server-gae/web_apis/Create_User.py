@@ -1,7 +1,7 @@
 from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
 from extras.Utils import *
-from models.FB import FBLogin
+from models.FacebookUser import FacebookUser
 from extras.Required_Fields import check_required_valid
 from API_NAME import create_user_api
 
@@ -91,7 +91,8 @@ class CreateUser(BaseHandler):
         # userId, and verification is not required if user is logged in from
         # facebook.
         if "fbId" in values:
-            fb_field = FBLogin(user_id=int(user_id), fb_id=int(values["fbId"]))
+            fb_field = FacebookUser(user_id=int(user_id),
+                                    fb_id=int(values["fbId"]))
             fb_field.put()
         else:
             signup_token = self.user_model.create_signup_token(user_id)

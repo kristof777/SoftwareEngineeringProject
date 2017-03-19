@@ -227,6 +227,9 @@ missing_fb_id = {"error": "missingFbId",
 invalid_fb_id = {"error": "invalidFbId",
                  "status": missing_invalid_parameter}
 
+invalid_dictionary = {"error": "invalidDictionary",
+                      "status": missing_invalid_parameter}
+
 invalids = {
     "phone1": invalid_phone1,
     "phone2": invalid_phone2,
@@ -251,8 +254,9 @@ invalids = {
     "senderId": invalid_user_id,
     "phone": invalid_phone,
     "messageId": invalid_message_id,
-    "readDel": missing_read_del,
-    "fbId": missing_fb_id
+    "readDel": invalid_read_del,
+    "fbId": invalid_fb_id,
+    "changeValues": invalid_dictionary
 }
 
 missing = {
@@ -288,6 +292,6 @@ missing = {
     "phone": missing_phone_number,
     "readDel": missing_read_del,
     "messageId": missing_message_id,
-    "fbId": invalid_fb_id,
+    "fbId": missing_fb_id,
     "receiverId": missing_receiverId
 }

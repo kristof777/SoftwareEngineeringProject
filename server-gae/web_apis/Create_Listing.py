@@ -14,7 +14,7 @@ class CreateListing(webapp2.RequestHandler):
     Class used to handle get and post.
     Get:  is used to render an HTML page.
     Post:
-        @pre-cond: Expecting keys to be price, sqft, bedrooms,
+        @pre-cond: Expecting keys to be price, squareFeet, bedrooms,
                    bathrooms, description, images, thumbnailImageIndex,
                    city, address, province, userId, isPublished. If any
                    of these is not present an appropriate error and
