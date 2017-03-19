@@ -36,8 +36,7 @@ class SetPasswordHandler(BaseHandler):
         password = self.request.get('password')
         old_token = self.request.get('t')
 
-        assert password is not None
-        assert password != ''
+        assert password is None or password != ''
 
         assert old_token is not None
         assert old_token != ''

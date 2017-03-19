@@ -73,14 +73,16 @@ def check_required_valid(api, post, response, auth_required=False):
 
         valid_user = user.validate_token(int(values["userId"]),
                                          "auth", values["authToken"])
+
         if not valid_user:
             utils.write_error_to_response(response, {not_authorized['error']: "not authorized to create listings"},
                                           not_authorized['status'])
             return False, None
 
+        assert valid_user
+        assert user is not None
+
     assert len(errors) == 0
     assert len(invalid) == 0
-    assert valid_user
-    assert user is not None
 
     return True, values
