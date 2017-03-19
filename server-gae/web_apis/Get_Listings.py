@@ -185,12 +185,12 @@ def is_valid_filter(filter_json):
     invalid = {}
 
     for key in filter_object:
-        if key not in ["squarefeet", "bedrooms", "bathrooms", "price", "city",
+        if key not in ["squareFeet", "bedrooms", "bathrooms", "price", "city",
                        "province", "address", "description", "isPublished", "images",
                        "thumbnailImageIndex"]:
             invalid[unrecognized_key['error']] = "Unrecognized key " + key
             break
-        if key in ["bedrooms", "bathrooms", "squarefeet", "price"]:
+        if key in ["bedrooms", "bathrooms", "squareFeet", "price"]:
             if any(bound not in ["lower", "upper"] for bound in filter_object[key]):
                 invalid[invalid_filter_bound['error']] = str(key) + " upper/lower bound invalid"
                 break
@@ -225,13 +225,14 @@ def decode_filter(filter_json):
     non_numeric_dict = {}
 
     for key in filter_object:
-        if key in ["bedrooms", "squarefeet", "price", "bathrooms"]:  # if key is a numeric field
+        if key in ["bedrooms", "squareFeet", "price",
+                   "bathrooms"]:  # if key is a numeric field
             if key == "bedrooms":
                 if "lower" in filter_object[key]:
                     Listing.numeric_filter_bounds['bedrooms_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
                     Listing.numeric_filter_bounds['bedrooms_max'] = int(filter_object[key]["upper"])
-            elif key == "squarefeet":
+            elif key == "squareFeet":
                 if "lower" in filter_object[key]:
                     Listing.numeric_filter_bounds['sqft_min'] = int(filter_object[key]["lower"])
                 if "upper" in filter_object[key]:
