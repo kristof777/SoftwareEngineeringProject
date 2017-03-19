@@ -1,20 +1,13 @@
 from __future__ import absolute_import
-import json
 import os
 import sys
 sys.path.append("../")
 import unittest
-from extras.Error_Code import *
 import Main
-import webapp2
-from models.User import User
 from models.FB import FBLogin
 from extras.utils import *
 from API_NAME import create_user_api
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-
 
 
 class TestCreateUser(unittest.TestCase):
@@ -25,6 +18,7 @@ class TestCreateUser(unittest.TestCase):
     Test invalid phone 2
     Test password mismatch
     Test not strong password
+    Test if email already exists
     Test all valid fields
     """
     def setUp(self):
@@ -102,12 +96,11 @@ class TestCreateUser(unittest.TestCase):
         input = create_random_user()
         input['confirmedPassword'] = "123456"
 
-        response_body, status_int = get_create_user_api_response(input)
+        response, status_int = get_create_user_api_response(input)
 
         self.assertEquals(status_int, missing_invalid_parameter)
         errors_expected = [password_mismatch['error']]
-        error_keys = [str(x) for x in response_body]
-        self.assertTrue(are_two_lists_same(errors_expected, error_keys))
+        self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
 
     def test_create_user_without_fb(self):
         input = create_random_user()
@@ -122,6 +115,15 @@ class TestCreateUser(unittest.TestCase):
         self.assertEquals(user_saved.email,input["email"])
         self.assertEquals(user_saved.phone1,input["phone1"])
         self.assertEquals(user_saved.province,input["province"])
+
+    def test_duplicate_email(self):
+        input = create_random_user()
+        _, status_int = get_create_user_api_response(input)
+        self.assertEquals(status_int, success)
+        response, status_int = get_create_user_api_response(input)
+        self.assertEquals(status_int, missing_invalid_parameter)
+        errors_expected = [email_alreadyExists['error']]
+        self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
 
     def test_create_user_with_fb(self):
         input = create_random_user()

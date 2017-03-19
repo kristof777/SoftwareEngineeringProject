@@ -21,11 +21,14 @@ class CreateUser(BaseHandler):
                    returned.
 
                    If email already exists, then an error is returned.
+
         @post-cond: An user with provided information is created in the
                     database. Token and userId is returned as an response
                     object.
 
-        @return:
+        @return: A dictionary with all the user details attached with token,
+         and userId is sent on valid request.
+
     """
 
     def options(self, *args, **kwargs):
@@ -43,15 +46,6 @@ class CreateUser(BaseHandler):
         if not valid:
             return
 
-        phone2 = self.request.POST.get('phone2')
-        if not is_empty(phone2):
-            values['phone2'] = phone2
-
-        last_name = self.request.POST.get('lastName')
-        if not is_empty(last_name):
-            values['lastName'] = last_name
-
-
         if values['password'] != values['confirmedPassword']:
             error = {
                 password_mismatch['error']:
@@ -60,16 +54,22 @@ class CreateUser(BaseHandler):
                                     missing_invalid_parameter)
 
             return
+
+        assert values['password'] == values['confirmedPassword']
+        assert is_valid_password(values["password"])
+
         values['province'] = scale_province(str(values['province']))
+
         unique_properties = ['email']
         user_data = self.user_model.create_user(
             values['email'], unique_properties, email=values['email'],
             first_name=values['firstName'],
             password_raw=values['password'], phone1=values['phone1'],
-            phone2=phone2,
+            phone2=values["phone2"],
             province=values['province'], city=values['city'],
-            last_name=last_name,
+            last_name=values["lastName"],
             verified=False)
+
         # user_data[0] contains True if user was created successfully
         if not user_data[0]:
             error_json = json.dumps({email_alreadyExists['error']
@@ -80,18 +80,27 @@ class CreateUser(BaseHandler):
             return
 
         # user_data[1] contains Token if user was created successfully
+
+        assert user_data[1] is not None
+
         user = user_data[1]
         user_id = user.get_id()
         token = self.user_model.create_auth_token(user_id)
+
+        # if user was created using a fbId then an entry needs to be mapped from
+        # userId, and verification is not required if user is logged in from
+        # facebook.
         if "fbId" in values:
-            fb_field = FBLogin(user_id= int(user_id), fb_id = int(values["fbId"]))
+            fb_field = FBLogin(user_id=int(user_id), fb_id=int(values["fbId"]))
             fb_field.put()
         else:
             signup_token = self.user_model.create_signup_token(user_id)
 
+            # signing user in
             self.auth.get_user_by_token(user_id, token, remember=True,
                                         save_session=True)
 
+            # sending email to verify user's email account.
             verification_url = self.uri_for('verification', type='v', user_id=
             user_id, signup_token=signup_token, _full=True)
             message = mail.EmailMessage(
@@ -104,6 +113,9 @@ class CreateUser(BaseHandler):
              {}
              """.format(verification_url)
             message.send()
+
+        assert token is not None
+        assert user_id is not None
 
         write_success_to_response(self.response, {'authToken': token,
                                                   "userId": user_id})

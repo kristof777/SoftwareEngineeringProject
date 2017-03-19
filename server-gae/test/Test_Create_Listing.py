@@ -25,6 +25,9 @@ class TestCreateListing(unittest.TestCase):
     """
     def setUp(self):
         setup_testbed(self)
+        users = create_dummy_users_for_testing(Main, 1)
+        self.assertEquals(len(users), 1)
+        self.user = users[0]
 
     def test_empty_input(self):
         empty_input = {}
@@ -156,8 +159,7 @@ class TestCreateListing(unittest.TestCase):
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_correct_input(self):
-        inputs, users = create_dummy_listings_for_testing(Main, 1)
-        correct_input = inputs[0]
+        correct_input = create_random_listing(self.user['userId'], self.user['authToken'])
         correct_input["bathrooms"] = 5.5
         correct_input["isPublished"] = "True"
 
@@ -182,10 +184,9 @@ class TestCreateListing(unittest.TestCase):
         self.assertEquals(listing_created.images, json.loads(correct_input['images']))
 
     def test_invalid_bathroom_input(self):
-        inputs, users = create_dummy_listings_for_testing(Main, 1)
-        correct_input = inputs[0]
-        correct_input["bathrooms"] = 5.25
-        response, response_status = get_listing_api_response(correct_input)
+        invalid_bathroom_input = create_random_listing(self.user['userId'], self.user['authToken'])
+        invalid_bathroom_input["bathrooms"] = 5.25
+        response, response_status = get_listing_api_response(invalid_bathroom_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -195,10 +196,23 @@ class TestCreateListing(unittest.TestCase):
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
+    def test_empty_images_input(self):
+        empty_image_input = create_random_listing(self.user['userId'], self.user['authToken'])
+        empty_image_input["isPublished"] = "true"
+        empty_image_input["images"] = json.dumps([])
+        response, response_status = get_listing_api_response(empty_image_input)
+
+        self.assertEquals(response_status, missing_invalid_parameter)
+
+        errors_expected = [missing_image['error']]
+
+        error_keys = [str(x) for x in response]
+
+        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
 
     def test_correct_create_unpublished_listing(self):
-        inputs, users = create_dummy_listings_for_testing(Main, 1)
-        correct_input = inputs[0]
+        correct_input = create_random_listing(self.user['userId'], self.user['authToken'])
         correct_input['isPublished'] = "False"
         del correct_input['bedrooms']
         del correct_input['bathrooms']
@@ -224,8 +238,7 @@ class TestCreateListing(unittest.TestCase):
         self.assertEquals(None, listing_created.price)
 
     def test_missing_is_published(self):
-        inputs, users = create_dummy_listings_for_testing(Main, 1)
-        correct_input = inputs[0]
+        correct_input = create_random_listing(self.user['userId'], self.user['authToken'])
         del correct_input['isPublished']
         response, response_status = get_listing_api_response(correct_input)
 
