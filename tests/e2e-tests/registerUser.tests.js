@@ -1,6 +1,7 @@
 beforeEach(function () {
+    sleep();
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000; //20 seconds
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000; //60 seconds
 
 });
 
