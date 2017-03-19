@@ -40,19 +40,34 @@ export class LoginService {
     /**
      * Set the logged in user
      *
-     * @param user   the user who is logged in
+     * @param user  the user who is logged in
+     *
+     * @pre-cond    user is not null
+     * @post-cond   the user object is set to user
+     * @post-cond   the userId is set to user.id
      */
     public setUser(user: User){
+        assert.object(user, "User cannot be null.");
+
         LoginService.user = user;
         this.userId = user.id;
+
+        assert.equals(LoginService.user, user, "user was not set correctly.");
+        assert.equals(this.userId, user.id, "userId was not set correctly.");
     }
 
     /**
      * Update the auth token for the currently logged in user.
      *
      * @param authToken the new token
+     *
+     * @pre-cond    authToken is not null
+     * @pre-cond    authToken is a string
+     * @post-cond   authToken is updated
+     * @post-cond   authToken is inserted in the database
      */
     public setToken(authToken: string): void{
+        assert.object(authToken, "The received token was null");
         assert.string(authToken, "The received token was not a string");
 
         this.authToken = authToken;
@@ -86,6 +101,10 @@ export class LoginService {
      * Insert a new userId/authToken pair into the users.
      *
      * @param authToken the token to insert
+     *
+     * @pre-cond    LoginService.user is not null
+     * @pre-cond    db is not null
+     * @post-cond   authToken is inserted in the database
      */
     private updateAuthToken(authToken: string){
         assert.object(LoginService.user, "A user must be logged in to update the auth token.");
@@ -102,6 +121,10 @@ export class LoginService {
 
     /**
      * Load the most recent userId and auth token from the users phone.
+     *
+     * @pre-cond    LoginService.user is not null
+     * @pre-cond    db is not null
+     * @post-cond   if session info is in the database, it is loaded to userId and authToken.
      */
     private loadSessionInfo(){
         assert.object(LoginService.user, "A user must be logged in to update the auth token.");
