@@ -7,26 +7,11 @@ from extras.Base_Handler import BaseHandler
 class VerificationHandler(BaseHandler):
     """
     Class used to handle get and post.
-    Get:
-        @pre-cond: Expecting keys to be email, firstName, lastName,
-                   password, confirmedPassword, phone1, phone2(optional),
-                   city, postalCode. If any of these is not present an
-                   appropriate error and status code 400 is returned.
-
-                   password and ConfirmedPassword are expected to be equal then
-                   if not then appropriate missing_invalid_parameter_error is
-                   returned.
-
-                   If email already exists, then an error is returned.
-
-        @post-cond: An user with provided information is created in the
-                    database. Token and userId is returned as an response
-                    object.
-
-        @return: A dictionary with all the user details attached with token,
-         and userId is sent on valid request. is used to render an HTML page.
-
-    Post: Doesn't exist
+    Get: When user clicks on user email verification link, a get request is
+         sent to this class.
+        @pre-cond: User is expected to have a valid signup token, userId
+        @post-cond: User is verified.
+        @return: None
     """
     def get(self, *args, **kwargs):
         user = None
@@ -51,7 +36,6 @@ class VerificationHandler(BaseHandler):
         if not user.verified:
             user.verified = True
             user.put()
-            # self.display_message('User email address has been verified.')
             return
         elif verification_type == 'p':
             # supply user to the page

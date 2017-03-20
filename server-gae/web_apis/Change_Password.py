@@ -11,7 +11,7 @@ from extras.Required_Fields import check_required_valid
 
 class ChangePassword(BaseHandler):
     """
-    lass containing the get and post for Change Password.
+    class containing the get and post for Change Password.
     Get:  is used to render an HTML page.
     Post:
         @pre-cond: Expecting keys to be old_password,

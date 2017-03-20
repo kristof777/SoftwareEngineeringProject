@@ -13,6 +13,9 @@ exports.config = {
     specs: [
         './tests/e2e-tests/*.tests.js'
     ],
+    exclude: [
+        './tests/e2e-tests/registerUser.tests.js'
+    ],
     jasmineNodeOpts: {
         isVerbose: true,
     }

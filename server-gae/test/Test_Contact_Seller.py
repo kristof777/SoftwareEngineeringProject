@@ -13,6 +13,13 @@ from web_apis.Create_User import *
 
 
 class TestContactSeller(unittest.TestCase):
+    """
+    Test 1: Correct input.
+    Test 2: Sending message to itself
+    Test 3: Testing unauthorized user
+    Test 4: Testing unauthorized listing
+    Test 5: Testing with missing input
+    """
     def setUp(self):
         setup_testbed(self)
         self.user_buyer = create_dummy_users_for_testing(Main, 1)[0]
@@ -35,8 +42,8 @@ class TestContactSeller(unittest.TestCase):
             get_contact_seller_api_response(correct_input)
         self.assertEquals(response_status, success)
 
-    def test_unallowed_input(self):
-        unallowed_input = {
+    def test_un_allowed_input(self):
+        un_allowed_input = {
             "senderId": self.user_seller['userId'],
             "listingId": self.listing['listingId'],
             "receiverId": self.user_seller['userId'],
@@ -47,12 +54,11 @@ class TestContactSeller(unittest.TestCase):
         }
 
         response, response_status = \
-            get_contact_seller_api_response(unallowed_input)
+            get_contact_seller_api_response(un_allowed_input)
 
         self.assertEquals(response_status, processing_failed)
         errors_expected = [unallowed_message_send['error']]
-        error_keys = [str(x) for x in response]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_unauthorized_user_id_input(self):
         unauthorized_input = {
@@ -70,8 +76,7 @@ class TestContactSeller(unittest.TestCase):
 
         self.assertEquals(response_status, not_authorized['status'])
         errors_expected = [not_authorized['error']]
-        error_keys = [str(x) for x in response]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_unauthorized_listingId_input(self):
         unauthorized_input = {
@@ -89,8 +94,7 @@ class TestContactSeller(unittest.TestCase):
 
         self.assertEquals(response_status, un_auth_listing['status'])
         errors_expected = [un_auth_listing['error']]
-        error_keys = [str(x) for x in response]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def test_missing_input(self):
         missing_input = {}
@@ -106,8 +110,7 @@ class TestContactSeller(unittest.TestCase):
                            missing_email['error'],
                            missing_token['error'],
                            missing_receiverId['error']]
-        error_keys = [str(x) for x in response]
-        self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+        self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
     def tearDown(self):
         self.testbed.deactivate()

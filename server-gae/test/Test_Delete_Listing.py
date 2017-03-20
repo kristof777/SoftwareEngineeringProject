@@ -17,8 +17,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 class TestDeleteListing(unittest.TestCase):
     """
         test case 1: missing input
-        test case 2: unauthorized identifier
-        test case 3: success delivery
+        test case 2: unauthorized listing
+        test case 3: Test with invalid userId
+        test case 4: success delivery
 
     """
     def setUp(self):
@@ -69,7 +70,7 @@ class TestDeleteListing(unittest.TestCase):
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
 
-    def invalid_user_id(self):
+    def test_invalid_user_id(self):
         res_value, status = get_delete_response(get_delete_post_dictionary("blabla", "blabla", self.ownerToken))
         self.assertEquals(status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error'],
