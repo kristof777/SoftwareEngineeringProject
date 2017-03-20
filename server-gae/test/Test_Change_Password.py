@@ -54,7 +54,6 @@ class TestChangePassword(unittest.TestCase):
         error_keys = response.keys()
         self.assertTrue(are_two_lists_same(error_keys[0], not_authorized['error']))
 
-
     def test_missing_fields(self):
         # Test case: One or more fields were not entered
         input1 = {}  # Json object to send

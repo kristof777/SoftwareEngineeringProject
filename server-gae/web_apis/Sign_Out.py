@@ -24,5 +24,6 @@ class SignOut(BaseHandler):
         if not valid:
             return
 
-        self.auth.unset_session()
+        token = values['authToken']
+        self.user_model.delete_auth_token(int(values['userId']), token)
         write_success_to_response(self.response, {})
