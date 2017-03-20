@@ -69,7 +69,7 @@ class User(Webapp2User):
     def set_last_name(self, last_name):
         self.last_name = last_name
 
-    _key_to_value = {
+    _key_to_set_value = {
         "email": set_email,
         "firstName": set_first_name,
         "lastName": set_last_name,
@@ -80,7 +80,48 @@ class User(Webapp2User):
     }
 
     def set_property(self, key, value):
-        self._key_to_value[key](self, str(value))
+        self._key_to_set_value[key](self, str(value))
 
+    _optional = ["phone2"]
+    _required_fields = ["email", "firstName", "lastName", "phone1",
+                        "phone2", "province", "city"]
 
+    def get_from_key(self, key):
+        _key_to_get_value = {
+            "email": self.email,
+            "firstName": self.first_name,
+            "lastName": self.last_name,
+            "phone1": self.phone1,
+            "phone2": self.phone2,
+            "province": self.province,
+            "city": self.city
+        }
+        assert key in _key_to_get_value
+        return _key_to_get_value[key]
 
+    def __cmp__(self, other):
+        """
+        Compares if two users have same data
+        :param other: Other user
+        :return:
+        """
+        if type(other) != type(self):
+            return False
+        for key in self._required_fields:
+            if self.get_from_key(key) != other.get_from_key(key):
+                return False
+        return True
+
+    def compare_with_dictionary(self, dictionary):
+        """
+        Checks if this object has same values as the user in dictionary.
+        :param dictionary: a user dictionary
+        :return: True if object has equal values as the dictionary
+        """
+        for key in self._required_fields:
+            if key in dictionary:
+                if self.get_from_key(key) != dictionary[key]:
+                    return False
+            elif key not in self._optional:
+                return False
+        return True

@@ -27,7 +27,6 @@ class ChangePassword(BaseHandler):
     def options(self, *args, **kwargs):
         setup_api_options(self)
 
-
     def get(self):
         self.render_template('../webpages/Change_Password.html')
 

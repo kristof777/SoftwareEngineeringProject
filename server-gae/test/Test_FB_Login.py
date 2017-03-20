@@ -8,7 +8,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Utils import *
 from models.User import User
 import Main
-from models.FB import FBLogin
+from models.FacebookUser import FacebookUser
 from API_NAME import *
 
 class TestFacebookLogin(unittest.TestCase):
@@ -34,8 +34,8 @@ class TestFacebookLogin(unittest.TestCase):
         self.assertEquals(user_saved.email,input["email"])
         self.assertEquals(user_saved.phone1,input["phone1"])
         self.assertEquals(user_saved.province,input["province"])
-        fb_e_id = FBLogin.query().fetch(keys_only=True)[0].integer_id()
-        fb_e = FBLogin.get_by_id(fb_e_id)
+        fb_e_id = FacebookUser.query().fetch(keys_only=True)[0].integer_id()
+        fb_e = FacebookUser.get_by_id(fb_e_id)
         self.assertEquals(fb_e.user_id,int(response_body["userId"]))
         self.assertEquals(fb_e.fb_id, int(input["fbId"]))
 

@@ -1,6 +1,6 @@
 import os
 from extras.Utils import *
-from models.FB import FBLogin
+from models.FacebookUser import FacebookUser
 from models.User import User
 import sys
 from extras.Base_Handler import BaseHandler
@@ -41,10 +41,11 @@ class FacebookLogin(BaseHandler):
             return
 
         # find the correct user with userId
-        fb_query = FBLogin.query().filter(FBLogin.fb_id == int(values["fbId"])).fetch(keys_only = True)
+        fb_query = FacebookUser.query().filter(
+            FacebookUser.fb_id == int(values["fbId"])).fetch(keys_only=True)
         assert len(fb_query) == 1
         fb_entry_id = fb_query[0].integer_id()
-        fb_entry = FBLogin.get_by_id(fb_entry_id)
+        fb_entry = FacebookUser.get_by_id(fb_entry_id)
         fb_user = User.get_by_id(fb_entry.user_id)
         token = self.user_model.create_auth_token(fb_entry.user_id)
         user_dict = {'token': token,

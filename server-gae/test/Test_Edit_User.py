@@ -12,8 +12,8 @@ from API_NAME import *
 
 class TestEditUser(unittest.TestCase):
     """
-    Test case 1: email already exists
-    Test case 2: nothing requested to change
+    Test case 1: nothing requested to change
+    Test case 2: email already exists
     Test case 3: unrecognized key
     Test case 4: invalid userId
     Test case 5: missing userId
@@ -68,7 +68,7 @@ class TestEditUser(unittest.TestCase):
         self.assertEqual(status, missing_user_id["status"])
         self.assertTrue(missing_user_id["error"] in res_value)
 
-    def test_passoword_change(self):
+    def test_password_change(self):
         user_id = self.users[0]["userId"]
         token = self.users[0]["authToken"]
         change_values = {"password" :"1234567891"}
@@ -113,7 +113,6 @@ class TestEditUser(unittest.TestCase):
         new_user = User.get_by_id(int(self.users[2]["userId"]))
         self.assertEqual(new_user.phone1, change_values["phone1"])
         self.assertEqual(new_user.last_name, change_values["lastName"])
-
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are

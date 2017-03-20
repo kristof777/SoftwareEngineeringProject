@@ -389,11 +389,26 @@ def is_valid_bool(input_string):
         return False
 
 
+def is_valid_json(json_str):
+    """
+    Checks if json_str is a valid json object or not.
+    :precond: json_str is not None
+    :param json_str: A json string.
+    :return: True if a valid json string, otherwise false.
+    """
+    assert json_str is not None
+    try:
+        json.loads(json_str)
+        return True
+    except ValueError:
+        return False
+
+
 def is_valid_phone(phone):
     """
     Checks if phone is valid phone or not. Valid here means, if it is of 10
     digits or not.
-    :precond phone is not null
+    :precond phone is not None
     :param phone: A number or a string.
     :return: True if a valid phone number, otherwise false
     """
@@ -611,7 +626,8 @@ valid_check = {
     "readDel": is_valid_read_del,
     "fbId": is_valid_integer,
     "senderId": is_valid_integer,
-    "receiverId": is_valid_integer
+    "receiverId": is_valid_integer,
+    "changeValues": is_valid_json
 }
 
 
@@ -724,3 +740,4 @@ def setup_api_options(response):
     response.headers['Access-Control-Allow-Headers'] = \
         'Origin, X-Requested-With, Content-Type, Accept'
     response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
+
