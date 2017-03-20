@@ -90,7 +90,7 @@ def check_required_valid(api, post, response, auth_required=False):
         if not valid_user:
             Utils.write_error_to_response \
                 (response,
-                 {not_authorized['error']: "not authorized to create listings"},
+                 {not_authorized['error']: "not authorized"},
                  not_authorized['status'])
             return False, None
 
