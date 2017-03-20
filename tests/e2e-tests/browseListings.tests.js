@@ -64,6 +64,11 @@ afterEach(function() {
      });
 });
 
+
+/**
+ * Force the browser to sleep for a specified amount of time.
+ * @param {number} time - The amount of time to sleep (in milliseconds)
+ */
 function sleep(){
     browser.driver.sleep(500);
 }
@@ -86,6 +91,11 @@ function checkDisplayed(element, item){
     expect(element.isDisplayed()).toBe(true, "Expected " + item + " to be displayed, but was not");
 }
 
+/**
+* Try to sign in with the expectation of a correct username and password
+* @param {string} emailInput - the email field to input
+* @param {string} passwordInput - the password field to input
+*/
 function attemptSignIn(emailInput, passwordInput){
     let email = element(by.id('email')).all(by.tagName('input')).first();
     let password = element(by.id('password')).all(by.tagName('input')).first();
