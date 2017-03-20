@@ -34,7 +34,7 @@
 
         <ion-item>
             <ion-label stacked>Secondary Phone</ion-label>
-            <ion-input formControlName="phone2" type="tel" placeholder="{{ currentUser?.phone2 }}"></ion-input>
+            <ion-input formControlName="phone2" type="tel" placeholder="{{ currentUser?.phone2 }}" id="settingsSecondPhoneNumber"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -65,6 +65,6 @@
 <ion-footer>
     <ion-item>
         <button item-left ion-button clear (click)="signOut()">Sign Out</button>
-        <button item-right ion-button clear (click)="saveChanges()">Save</button>
+        <button item-right ion-button clear (click)="saveChanges()" id="settingsSave">Save</button>
     </ion-item>
 </ion-footer>
