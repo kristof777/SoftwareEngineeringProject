@@ -25,7 +25,6 @@ describe('Registering new user as a user would', function() {
         registerButton.click().then(function(){
             sleep();
 
-            /*
             attemptSignUp('wrongFormatEmail', 'Password123', 'Password123');
 
             attemptSignUp('test1@test.ca', 'weakpassword', 'weakpassword');
@@ -36,12 +35,12 @@ describe('Registering new user as a user would', function() {
             attemptSignUp('test1@test.ca', 'Password123', 'Password123');
 
             sleep();
-            */
+
         });
 
         done();
     });
-     /*
+
     it('Should register Page 2', function(done){
         attemptSignUpInfo('John', 'Smith', '30655512341234');
 
@@ -93,7 +92,7 @@ describe('Registering new user as a user would', function() {
 
         done();
      });
-     */
+
 
     //TODO Fix to accomodate Browse Page changes
 

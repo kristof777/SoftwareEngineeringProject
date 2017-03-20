@@ -18,7 +18,8 @@ class SignOut(BaseHandler):
     def post(self):
         setup_post(self.response)
         valid, values = \
-            check_required_valid(sign_out_api, self.request.POST, self.response)
+            check_required_valid(sign_out_api, self.request.POST,
+                                 self.response, True)
 
         if not valid:
             return
