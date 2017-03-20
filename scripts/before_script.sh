@@ -9,8 +9,10 @@ if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
   # TODO: KEYS FOR ENCRYPTION FOR IOS DEPLOYMENT
   echo "should be osx"
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-  echo "got to linux before_script"
-  gulp test
+  if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    echo "got to linux before_script"
+    gulp test
+  fi
 else
   echo "should be andriod"
 fi
