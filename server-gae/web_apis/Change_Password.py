@@ -23,13 +23,6 @@ class ChangePassword(BaseHandler):
                     an appropriate error message and code.
 
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.render_template('../webpages/Change_Password.html')
-
     def post(self):
         setup_post(self.response)
         # For each required field, making sure it is non-null, non-empty

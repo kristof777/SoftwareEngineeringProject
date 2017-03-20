@@ -25,12 +25,6 @@ class FacebookLogin(BaseHandler):
                     database if it doesn't exist before, or update the liked field if it exists.
                     Return nothing.
     """
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        pass
-
     def post(self):
         setup_post(self.response)
 

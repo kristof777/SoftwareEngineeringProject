@@ -15,7 +15,11 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 
 class TestSignInWithToken(unittest.TestCase):
-    # Set up the testbeddegod7642q5
+    """
+    Test case 1: Testing with missing input
+    Test case 2: Testing with incorrect token
+    Test case 3:
+    """
 
     def setUp(self):
         setup_testbed(self)

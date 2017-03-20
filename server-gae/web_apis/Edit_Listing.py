@@ -16,17 +16,14 @@ class EditListing(webapp2.RequestHandler):
     Class used to handle get and post.
     Get:  is used to render an HTML page.
     Post:
-        @pre-cond: the listing object should exist
+        @pre-cond: The listing object should exist.
                    listingId and userId are supposed to be integers,
                    valuesRequired should be a dictionary
-        @post-cond: a timestamp of modified date should be returned
+                   If is published field is changed, then listing should have
+                   all required fields.
+        @post-cond:
+        @return: a timestamp of modified date should be returned
     """
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
         setup_post(self.response)
         valid, values = \
@@ -39,13 +36,9 @@ class EditListing(webapp2.RequestHandler):
         change_values = json.loads(values['changeValues'])
 
         # check if there's any unrecognized key presented in changeValues
-        if any(key not in ["squareFeet", "bedrooms", "bathrooms", "price",
-                           "city",
-                           "province", "address", "description", "isPublished",
-                           "images","thumbnailImageIndex", "postalCode"] for key in
-               change_values.keys()):
-            write_error_to_response(self.response, {unrecognized_key['error']:
-                                                        "Unrecognized key found"},
+        if any(key not in listing_keys for key in change_values.keys()):
+            error = {unrecognized_key['error']: "Unrecognized key found"}
+            write_error_to_response(self.response, error,
                                     unrecognized_key['status'])
             return
 

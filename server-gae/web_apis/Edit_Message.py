@@ -17,13 +17,6 @@ class EditMessage(webapp2.RequestHandler):
          @post-cond: Message is either deleted for modified
          @return-api: Nothing is being returned in this API
      """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
         setup_post(self.response)
         valid, values = \

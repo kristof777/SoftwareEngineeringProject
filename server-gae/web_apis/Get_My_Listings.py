@@ -12,15 +12,10 @@ class GetMyListing(webapp2.RequestHandler):
     Class used to handle get and post.
     Get:  do nothing
     Post:
-        @pre-cond: Expecting keys to be userId
-        @post-cond: all my listings
+        @pre-cond: Expecting keys to be userId and authToken
+        @post-cond: Nothing
+        @return: all my listings of the user with userID
     """
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
         setup_post(self.response)
 

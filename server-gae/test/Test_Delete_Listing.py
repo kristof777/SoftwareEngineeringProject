@@ -20,7 +20,6 @@ class TestDeleteListing(unittest.TestCase):
         test case 2: unauthorized listing
         test case 3: Test with invalid userId
         test case 4: success delivery
-
     """
     def setUp(self):
         setup_testbed(self)
@@ -53,7 +52,8 @@ class TestDeleteListing(unittest.TestCase):
         self.assertEquals(res_value, None)
 
     def test_missing_input(self):
-        res_value, status = get_delete_response(get_delete_post_dictionary("", "", ""))
+        res_value, status = get_delete_response(
+            get_delete_post_dictionary("", "", ""))
 
         self.assertEqual(status, missing_invalid_parameter)
 
@@ -65,13 +65,15 @@ class TestDeleteListing(unittest.TestCase):
     def test_listing_auth(self):
 
         res_value, status = get_delete_response(
-            get_delete_post_dictionary(self.deleterId, self.listingId, self.deleterToken))
+            get_delete_post_dictionary(
+                self.deleterId, self.listingId, self.deleterToken))
         self.assertEquals(status, not_authorized['status'])
         error_expected = Error_Code.not_authorized['error']
         self.assertTrue(error_expected in res_value)
 
     def test_invalid_user_id(self):
-        res_value, status = get_delete_response(get_delete_post_dictionary("blabla", "blabla", self.ownerToken))
+        res_value, status = get_delete_response(
+            get_delete_post_dictionary("invalid", "invalid", self.ownerToken))
         self.assertEquals(status, missing_invalid_parameter)
         errors_expected = [Error_Code.invalid_user_id['error'],
                            Error_Code.invalid_listing_id['error']]
@@ -79,7 +81,8 @@ class TestDeleteListing(unittest.TestCase):
 
     def test_correct_input(self):
         res_value, status = get_delete_response(
-            get_delete_post_dictionary(self.ownerId, self.listingId, self.ownerToken))
+            get_delete_post_dictionary(
+                self.ownerId, self.listingId, self.ownerToken))
         self.assertEquals(status, success)
 
         listing_changed = Listing.get_by_id(self.listingId)

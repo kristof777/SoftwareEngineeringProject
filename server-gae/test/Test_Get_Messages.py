@@ -15,7 +15,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class TestGetMessages(unittest.TestCase):
     """
-    Test cases
+    Test case:1
     successful get info
     Invalid userId
     """
@@ -32,33 +32,41 @@ class TestGetMessages(unittest.TestCase):
         self.messagers = create_dummy_users_for_testing(Main, 3)
         assert len(self.messagers) == 3
 
-        res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[0]['userId'],
-                                                                                 self.seller['userId'],
-                                                                                 self.listings[0]['listingId'],
-                                                                                 self.messagers[0]['authToken'],
-                                                                                 "Interested in your listing!",
-                                                                                 self.messagers[0]['phone1'],
-                                                                                 self.messagers[0]['email']))
+        res_value, status = get_contact_response(
+            get_contact_seller_post_dictionary(
+                self.messagers[0]['userId'],
+                self.seller['userId'],
+                self.listings[0]['listingId'],
+                self.messagers[0]['authToken'],
+                "Interested in your listing!",
+                self.messagers[0]['phone1'],
+                self.messagers[0]['email']))
+
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[1]['userId'],
-                                                                                 self.seller['userId'],
-                                                                                 self.listings[1]['listingId'],
-                                                                                 self.messagers[1]['authToken'],
-                                                                                 "Any time we can meet up?",
-                                                                                 self.messagers[1]['phone1'],
-                                                                                 self.messagers[1]['email']))
+        res_value, status = get_contact_response(
+            get_contact_seller_post_dictionary(
+                self.messagers[1]['userId'],
+                self.seller['userId'],
+                self.listings[1]['listingId'],
+                self.messagers[1]['authToken'],
+                "Any time we can meet up?",
+                self.messagers[1]['phone1'],
+                self.messagers[1]['email']))
+
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
-        res_value, status = get_contact_response(get_contact_seller_post_dictionary(self.messagers[2]['userId'],
-                                                                                 self.seller['userId'],
-                                                                                 self.listings[2]['listingId'],
-                                                                                 self.messagers[2]['authToken'],
-                                                                                 "Nice house!",
-                                                                                 self.messagers[2]['phone1'],
-                                                                                 self.messagers[2]['email']))
+        res_value, status = get_contact_response(
+            get_contact_seller_post_dictionary(
+                self.messagers[2]['userId'],
+                self.seller['userId'],
+                self.listings[2]['listingId'],
+                self.messagers[2]['authToken'],
+                "Nice house!",
+                self.messagers[2]['phone1'],
+                self.messagers[2]['email']))
         self.assertEqual(status, success)
         self.assertEquals(res_value, None)
 
@@ -86,15 +94,12 @@ class TestGetMessages(unittest.TestCase):
 
         self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
-
     def tearDown(self):
-        # Don't forget to deactivate the testbed after the tests are
-        # completed. If the testbed is not deactivated, the original
-        # stubs will not be restored.
         self.testbed.deactivate()
 
 
-def get_contact_seller_post_dictionary(sender_id, receiver_id, listing_id, auth_token, message,phone, email):
+def get_contact_seller_post_dictionary(sender_id, receiver_id, listing_id,
+                                       auth_token, message, phone, email):
     return {
             "senderId": sender_id,
             "receiverId": receiver_id,

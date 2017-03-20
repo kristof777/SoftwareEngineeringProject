@@ -30,13 +30,6 @@ class CreateUser(BaseHandler):
          and userId is sent on valid request.
 
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.render_template('../webpages/Create_User.html')
-
     def post(self):
         setup_post(self.response)
         valid, values = \

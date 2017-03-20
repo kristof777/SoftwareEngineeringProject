@@ -29,13 +29,6 @@ class CreateListing(webapp2.RequestHandler):
                     object.
 
     """
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    # this GET method is only used for the testing browser
-    def get(self):
-        self.render_template('../webpages/Create_Listing.html')
-
     def post(self):
         setup_post(self.response)
         valid, values = \

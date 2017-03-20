@@ -7,16 +7,16 @@ from API_NAME import get_listing_api
 from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
-DEFAULT_MAX_LIMIT = 20 # max number of listings required, by default (if not provided)
+# max number of listings required, by default (if not provided)
+DEFAULT_MAX_LIMIT = 20
 
 
 class GetListing(webapp2.RequestHandler):
     """
-    Class used to handle get filtered listings.
-    Get:  do nothing
     Post:
         @pre-cond: all keys are optional
-        @post-cond: get all listings that match the filter back as response
+        @post-cond: None
+        @return-api: get all listings that match the filter back as response
     """
     def options(self, *args, **kwargs):
         setup_api_options(self)

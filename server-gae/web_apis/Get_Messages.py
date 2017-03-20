@@ -10,19 +10,12 @@ sys.path.append("../")
 
 class GetMessages(webapp2.RequestHandler):
     """
-     Class used to handle get and post.
-     Get:  do nothing
      Post:
-         @pre-cond: Expecting keys to be userId
-         @post-cond: all the messages that sent to me
+         @pre-cond: Expecting keys to be userId, authToken
+                    authToken should be valid.
+         @post-cond: None
+         @return: All the messages of the user with userId.
      """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
         setup_post(self.response)
 

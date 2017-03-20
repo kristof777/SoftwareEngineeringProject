@@ -26,13 +26,6 @@ class ContactSeller(BaseHandler):
 
 
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        pass
-
     def post(self):
         setup_post(self.response)
 
