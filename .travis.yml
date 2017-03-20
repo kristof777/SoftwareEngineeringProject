@@ -13,8 +13,8 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/yaml-3.10:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
   BUILD_TYPE=test
-  RELEASE_ID=ID4
-  TESTING_BRANCH=id4_ReadyForTesting
+  RELEASE_ID=ID5
+  TESTING_BRANCH=id5_ReadyForTesting
   
 
 
@@ -23,7 +23,7 @@ branches:
   - master
   - develop
   - build_dev
-  - id4
+  - id5
     
 language: node_js
 cache:
