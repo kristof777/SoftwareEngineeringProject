@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author: Chris Mykota-Reid
-# Gets ran after the smoke tests pass.  
+# Gets ran after the smoke tests pass.
 # Sends the sources code to a branch for more rigorous testing.
 # Is a modification of the deploy script.
 
