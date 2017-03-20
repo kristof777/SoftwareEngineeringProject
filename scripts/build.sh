@@ -36,7 +36,7 @@ android_build(){
   ionic platform remove android
   ionic platform add android
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    ionic build android --release
+    ionic build android 
   else
     ionic build android
     #xvfb-run /home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd   
