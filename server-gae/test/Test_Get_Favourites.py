@@ -13,9 +13,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class TestGetFavouriteListing(unittest.TestCase):
     """
-    Test cases
-    successful get info
-    Invalid userId
+    Test case 1: successful get info
+    Test case 2: Invalid userId
     """
     def setUp(self):
         setup_testbed(self)

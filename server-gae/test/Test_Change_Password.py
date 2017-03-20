@@ -11,6 +11,14 @@ from extras.Utils import *
 
 
 class TestChangePassword(unittest.TestCase):
+    """
+    Test case 1: Success case
+    Test case 2: One or more fields were not entered
+    Test Case 3: Incorrect old password
+    Test Case 4: Passwords do not match
+    Test Case 5: new passwords match but are not strong
+    Test case 6: new passwords and old password are the same
+    """
     def setUp(self):
         setup_testbed(self)
         # I need to create the database entry manually because I need access

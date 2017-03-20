@@ -12,14 +12,16 @@ from API_NAME import *
 
 class SignIn(BaseHandler):
     """
-    The implementation above renders the login page when the request
-    comes via GET and processes the credentials upon POST. When authentication
-    fails it renders the login page and passes the username to the template so
-    that the corresponding field can be pre-filled.
-
-    @pre-condition: Post has email and password
-    @post-condition:
-    @return-api:
+    SignIn class is used to respond to request to signIn api.
+    The post method in this class is used to sign in the user by validating
+    the password, and creating a token for the user.
+    POST
+        @pre-cond: Expecting keys to be userId and password.
+                   User with provided userId should be present in the database.
+                   password should be valid for given userId.
+        @post-cond: A token is generated which will allow user to login.
+        @return-api: A valid Token, with all the user details is returned in
+                     response.
     """
 
     def options(self, *args, **kwargs):

@@ -11,8 +11,8 @@ from extras.Required_Fields import check_required_valid
 
 class EditUser(BaseHandler):
     """
-       Class used to handle get and post.
-       Get:  is used to render an HTML page.
+    EditUser class is used to respond to request to editUser api.
+    The post method in this class is used to edit the user information.
        Post:
            @pre-cond: Expecting keys to be changeValues, userId, authToken.
                       If any of these is not present an appropriate error and

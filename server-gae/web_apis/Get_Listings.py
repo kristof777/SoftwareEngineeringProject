@@ -13,17 +13,32 @@ DEFAULT_MAX_LIMIT = 20
 
 class GetListing(webapp2.RequestHandler):
     """
+    GetListing class is used to respond to request to getListing api.
+    The post method in this class is used to get all the listings.
     Post:
-        @pre-cond: all keys are optional
-        @post-cond: None
-        @return-api: get all listings that match the filter back as response
+        @pre-cond: Expecting keys to be userId, authToken, valuesRequired,
+                   maxLimit, filter and listingIdList.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
+                   filter should be a json dictionary.
+                   valuesRequired should be a json array.
+                   Both filter and listingIdList should not be present.
+        @post-cond: Nothing
+        @return-api: maxLimit number of listings are returned based on the
+                     request, if maxLimit is not present it is set to
+                     DEFAULT_MAX_LIMIT.
+                     only information about keys present in valuesRequired array
+                     is returned. If valuesRequired is not present, then only
+                     listing ids are returned.
+                     if none of listingIdList and filter are provided, then
+                     default filter present inside the listing model is used,
+                     and an array of listings are returned according to that
+                     default filter. If listingIdList is present then
+                     information about those listing id's are returned that
+                     are present in listingIdList array.
+                     If filter is provided then listing which follow the filter
+                     are returned.
     """
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
         setup_post(self.response)
         valid, values = \

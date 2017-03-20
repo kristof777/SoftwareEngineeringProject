@@ -10,17 +10,19 @@ sys.path.append("../")
 
 class GetFavourites(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  do nothing
+    GetFavourites class is used to respond to request to getFavourites api.
+    The post method in this class is used to get all the listings liked by
+    the user.
     Post:
-        @pre-cond: Expecting keys to be userId
-        @post-cond: favorite listings that are published
+        @pre-cond: Expecting keys to be userId and authToken.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
+        @post-cond: Nothing
+        @return-api: All the listing liked by the user with userId are returned.
     """
+
     def options(self, *args, **kwargs):
         setup_api_options(self)
-
-    def get(self):
-        self.response.out.write()
 
     def post(self):
         setup_post(self.response)

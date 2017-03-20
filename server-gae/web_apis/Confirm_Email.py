@@ -6,7 +6,6 @@ from extras.Base_Handler import BaseHandler
 
 class VerificationHandler(BaseHandler):
     """
-    Class used to handle get and post.
     Get: When user clicks on user email verification link, a get request is
          sent to this class.
         @pre-cond: User is expected to have a valid signup token, userId

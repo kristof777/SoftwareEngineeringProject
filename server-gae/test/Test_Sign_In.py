@@ -13,7 +13,14 @@ from API_NAME import *
 from extras.Utils import get_response_from_post
 
 
-class TestHandlerSignIn(unittest.TestCase):
+class TestSignIn(unittest.TestCase):
+    """
+    Test case 1: With correct email and password.
+    Test case 2: With case insensitive email
+    Test case 3: with empty input
+    Test case 4: incorrect password
+    Test case 5: incorrect email
+    """
     def setUp(self):
         setup_testbed(self)
         self.database_user = create_random_user()
@@ -57,7 +64,6 @@ class TestHandlerSignIn(unittest.TestCase):
         # checking if there is a difference between error_keys and what we got
         self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
 
-
     def test_incorrect_password(self):
         # Test2: When incorrect password is entered
         input2 = {'email': 'student@usask.ca',
@@ -75,7 +81,6 @@ class TestHandlerSignIn(unittest.TestCase):
         self.assertEquals(response_status, unauthorized_access)
         self.assertTrue(
             are_two_lists_same(response.keys(), [not_authorized["error"]]))
-
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are

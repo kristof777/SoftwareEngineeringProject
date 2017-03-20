@@ -12,18 +12,16 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class FacebookLogin(BaseHandler):
     """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
-    Post:
-        @pre-cond: Expecting keys to be listingId, userId and liked. If any
-                   of these is not present an appropriate error and
-                   status code 400 is returned.
-
-                   listingId and userId are supposed to be integers, and liked
-                   is either "True" or "False".
-        @post-cond: A favorite object with provided listingId and userId is created in the
-                    database if it doesn't exist before, or update the liked field if it exists.
-                    Return nothing.
+    FacebookLogin class is used to respond to request to signInWithFacebook api.
+    The post method in this class is used to sign in the user by validating
+    the facebook id, and creating a token for the user.
+    POST
+        @pre-cond: Expecting keys to be fbId
+                   User with provided fbId should be present in the
+                   database.
+        @post-cond: A token is generated which will allow user to login.
+        @return-api: A valid Token, with all the user details is returned in
+                     response.
     """
     def post(self):
         setup_post(self.response)

@@ -15,9 +15,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class TestGetMessages(unittest.TestCase):
     """
-    Test case:1
-    successful get info
-    Invalid userId
+    Test case 1: With valid input
+    Test case 2: With invalid user id
     """
     def setUp(self):
         setup_testbed(self)

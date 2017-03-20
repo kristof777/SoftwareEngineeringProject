@@ -18,7 +18,9 @@ class TestSignInWithToken(unittest.TestCase):
     """
     Test case 1: Testing with missing input
     Test case 2: Testing with incorrect token
-    Test case 3:
+    Test case 3: Testing with incorrect user id
+    Test case 4: Testing with correct information
+
     """
 
     def setUp(self):

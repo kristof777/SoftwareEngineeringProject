@@ -8,6 +8,12 @@ from Validate_Email import validate_email
 from google.appengine.ext import testbed
 import re
 
+"""
+This file contains all the common function that were required in various api
+calls.
+"""
+
+
 
 """
 province_abbr and province_complete are all the provinces of Canada,

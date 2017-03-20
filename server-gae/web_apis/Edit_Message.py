@@ -10,11 +10,19 @@ sys.path.append("../")
 
 class EditMessage(webapp2.RequestHandler):
     """
-     Class used to handle get and post.
-     Get:  do nothing
+    EditMessage class is used to respond to request to editMessage api.
+    The post method in this class is used to edit the given message.
      Post:
-         @pre-cond: Expecting keys to be messageId, readDel
-         @post-cond: Message is either deleted for modified
+         @pre-cond: Expecting keys to be userId, messageId, readDel and
+                    authToken.
+                    User with provided userId should be present in the database.
+                    authToken should be valid for given userId.
+                    message with messageId should be present in the database.
+                    message should belong the user requesting to edit.
+                    readDel should be either r, R, d, D which represents read
+                    or delete.
+         @post-cond: If readDel is r or R then message is set to read, otherwise
+                     if it is d or D then message is deleted from the database.
          @return-api: Nothing is being returned in this API
      """
     def post(self):
@@ -40,10 +48,11 @@ class EditMessage(webapp2.RequestHandler):
                 not_authorized['error']: "not authorized to edit this message"},
                                     not_authorized['status'])
             return
-
+        # r represent read
         if values["readDel"] in ["r", "R"]:
             message.received = True
             message.put()
+        # d represent delete
         elif values["readDel"] in ["d", "D"]:
             message.key.delete()
         write_success_to_response(self.response, {})

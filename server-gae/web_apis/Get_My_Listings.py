@@ -9,12 +9,15 @@ sys.path.append("../")
 
 class GetMyListing(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  do nothing
+    GetMyListing class is used to respond to request to getMyListing api.
+    The post method in this class is used to get all the listings added by
+    the provided user.
     Post:
-        @pre-cond: Expecting keys to be userId and authToken
+        @pre-cond: Expecting keys to be userId and authToken.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
         @post-cond: Nothing
-        @return: all my listings of the user with userID
+        @return-api: All the listing of the user with userId are returned.
     """
     def post(self):
         setup_post(self.response)

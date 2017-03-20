@@ -13,7 +13,7 @@ from API_NAME import *
 
 class TestFacebookLogin(unittest.TestCase):
     """
-
+    Test case 1: successful login
     """
 
     def setUp(self):

@@ -12,18 +12,17 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class LikeDislikeListing(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
+    LikeDislikeListing class is used to respond to request to like api.
+    The post method in this class is used to like or dislike the listing.
     Post:
-        @pre-cond: Expecting keys to be listingId, userId and liked. If any
-                   of these is not present an appropriate error and
-                   status code 400 is returned.
-
-                   listingId and userId are supposed to be integers, and liked
+        @pre-cond: Expecting keys to be listingId, userId and liked.
+                   listingId and userId are supposed to be integers and
+                   correspond to valid user and listing. liked
                    is either "True" or "False".
-        @post-cond: A favorite object with provided listingId and userId is created in the
-                    database if it doesn't exist before, or update the liked field if it exists.
-                    Return nothing.
+        @post-cond: A favorite object with provided listingId and userId is
+                    created in the database if it doesn't exist before, or
+                    update the liked field if it exists.
+        @return-api: nothing.
     """
 
     def options(self, *args, **kwargs):

@@ -13,15 +13,13 @@ from extras.Base_Handler import BaseHandler
 
 class ContactSeller(BaseHandler):
     """
-    class containing the get and post for Contact Seller.
-    Get:  is used to render an HTML page.
     Post:
         @pre-cond: Expecting keys to be senderId, listingId, message, phone,
                    email, phone, email, received, createdDate, authToken
                    At least one of email or phone should be present.
                    Sender should have valid authToken.
         @post-cond: On success, A message is sent to owner of the listing.
-        @:return:   A new token if success with code 200, otherwise,
+        @return:   A new token if success with code 200, otherwise,
                     an appropriate error message and code.
 
 

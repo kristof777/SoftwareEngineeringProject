@@ -10,12 +10,16 @@ sys.path.append("../")
 
 class GetMessages(webapp2.RequestHandler):
     """
-     Post:
-         @pre-cond: Expecting keys to be userId, authToken
-                    authToken should be valid.
-         @post-cond: None
-         @return: All the messages of the user with userId.
-     """
+    GetMessages class is used to respond to request to getMessages api.
+    The post method in this class is used to get all the messages of
+    the provided user.
+    Post:
+        @pre-cond: Expecting keys to be userId and authToken.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
+        @post-cond: Nothing
+        @return-api: All the messages of the user with userId are returned.
+    """
     def post(self):
         setup_post(self.response)
 

@@ -11,20 +11,18 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 class CreateListing(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
     Post:
         @pre-cond: Expecting keys to be price, squareFeet, bedrooms,
                    bathrooms, description, images, thumbnailImageIndex,
                    city, address, province, userId, isPublished. If any
                    of these is not present an appropriate error and
                    status code 400 is returned.
-
                    There's a few fields which are supposed to be integer:
-                   bedrooms, sqft, price, userId and thumbnailImageIndex;
+                   bedrooms, squareFeet, price, userId and thumbnailImageIndex;
                    There's a field that's supposed to be a float: bathrooms;
                    There's a field that's supposed to be a bool: isPublished
-        @post-cond: A listing with provided information is created in the
+        @post-cond: A listing is created in the database
+        @return-api: A listing with provided information is created in the
                     database. ListingId is returned as an response
                     object.
 

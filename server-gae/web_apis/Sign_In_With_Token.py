@@ -9,10 +9,17 @@ from extras.Required_Fields import check_required_valid
 
 class SignInWithToken(BaseHandler):
     """
+    SignInWithToken class is used to respond to request to signInWithToken api.
+    The post method in this class is used to sign in the user by validating
+    the token, and replacing it with the new token.
     POST
-        @pre-condition: Post has email and token
-        @post-condition: None
-        @return-api: The user's token
+        @pre-cond: Expecting keys to be userId and authToken.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
+        @post-cond: authToken provided is not valid anymore.
+                    A new token is generated which will allow user to login.
+        @return-api: A new valid Token, with all the user details is returned in
+                     response.
     """
     def post(self):
         setup_post(self.response)

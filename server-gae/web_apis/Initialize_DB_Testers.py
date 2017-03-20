@@ -13,22 +13,15 @@ import Main
 
 class InitializeDB(BaseHandler):
     """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
+    InitializeDB class is used to reinitialize the database with information
+    provided in Test_Database.py. Please use this with caution, this exists
+    only for testing purposes. A better way has to found in order to overcome
+    this issue.
+    !!!NOTE: This class should only be used on testing database!!!
     Post:
-        @pre-cond: Expecting keys to be email, firstName, lastName,
-                   password, confirmedPassword, phone1, phone2(optional),
-                   city, postalCode. If any of these is not present an
-                   appropriate error and status code 400 is returned.
-
-                   password and ConfirmedPassword are expected to be equal then
-                   if not then appropriate missing_invalid_parameter_error is
-                   returned.
-
-                   If email already exists, then an error is returned.
-        @post-cond: An user with provided information is created in the
-                    database. Token and userId is returned as an response
-                    object.
+        @pre-cond: None
+        @post-cond: Database is reset to have data defined in Test_Database.py
+        @return-api: nothing
     """
 
     def options(self, *args, **kwargs):
