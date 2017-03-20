@@ -1,76 +1,74 @@
 import sys
-
 sys.path.append("../")
 import os
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
-from extras.utils import *
+from extras.Utils import *
 from models.User import User
+from API_NAME import edit_user_api
+from extras.Required_Fields import check_required_valid
 
 
 class EditUser(BaseHandler):
     """
-    Class used to handle get and post.
-    Get:  is used to render an HTML page.
-    Post:
-    """
+    EditUser class is used to respond to request to editUser api.
+    The post method in this class is used to edit the user information.
+       Post:
+           @pre-cond: Expecting keys to be changeValues, userId, authToken.
+                      If any of these is not present an appropriate error and
+                      status code is returned in the response..
+                      changeValues can only have keys that are associated with
+                      User model otherwise an error is returned in the response.
+                      edit user cannot be used to change the password, if tried
+                      an error is returned in the response.
+                      If email is changed then email is set to be not verified.
 
-    def get(self):
-        self.render_template('../webpages/Edit_User.html')
+           @post-cond: Using userId and authToken,a user is found, and it's
+                       information is updated using changeValues dictionary.
 
+           @return: Nothing
+
+       """
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        # check if user id and token are present
-        error_keys = ['changeValues', 'userId', 'authToken']
-        errors, values = keys_missing(error_keys, self.request.POST)
+        setup_post(self.response)
 
+        valid, values = \
+            check_required_valid(edit_user_api, self.request.POST,
+                                 self.response, True)
 
-        if len(errors) != 0:
-            write_error_to_response(self.response,
-                                    errors, missing_invalid_parameter)
+        if not valid:
             return
-
 
         change_values = json.loads(values['changeValues'])
+
         if len(change_values) == 0:
-            write_error_to_response(self.response,
-                                    {nothing_requested_to_change['error']:
-                                         "Nothing requested to change"},
+            error = {nothing_requested_to_change['error']:
+                         "Nothing requested to change"}
+            write_error_to_response(self.response, error,
                                     nothing_requested_to_change['status'])
-            return
-        valid_user = self.user_model.validate_token(int(values["userId"]),
-                                                    "auth",
-                                                    values["authToken"])
-        if not valid_user:
-            write_error_to_response(self.response, {not_authorized['error']:
-                                                        "not authorized to chnage user"},
-                                    not_authorized['status'])
             return
 
         if "password" in change_values.keys():
-            write_error_to_response(self.response,
-                                    {password_cant_be_changed['error']:
-                                         "Please don't change password using edit user"},
+            error = {password_cant_be_changed['error']:
+                         "Please don't change password using edit user"}
+
+            write_error_to_response(self.response, error,
                                     password_cant_be_changed['status'])
             return
 
         if any(key not in ["phone1", "phone2", "email", "province", "city",
-                           "firstName", "lastName"] for key in
-               change_values.keys()):
-            write_error_to_response(self.response, {unrecognized_key['error']:
-                                                        "Unrecognized key found"},
-                                    unrecognized_key['status'])
-            return
-
-        invalid = key_validation(change_values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
+                           "firstName", "lastName"]
+               for key in change_values.keys()):
+            write_error_to_response(
+                self.response,
+                {unrecognized_key['error']: "Unrecognized key found"},
+                unrecognized_key['status'])
             return
 
         user = User.get_by_id(int(values["userId"]))
+
+        assert user is not None
+
         for key in change_values:
             user.set_property(key, change_values[key])
         user.put()

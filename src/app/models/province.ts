@@ -16,7 +16,7 @@ export class Province{
     static NL = new Province("NL", "Newfoundland and Labrador");
     static NS = new Province("NS", "Nova Scotia");
     static NU = new Province("NU", "Nunavut");
-    static NW = new Province("NW", "North West Territories");
+    static NT = new Province("NT", "Northwest Territories");
     static ON = new Province("ON", "Ontario");
     static PE = new Province("PE", "Prince Edward Island");
     static QC = new Province("QC", "Quebec");
@@ -36,7 +36,7 @@ export class Province{
         Province.NL,
         Province.NS,
         Province.NU,
-        Province.NW,
+        Province.NT,
         Province.ON,
         Province.PE,
         Province.QC,
@@ -49,9 +49,11 @@ export class Province{
      *
      * @param abbr          the abbreviation of the province
      * @returns {Province}  the province with the specified abbreviation
-     * @returns null        if the abbreviation provided was not valid
+     * @returns null        if the abbreviation provided was not valid or null
      */
     static fromAbbr(abbr: string): Province{
+        if(!abbr) return null;
+
         let provinces: Province[] = Province.asArray;
 
         for(let i=0; i<provinces.length; i++){

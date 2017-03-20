@@ -1,7 +1,6 @@
 /**
- * This class is to contain client-side settings such as enabling/disabling push notifications.
+ * This class is to contain client-side settings such as previously used filters.
  */
 export class UserSettings{
-    // TODO ID4
     constructor(){}
 }

@@ -1,3 +1,4 @@
+import {AlertController} from "ionic-angular";
 let assert = require('assert-plus');
 import {Injectable} from "@angular/core";
 import {Http, ResponseContentType} from "@angular/http";
@@ -11,10 +12,13 @@ import {FormControl} from "@angular/forms";
 
 @Injectable()
 export class KasperService {
+    public static errorMessages: string[][];
 
     constructor(public http: Http,
                 public loginService: LoginService,
+                public alertCtrl: AlertController,
                 private _logger: Logger) {
+        KasperService.errorMessages = this.initErrors();
     }
 
     /**
@@ -22,7 +26,7 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string,
+     *      authToken: string,
      *      userId: int,
      *      email: string,
      *      firstName: string,
@@ -37,7 +41,7 @@ export class KasperService {
      * @param password  the password to sign in with
      */
     login(email: string, password: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
 
@@ -46,15 +50,15 @@ export class KasperService {
     }
 
     /**
-     * Send a login request to the server using a token
+     * Send a login request to the server using a auth token
      *
      * The return data is as follows
      * {
-     *      token: string
+     *      authToken: string
      * }
      */
     loginWithToken(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
@@ -62,7 +66,11 @@ export class KasperService {
     }
 
     confirmEmail(): any{
-        this._logger.error("KasperService.confirmEmail is not implemented.");
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
+            .map(response => response.json());
     }
 
     /**
@@ -70,7 +78,7 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string,
+     *      authToken: string,
       *     useId: int
      * }
      *
@@ -86,7 +94,7 @@ export class KasperService {
      */
     signUp(email: string, password: string, confirmedPassword: string, firstName: string,
             lastName: string, phone1: string, phone2: string, city: string, province: string): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         body.append('email', email);
         body.append('password', password);
         body.append('confirmedPassword', confirmedPassword);
@@ -107,10 +115,10 @@ export class KasperService {
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      firstName, lastName, phone1, phone2, city, province, email
      */
-    editUser(changeValues: Object): any {
-        let body = new FormData();
+    editUser(changeValues: any): any {
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('changeValues', changeValues);
+        body.append('changeValues', JSON.stringify(changeValues));
 
         return this.http.post(KasperConfig.API_URL + "/editUser", body, ResponseContentType.Json)
             .map(response => response.json());
@@ -121,21 +129,32 @@ export class KasperService {
      *
      * The return data is as follows
      * {
-     *      token: string
+     *      authToken: string
      * }
      *
-     * @param oldPassword           the current password of the user
-     * @param newPassword           the new password for the user
-     * @param newPasswordConfirmed  the new password for the user
+     * @param oldPassword       the current password of the user
+     * @param newPassword       the new password for the user
+     * @param confirmedPassword the new password for the user
      */
-    changePassword(oldPassword: string, newPassword: string, newPasswordConfirmed: string): any{
-        let body = new FormData();
+    changePassword(oldPassword: string, newPassword: string, confirmedPassword: string): any{
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('oldPassword', oldPassword);
         body.append('newPassword', newPassword);
-        body.append('newPasswordConfirmed', newPasswordConfirmed);
+        body.append('confirmedPassword', confirmedPassword);
 
         return this.http.post(KasperConfig.API_URL + "/changePassword", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
+     * Request to sign out of the api.
+     */
+    signOut(): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/signOut", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -148,10 +167,10 @@ export class KasperService {
      * }
      */
     getFavourites(): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
 
-        return this.http.post(KasperConfig.API_URL + "/favouritesListingUser", body,
+        return this.http.post(KasperConfig.API_URL + "/getFavourites", body,
             ResponseContentType.Json)
             .map(response => response.json());
     }
@@ -163,12 +182,12 @@ export class KasperService {
      * @param liked                 do they like it
      */
     likeDislikeListing(listingId: number, liked: boolean): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
         body.append('liked', liked);
 
-        return this.http.post(KasperConfig.API_URL + "/likeDislikeListing", body, ResponseContentType.Json)
+        return this.http.post(KasperConfig.API_URL + "/like", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -181,13 +200,34 @@ export class KasperService {
      * }
      *
      * @param filter            the filter to apply
+     * @param valuesRequired    the fields to return about the listings
+     * @param maxLimit          the max number of returned results
      */
-    getListings(filter: Filter): any{
-        let body = new FormData();
+    getListings(filter: Filter, valuesRequired: string[], maxLimit: number): any{
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('filter', JSON.stringify(filter));
+        body.append('filter', filter.toJson());
+        body.append('valuesRequired', JSON.stringify(valuesRequired));
+        body.append('maxLimit', maxLimit);
 
         return this.http.post(KasperConfig.API_URL + "/getListings", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
+     * Submit a request to get listings according to the specified filter
+     *
+     * The return data is as follows
+     * {
+     *      myListings: Listing[]
+     * }
+     *
+     */
+    getMyListings(): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+
+        return this.http.post(KasperConfig.API_URL + "/getMyListings", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -202,15 +242,18 @@ export class KasperService {
      * @param listing           the listing
      */
     createListings(listing: Listing): any{
-        let body = new FormData();
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('province', listing.location.province.abbr);
-        body.append('city', listing.location.city);
-        body.append('address', listing.location.address);
+        body.append('province', listing.province.abbr);
+        body.append('city', listing.city);
+        body.append('address', listing.address);
         body.append('price', listing.price);
-        body.append('sqft', listing.squarefeet);
+        body.append('squareFeet', listing.squareFeet);
         body.append('bedrooms', listing.bedrooms);
         body.append('bathrooms', listing.bathrooms);
+        body.append('postalCode', listing.postalCode);
+        body.append('longitude', 0.0);
+        body.append('latitude', 0.0);
         body.append('description', listing.description);
         body.append('images', JSON.stringify(listing.images));
         body.append('thumbnailImageIndex', 0);
@@ -223,14 +266,16 @@ export class KasperService {
     /**
      * Send a request to update a listing
      *
+     * @param listingId     the listingId to edit
      * @param changeValues  a dictionary of values to change, valid keys are as follows
      *                      province, city, address, price, sqft, bedrooms, bathrooms,
      *                      description, images, thumbnailImageIndex, isPublished
      */
-    editListing(changeValues: JSON): any {
-        let body = new FormData();
+    editListing(listingId: number, changeValues: {}): any {
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
-        body.append('changeValues', changeValues);
+        body.append('listingId', listingId);
+        body.append('changeValues', JSON.stringify(changeValues));
 
         return this.http.post(KasperConfig.API_URL + "/editListing", body, ResponseContentType.Json)
             .map(response => response.json());
@@ -246,12 +291,17 @@ export class KasperService {
      *       email: string
      * }
      *
-     * @param listingId             the listing id
+     * @param listingId     the listing id
+     * @param message       the message for the seller
      */
-    requestContactInformation(listingId: number): any{
-        let body = new FormData();
+    contactSeller(listingId: number, message: string): any{
+        let body: FormData = new FormData();
         this.appendAuthentication(body);
         body.append('listingId', listingId);
+        body.append('message', message);
+        body.append('phone1', LoginService.user.phone1);
+        body.append('phone2', LoginService.user.phone2);
+        body.append('email', LoginService.user.email);
 
         return this.http.post(KasperConfig.API_URL + "/requestContactInformation", body
             , ResponseContentType.Json)
@@ -259,11 +309,12 @@ export class KasperService {
     }
 
     /**
-     * Appends required information for all calls
+     * Appends the userId and authToken to the call if the user is logged in.
      */
     appendAuthentication(body: FormData): void{
+        if(!this.loginService.isLoggedIn()) return;
         body.append('userId', this.loginService.getUserId());
-        body.append('token', this.loginService.getToken());
+        body.append('authToken', this.loginService.getAuthToken());
     }
 
     /**
@@ -338,5 +389,193 @@ export class KasperService {
         }
 
         return null;
+    }
+
+    /**
+     * Creates the error messages to be displayed when an error is returned from the server.
+     *
+     * <p>The value held at each route-error pair is the message to be displayed when this error occurs.
+     *
+     * @returns {string[][]}    a 2D array where the first key is the name of the API route, and the second key is
+     *                          the key of the error the server should return.
+     */
+    initErrors(): string[][]{
+        let result: string[][] = [[]];
+
+        result['general'] = [];
+        result['general']['missingUserId'] = "You must be logged in to do this";
+        result['general']['missingToken'] = "You must be logged in to do this";
+
+        result['signIn'] = [];
+        result['signIn']['invalidCredentials'] = "Looks like you entered the wrong email or password";
+        result['signIn']['missingEmail'] = "Please enter your email to continue";
+        result['signIn']['missingPassword'] = "Please enter your password to continue";
+
+        result['signInToken'] = [];
+        result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
+
+        result['confirmEmail'] = [];
+        result['confirmEmail']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['confirmEmail']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+
+        result['createUser'] = [];
+        result['createUser']['emailAlreadyExists'] = "Looks like this email is already in our system";
+        result['createUser']['passwordMismatch'] = "Looks like the entered passwords don't match ";
+        result['createUser']['passwordNotStrong'] = "Please make sure your password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['createUser']['missingEmail'] = "Looks like your email address is missing";
+        result['createUser']['missingPassword'] = "Please enter your password";
+        result['createUser']['missingConfirmedPassword'] = "Please confirm your password";
+        result['createUser']['missingFirstName'] = "Please enter your first name";
+        result['createUser']['missingLastName'] = "Please enter your last name";
+        result['createUser']['missingPhoneNumber'] = "Please enter your phone number";
+        result['createUser']['missingCity'] = "Please enter your city";
+
+        result['editUser'] = [];
+        result['editUser']['emailAlreadyExists'] = "Looks like this email is already in use, please pick a different one";
+        result['editUser']['nothingRequestedToChange'] = "If you want to make changes, enter some fields and click save ";
+        result['editUser']['unrecognizedKey'] = "Looks like you tried to change a field that doesn't exist. You don't want to do that.";
+        result['editUser']['invalidUserId'] = "Setting new information failed.";
+        result['editUser']['missingUserId'] = "Setting new information failed. ";
+        result['editUser']['passwordCantBeChanged'] = "Please use the change password button to change your password";
+
+        result['changePassword'] = [];
+        result['changePassword']['missingOldPassword'] = "Please enter your current password";
+        result['changePassword']['missingNewPassword'] = "Please enter your new password";
+        result['changePassword']['missingNewPasswordConfirmed'] = "Please confirm your now password";
+        result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
+        result['changePassword']['invalidUserId'] = "Setting new password failed.";
+        result['changePassword']['missingUserId'] = "Setting new password failed.";
+        result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
+        result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
+        result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you entered is the same as your current password. Please choose a new password.";
+
+        result['signOut'] = [];
+        result['signOut']['invalidUserId'] = "Looks like you are already signed out";
+
+        result['getFavourites'] = [];
+        result['getFavourites']['noFavouriteListing'] = "You don't have anything favourited. To add things to favourites, swipe right on houses on the main page. ";
+        result['getFavourites']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['getFavourites']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+
+        result['getMyListings'] = [];
+        result['getMyListings']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['getMyListings']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+
+        result['likeDislikeListing'] = [];
+        result['likeDislikeListing']['unallowedLiked'] = "You cannot like your own listing.";
+        result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingUserId'] = "You must be logged in to like or dislike a listing.";
+        result['likeDislikeListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingLiked'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['likeDislikeListing']['missingToken'] = "You must be logged in to like or dislike a listing.";
+
+        result['getListings'] = [];
+        result['getListings']['noListingsLeft'] = "Looks like you've hit the end of your search. To see more listings, adjust your filter settings.";
+
+        result['createListing'] = [];
+        result['createListing']['invalidCity'] = "Looks like the city you entered was not recognized";
+        result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
+        result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
+        result['createListing']['missingPostalCode'] = "A postal code is required";
+        result['createListing']['invalidImages'] = "At least one image is required to publish a listing";
+
+        result['editListing'] = [];
+        result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
+        result['editListing']['unrecognizedKey'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['notAuthorized'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+
+        result['contactSeller'] = [];
+        result['contactSeller']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['contactSeller']['userEmailNotConfirmed'] = "You need to confirm your email before contacting a seller.";
+
+        return result;
+    }
+
+    /**
+     * Handles errors returned by the Kasper server by displaying an alert message.
+     *
+     * @param route the api route that the error was returned from
+     * @param errors    a dictionary of error keys and messages
+     * @returns {Alert} returns a reference to the created Alert
+     *
+     * @pre-cond    route is not null
+     * @pre-cond    errors is not null or empty
+     * @post-cond   if the message contained in KasperService.errorMessages is not empty, an alert will be shown.
+     */
+    handleError(route: string, errors: any) {
+        assert(route, "route can not be null");
+        assert(errors, "errors can not be null");
+        assert(Object.keys(errors).length > 0, "errors can not be empty");
+
+        let firstKey = Object.keys(errors)[0];
+
+        // Check if the error key is in the General declarations
+        if(firstKey in KasperService.errorMessages['general']){
+            route = "general";
+        } else if(!(firstKey in KasperService.errorMessages[route])) {
+            this._logger.error("Unhandled error : [" + route + ", " + JSON.stringify(firstKey) + "]");
+            return;
+        }
+
+        let message: string = KasperService.errorMessages[route][firstKey];
+
+        let alert = this.alertCtrl.create({
+            title: "Oops...",
+            subTitle: message,
+            buttons: ['Dismiss']
+        });
+
+        if(message)
+            alert.present();
+
+        return alert;
+    }
+
+    /**
+     * Takes in an object and parses it to a listing object.
+     *
+     * @param data  the data to parse into Listing objects.
+     * @returns {Listing[]} an array of Listings
+     *
+     * @pre-cond    data is not null
+     */
+    static fromData(data: any): Listing[]{
+        assert(data, "data cannot be null");
+
+        let result: Listing[] = [];
+
+        for(let i=0; i<data.length; i++){
+            result.push(
+                new Listing(
+                    data[i].listingId,
+                    data[i].listerId,
+                    data[i].bedrooms,
+                    data[i].bathrooms,
+                    data[i].squareFeet,
+                    data[i].price,
+                    data[i].description,
+                    data[i].isPublished,
+                    data[i].createdDate,
+                    data[i].modifiedDate,
+                    data[i].images,
+
+                    data[i].province,
+                    data[i].city,
+                    data[i].address,
+                    data[i].postalCode,
+                    data[i].longitude,
+                    data[i].latitude,
+                )
+            );
+        }
+
+        return result;
     }
 }

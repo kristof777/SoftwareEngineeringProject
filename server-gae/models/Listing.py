@@ -1,23 +1,67 @@
+import json
 import sys
 from google.appengine.ext import ndb
 sys.path.append("../")
 
+DEFAULT_BEDROOMS_MAX = 10
+DEFAULT_BEDROOMS_MIN = 1
+DEFAULT_BATHROOMS_MAX = 10.0
+DEFAULT_BATHROOMS_MIN = 1.0
+DEFAULT_SQFT_MAX = 10000
+DEFAULT_SQFT_MIN = 0
+DEFAULT_PRICE_MAX = 999999999
+DEFAULT_PRICE_MIN = 10
+
 
 class Listing(ndb.Model):
-    """Models an individual Guestbook entry with content and date."""
-    bedrooms = ndb.IntegerProperty(required=True)
-    sqft = ndb.IntegerProperty(required=True)
-    bathrooms = ndb.FloatProperty(required=True)
-    price = ndb.IntegerProperty(required=True)
-    description = ndb.StringProperty(required=True)
-    isPublished = ndb.BooleanProperty(required=True, default=False)
-    province = ndb.StringProperty(required=True)
-    city = ndb.StringProperty(required=True)
-    images = ndb.BlobProperty(required=True)
-    thumbnailImageIndex = ndb.IntegerProperty(required=True, default=0)
+    """
+    Models an individual Guest book entry with content and date.
+    """
+    bedrooms = ndb.IntegerProperty(required=False)
+    squareFeet = ndb.IntegerProperty(required=False)
+    bathrooms = ndb.FloatProperty(required=False)
+    price = ndb.IntegerProperty(required=False)
+    description = ndb.StringProperty(required=False)
+    isPublished = ndb.BooleanProperty(required=True)
+    province = ndb.StringProperty(required=False)
+    city = ndb.StringProperty(required=False)
+    images = ndb.BlobProperty(required=False, repeated=True)
+    thumbnailImageIndex = ndb.IntegerProperty(required=False)
     userId = ndb.IntegerProperty(required=True)
-    address = ndb.StringProperty(required=True)
-    listingId = ndb.IntegerProperty(required=True,default=0)
+    address = ndb.StringProperty(required=False)
+    listingId = ndb.IntegerProperty(required=False)
+    longitude = ndb.FloatProperty(required=False)
+    latitude = ndb.FloatProperty(required=False)
+    postalCode = ndb.StringProperty(required=False)
+
+    """
+    Assign the default values for min and max of bedrooms, bathrooms, sqFt, and price
+    """
+    numeric_filter_bounds = {
+        "bedrooms_min": DEFAULT_BEDROOMS_MIN,
+        "bedrooms_max": DEFAULT_BEDROOMS_MAX,
+        "bathrooms_min": DEFAULT_BATHROOMS_MIN,
+        "bathrooms_max": DEFAULT_BATHROOMS_MAX,
+        "sqft_min": DEFAULT_SQFT_MIN,
+        "sqft_max": DEFAULT_SQFT_MAX,
+        "price_min": DEFAULT_PRICE_MIN,
+        "price_max": DEFAULT_PRICE_MAX
+    }
+
+    @classmethod
+    def reset_filter(cls):
+        """
+        Resets the filter to the default max and min values
+        :return: Nothing
+        """
+        cls.numeric_filter_bounds['bedrooms_min'] = DEFAULT_BEDROOMS_MIN
+        cls.numeric_filter_bounds['bedrooms_max'] = DEFAULT_BEDROOMS_MAX
+        cls.numeric_filter_bounds['bathrooms_min'] = DEFAULT_BATHROOMS_MIN
+        cls.numeric_filter_bounds['bathrooms_max'] = DEFAULT_BATHROOMS_MAX
+        cls.numeric_filter_bounds['sqft_min'] = DEFAULT_SQFT_MIN
+        cls.numeric_filter_bounds['sqft_max'] = DEFAULT_SQFT_MAX
+        cls.numeric_filter_bounds['price_min'] = DEFAULT_PRICE_MIN
+        cls.numeric_filter_bounds['price_max'] = DEFAULT_PRICE_MAX
 
     def set_bedrooms(self, bedrooms):
         self.bedrooms = int(bedrooms)
@@ -52,13 +96,22 @@ class Listing(ndb.Model):
     def set_listing_id(self, listing_id):
         self.listingId = listing_id
 
-    def set_sqft(self, sqft):
-        self.sqft = int(sqft)
+    def set_squareFeet(self, squareFeet):
+        self.squareFeet = int(squareFeet)
+
+    def set_longitude(self, longitude):
+        self.longitude = float(longitude)
+
+    def set_latitude(self, latitude):
+        self.latitude = float(latitude)
+
+    def set_postalCode(self, postal_code):
+        self.postalCode = postal_code
 
     def set_property(self, key, value):
         _key_to_set = {
             "price": self.set_price,
-            "sqft": self.set_sqft,
+            "squareFeet": self.set_squareFeet,
             "bathrooms": self.set_bathrooms,
             "bedrooms": self.set_bedrooms,
             "description": self.set_description,
@@ -68,15 +121,20 @@ class Listing(ndb.Model):
             "thumbnailImageIndex": self.set_thumbnail_index,
             "images": self.set_images,
             "listingId": self.set_listing_id,
-            "city": self.set_city
+            "city": self.set_city,
+            "longitude": self.set_longitude,
+            "latitude": self.set_latitude,
+            "postalCode": self.set_postalCode
         }
         _key_to_set[key](value)
 
     def get_value_from_key(self, key):
+        assert key is not None
+        assert key != ""
         _key_to_get_value = {
             "price": self.price,
             "city": self.city,
-            "sqft": self.sqft,
+            "squareFeet": self.squareFeet,
             "bathrooms": self.bathrooms,
             "bedrooms": self.bedrooms,
             "description": self.description,
@@ -86,35 +144,24 @@ class Listing(ndb.Model):
             "userId": self.userId,
             "thumbnailImageIndex": self.thumbnailImageIndex,
             "images": self.images,
-            "listingId": self.listingId
+            "listingId": self.listingId,
+            "longitude": self.longitude,
+            "latitude": self.latitude,
+            "postalCode": self.latitude
         }
         return _key_to_get_value[key]
 
     @classmethod
     def get_key(cls, key):
-        if key == 'bedrooms':
-            return cls.bedrooms
-        if key == 'sqft':
-            return cls.sqft
-        if key == 'bathrooms':
-            return cls.bathrooms
-        if key == 'price':
-            return cls.price
-        if key == 'description':
-            return cls.description
-        if key == 'isPublished':
-            return cls.isPublished
-        if key == 'province':
-            return cls.province
-        if key == 'city':
-            return cls.city
-        if key == 'images':
-            return cls.images
-        if key == 'thumbnailImageIndex':
-            return cls.thumbnailImageIndex
-        if key == 'address':
-            return cls.address
-        if key == 'listingId':
-            return cls.listingId
+        """
+        Returns the desired key from the class.
+        :precond key is not null
+        :param key: A string representing the desired key in the class.
+        :return:  The key from the class
+        N.B. Python doesn't have switch cases.
+        """
+        assert key is not None
+        assert key != ''
+        return cls.get_value_from_key(cls, key)
 
 

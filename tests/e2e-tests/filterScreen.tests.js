@@ -14,78 +14,30 @@ describe('Filter Listings',function(){
 
     //Button to open the filters menu
     let filtersBtn = element(by.id('goToFilters'));
-    //button to open myListings
 
     //filter options
-    let provDrop = element(by.id('FlProv'));
+    let provDrop = element(by.id('flProv'));
+    //The css is the generated css made by ionic copied from firefox inspect
+    let priceSliderMin = element(by.id('flPrice')).element(by.css('#flPrice > div:nth-child(2) > div:nth-child(3)'));
+    let priceSliderMax = element(by.id('flPrice'));
 
-    let priceSliderMin = element(by.id('FlPrice')).element(by.css('#FlPrice > div:nth-child(2) > div:nth-child(3)'));
-    let priceSliderMax = element(by.id('FlPrice'));
+    let sqftSliderMin = element(by.id('flSqft')).element(by.css('#flSqft > div:nth-child(2) > div:nth-child(3)'));
+    let sqftSliderMax = element(by.id('flSqft'));
 
-    let SqftSliderMin = element(by.id('FlSqft')).element(by.css('#FlSqft > div:nth-child(2) > div:nth-child(3)'));
-    let SqftSliderMax = element(by.id('FlSqft'));
+    let bedSliderMin = element(by.id('flBed')).element(by.css('#flBed > div:nth-child(2) > div:nth-child(13)'));
+    let bedSliderMax = element(by.id('flBed'));
 
-    let BedSliderMin = element(by.id('FlBed')).element(by.css('#FlBed > div:nth-child(2) > div:nth-child(13)'));
-    let BedSliderMax = element(by.id('FlBed'));
-
-    let BathSliderMin = element(by.id('flBath')).element(by.css('#flBath > div:nth-child(2) > div:nth-child(13)'));
-    let BathSliderMax = element(by.id('flBath'));
+    let bathSliderMin = element(by.id('flBath')).element(by.css('#flBath > div:nth-child(2) > div:nth-child(13)'));
+    let bathSliderMax = element(by.id('flBath'));
 
     // apply and cancel filter
     let applyBtn = element(by.id('flApply'));
     let cancelBtn = element(by.id('flCancel'));
 
-
-    it('should filter with nothing', function(done){
-
-        browser.driver.sleep(500);
-        filtersBtn.click();
-
-        browser.driver.sleep(500);
-        applyBtn.click();
-
-        browser.driver.sleep(500);
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-
-    it('should filter then cancel', function (done) {
-        //open filters
-        browser.driver.sleep(500);
-        filtersBtn.click();
-
-        selectFilterOptions();
-
-        cancelBtn.click();
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-
-    // There is an issue with clicking outside of the filter screen
-    /*
-    it('should filter then click outside Filter Menu', function(done){
+    it('should filter then press apply filter', function(){
 
         //open filters
-        browser.driver.sleep(500);
-        filtersBtn.click();
-
-        //select filter options
-        selectFilterOptions();
-
-        //click outside of popup
-        browser.actions().mouseMove({x: 300, y: 100}).doubleClick().perform();
-        browser.driver.sleep(500);
-
-        //TODO: when filter updates results add an expect that results have not changed
-        done();
-    });
-    */
-    it('should filter then press apply filter', function(done){
-
-        //open filters
-        browser.driver.sleep(500);
+        sleep();
         filtersBtn.click();
 
         //select filter options
@@ -93,45 +45,95 @@ describe('Filter Listings',function(){
 
         //click apply filter
         applyBtn.click();
-
+        sleep();
         //TODO: When filter updates results add an expect that results equal what is filtered
-        done();
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
+    });
+    it('should filter with nothing', function(){
+
+        sleep();
+        filtersBtn.click();
+
+        sleep();
+        applyBtn.click();
+
+        sleep();
+
+        //TODO: when filter updates results add an expect that results have not changed
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
     });
 
+    it('should filter then cancel', function () {
+        //open filters
+        sleep();
+        filtersBtn.click();
+
+        selectFilterOptions();
+
+        cancelBtn.click();
+
+        //TODO: when filter updates results add an expect that results have not changed
+        expect(element(by.css('.price')).getText()).toEqual('$120,000.00');
+    });
+
+
+    /*
+    Fills in the filter model selections as described in the Filter Use Case
+     */
     function selectFilterOptions (){
-        //select AB and SK in Provinces Menu
-        browser.driver.sleep(500);
+        //set up the x coord for sliders
+        let priceMax =70;
+        let priceMin =5;
+
+        let sqftMax =60;
+        let sqftMin =70;
+
+        let bedMax =100;
+        let bedMin =60;
+
+        let bathMax =80;
+        let bathMin =80;
+
+
+        //select SK in Provinces Menu
+        sleep();
         provDrop.click();
-        browser.driver.sleep(500);
+        sleep();
 
         //The province Drop menu
-        let abBtn = element(by.buttonText('Alberta'));
-        abBtn.click();
 
-        let skBtn = element(by.buttonText('Saskatchewan'));
-        browser.executeScript("arguments[0].scrollIntoView();", skBtn); //Sask needs to be in view to click
-        skBtn.click();
+        let YTBtn = element(by.buttonText('Yukon'));
+        browser.executeScript("arguments[0].scrollIntoView();", YTBtn); //Sask needs to be in view to click
+        YTBtn.click();
 
-        let okaybtn = element(by.buttonText('OK'));
-        okaybtn.click();
-        browser.driver.sleep(500);
+        let okBtn = element(by.buttonText('OK'));
+        okBtn.click();
+        sleep();
+        //These drag the sliders a certain distance X from the opposite end the slider started
+        //for example the max will go to min and min towards max
 
         //select price range from 100k to 1.3Mil
-        browser.actions().dragAndDrop(priceSliderMax,{x:70,y:0}).perform();
-        browser.actions().dragAndDrop(priceSliderMin,{x:80,y:0}).perform();
+        browser.actions().dragAndDrop(priceSliderMax,{x:priceMax,y:0}).perform();
+        browser.actions().dragAndDrop(priceSliderMin,{x:priceMin,y:0}).perform();
 
         //select sqft range from 100 to 100000
-        browser.actions().dragAndDrop(SqftSliderMax,{x:60,y:0}).perform();
-        browser.actions().dragAndDrop(SqftSliderMin,{x:70,y:0}).perform();
+        browser.actions().dragAndDrop(sqftSliderMax,{x:sqftMax,y:0}).perform();
+        browser.actions().dragAndDrop(sqftSliderMin,{x:sqftMin,y:0}).perform();
 
         //select beds range from 2 to 8
-        browser.actions().dragAndDrop(BedSliderMax,{x:100,y:0}).perform();
-        browser.actions().dragAndDrop(BedSliderMin,{x:60,y:0}).perform();
+        browser.actions().dragAndDrop(bedSliderMax,{x:bedMax,y:0}).perform();
+        browser.actions().dragAndDrop(bedSliderMin,{x:bedMin,y:0}).perform();
 
         //select bath range from 3 to 7
-        browser.actions().dragAndDrop(BathSliderMax,{x:80,y:0}).perform();
-        browser.actions().dragAndDrop(BathSliderMin,{x:80,y:0}).perform();
+        browser.actions().dragAndDrop(bathSliderMax,{x:bathMax,y:0}).perform();
+        browser.actions().dragAndDrop(bathSliderMin,{x:bathMin,y:0}).perform();
 
+        sleep();
+    }
+    /*
+    Puts the browser to sleep to allow the website to load before protractor performs an action
+     */
+    function sleep(){
         browser.driver.sleep(500);
     }
 });

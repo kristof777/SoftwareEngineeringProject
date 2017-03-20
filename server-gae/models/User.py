@@ -14,16 +14,12 @@ class User(Webapp2User):
     province = ndb.StringProperty(required=True)
     city = ndb.StringProperty(required=False)
 
-
     def set_password(self, raw_password):
         """Sets the password for the current user
-
         :param raw_password:
             The raw password which will be hashed and stored
         """
         self.password = security.generate_password_hash(raw_password)
-
-
 
     # @classmethod
     # def build_key(cls, email):
@@ -31,14 +27,12 @@ class User(Webapp2User):
 
     @classmethod
     def get_by_auth_token(cls, user_id, token, subject='auth'):
-        """Returns a user object based on a user ID and token
-
-        :param user_id:
-            The user_id of the requesting user
-        :param token:
-            The token string to be verified
-        :returns
-            A tuple ``(User, timestamp)``, with a user object and
+        """
+        Returns a Monad tuple of user object based on a user ID and token
+        :param user_id: The user_id of the requesting user
+        :param token: The token string to be verified
+        :param subject: the subject - default is "auth"
+        :returns A monad tuple ``(User, timestamp)``, with a user object and
         the token timestamp, or ``(None, None)`` if both were not found.
         """
 
@@ -61,7 +55,7 @@ class User(Webapp2User):
 
     def set_email(self, email):
         self.email = email
-        #TODO make verified false
+        self.verified = False
 
     def set_province(self, province):
         self.province = province
@@ -75,7 +69,7 @@ class User(Webapp2User):
     def set_last_name(self, last_name):
         self.last_name = last_name
 
-    _key_to_value = {
+    _key_to_set_value = {
         "email": set_email,
         "firstName": set_first_name,
         "lastName": set_last_name,
@@ -85,9 +79,49 @@ class User(Webapp2User):
         "city": set_city
     }
 
-
     def set_property(self, key, value):
-        self._key_to_value[key](self, str(value))
+        self._key_to_set_value[key](self, str(value))
 
+    _optional = ["phone2"]
+    _required_fields = ["email", "firstName", "lastName", "phone1",
+                        "phone2", "province", "city"]
 
+    def get_from_key(self, key):
+        _key_to_get_value = {
+            "email": self.email,
+            "firstName": self.first_name,
+            "lastName": self.last_name,
+            "phone1": self.phone1,
+            "phone2": self.phone2,
+            "province": self.province,
+            "city": self.city
+        }
+        assert key in _key_to_get_value
+        return _key_to_get_value[key]
 
+    def __cmp__(self, other):
+        """
+        Compares if two users have same data
+        :param other: Other user
+        :return:
+        """
+        if type(other) != type(self):
+            return False
+        for key in self._required_fields:
+            if self.get_from_key(key) != other.get_from_key(key):
+                return False
+        return True
+
+    def compare_with_dictionary(self, dictionary):
+        """
+        Checks if this object has same values as the user in dictionary.
+        :param dictionary: a user dictionary
+        :return: True if object has equal values as the dictionary
+        """
+        for key in self._required_fields:
+            if key in dictionary:
+                if self.get_from_key(key) != dictionary[key]:
+                    return False
+            elif key not in self._optional:
+                return False
+        return True

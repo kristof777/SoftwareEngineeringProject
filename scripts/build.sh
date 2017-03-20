@@ -1,36 +1,31 @@
 #!/bin/bash
 
 # Author: Chris Mykota-Reid :>
-# This script calls the commands required to compile (TODO: TESTING)
+# This script calls the commands required to compile
 # and emulate our program
 
 
 set -ev
 
 # Builds the ios app.  If we are deploying, it builds a release version, otherwise,
-# builds and emulates the app for testing.  Currently not being built for 
-# deployment.
+# builds and emulates the app for testing.  A deployment build should not be done
+# on this platform.
 ios_build(){
   ionic platform add ios
-  if [[ "${BUILD_TYPE}" == "deployment" ]]; then
+  if [[ "${BUILD_TYPE}" != "deployment" ]]; then
     ionic build ios
-  else
-    ionic build ios
-    ionic emulate ios
-    cat /Users/travis/build/CMPT371Team1/Project/platforms/ios/cordova/console.log
+    #ionic emulate ios
   fi
 }
 
-# Builds the browser version of our app.  A deployment build should not be done
-# on this version.
+# Builds the browser version of our app. This is currently the version of our app
+# that has the e2e smoke tests done on it. A deployment build should not be done
+# on this platform.
 browser_build(){
-  if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    ionic build
-  else
-    # dev_appserver.py 371server-gae/main.py
-    ./scripts/test_script.sh
+  if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    sudo du / | grep 'jasmine-spec-reporter'
+    ./scripts/smoke_test.sh
     # sudo du / | grep "geckodriver"
-    # kill -9 $IONIC_PID # should occure after tests
   fi
 }
 
@@ -41,10 +36,11 @@ android_build(){
   ionic platform remove android
   ionic platform add android
   if [[ "${BUILD_TYPE}" == "deployment" ]]; then
-    ionic build android --release
+    ionic build android 
   else
     ionic build android
-    ionic emulate android
+    #xvfb-run /home/travis/build/CMPT371Team1/Project/android-sdk-linux/tools/android avd   
+    #ionic emulate android
   fi
 }
 

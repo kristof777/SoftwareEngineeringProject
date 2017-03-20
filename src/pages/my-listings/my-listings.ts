@@ -6,6 +6,7 @@ import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail";
 import {AddListingPage} from "../add-listing/add-listing";
+import {KasperService} from "../../app/providers/kasper-service";
 let assert = require('assert-plus');
 
 @Component({
@@ -24,57 +25,86 @@ export class MyListingsPage {
                 private _logger: Logger) {
 
         this.listings = Array();
-        // let data = listingProvider.savedListings.myListings;
-        // this.listings = Object.keys(data).map(key => data[key]);
+    }
+
+    /**
+     * Refresh the users listings when they open this tab
+     *
+     * TODO make this more efficient
+     */
+    ionViewDidEnter(){
+        let me = this;
+
+        if(this.loginService.isLoggedIn()) {
+            this.listingProvider.getMyListings().subscribe(data => {
+                me.listings = KasperService.fromData(data['listings']);
+            }, error => {
+                this._logger.error(JSON.stringify(error));
+            });
+        } else {
+            this.listings = Array();
+        }
     }
 
     /**
      * Display the detailed view for the selected listing
      *
      * @param listing listing clicked by user
+     * @pre-cond    listing is not null
      */
     selectListing(listing:Listing){
+        assert(listing, "listing can not be null");
+
         this.navCtrl.push(DetailPage, {
             data: this.listings,
             cursor: this.listings.indexOf(listing)
         });
-        this._logger.debug("Listing  " + listing + " was clicked")
+        this._logger.debug("ListingId  " + listing + " was clicked"); //probably changed to listing id and semicolon
     }
 
     /**
      * Display the edit listing view for the selected listing
      *
      * @param listing: listing to be edited
+     * @pre-cond    listing is not null
      */
-    editListing(listing:Listing){
-        this.navCtrl.push(AddListingPage,{
-            listing:listing
-        });
-        this._logger.debug("Trying to edit...")
+    editListing(listing:Listing){ //add asserts to methods
+        assert(listing, "listing can not be null");
 
-    }
+        this.navCtrl.push(AddListingPage,{ //add comment to explain that addListingPage is the same as edit...
+            listing: listing
+        });
+
+    };
 
     /**
+     * Delete a listing from the users listings
      *
      * @param listing: listing to be deleted
+     * @pre-cond    listing is not null
      */
     deleteListing(listing:Listing){
+        assert(listing, "listing can not be null");
+
         let selectedIndex = this.listings.indexOf(listing);
         this.listings.splice(selectedIndex, 1);
     }
 
     /**
-     * Takes you to listing page
+     * Display the add listing page.
+     *
+     * @pre-cond    the user is logged in
      */
     addListing(){
+        if(!this.loginService.isLoggedIn()) return;
 
         this.navCtrl.push(AddListingPage);
     }
 
     /**
-     * Get the Unpublished listing
+     * Get the unpublished listings from the listings loaded on this page.
      *
-     * @returns {Listing[]}  Unpublished listing
+     * @returns {Listing[]}  the unpublished listings
      */
     getUnpublished(): Listing[]{
         let result: Listing[] = [];
@@ -88,9 +118,9 @@ export class MyListingsPage {
     }
 
     /**
-     * Get the published listing
+     * Get the published listings from the listings loaded on this page.
      *
-     * @returns {Listing[]}  Published listing
+     * @returns {Listing[]}  the published listings
      */
     getPublished(): Listing[]{
         let result: Listing[] = [];

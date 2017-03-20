@@ -5,6 +5,13 @@ from extras.Base_Handler import BaseHandler
 
 
 class VerificationHandler(BaseHandler):
+    """
+    Get: When user clicks on user email verification link, a get request is
+         sent to this class.
+        @pre-cond: User is expected to have a valid signup token, userId
+        @post-cond: User is verified.
+        @return: None
+    """
     def get(self, *args, **kwargs):
         user = None
         user_id = kwargs['user_id']
@@ -28,8 +35,6 @@ class VerificationHandler(BaseHandler):
         if not user.verified:
             user.verified = True
             user.put()
-
-            self.display_message('User email address has been verified.')
             return
         elif verification_type == 'p':
             # supply user to the page

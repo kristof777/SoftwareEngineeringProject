@@ -13,13 +13,10 @@ export class MyApp {
 
     constructor(platform: Platform,
                 private _logger: Logger) {
+        
         platform.ready().then(() => {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
-            StatusBar.styleDefault();
-            Splashscreen.hide();
-
             let db = new SQLite();
+
             db.openDatabase(KasperConfig.DB_INFO).then(() => {
                 this.createLoginTable(db);
             }, error => {
@@ -27,6 +24,9 @@ export class MyApp {
                 this._logger.error(JSON.stringify(error));
             });
         });
+        
+        StatusBar.styleDefault();
+        Splashscreen.hide();
     }
 
     /**
@@ -38,7 +38,7 @@ export class MyApp {
         db.executeSql(
             "CREATE TABLE IF NOT EXISTS session(" +
             "userId       INT PRIMARY KEY, " +
-            "token        VARCHAR(255), " +
+            "authToken    VARCHAR(255), " +
             "created_date DATETIME)", {})
             .then(() => {
                 // Don't do anything if it's created successfully or already exists.

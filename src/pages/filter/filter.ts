@@ -11,27 +11,65 @@ let assert = require('assert-plus');
     templateUrl: 'filter.html'
 })
 export class FilterPage {
-    private _priceMin = 100000;
-    private _priceMax = 1600000;
-    private _squareFeetMin = 100;
-    private _squareFeetMax = 10000;
-    private _bedroomsMin = 1;
-    private _bedroomsMax = 10;
-    private _bathroomsMin = 1;
-    private _bathroomsMax = 10;
+    private _provinces: Province[];
+    private _priceMin: number = 100000;
+    private _priceMax: number = 1600000;
+    private _squareFeetMin: number = 100;
+    private _squareFeetMax: number = 10000;
+    private _bedroomsMin: number = 1;
+    private _bedroomsMax: number = 10;
+    private _bathroomsMin: number = 1;
+    private _bathroomsMax: number = 10;
 
-    // ngModel binds the value of the html element to variable "province"
-    // to access use this.province
-    province: string[];
-    price: Bound = {lower: 100000, upper: 1600000};
-    squareFeet: Bound = {lower: 100, upper: 10000};
-    bedrooms: Bound = {lower: 1, upper: 10};
-    bathrooms: Bound = {lower: 1, upper: 10};
+    province: string;
+    price: Bound = {lower: this._priceMin, upper: this._priceMax};
+    squareFeet: Bound = {lower: this._squareFeetMin, upper: this._squareFeetMax};
+    bedrooms: Bound = {lower: this._bedroomsMin, upper: this._bedroomsMax};
+    bathrooms: Bound = {lower: this._bathroomsMin, upper: this._bathroomsMax};
 
-    // Creates the logger object (needed in all constructors
     constructor(public viewCtrl: ViewController,
-                params: NavParams,
+                public params: NavParams,
                 private _logger: Logger) {
+
+        this._provinces = Province.asArray;
+        // If we're given a filter, load it, otherwise use default values
+        if(params.get("filter"))
+            this.loadFilter(params.get("filter"));
+    }
+
+    /**
+     * Takes in a Filter object and copies its values to the sliders/fields on this page
+     *
+     * @param filter    the filter object to apply
+     * @pre-cond    filter is not null
+     */
+    loadFilter(filter: Filter): void{
+        assert(filter, "filter can not be null");
+
+        this.province = (filter.province) ? filter.province.abbr : "";
+
+        // If we're given a bound, use the bound, otherwise use the default.
+        if(filter.price.upper)
+            this.price.upper = filter.price.upper;
+        if(filter.price.lower)
+            this.price.lower = filter.price.lower;
+
+        if(filter.squareFeet.lower)
+            this.squareFeet.lower = filter.squareFeet.lower;
+        if(filter.squareFeet.upper)
+            this.squareFeet.upper = filter.squareFeet.upper;
+
+        if(filter.bedrooms.lower)
+            this.bedrooms.lower = filter.bedrooms.lower;
+        if(filter.bedrooms.upper)
+            this.bedrooms.upper = filter.bedrooms.upper;
+
+        if(filter.bathrooms.lower)
+            this.bathrooms.lower = filter.bathrooms.lower;
+        if(filter.bathrooms.upper)
+            this.bathrooms.upper = filter.bathrooms.upper;
+
+        this._logger.debug("Loaded filter: " + JSON.stringify(filter));
     }
 
     /**
@@ -39,11 +77,7 @@ export class FilterPage {
      */
     applyFilter(): void{
         // Turn the province strings into an array of provinces
-        let provinces: Province[] = [];
-        if(this.province && this.province.length > 0) {
-            for (let i = 0; i < this.province.length; i++)
-                provinces.push(Province.fromAbbr(this.province[i]));
-        }
+        let province: Province = Province.fromAbbr(this.province);
 
         let tempPrice: Bound = {};
         if(this.price.lower != this._priceMin) tempPrice['lower'] = this.price.lower;
@@ -62,7 +96,7 @@ export class FilterPage {
         if(this.bathrooms.upper != this._bathroomsMax) tempBathrooms['upper'] = this.bathrooms.upper;
 
         let data: Filter = new Filter(
-            provinces, tempPrice, tempSquareFeet, tempBedrooms, tempBathrooms
+            province, tempPrice, tempSquareFeet, tempBedrooms, tempBathrooms
         );
 
         this.viewCtrl.dismiss(data);

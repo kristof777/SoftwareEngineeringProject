@@ -34,15 +34,19 @@ from web_apis.Create_Listing import *
 from web_apis.Get_My_Listings import *
 from web_apis.Like_Dislike_Listing import *
 from web_apis.Edit_Listing import *
-from web_apis.Get_Favorite_Listings import *
+from web_apis.Get_Favourites import *
 from web_apis.Change_Password import *
 from web_apis.Sign_In_With_Token import *
-from models.User import User
-from extras.User_Auth import *
 from web_apis.Edit_User import EditUser
 from web_apis.Get_Listings import GetListing
 from web_apis.Confirm_Email import VerificationHandler
-# from web_apis.SignInWithToken import *
+from web_apis.Delete_Listing import *
+from web_apis.Contact_Seller import ContactSeller
+from web_apis.Edit_Message import EditMessage
+from web_apis.Facebook_Login import FacebookLogin
+from web_apis.Get_Messages import GetMessages
+from web_apis.Initialize_DB_Testers import InitializeDB
+from web_apis.Sign_Out import SignOut
 
 # configuration
 config = {
@@ -58,25 +62,25 @@ config = {
 
 # All API endpoints we are currently using
 app = webapp2.WSGIApplication([
-    webapp2.Route('/', MainHandler, name='home'),
     webapp2.Route('/createUser', CreateUser),
     webapp2.Route('/<type:v|p>/<user_id:\d+>-<signup_token:.+>',
     handler=VerificationHandler, name='verification'),
     webapp2.Route('/signIn', SignIn, name='signIn'),
     webapp2.Route('/signInWithToken', SignInWithToken, name='signInWithToken'),
-    webapp2.Route('/signOut', LogoutHandler, name='signOut'),
-    webapp2.Route('/password', SetPasswordHandler),
+    webapp2.Route('/signOut', SignOut, name='signOut'),
     webapp2.Route('/changePassword', ChangePassword),
-    webapp2.Route('/authenticated', AuthenticatedHandler, name='authenticated'),
-    webapp2.Route('/forgot', ForgotPasswordHandler, name='forgot'),
     webapp2.Route('/createListing', CreateListing),
     webapp2.Route('/like', LikeDislikeListing),
     webapp2.Route('/editListing', EditListing),
     webapp2.Route('/getFavourites', GetFavourites),
-    webapp2.Route('/getMyListing', GetMyListing),
+    webapp2.Route('/getMyListings', GetMyListing),
     webapp2.Route('/editUser', EditUser),
-    webapp2.Route('/getListings', GetListing)
+    webapp2.Route('/getListings', GetListing),
+    webapp2.Route('/deleteListing', DeleteListing),
+    webapp2.Route('/contactSeller', ContactSeller),
+    webapp2.Route('/editMessage', EditMessage),
+    webapp2.Route('/fbLogin', FacebookLogin),
+    webapp2.Route('/getMessages', GetMessages),
+    webapp2.Route('/initDBTESTERS', InitializeDB)
 
-
-    # webapp2.Route('/showlistings', ShowListings)
 ], debug=True, config=config)

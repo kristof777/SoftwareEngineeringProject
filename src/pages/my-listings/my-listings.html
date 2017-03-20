@@ -8,11 +8,6 @@
         <ion-title>
             My Listings
         </ion-title>
-        <ion-buttons end *ngIf="listings.length != 0">
-            <button ion-button icon-only>
-                <ion-icon name="create"></ion-icon>
-            </button>
-        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
@@ -32,7 +27,7 @@
                 <p>{{ cur['description'] }}</p>
             </ion-item>
             <ion-item-options slide="left">
-                <button ion-button color="blue" (click)="editListing(cur)">
+                <button ion-button color="primary" (click)="editListing(cur)">
                     <ion-icon name="create"></ion-icon>
                     Edit
                 </button>
@@ -53,7 +48,7 @@
                 <p>{{ cur['description'] }}</p>
             </ion-item>
             <ion-item-options slide="left">
-                <button ion-button color="blue" (click)="editListing(cur)">
+                <button ion-button color="primary" (click)="editListing(cur)">
                     <ion-icon name="create"></ion-icon>
                     Edit
                 </button>

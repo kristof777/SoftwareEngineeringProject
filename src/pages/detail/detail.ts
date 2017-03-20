@@ -1,12 +1,9 @@
-import {User} from "../../app/models/user";
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component, ViewChild} from "@angular/core";
 import {NavController, ModalController, NavParams, Slides} from "ionic-angular";
 import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {LoginService} from "../../app/providers/login-service";
-import {Province} from "../../app/models/province";
-import {Location} from "../../app/models/location";
 import {AddListingPage} from "../add-listing/add-listing";
 import {ContactPage} from "../contact/contact";
 let assert = require('assert-plus');
@@ -19,69 +16,55 @@ let assert = require('assert-plus');
 export class DetailPage {
     @ViewChild(Slides) slides: Slides;
     data: Listing[];
-    // The index of the page currently being displayed
     cursor: number = 0;
 
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
-                public listings: ListingProvider,
+                public listingProvider: ListingProvider,
                 public loginService: LoginService,
                 private _logger: Logger,
                 public navParams: NavParams) {
-        if(Object.keys(navParams.data).length === 0 && navParams.data.constructor === Object) {
-            this.data = listings.data;
-        } else {
-            this.data = navParams.get('data');
-            this.cursor = navParams.get('cursor');
-        }
-
-        //TODO: Remove fake user account
-        let userID: number = 1;
-        let email: string = "john.doe@gmail.com";
-        let firstName: string = "John";
-        let lastName: string = "Doe";
-        let phone1: string = "3065555555";
-        let phone2: string = null;
-        let location: Location = new Location(Province.SK, "Saskatoon", "1234 Saskatoon St.", "A1B2C3", 0.0, 0.0);
-
-        this.loginService.setUser(new User(userID, email, firstName, lastName, phone1, phone2, location));
-    }
-
-
-    /**
-     * Navigate to the My Listings page.
-     */
-    goToFavourites(): void{
-        this._logger.debug("Favourites was clicked");
+        this.data = navParams.get('data');
+        this.cursor = navParams.get('cursor');
     }
 
     /**
      * Add the house to the users dislike list
      */
-    unlike(): void{
-        this._logger.debug("Unlike was clicked");
+    dislike(): void{
+        this.listingProvider.dislikeListing(this.data[this.cursor].listingId).subscribe(data => {
+            this._logger.debug("Dislike was successful.");
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+        });
     }
 
     /**
      * Add the house to the users favourites list
      */
     like(): void{
-        this._logger.debug("Like was clicked.");
+        this.listingProvider.likeListing(this.data[this.cursor].listingId).subscribe(data => {
+            this._logger.debug("Like was successful.");
+        }, error => {
+            this.listingProvider.kasperService.handleError("likeDislikeListing", error.json());
+        });
     }
 
     /**
      * Return to the first image in the slides
      */
     goToFirstSlide(): void{
+        assert(this.slides, "slides can not be null");
+
         this.slides.slideTo(0, 0);
     }
 
     /**
      * Display the next property
+     *
+     * @pre-cond    there is a next property available
      */
     nextProperty(): void{
-        this._logger.debug("Next Property was clicked");
-
         this.goToFirstSlide();
 
         if(this.isNextProperty())
@@ -90,10 +73,10 @@ export class DetailPage {
 
     /**
      * Display the previous property
+     *
+     * @pre-cond    there is a previous property available
      */
     previousProperty(): void{
-        this._logger.debug("Previous Property was clicked");
-
         this.goToFirstSlide();
 
         if(this.isPreviousProperty())
@@ -133,9 +116,15 @@ export class DetailPage {
      * @returns {boolean}   true if it is their property
      */
     belongsToUser(): boolean{
+        if(!this.loginService.isLoggedIn())
+            return false;
+
         return this.loginService.getUserId() == this.data[this.cursor].listerId;
     }
 
+    /**
+     * Display the contact page for the user who created the current property
+     */
     goToContact(): void{
         this.navCtrl.push(ContactPage, {listingId: this.data[this.cursor].listingId});
     }

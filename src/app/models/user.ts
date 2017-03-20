@@ -1,5 +1,5 @@
-import {Location} from './location';
 import {UserSettings} from "./user-settings";
+import {Province} from "./province";
 
 export class User{
     public id: number;
@@ -8,6 +8,8 @@ export class User{
     public lastName: string;
     public phone1: string;
     public phone2: string;
+    public province: Province;
+    public city: string;
     public location: Location;
     public settings: UserSettings;
 
@@ -20,16 +22,18 @@ export class User{
      * @param lastName  the user's last name
      * @param phone1    the user's primary phone number
      * @param phone2    the user's secondary phone number
-     * @param location  the user's location
+     * @param province  the user's province
+     * @param city      the user's city
      */
     constructor(id: number, email: string, firstName: string, lastName: string, phone1: string,
-                phone2: string, location: Location) {
+                phone2: string, province: Province, city: string) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone1 = phone1;
         this.phone2 = phone2;
-        this.location = location;
+        this.province = province;
+        this.city = city;
     }
 }

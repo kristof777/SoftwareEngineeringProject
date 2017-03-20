@@ -1,57 +1,32 @@
 import sys
-from extras.utils import *
+from extras.Utils import *
 from models.Listing import Listing
 from models.User import User
+from API_NAME import get_messages_api
+from extras.Required_Fields import check_required_valid
 sys.path.append("../")
 
 
 class GetMyListing(webapp2.RequestHandler):
     """
-    Class used to handle get and post.
-    Get:  do nothing
+    GetMyListing class is used to respond to request to getMyListing api.
+    The post method in this class is used to get all the listings added by
+    the provided user.
     Post:
-        @pre-cond: Expecting keys to be userId
-        @post-cond: all my listings
+        @pre-cond: Expecting keys to be userId and authToken.
+                   User with provided userId should be present in the database.
+                   authToken should be valid for given userId.
+        @post-cond: Nothing
+        @return-api: All the listing of the user with userId are returned.
     """
-    def options(self, *args, **kwargs):
-        self.response.headers['Access-Control-Allow-Origin'] = '*'
-        self.response.headers[
-            'Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-        self.response.headers[
-            'Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
-
-    def get(self):
-        self.response.out.write()
-
     def post(self):
-        self.response.headers.add_header('Access-Control-Allow-Origin', '*')
-        error_keys = ['userId']
+        setup_post(self.response)
 
-        # check if there's any missing field, if so, just return to the user what all is missing
-        errors, values = keys_missing(error_keys, self.request.POST)
+        valid, values = \
+            check_required_valid(get_messages_api, self.request.POST,
+                                 self.response, True)
 
-        # If there exists error then return the response, and stop the function
-        # if not, then go ahead and check validity
-        if len(errors) != 0:
-            write_error_to_response(self.response, errors,
-                                    missing_invalid_parameter)
-            return
-
-        # check validity for integer fields (userId)
-        invalid = key_validation(values)
-
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
-        # find the correct user with userId
-        user = User.get_by_id(int(values['userId']))
-        if user is None:
-            error = {
-                not_authorized['error']: 'User not authorized'
-            }
-            write_error_to_response(self.response, error, not_authorized)
+        if not valid:
             return
 
         owner_id = int(values['userId'])
@@ -64,7 +39,7 @@ class GetMyListing(webapp2.RequestHandler):
                 'listingId': listing.listingId,
                 'userId': listing.userId,
                 'bedrooms': listing.bedrooms,
-                'sqft': listing.sqft,
+                'squareFeet': listing.squareFeet,
                 'bathrooms': listing.bathrooms,
                 'price': listing.price,
                 'description': listing.description,
@@ -72,9 +47,12 @@ class GetMyListing(webapp2.RequestHandler):
                 'province': listing.province,
                 'city': listing.city,
                 'address': listing.address,
+                'longitude': listing.longitude,
+                'latitude': listing.latitude,
                 'images': listing.images,
-                'thumbnailImageIndex': listing.thumbnailImageIndex
+                'thumbnailImageIndex': listing.thumbnailImageIndex,
+                'postalCode': listing.postalCode
             }
             returned_array.append(template_values)
 
-        write_success_to_response(self.response, {"myListings": returned_array})
+        write_success_to_response(self.response, {"listings": returned_array})

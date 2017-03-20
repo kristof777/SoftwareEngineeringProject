@@ -14,7 +14,7 @@
 <ion-content>
     <ion-toolbar>
         <ion-item no-lines id="voteBar" *ngIf="!belongsToUser()">
-            <button ion-button item-left color="second" clear icon-only (click)="unlike()" id="unlikeButton">
+            <button ion-button item-left color="second" clear icon-only (click)="dislike()" id="unlikeButton">
                 <ion-icon ios="ios-thumbs-down" md="md-thumbs-down"></ion-icon>
             </button>
             <button ion-button item-right color="danger" clear icon-only (click)="like()" id="likeButton">
@@ -24,7 +24,7 @@
 
         <ion-slides pager id="listingImages">
             <ion-slide style="background-color: lightgray" *ngFor="let image of data[cursor].images">
-                <img src="{{ image }}" />
+                <img src="data:image/png;base64,{{ image }}" />
             </ion-slide>
         </ion-slides>
     </ion-toolbar>
@@ -39,15 +39,15 @@
     </ion-item>
 
     <ion-list>
-        <button ion-item detail-push (click)="goToContact()">
-                Contact
-        </button>
+        <!--<button ion-item detail-push (click)="goToContact()">-->
+                <!--Contact-->
+        <!--</button>-->
         <ion-item>
             <span item-left>
                 Location
             </span>
             <span item-right>
-                {{ data[cursor].location.city }}, {{ data[cursor].location.province.abbr }}
+                {{ data[cursor].city }}, {{ data[cursor].province.abbr }}
             </span>
         </ion-item>
         <ion-item>
@@ -55,7 +55,7 @@
                 Address
             </span>
             <span item-right>
-                {{ data[cursor].location.address }}
+                {{ data[cursor].address }}
             </span>
         </ion-item>
         <ion-item>
@@ -63,7 +63,7 @@
                 Square Feet
             </span>
             <span item-right>
-                {{ data[cursor].squarefeet }}
+                {{ data[cursor].squareFeet }}
             </span>
         </ion-item>
         <ion-item>

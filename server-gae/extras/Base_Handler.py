@@ -5,8 +5,6 @@ import webapp2
 import os
 
 
-
-
 class BaseHandler(webapp2.RequestHandler):
     """
     contains business logic sign up and authentication users.

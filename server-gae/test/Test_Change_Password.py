@@ -1,71 +1,79 @@
 from __future__ import absolute_import
-
 import sys
-
 from extras.Error_Code import *
-
 sys.path.append("../")
-import json
 import os
 import unittest
 import Main
-import webapp2
-
+from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from extras.utils import setup_testbed
+from extras.Utils import *
 
 
-class TestHandlerChangePassword(unittest.TestCase):
+class TestChangePassword(unittest.TestCase):
+    """
+    Test case 1: Success case
+    Test case 2: One or more fields were not entered
+    Test Case 3: Incorrect old password
+    Test Case 4: Passwords do not match
+    Test Case 5: new passwords match but are not strong
+    Test case 6: new passwords and old password are the same
+    """
     def setUp(self):
         setup_testbed(self)
         # I need to create the database entry manually because I need access
         # to the password.
-        database_entry1 = {"email": "student@usask.ca",
-                           "password": "aaAA1234",
-                           "firstName": "Student",
-                           "lastName": "USASK",
-                           "city": "Saskatoon",
-                           "postalCode": "S7N 4P7",
-                           "province": "Saskatchewan",
-                           "phone1": 1111111111,
-                           "confirmedPassword": "aaAA1234"}
+        self.database_user = create_random_user()
+        self.database_user['password'] = 'aaAA1234'
+        self.database_user['confirmedPassword'] = 'aaAA1234'
+        self.database_user['email'] = 'student@usask.ca'
 
-        request = webapp2.Request.blank('/createUser', POST=database_entry1)
-        response = request.get_response(Main.app)
+        response, response_status = \
+            get_create_user_api_response(self.database_user)
 
-        self.user = json.loads(response.body)
+        self.user = response
         self.assertTrue("userId" in self.user)
         self.user_id = self.user['userId']
 
         # If this assert fails then create user unit tests should be run
-        self.assertEquals(response.status_int, success)
+        self.assertEquals(response_status, success)
 
     def test_change_password(self):
         # Test Case: Success case
-        input5 = {"oldPassword": "aaAA1234",
+        input = {"oldPassword": "aaAA1234",
                   "newPassword": "newPass123",
                   "confirmedPassword": "newPass123",
                   "userId": self.user_id}
 
-        request = webapp2.Request.blank('/changePassword', POST=input5)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, success)
+        response, response_status = \
+            get_response_from_post(Main, input, change_password_api)
 
-        output = json.loads(response.body)
-        self.assertTrue("token" in output)
+        self.assertEquals(response_status, success)
+
+        self.assertTrue("authToken" in response)
+
+        #Check to make sure old password no longer works
+        input2 = {'email': 'student@usask.ca', 'password': 'aaAA1234'}
+
+        response, response_status = \
+            get_response_from_post(Main, input2, sign_in_api)
+
+        self.assertEquals(response_status, unauthorized_access)
+        error_keys = response.keys()
+        self.assertTrue(are_two_lists_same(error_keys[0], not_authorized['error']))
 
     def test_missing_fields(self):
         # Test case: One or more fields were not entered
         input1 = {}  # Json object to send
-        request = webapp2.Request.blank('/changePassword', POST=input1)
-        response = request.get_response(Main.app)  # get response back
+        response, response_status = \
+            get_response_from_post(Main, input1, change_password_api)
 
-        self.assertEquals(response.status_int, missing_invalid_parameter)
+        self.assertEquals(response_status, missing_invalid_parameter)
         errors_expected = [missing_password['error'],
                            missing_new_password['error'],
                            missing_confirmed_password['error'],
                            missing_user_id['error']]
-        error_keys = [str(x) for x in json.loads(response.body)]
+        error_keys = [str(x) for x in response]
         self.assertEquals(len(set(errors_expected).
                               difference(set(error_keys))), 0)
 
@@ -76,15 +84,10 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "notImportant123",
                   "userId": self.user_id}
 
-        request = webapp2.Request.blank('/changePassword', POST=input2)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse(True)
-            return
-        self.assertEquals(not_authorized['error'], error_message)
+        response, response_status = get_change_password_api_response(input2)
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(are_two_lists_same([not_authorized['error']],
+                                           response.keys()))
 
     def test_missmatched_passwords(self):
         # Case3: Passwords do not match
@@ -92,15 +95,10 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "newPassword": "NotMatching123",
                   "confirmedPassword": "doesntMatch123",
                   "userId": self.user_id}
-
-        request = webapp2.Request.blank('/changePassword', POST=input3)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, unauthorized_access)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(password_mismatch['error'], error_message)
+        response, response_status = get_change_password_api_response(input3)
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(are_two_lists_same([password_mismatch['error']],
+                                           response.keys()))
 
     def test_weak_passwords(self):
         # Case4: new passwords match but are not strong
@@ -109,15 +107,11 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "weakmatch",
                   "userId": self.user_id}
 
-        request = webapp2.Request.blank('/changePassword', POST=input4)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, processing_failed)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(password_not_strong['error'], error_message)
+        response, response_status = get_change_password_api_response(input4)
 
+        self.assertEquals(response_status, processing_failed)
+        self.assertTrue(are_two_lists_same([password_not_strong['error']],
+                                           response.keys()))
     def test_change_to_same_password(self):
         # Case5: new passwords and old password are the same
         input4 = {"oldPassword": "aaAA1234",
@@ -125,24 +119,19 @@ class TestHandlerChangePassword(unittest.TestCase):
                   "confirmedPassword": "aaAA1234",
                   "userId": self.user_id}
 
-        request = webapp2.Request.blank('/changePassword', POST=input4)
-        response = request.get_response(Main.app)
-        self.assertEquals(response.status_int, processing_failed)
-        try:
-            error_message = str(json.loads(response.body))
-        except IndexError as _:
-            self.assertFalse(True)
-        self.assertEquals(new_password_is_the_same_as_old['error'],
-                          error_message)
+        response, response_status = get_change_password_api_response(input4)
 
-
-
+        self.assertEquals(response_status, processing_failed)
+        self.assertTrue(are_two_lists_same(
+            [new_password_is_the_same_as_old['error']], response.keys()))
 
     def tearDown(self):
         self.testbed.deactivate()
 
 
+def get_create_user_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, create_user_api)
 
 
-if __name__ == '__main__':
-    unittest.main()
+def get_change_password_api_response(input_dictionary):
+    return get_response_from_post(Main, input_dictionary, change_password_api)

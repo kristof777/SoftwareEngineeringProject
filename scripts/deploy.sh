@@ -3,7 +3,7 @@
 # Author: Chris Mykota-Reid
 # Does everything related to the deployment of a release.  Sets up ssh keys
 # , gets us checked out onto the right branch and security type for git,
-# gets files prepped for deployment, and lastly deploys them
+# gets files prepped for deployment, and lastly deploys them.
 
 
 
@@ -29,34 +29,27 @@ setup_git(){
 # Sets up the Travis environment for deployment by making the dir for the particular release,
 # then copying the files for deployment into it.
 setup_deploy(){
-  cd ${PUSH_FOLDER}
-  mkdir "${RELEASE_ID}"
-  cd ${RELEASE_ID}
-  cp -r ${BUILD_FOLDER} ${PUSH_FOLDER}/${RELEASE_ID}
-  cd ${RELEASE_ID}
-  ls 
-  cd ..
+  mkdir ${PUSH_FOLDER}/${RELEASE_ID}
+  cp -r ${BUILD_FOLDER} ${PUSH_FOLDER}/${RELEASE_ID} 
 }
 
 # Moves the compiled files to the right folder then pushes the files to the repo.
 # TODO Figure out Github releases using a script.
 # This should be changed to run some kind of releases script.
 deploy(){
-  git add ${RELEASE_ID}
-  git commit -m "Deploy build from $TRAVIS_BUILD_ID [ci skip]"
+  git add ${PUSH_FOLDER}/${RELEASE_ID}
+  git commit -m "Deploy build from $RELEASE_ID [ci skip]"
   git push
 }
 
 
-if [[ "${BUILD_TYPE}" == "deployment" ]] && [[ "${TRAVIS_OS_NAME}" == "android" ]]; then
+if [[ "${BUILD_TYPE}" == "deployment" ]]; then
   setup_ssh
   setup_git
 
-  # variables used for
   export PUSH_FOLDER=/home/travis/build/CMPT371Team1/Project/releases
   export BUILD_FOLDER=/home/travis/build/CMPT371Team1/Project/platforms/android/build/outputs
-  export RELEASE_ID=ID3 
-  
+
   setup_deploy
   deploy
 else
