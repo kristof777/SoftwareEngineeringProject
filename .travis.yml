@@ -12,7 +12,7 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/yaml-3.10:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
-  BUILD_TYPE=test
+  BUILD_TYPE=deployment
   RELEASE_ID=ID4
   TESTING_BRANCH=id4_ReadyForTesting
   
