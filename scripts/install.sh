@@ -55,18 +55,23 @@ gae_install(){
   sudo pip install django
 }
 
+# We conditionally install ios and browser files because they are not actually built for deployment.
 if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-  echo "got to install osx"
-  ios_install
+  if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    echo "got to install osx"
+    ios_install
+  fi
 elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-  echo "got to linux install"
-  lindroid_install
-  
-  # prevent dialogue messages from appearing in gooogle app engine install
-  export CLOUDSDK_INSTALL_DIR=/$HOME
-  export CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  
-  gae_install
+  if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    echo "got to linux install"
+    lindroid_install
+    
+    # prevent dialogue messages from appearing in gooogle app engine install
+    export CLOUDSDK_INSTALL_DIR=/$HOME
+    export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+    
+    gae_install
+  fi
 else
   echo "got to install: android"
   lindroid_install
