@@ -7,7 +7,7 @@ exports.config = {
     capabilities: {
         'browserName': 'firefox',
         shardTestFiles: true,
-        maxInstances: 10
+        maxInstances: 3
     },
     baseUrl: 'http://localhost:8100',
     specs: [
