@@ -43,8 +43,8 @@ android_install(){
   echo y | ./android-sdk-linux/tools/android update sdk --no-ui --all --filter extra-google-m2repository
 }
 
-# Downloads and installs google app engine for our server build.
-gae_install(){
+# Downloads and installs files necessary for running our back-end tests.
+be_install(){
   gcloud -v
   sudo gcloud components update
   echo "" | sudo gcloud components install app-engine-python
@@ -53,6 +53,7 @@ gae_install(){
   sudo pip install webapp2
   sudo pip install WebOb
   sudo pip install django
+  sudo pip install coverage
 }
 
 # We conditionally install ios and browser files because they are not actually built for deployment.
@@ -70,7 +71,7 @@ elif [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     export CLOUDSDK_INSTALL_DIR=/$HOME
     export CLOUDSDK_CORE_DISABLE_PROMPTS=1
     
-    gae_install
+    be_install
   fi
 else
   echo "got to install: android"
