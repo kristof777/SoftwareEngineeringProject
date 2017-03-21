@@ -28,7 +28,7 @@ browser_build(){
   fi
 }
 
-# Builds the android version of our app.  If it's a deployment build
+# Builds the android version of our app. If it's a deployment build 
 # does a release build and if not then builds and emulates the app for testing
 # TODO: GET THE APP SIGNED W/ A KEY 
 android_build(){
