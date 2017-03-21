@@ -20,6 +20,7 @@ class User(Webapp2User):
             The raw password which will be hashed and stored
         """
         self.password = security.generate_password_hash(raw_password)
+        self.put()
 
     # @classmethod
     # def build_key(cls, email):
