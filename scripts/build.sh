@@ -11,8 +11,8 @@ set -ev
 # builds and emulates the app for testing.  A deployment build should not be done
 # on this platform.
 ios_build(){
-  ionic platform add ios
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    ionic platform add ios
     ionic build ios
     #ionic emulate ios
   fi
