@@ -7,7 +7,9 @@
 # with an empty post to the TestDB init URL.
 
 echo $'\n\n\n\n*******RUNNING BACK-END SMOKE TESTS*******'
-cd server-gae/test
+cd server-gae/test/
+echo $PWD
+ls
 python Run_All_Test.py
 export BACK_END_TEST=$?
 cd ../..
