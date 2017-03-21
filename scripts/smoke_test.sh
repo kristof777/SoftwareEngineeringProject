@@ -7,8 +7,10 @@
 # with an empty post to the TestDB init URL.
 
 echo $'\n\n\n\n*******RUNNING BACK-END SMOKE TESTS*******'
-python server-gae/test/Run_All_Test.py
+cd server-gae/test
+python Run_All_Test.py
 export BACK_END_TEST=$?
+cd ../..
 
 # if the back end tests succeeded we want to update the server before we run the front end tests
 if [[ "${BACK_END_TEST}" == 0 ]]; then
