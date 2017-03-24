@@ -71,7 +71,7 @@ class TestSignIn(unittest.TestCase):
         response, response_status = get_sign_in_response(input2)
         self.assertEquals(response_status, unauthorized_access)
         self.assertTrue(
-            are_two_lists_same(response.keys(), [not_authorized["error"]]))
+            are_two_lists_same(response.keys(), [not_authorized['error']]))
 
     def test_incorrect_userName(self):
         # Test2: When incorrect user_name, but correct password
@@ -80,7 +80,7 @@ class TestSignIn(unittest.TestCase):
         response, response_status = get_sign_in_response(input2)
         self.assertEquals(response_status, unauthorized_access)
         self.assertTrue(
-            are_two_lists_same(response.keys(), [not_authorized["error"]]))
+            are_two_lists_same(response.keys(), [not_authorized['error']]))
 
     def tearDown(self):
         # Don't forget to deactivate the testbed after the tests are

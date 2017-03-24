@@ -44,7 +44,7 @@ class ChangePassword(BaseHandler):
             logging.info('Sign-in failed for user %s because of %s',
                          values['userId'], type(e))
             error = {
-                not_authorized['error']: "Invalid credentials"
+                not_authorized['error']: 'Invalid credentials'
             }
             write_error_to_response(self.response, error,
                                     not_authorized['status'])
@@ -52,7 +52,7 @@ class ChangePassword(BaseHandler):
 
         if user is None:
             error = {
-                not_authorized['error']: "Invalid credentials"
+                not_authorized['error']: 'Invalid credentials'
             }
             write_error_to_response(self.response, error,
                                     not_authorized['status'])
@@ -68,7 +68,7 @@ class ChangePassword(BaseHandler):
 
         if not is_valid_password(values['newPassword']):
             error = {
-                password_not_strong['error']: "Password not strong enough"
+                password_not_strong['error']: 'Password not strong enough'
             }
             write_error_to_response(self.response, error,
                                     password_not_strong['status'])
@@ -77,7 +77,7 @@ class ChangePassword(BaseHandler):
         if values['newPassword'] != values['confirmedPassword']:
             error = {
                 password_mismatch['error']:
-                    "Password and confirmed password do not match"
+                    'Password and confirmed password do not match'
             }
             write_error_to_response(self.response, error,
                                     password_mismatch['status'])
@@ -86,7 +86,7 @@ class ChangePassword(BaseHandler):
         if values['newPassword'] == values['oldPassword']:
             error = {
                 new_password_is_the_same_as_old['error']:
-                    "New password is same as the old password"
+                    'New password is same as the old password'
             }
             write_error_to_response(self.response, error,
                                     new_password_is_the_same_as_old['status'])
