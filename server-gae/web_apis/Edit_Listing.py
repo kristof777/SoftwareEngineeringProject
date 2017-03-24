@@ -16,13 +16,12 @@ class EditListing(webapp2.RequestHandler):
     Class used to handle get and post.
     Get:  is used to render an HTML page.
     Post:
-        @pre-cond: The listing object should exist.
-                   listingId and userId are supposed to be integers,
-                   valuesRequired should be a dictionary
-                   If is published field is changed, then listing should have
-                   all required fields.
-        @post-cond:
-        @return: a timestamp of modified date should be returned
+        @pre-cond: listing object  is not null
+                   listingId  is an int
+                   userId     is an int
+                   valuesRequired  is a dict
+        @post-cond: if isPublished field changed    listing should have all required fields.
+        @return: a timestamp of modified date
     """
     def post(self):
         setup_post(self.response)
@@ -116,11 +115,11 @@ class EditListing(webapp2.RequestHandler):
 
 def fields_missing(listing):
     """
-    check if there's any fields that are None or empty
+    Checks if there are any fields that are None or empty.
 
-    :param required_keys: List of keys
-    :param post: Post request
-    :return: errors and post values converted to string
+    @param required_keys: List of keys
+    @param post: Post request
+    @return: errors and post values converted to string
     """
     errors = {}
     listing_keys_clone = copy.deepcopy(listing_keys)

@@ -11,14 +11,16 @@ class SignOut(BaseHandler):
     """
     SignOut class is used to respond to request to signOut api. The post method
     in this class is used to sign out the user by invalidating the token.
-    Post:
-        @pre-cond: Expecting keys to be userId and authToken.
-                   User with provided userId should be present in the database.
-                   authToken should be valid for given userId.
-        @post-cond: authToken provided is not valid anymore.
-        @return-api: Nothing
     """
     def post(self):
+        """
+        Post:
+         @pre-cond: keys   a userId and authToken
+                   user     in database with userID
+                   authToken valid for given userID
+         @post-cond: authToken  no longer valid
+         @return-api: Nothing
+        """
         setup_post(self.response)
         valid, values = \
             check_required_valid(sign_out_api, self.request.POST,

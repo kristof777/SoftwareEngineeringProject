@@ -73,7 +73,7 @@ class CreateUser(BaseHandler):
 
         # if user was created using a fbId then an entry needs to be mapped
         # from userId, and verification is not required if user is logged in
-        # from facebook.
+        # from face book.
         if "fbId" in values:
             fb_field = FacebookUser(user_id=int(user_id),
                                     fb_id=int(values["fbId"]))

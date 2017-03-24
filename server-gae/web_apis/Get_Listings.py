@@ -40,6 +40,7 @@ class GetListing(webapp2.RequestHandler):
                      are returned.
     """
     def post(self):
+        assert ()
         setup_post(self.response)
         valid, values = \
             check_required_valid(get_listing_api, self.request.POST,
@@ -52,7 +53,7 @@ class GetListing(webapp2.RequestHandler):
         invalid = {}
         if "filter" in values:
             invalid.update(is_valid_filter(values["filter"]))
-            if len(invalid) != 0:
+            if len(invalid) > 0:
                 write_error_to_response(self.response, invalid,
                                         missing_invalid_parameter)
                 return
@@ -64,7 +65,7 @@ class GetListing(webapp2.RequestHandler):
             return
 
         # This part should never be called
-        #TODO this part is called by the 4th test case. Is this expected? Why should it noe be called?
+        # TODO this part is called by the 4th test case. Is this expected? Why should it not be called?
         if is_existing_and_non_empty("listingIdList", values):
             listing_info_list = get_listings_from_listing_ids(values)
             output_dict = {}
@@ -291,7 +292,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     bedroom_query = Listing.query().filter(Listing.bedrooms >= Listing.numeric_filter_bounds['bedrooms_min'],
                                            Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'],
-                                           Listing.isPublished == True)
+                                           Listing.isPublished)
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
     logging.info("bedrooms_keys_len is " + str(bedrooms_keys_len))
@@ -301,7 +302,7 @@ def get_listingIds_with_numeric_bounds():
     sqft_query = Listing.query().filter(
         Listing.squareFeet >= Listing.numeric_filter_bounds['sqft_min'],
         Listing.squareFeet <= Listing.numeric_filter_bounds['sqft_max'],
-        Listing.isPublished == True)
+        Listing.isPublished)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))
@@ -310,7 +311,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     price_query = Listing.query().filter(Listing.price >= Listing.numeric_filter_bounds['price_min'],
                                          Listing.price <= Listing.numeric_filter_bounds['price_max'],
-                                         Listing.isPublished == True)
+                                         Listing.isPublished)
     price_keys = price_query.fetch(keys_only=True)
     price_keys_len = len(price_keys)
 
@@ -318,7 +319,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     bathrooms_query = Listing.query().filter(Listing.bathrooms >= Listing.numeric_filter_bounds['bathrooms_min'],
                                              Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'],
-                                             Listing.isPublished == True)
+                                             Listing.isPublished)
     bathrooms_keys = bathrooms_query.fetch(keys_only=True)
     bathrooms_keys_len = len(bathrooms_keys)
 
