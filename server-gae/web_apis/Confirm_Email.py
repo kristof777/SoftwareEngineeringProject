@@ -6,14 +6,14 @@ from extras.Base_Handler import BaseHandler
 
 class VerificationHandler(BaseHandler):
     """
-    Get: When user clicks on user email verification link, a get request is
-         sent to this class.
-        @pre-cond: User is expected to have a valid signup token, userId
+    Get: Verifies a user when they click on their email verifications link. A
+    get request specifying this is sent to this class.
+        @pre-cond: User  have a valid signup token userID
         @post-cond: User is verified.
         @return: None
     """
     def get(self, *args, **kwargs):
-        user = None
+        user = None     #TODO: Why is this here?
         user_id = kwargs['user_id']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
@@ -28,14 +28,19 @@ class VerificationHandler(BaseHandler):
         # store user data in the session
         self.auth.set_session(self.auth.store.user_to_dict(user), remember=True)
 
-        if verification_type == 'v':  # remove signup token, we don't want users
+        # v is _______________
+        if verification_type == 'v':
+            # remove signup token, we don't want users
             # to come back with an old link
             self.user_model.delete_signup_token(user.get_id(), signup_token)
+            assert(verification_type == 'v')
 
         if not user.verified:
             user.verified = True
             user.put()
+            assert user.verified
             return
+        # p is __________
         elif verification_type == 'p':
             # supply user to the page
             params = {
@@ -43,6 +48,10 @@ class VerificationHandler(BaseHandler):
                 'token': signup_token
             }
             self.render_template('Reset_Password.html', params)
+            assert(verification_type == 'p')
         else:
+            assert user.verified
+            assert(verification_type is not None)
+            assert(verification_type != 'p')
             logging.info('verification type not supported.')
             self.abort(404)
