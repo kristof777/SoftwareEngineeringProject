@@ -40,7 +40,6 @@ class GetListing(webapp2.RequestHandler):
                      are returned.
     """
     def post(self):
-        assert ()
         setup_post(self.response)
         valid, values = \
             check_required_valid(get_listing_api, self.request.POST,
