@@ -111,8 +111,7 @@ export class SignUpPage {
             // changing to another tab) will bring the user back to the SignInPage page.
             this.navCtrl.parent.select(0);
         }, error => {
-            this._logger.error("There was an error registering: ");
-            this._logger.error(JSON.stringify(error));
+            this.kasperService.handleError("signUp", error.json());
         });
     }
 
