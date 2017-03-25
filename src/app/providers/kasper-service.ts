@@ -404,6 +404,7 @@ export class KasperService {
         let result: string[][] = [[]];
 
         result['general'] = [];
+        result['general']['isTrusted'] = "There was an error connecting to the server! Please check you're connecting to the internet.";
         result['general']['missingUserId'] = "You must be logged in to do this";
         result['general']['missingToken'] = "You must be logged in to do this";
 
