@@ -291,7 +291,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     bedroom_query = Listing.query().filter(Listing.bedrooms >= Listing.numeric_filter_bounds['bedrooms_min'],
                                            Listing.bedrooms <= Listing.numeric_filter_bounds['bedrooms_max'],
-                                           Listing.isPublished)
+                                           Listing.isPublished == True)
     bedrooms_keys = bedroom_query.fetch(keys_only=True)
     bedrooms_keys_len = len(bedrooms_keys)
     logging.info("bedrooms_keys_len is " + str(bedrooms_keys_len))
@@ -301,7 +301,7 @@ def get_listingIds_with_numeric_bounds():
     sqft_query = Listing.query().filter(
         Listing.squareFeet >= Listing.numeric_filter_bounds['sqft_min'],
         Listing.squareFeet <= Listing.numeric_filter_bounds['sqft_max'],
-        Listing.isPublished)
+        Listing.isPublished == True)
     sqft_keys = sqft_query.fetch(keys_only=True)
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))
@@ -310,7 +310,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     price_query = Listing.query().filter(Listing.price >= Listing.numeric_filter_bounds['price_min'],
                                          Listing.price <= Listing.numeric_filter_bounds['price_max'],
-                                         Listing.isPublished)
+                                         Listing.isPublished == True)
     price_keys = price_query.fetch(keys_only=True)
     price_keys_len = len(price_keys)
 
@@ -318,7 +318,7 @@ def get_listingIds_with_numeric_bounds():
     # only fetch their key(listingId) for efficiency
     bathrooms_query = Listing.query().filter(Listing.bathrooms >= Listing.numeric_filter_bounds['bathrooms_min'],
                                              Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'],
-                                             Listing.isPublished)
+                                             Listing.isPublished == True)
     bathrooms_keys = bathrooms_query.fetch(keys_only=True)
     bathrooms_keys_len = len(bathrooms_keys)
 
