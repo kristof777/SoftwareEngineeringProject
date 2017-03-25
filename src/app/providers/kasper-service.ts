@@ -333,7 +333,7 @@ export class KasperService {
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
         let numeric = new RegExp("^(?=.*[0-9])");
-        let length = new RegExp("^(?=.{7,})");
+        let length = new RegExp("^(?=.{8,})");
 
         if(!lowerCase.test(c.value)){
             return (0 == requiredStrength) ? null : {
@@ -360,7 +360,7 @@ export class KasperService {
             return (3 == requiredStrength) ? null : {
                 checkPass: {
                     strength: 3,
-                    message: "Password must include at least 7 characters long"
+                    message: "Password must include at least 8 characters long"
                 }
             };
         } else {
