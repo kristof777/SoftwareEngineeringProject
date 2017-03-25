@@ -34,7 +34,7 @@ class GetFavourites(webapp2.RequestHandler):
             return
         # Get all favorites object that satisfies the filter condition
         favorites = Favorite.query(Favorite.userId == int(values['userId']),
-                                   Favorite.liked).fetch()
+                                   Favorite.liked == True).fetch()
 
         returned_array = []
         count_listings = 0
@@ -70,5 +70,6 @@ class GetFavourites(webapp2.RequestHandler):
         assert (len(returned_array) == count_listings)
         assert (not (len(returned_array) == 0) or (not published_favourites))
         assert (not (len(returned_array) > 0) or published_favourites)
+        assert valid
         # returned_array is either [] or contains as many elements are there are published listings in favourites.
         write_success_to_response(self.response, {"listings": returned_array})
