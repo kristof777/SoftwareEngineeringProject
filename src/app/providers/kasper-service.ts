@@ -464,7 +464,8 @@ export class KasperService {
         result['getMyListings']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['likeDislikeListing'] = [];
-        result['likeDislikeListing']['unallowedLiked'] = "You cannot like your own listing.";
+        result['likeDislikeListing']['duplicatedLike'] = "";
+        result['likeDislikeListing']['unallowedLiked'] = "You cannot like/dislike your own listing.";
         result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['missingUserId'] = "You must be logged in to like or dislike a listing.";
@@ -480,7 +481,7 @@ export class KasperService {
         result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
         result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
         result['createListing']['missingPostalCode'] = "A postal code is required";
-        result['createListing']['invalidImages'] = "At least one image is required to publish a listing";
+        result['createListing']['missingImage'] = "At least one image is required to publish a listing";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";

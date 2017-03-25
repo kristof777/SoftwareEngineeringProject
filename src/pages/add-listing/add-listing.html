@@ -1,9 +1,9 @@
 <ion-header>
     <ion-navbar color="primary">
-        <ion-title *ngIf="curListing == null">
+        <ion-title *ngIf="!editMode">
             Add Listing
         </ion-title>
-        <ion-title *ngIf="curListing != null">
+        <ion-title *ngIf="editMode">
             Edit Listing
         </ion-title>
     </ion-navbar>

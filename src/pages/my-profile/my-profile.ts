@@ -3,7 +3,7 @@ import {ChangePasswordPage} from "../change-password/change-password";
 import {Component} from "@angular/core";
 import {Logger} from "angular2-logger/core";
 import {Province} from "../../app/models/province";
-import {NavController, ModalController, Platform, AlertController} from "ionic-angular";
+import {NavController, ModalController, Platform, AlertController, ToastController} from "ionic-angular";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {LoginService} from "../../app/providers/login-service";
 import {SignInPage} from "../sign-in/sign-in";
@@ -24,6 +24,7 @@ export class MyProfilePage {
     constructor(public navCtrl: NavController,
                 public modalCtrl: ModalController,
                 public formBuilder: FormBuilder,
+                public toastCtrl: ToastController,
                 public alertCtrl: AlertController,
                 public kasperService: KasperService,
                 public loginService: LoginService,
@@ -152,7 +153,12 @@ export class MyProfilePage {
         this.kasperService.signOut().subscribe(data => {
             me.loginService.signOut();
             me.navCtrl.setRoot(SignInPage);
-            // User is signed out
+            me.navCtrl.parent.select(0);
+            me.toastCtrl.create({
+                message: "Successfully logged out.",
+                duration: 3000,
+                position: 'top'
+            }).present();
         }, error => {
             this.kasperService.handleError("signOut", error.json());
         });
