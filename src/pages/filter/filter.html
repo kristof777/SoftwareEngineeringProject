@@ -13,6 +13,7 @@
         <ion-item>
             <ion-label stacked>Province</ion-label>
             <ion-select [(ngModel)]="province" id="flProv">
+                <ion-option value = "null" >None</ion-option>
                 <ion-option *ngFor="let province of _provinces" value="{{ province.abbr }}">{{ province.name }}</ion-option>
             </ion-select>
         </ion-item>
