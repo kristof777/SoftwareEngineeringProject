@@ -122,14 +122,20 @@ export class MyProfilePage {
      */
     saveChanges(): void {
         let changeValues: {} = this.getChangedValues();
-
+        console.log(JSON.stringify(changeValues));
         this.kasperService.editUser(changeValues).subscribe(data => {
             let keys = Object.keys(changeValues);
 
             // update the current user settings to the new values
-            for(let i=0; i<keys.length; i++)
-                this.currentUser[keys[i]] = changeValues[keys[i]];
+            for(let i=0; i<keys.length; i++){
+                if(keys[i] == "province"){
+                    this.currentUser.province = Province.fromAbbr(changeValues[keys[i]]);
+                }else{
+                    this.currentUser[keys[i]] = changeValues[keys[i]];
+                }
+            }
 
+        console.log(JSON.stringify(this.currentUser));
             // Clear the form
             this.profileGroup.reset();
 
