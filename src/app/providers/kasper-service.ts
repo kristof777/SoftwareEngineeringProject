@@ -413,7 +413,7 @@ export class KasperService {
         result['signIn']['missingPassword'] = "Please enter your password to continue";
 
         result['signInToken'] = [];
-        result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
+        result['signInToken']['invalidCredentials'] = "Bringing you to the sign in page...";
 
         result['confirmEmail'] = [];
         result['confirmEmail']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
@@ -446,7 +446,7 @@ export class KasperService {
         result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
         result['changePassword']['invalidUserId'] = "Setting new password failed.";
         result['changePassword']['missingUserId'] = "Setting new password failed.";
-        result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
+        result['changePassword']['invalidCredentials'] = "Looks like your password was incorrect, please try again";
         result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
         result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you entered is the same as your current password. Please choose a new password.";
 
@@ -486,7 +486,7 @@ export class KasperService {
         result['editListing']['unrecognizedKey'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
-        result['editListing']['notAuthorized'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['invalidCredentials'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['contactSeller'] = [];
