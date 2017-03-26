@@ -42,6 +42,7 @@ export class KasperService {
      */
     login(email: string, password: string): any{
         let body: FormData = new FormData();
+        email = email.replace(' ', '');
         body.append('email', email);
         body.append('password', password);
 
