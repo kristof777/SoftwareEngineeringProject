@@ -18,13 +18,19 @@ class GetFavourites(webapp2.RequestHandler):
                    User with provided userId should be present in the database.
                    authToken should be valid for given userId.
         @post-cond: Nothing
-        @return-api: All the listing liked by the user with userId are returned.
+        @return-api: All the listings liked by the user with userId are
+                     returned.
     """
 
     def options(self, *args, **kwargs):
         setup_api_options(self)
 
     def post(self):
+        # TODO: Finish the specs here please.
+        """
+
+        :return:
+        """
         setup_post(self.response)
         valid, values = \
             check_required_valid(get_favourites_listing_api,
@@ -68,8 +74,10 @@ class GetFavourites(webapp2.RequestHandler):
             assert (favorites is not None)
 
         assert (len(returned_array) == count_listings)
+        # For the following two asserts, If A then B <==> !A or B
         assert (not (len(returned_array) == 0) or (not published_favourites))
         assert (not (len(returned_array) > 0) or published_favourites)
         assert valid
-        # returned_array is either [] or contains as many elements are there are published listings in favourites.
+        # returned_array is either [] or contains as many elements are there
+        # are published listings in favourites.
         write_success_to_response(self.response, {"listings": returned_array})
