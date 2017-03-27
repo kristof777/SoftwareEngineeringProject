@@ -4,6 +4,7 @@ import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Base_Handler import BaseHandler
 from extras.Utils import *
+from extras.Check_Invalid import *
 from models.User import User
 from API_NAME import edit_user_api
 from extras.Required_Fields import check_required_valid
@@ -53,7 +54,7 @@ class EditUser(BaseHandler):
         # If requested to edit password. Cannot be done in edit-user.
         if "password" in change_values.keys():
             error = {password_cant_be_changed['error']:
-                         "Please don't change password using edit user"}
+                     "Please don't change password using edit user"}
 
             write_error_to_response(self.response, error,
                                     password_cant_be_changed['status'])

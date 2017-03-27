@@ -11,7 +11,7 @@ from models.User import User
 from extras.Utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from API_NAME import create_user_api
-
+from extras.Check_Invalid import *
 
 class TestConfirmEmail(unittest.TestCase):
     """

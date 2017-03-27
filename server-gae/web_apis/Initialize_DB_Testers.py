@@ -1,6 +1,7 @@
 from google.appengine.api import mail
 from extras.Base_Handler import BaseHandler
 from extras.Utils import *
+from extras.Check_Invalid import *
 from models.FacebookUser import FacebookUser
 from models.Favorite import Favorite
 from models.Listing import Listing

@@ -1,6 +1,7 @@
 import logging
 
 from extras.Utils import *
+from extras.Check_Invalid import *
 import sys
 sys.path.append('../')
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError

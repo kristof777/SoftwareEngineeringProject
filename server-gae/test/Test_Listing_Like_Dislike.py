@@ -9,6 +9,7 @@ from API_NAME import *
 from extras.Utils import get_response_from_post
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.Check_Invalid import *
 
 
 class TestLikeListingApi(unittest.TestCase):
