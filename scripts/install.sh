@@ -19,7 +19,7 @@ ios_install(){
 
 # Downloads and installs all the common files required to run android/linux.
 lindroid_install(){
-  sudo apt-get install oracle-java8-set-default screen xvfb
+  sudo apt-get --force-yes install oracle-java8-set-default
   npm install -g protractor@5.0.0 cordova ionic jasmine jasmine-core gulp gulp-cli
   npm install jasmine-spec-reporter --save-dev
   # installs packages specified in the ionic json
