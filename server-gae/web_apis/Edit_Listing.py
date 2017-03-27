@@ -91,7 +91,8 @@ class EditListing(webapp2.RequestHandler):
             error = {
                 not_authorized[
                     'error']:
-                        "Provided user ID doesn't match the owner id of the listing"
+                        "Provided user ID does not match the owner id of " +
+                        "the listing"
             }
             write_error_to_response(self.response, error, unauthorized_access)
             return
@@ -105,9 +106,11 @@ class EditListing(webapp2.RequestHandler):
         for key in change_values:
             if key != "isPublished":
                 listing.set_property(key, change_values[key])
-        # if isPublished field is changed from false to true, check missing fields
+        # if isPublished field is changed from false to true,
+        # check missing fields
         if is_existing_and_non_empty("isPublished", change_values):
-            if (not listing.isPublished) and (convert_to_bool(change_values["isPublished"])):
+            if (not listing.isPublished) and \
+                    (convert_to_bool(change_values["isPublished"])):
                 errors = fields_missing(listing)
                 if len(errors) > 0:
                     write_error_to_response(self.response,
@@ -122,7 +125,8 @@ class EditListing(webapp2.RequestHandler):
 
 
 def fields_missing(listing):
-    # TODO: Update the following specs, please.
+    # TODO: Update the following specs, please. The current params don't exist
+    # TODO: And the listing param is not explained.
     """
     Checks if there are any fields that are None or empty.
 
@@ -143,5 +147,3 @@ def fields_missing(listing):
             errors[image_error] = "images is Missing"
 
     return errors
-
-

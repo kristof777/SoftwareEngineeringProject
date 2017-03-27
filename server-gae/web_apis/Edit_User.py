@@ -53,7 +53,7 @@ class EditUser(BaseHandler):
         # If requested to edit password. Cannot be done in edit-user.
         if "password" in change_values.keys():
             error = {password_cant_be_changed['error']:
-                         "Please don't change password using edit user"}
+                     "Please don't change password using edit user"}
 
             write_error_to_response(self.response, error,
                                     password_cant_be_changed['status'])
