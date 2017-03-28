@@ -97,7 +97,7 @@ class TestLikeListingApi(unittest.TestCase):
             get_like_listing_response(dislike_the_listing)
         self.assertEquals(response_status, success)
 
-    def test_disliking_like(self):
+    def test_already_disliked_listing(self):
 
         dislike_the_listing_again = {
             "userId": self.liker_id,
@@ -116,7 +116,7 @@ class TestLikeListingApi(unittest.TestCase):
         errors_expected = [duplicated_liked['error']]
         self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
-    def test_like_in_fav_and_then_disliked_it_removed_from_favorites(self):
+    def test_add_and_remove_from_favourites(self):
         like_the_listing = {
             "userId": self.liker_id,
             "listingId": self.listing_id,
