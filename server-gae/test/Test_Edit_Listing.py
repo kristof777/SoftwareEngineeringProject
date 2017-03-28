@@ -181,7 +181,7 @@ class TestEditListing(unittest.TestCase):
                           int(change_values['thumbnailImageIndex']))
 
     def test_unpublishing_input(self):
-        change_values = {"isPublished": "False"}
+        change_values = {"isPublished": "Fals e"}
         res_value, status = get_response(
             get_post_dictionary(self.ownerId, self.listingId, self.token, change_values))
         self.assertEquals(status, success)

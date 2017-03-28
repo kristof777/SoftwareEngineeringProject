@@ -483,7 +483,6 @@ def is_valid_province(province):
     """
     assert province is not None
     assert len(province) >= 2
-    assert province.isalpha()
     return province.lower() in province_complete or province in province_abbr
 
 
