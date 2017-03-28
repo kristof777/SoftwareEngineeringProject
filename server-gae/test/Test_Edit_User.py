@@ -10,6 +10,7 @@ from models.User import User
 import Main
 from API_NAME import *
 from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 class TestEditUser(unittest.TestCase):
     """

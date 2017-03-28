@@ -11,6 +11,7 @@ import Main
 from models.FacebookUser import FacebookUser
 from API_NAME import *
 from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 class TestFacebookLogin(unittest.TestCase):
     """

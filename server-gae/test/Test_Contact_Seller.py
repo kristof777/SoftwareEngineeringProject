@@ -10,6 +10,7 @@ from API_NAME import contact_seller_api
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import Main
 from web_apis.Create_User import *
+from extras.Random_Models import *
 
 
 class TestContactSeller(unittest.TestCase):

@@ -11,6 +11,7 @@ from models.User import *
 from extras.Utils import *
 from API_NAME import *
 from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 

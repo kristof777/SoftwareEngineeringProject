@@ -9,6 +9,7 @@ from extras.Utils import *
 from API_NAME import create_user_api
 from extras.Check_Invalid import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.Random_Models import *
 
 
 class TestCreateUser(unittest.TestCase):

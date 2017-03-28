@@ -10,7 +10,7 @@ from extras.Utils import get_response_from_post
 sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Check_Invalid import *
-
+from extras.Random_Models import *
 
 class TestLikeListingApi(unittest.TestCase):
     """
