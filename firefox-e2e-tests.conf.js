@@ -11,9 +11,7 @@ exports.config = {
     },
     baseUrl: 'http://localhost:8100',
     specs: [
-        //'./tests/e2e-tests/*.tests.js'
-        //'./tests/e2e-tests/registerBrowseAddListing.tests.js'
-        './tests/e2e-tests/addListing.tests.js'
+        './tests/e2e-tests/*.tests.js'
     ],
     exclude: [
         './tests/e2e-tests/registerUser.tests.js'
