@@ -1,7 +1,7 @@
 import {Logger} from "angular2-logger/core";
 let assert = require('assert-plus');
 import {Component} from '@angular/core';
-import {NavController, NavParams, ToastController} from 'ionic-angular';
+import {Loading, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
@@ -38,6 +38,7 @@ export class AddListingPage {
 
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
+                public loadingCtrl: LoadingController,
                 public toastCtrl: ToastController,
                 public navParams: NavParams,
                 private _logger: Logger) {
@@ -144,6 +145,7 @@ export class AddListingPage {
             this.updateListing();
         } else {
             this.addListing();
+            this.editMode = true;
         }
     }
 
@@ -151,11 +153,18 @@ export class AddListingPage {
      * Add a new listing to the server, or display an error if the server denies the requset.
      */
     addListing(){
+        let loading:Loading = this.loadingCtrl.create({
+            content: "Adding Listing..."
+        });
+        loading.present();
+
         let result = this.listingProvider.addListing(this.getCurListing());
 
         result.subscribe(data => {
             this.navCtrl.pop();
+            loading.dismiss();
         }, error => {
+            loading.dismiss();
             this.listingProvider.kasperService.handleError("createListing", error.json());
         });
 
