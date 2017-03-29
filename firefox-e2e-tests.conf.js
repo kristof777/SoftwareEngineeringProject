@@ -7,11 +7,13 @@ exports.config = {
     capabilities: {
         'browserName': 'firefox',
         shardTestFiles: true,
-        maxInstances: 1
+        maxInstances: 3
     },
     baseUrl: 'http://localhost:8100',
     specs: [
-        './tests/e2e-tests/*.tests.js'
+        //'./tests/e2e-tests/*.tests.js'
+        //'./tests/e2e-tests/registerBrowseAddListing.tests.js'
+        './tests/e2e-tests/addListing.tests.js'
     ],
     exclude: [
         './tests/e2e-tests/registerUser.tests.js'
