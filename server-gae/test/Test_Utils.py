@@ -80,6 +80,39 @@ class TestUtils(unittest.TestCase):
         exists = is_existing_and_non_empty('not_key', test_dict)
         self.assertFalse(exists)
 
+    def test_is_valid_read_del(self):
+        self.assertTrue(is_valid_read_del('r'))
+        self.assertTrue(is_valid_read_del('R'))
+        self.assertTrue(is_valid_read_del('d'))
+        self.assertFalse(is_valid_read_del('q'))
+
+    def test_scale_province(self):
+        self.assertEquals(scale_province('Saskatchewan'),'SK')
+        self.assertEquals(scale_province('saskatchewan'), 'SK')
+        self.assertNotEquals(scale_province('Alberta'), 'SK')
+
+    def test_are_two_lists_same(self):
+        list1 = ['element1', 'element2']
+        list2 = ['element1', 'element2']
+        self.assertTrue(are_two_lists_same(list1,list2))
+
+        list2 = ['element2', 'element1']
+        self.assertTrue(are_two_lists_same(list1, list2))
+
+        list2 = ['element1', 'element2','element3']
+        self.assertFalse(are_two_lists_same(list1, list2))
+
+        list2 = ['element1']
+        self.assertFalse(are_two_lists_same(list1, list2))
+
+    def test_is_empty(self):
+        self.assertTrue(is_empty({}))
+        self.assertTrue(is_empty(''))
+        self.assertTrue(is_empty(None))
+        self.assertTrue(is_empty(' '))
+
+        self.assertFalse(is_empty('not nothing'))
+        self.assertFalse(is_empty(1))
 
 
 
