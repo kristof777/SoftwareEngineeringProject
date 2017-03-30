@@ -46,6 +46,13 @@ class TestFacebookLogin(unittest.TestCase):
             get_fb_login_response({"fbId": 1212312398})
         self.assertEqual(response_status, success)
 
+    def test_unsuccess_facebook_login(self):
+        response, response_status = \
+            get_fb_login_response({"fbId": 121231239})
+        error_list = [invalid_fb_id["error"]]
+        self.assertTrue(are_two_lists_same(error_list, response.keys()))
+
+
 
 def get_create_user_response(input_dictionary):
     return \
