@@ -78,6 +78,11 @@ class TestSignInWithToken(unittest.TestCase):
         self.assertNotEqual(output['authToken'], self.token)
         check_output_for_sign_in(self,output,self.database_user)
 
+        #check to make sure the old token doesn't work
+        output, response_status = get_sign_in_token_response(input3)
+        self.assertEquals(response_status,unauthorized_access)
+
+
     def tearDown(self):
         self.testbed.deactivate()
 
