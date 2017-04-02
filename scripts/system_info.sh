@@ -14,7 +14,7 @@ if [[ "${TRAVIS_OS_NAME}" == "android" ]]; then
   echo 'Android Support Repository, revision 42'
 fi
   
-if [[ "${BUILD_TYPE}" == "test" || ( "${BUILD_TYPE}" == "deployment" && "${TRAVIS_OS_NAME}" == "android" ]]; then  
+if [[ "${BUILD_TYPE}" == "test" || ( "${BUILD_TYPE}" == "deployment" && "${TRAVIS_OS_NAME}" == "android" ) ]]; then  
   java -version
   echo 'npm version:'
   npm -v
