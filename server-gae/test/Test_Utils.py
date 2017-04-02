@@ -16,15 +16,6 @@ from extras.Random_Models import *
 
 class TestUtils(unittest.TestCase):
 
-
-    def setUp(self):
-        setup_testbed(self)
-
-
-    # The keys_missing tests use the error dict for sign_in_with_token as
-    # it will not change in the future.
-
-
     def test_keys_missing_1(self):
         #Case 1: missing keys
         expected_keys = ['authToken', 'userId']
@@ -113,8 +104,3 @@ class TestUtils(unittest.TestCase):
 
         self.assertFalse(is_empty('not nothing'))
         self.assertFalse(is_empty(1))
-
-
-
-    def tearDown(self):
-        self.testbed.deactivate()

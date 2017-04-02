@@ -225,8 +225,9 @@ def is_valid_postal_code(postal_code):
         N.B. To check this, postal_code must be in the form A1A1A1 with no spaces in between characters.
     """
     assert postal_code is not None
+    postal_code = postal_code.replace(" ", "")
     postal_code_re = re.compile(r"\s*(\w\d\s*){3}\s*")
-    return postal_code_re.match(postal_code)
+    return postal_code_re.match(postal_code) is not None
 
 
 def is_valid_longitude(longitude):
@@ -286,3 +287,4 @@ valid_check = {
     "receiverId": is_valid_integer,
     "changeValues": is_valid_json
 }
+

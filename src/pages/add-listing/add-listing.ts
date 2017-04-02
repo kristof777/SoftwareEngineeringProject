@@ -145,7 +145,6 @@ export class AddListingPage {
             this.updateListing();
         } else {
             this.addListing();
-            this.editMode = true;
         }
     }
 
@@ -192,6 +191,7 @@ export class AddListingPage {
      * Update the listing on the server to be unpublished
      */
     unpublish(){
-        this._logger.error("AddListingPage.unpublish is not implemented yet");
+        this.isPublished = false;
+        this.saveListing();
     }
 }
