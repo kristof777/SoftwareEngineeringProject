@@ -70,7 +70,7 @@ afterEach(function() {
  * @param {number} time - The amount of time to sleep (in milliseconds)
  */
 function sleep(){
-    browser.driver.sleep(500);
+    browser.driver.sleep(1000);
 }
 
 /**
