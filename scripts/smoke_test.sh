@@ -17,7 +17,7 @@ if [[ "${BACK_END_TEST}" == 0 ]]; then
   ./scripts/update_server.sh
 fi
 
-# curl -v -H "Content-Type: application/json" -X POST -d '{}' http://cmpt371g1.usask.ca:4040/initDBTESTERS
+curl -v -H "Content-Type: application/json" -X POST -d '{}' http://cmpt371g1.usask.ca:4040/initDBTESTERS
 
 echo $'\n\n\n\n*******RUNNING FRONT-END SMOKE TESTS FOR FIREFOX*******'
 screen -d -m -L ionic serve --firefox@47.0.1
