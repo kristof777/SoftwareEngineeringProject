@@ -11,6 +11,8 @@ from web_apis.Create_User import *
 import extras.Utils as utils
 from models.Message import Message
 from API_NAME import *
+from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 
 class TestEditMessage(unittest.TestCase):

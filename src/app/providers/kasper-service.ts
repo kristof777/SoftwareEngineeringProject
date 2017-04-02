@@ -42,6 +42,7 @@ export class KasperService {
      */
     login(email: string, password: string): any{
         let body: FormData = new FormData();
+        email = email.replace(' ', '');
         body.append('email', email);
         body.append('password', password);
 
@@ -332,7 +333,7 @@ export class KasperService {
         let lowerCase = new RegExp("^(?=.*[a-z])");
         let upperCase = new RegExp("^(?=.*[A-Z])");
         let numeric = new RegExp("^(?=.*[0-9])");
-        let length = new RegExp("^(?=.{7,})");
+        let length = new RegExp("^(?=.{8,})");
 
         if(!lowerCase.test(c.value)){
             return (0 == requiredStrength) ? null : {
@@ -359,7 +360,7 @@ export class KasperService {
             return (3 == requiredStrength) ? null : {
                 checkPass: {
                     strength: 3,
-                    message: "Password must include at least 7 characters long"
+                    message: "Password must include at least 8 characters long"
                 }
             };
         } else {
@@ -403,6 +404,7 @@ export class KasperService {
         let result: string[][] = [[]];
 
         result['general'] = [];
+        result['general']['isTrusted'] = "There was an error connecting to the server! Please check you're connecting to the internet.";
         result['general']['missingUserId'] = "You must be logged in to do this";
         result['general']['missingToken'] = "You must be logged in to do this";
 
@@ -412,7 +414,7 @@ export class KasperService {
         result['signIn']['missingPassword'] = "Please enter your password to continue";
 
         result['signInToken'] = [];
-        result['signInToken']['notAuthorized'] = "Bringing you to the sign in page...";
+        result['signInToken']['invalidCredentials'] = "Bringing you to the sign in page...";
 
         result['confirmEmail'] = [];
         result['confirmEmail']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
@@ -445,7 +447,7 @@ export class KasperService {
         result['changePassword']['passwordNotStrong'] = "Please make sure your new password is at least 8 characters long, and has a number and both lower and upper-case characters ";
         result['changePassword']['invalidUserId'] = "Setting new password failed.";
         result['changePassword']['missingUserId'] = "Setting new password failed.";
-        result['changePassword']['notAuthorized'] = "Looks like your password was incorrect, please try again";
+        result['changePassword']['invalidCredentials'] = "Looks like your password was incorrect, please try again";
         result['changePassword']['newPasswordMismatch'] = "Looks like your confirm password didn't match... please try again";
         result['changePassword']['newPasswordIsTheSameAsOld'] = "The new password you entered is the same as your current password. Please choose a new password.";
 
@@ -462,7 +464,8 @@ export class KasperService {
         result['getMyListings']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['likeDislikeListing'] = [];
-        result['likeDislikeListing']['unallowedLiked'] = "You cannot like your own listing.";
+        result['likeDislikeListing']['duplicatedLike'] = "";
+        result['likeDislikeListing']['unallowedLiked'] = "You cannot like/dislike your own listing.";
         result['likeDislikeListing']['invalidListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['likeDislikeListing']['missingUserId'] = "You must be logged in to like or dislike a listing.";
@@ -478,14 +481,14 @@ export class KasperService {
         result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
         result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
         result['createListing']['missingPostalCode'] = "A postal code is required";
-        result['createListing']['invalidImages'] = "At least one image is required to publish a listing";
+        result['createListing']['missingImage'] = "At least one image is required to publish a listing";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
         result['editListing']['unrecognizedKey'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['invalidUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['missingUserId'] = "Something went wrong in the app. We apologize for any inconvenience";
-        result['editListing']['notAuthorized'] = "Something went wrong in the app. We apologize for any inconvenience";
+        result['editListing']['invalidCredentials'] = "Something went wrong in the app. We apologize for any inconvenience";
         result['editListing']['missingListingId'] = "Something went wrong in the app. We apologize for any inconvenience";
 
         result['contactSeller'] = [];

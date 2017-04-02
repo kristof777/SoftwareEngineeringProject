@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os
 import sys
-
+from extras.Check_Invalid import *
 sys.path.append("../")
 import unittest
 from API_NAME import contact_seller_api
@@ -10,6 +10,7 @@ from API_NAME import contact_seller_api
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 import Main
 from web_apis.Create_User import *
+from extras.Random_Models import *
 
 
 class TestContactSeller(unittest.TestCase):

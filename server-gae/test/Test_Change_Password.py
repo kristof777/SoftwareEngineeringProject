@@ -8,6 +8,8 @@ import Main
 from API_NAME import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from extras.Utils import *
+from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 
 class TestChangePassword(unittest.TestCase):

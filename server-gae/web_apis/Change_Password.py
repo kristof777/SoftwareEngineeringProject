@@ -2,9 +2,8 @@ import sys
 sys.path.append('../')
 import logging
 from extras.Base_Handler import BaseHandler
-from models.User import *
 from webapp2_extras.auth import InvalidAuthIdError, InvalidPasswordError
-from extras.Utils import *
+from extras.Check_Invalid import *
 from API_NAME import *
 from extras.Required_Fields import check_required_valid
 

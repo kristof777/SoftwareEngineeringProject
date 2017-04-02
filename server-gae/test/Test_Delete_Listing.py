@@ -11,7 +11,9 @@ from models.Listing import Listing
 from web_apis.Create_User import *
 from API_NAME import *
 sys.path.append("../")
+from extras.Check_Invalid import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from extras.Random_Models import *
 
 
 class TestDeleteListing(unittest.TestCase):

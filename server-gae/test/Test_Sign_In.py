@@ -11,6 +11,8 @@ from extras.Utils import *
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from API_NAME import *
 from extras.Utils import get_response_from_post
+from extras.Check_Invalid import *
+from extras.Random_Models import *
 
 
 class TestSignIn(unittest.TestCase):
