@@ -86,8 +86,12 @@ export class MyListingsPage {
     deleteListing(listing:Listing){
         assert(listing, "listing can not be null");
 
-        let selectedIndex = this.listings.indexOf(listing);
-        this.listings.splice(selectedIndex, 1);
+        this.listingProvider.kasperService.deleteListing(listing.listingId).subscribe().then(result => {
+            let selectedIndex = this.listings.indexOf(listing);
+            this.listings.splice(selectedIndex, 1);
+        }, error => {
+            this.listingProvider.kasperService.handleError("deleteListing", error.json());
+        });
     }
 
     /**

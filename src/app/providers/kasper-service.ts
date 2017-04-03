@@ -265,6 +265,20 @@ export class KasperService {
     }
 
     /**
+     * Delete a listing from the database
+     *
+     * @param listingId The listing to delete
+     */
+    deleteListing(listingId: number): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+        body.append('listingId', listingId);
+
+        return this.http.post(KasperConfig.API_URL + "/deleteListing", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
      * Send a request to update a listing
      *
      * @param listingId     the listingId to edit
@@ -431,6 +445,11 @@ export class KasperService {
         result['createUser']['missingLastName'] = "Please enter your last name";
         result['createUser']['missingPhoneNumber'] = "Please enter your phone number";
         result['createUser']['missingCity'] = "Please enter your city";
+
+        result['deleteListing'] = [];
+        result['deleteListing']['invalidListingId'] = "Could not find the listing specified.";
+        result['deleteListing']['missingListingId'] = "An error occurred while deleting the listing. (1)";
+        result['deleteListing']['invalidUserId'] = "An error occurred while deleting the listing. (2)";
 
         result['editUser'] = [];
         result['editUser']['emailAlreadyExists'] = "Looks like this email is already in use, please pick a different one";
