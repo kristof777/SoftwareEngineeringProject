@@ -1,7 +1,7 @@
 import {LoginService} from "../../app/providers/login-service";
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Component} from "@angular/core";
-import {NavController, ModalController} from "ionic-angular";
+import {NavController, ModalController, ToastController} from "ionic-angular";
 import {Listing} from "../../app/models/listing";
 import {Logger} from "angular2-logger/core";
 import {DetailPage} from "../detail/detail";
@@ -13,13 +13,12 @@ let assert = require('assert-plus');
     selector: 'page-my-listings',
     templateUrl: 'my-listings.html',
     providers: [ListingProvider]
-
 })
 export class MyListingsPage {
     listings: Listing[];
 
     constructor(public navCtrl: NavController,
-                public modalCtrl: ModalController,
+                public toastCtrl: ToastController,
                 public listingProvider: ListingProvider,
                 public loginService: LoginService,
                 private _logger: Logger) {
@@ -86,9 +85,15 @@ export class MyListingsPage {
     deleteListing(listing:Listing){
         assert(listing, "listing can not be null");
 
-        this.listingProvider.kasperService.deleteListing(listing.listingId).subscribe().then(result => {
+        this.listingProvider.kasperService.deleteListing(listing.listingId).subscribe(result => {
             let selectedIndex = this.listings.indexOf(listing);
             this.listings.splice(selectedIndex, 1);
+            
+            this.toastCtrl.create({
+                message: "The listing has been deleted",
+                duration: 3000,
+                position: 'top'
+            }).present();
         }, error => {
             this.listingProvider.kasperService.handleError("deleteListing", error.json());
         });

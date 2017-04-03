@@ -39,7 +39,6 @@ export class AddListingPage {
     constructor(public navCtrl: NavController,
                 public listingProvider: ListingProvider,
                 public loadingCtrl: LoadingController,
-                public toastCtrl: ToastController,
                 public navParams: NavParams,
                 private _logger: Logger) {
         this._provinces = Province.asArray;
