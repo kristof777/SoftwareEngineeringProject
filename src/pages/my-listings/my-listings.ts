@@ -88,7 +88,7 @@ export class MyListingsPage {
         this.listingProvider.kasperService.deleteListing(listing.listingId).subscribe(result => {
             let selectedIndex = this.listings.indexOf(listing);
             this.listings.splice(selectedIndex, 1);
-            
+
             this.toastCtrl.create({
                 message: "The listing has been deleted",
                 duration: 3000,
@@ -97,6 +97,17 @@ export class MyListingsPage {
         }, error => {
             this.listingProvider.kasperService.handleError("deleteListing", error.json());
         });
+    }
+
+    /**
+     * Hook for deleteListing. The error it repuclates is invalid userid
+     */
+    deleteListingHook(listing:Listing){
+        assert(listing, "listing can not be null");
+
+        let error = {"invalidUserId" : "invalid user id"};
+
+        this.listingProvider.kasperService.handleError("deleteListing", error);
     }
 
     /**
