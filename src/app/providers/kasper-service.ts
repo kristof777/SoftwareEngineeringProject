@@ -499,8 +499,11 @@ export class KasperService {
         result['createListing']['invalidCity'] = "Looks like the city you entered was not recognized";
         result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
         result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
+        result['createListing']['invalidPostalCode'] = "The postal code you entered was invalid";
         result['createListing']['missingPostalCode'] = "A postal code is required";
         result['createListing']['missingImage'] = "At least one image is required to publish a listing";
+        result['createListing']['missingAddress'] = "An address is required to publish a listing";
+        result['createListing']['missingCity'] = "A city is required to publish a listing";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
