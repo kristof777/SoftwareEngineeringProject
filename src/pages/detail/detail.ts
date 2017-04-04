@@ -46,6 +46,24 @@ export class DetailPage {
     }
 
     /**
+     * dislike test hook attempt to dislike a house get invalid userid error
+     */
+    dislikeHook(): void{
+        let error = {"invalidUserId" : "invalid user id"};
+
+        this.listingProvider.kasperService.handleError("likeDislikeListing", error);
+    }
+
+    /**
+     * like test hook attempt to dislike a house get invalid userid error
+     */
+    likeHook(): void {
+        let error = {"invalidUserId": "invalid user id"};
+
+        this.listingProvider.kasperService.handleError("likeDislikeListing", error);
+    }
+
+    /**
      * Add the house to the users favourites list
      */
     like(): void{
