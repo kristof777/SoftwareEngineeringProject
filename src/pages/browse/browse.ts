@@ -59,6 +59,21 @@ export class BrowsePage {
     }
 
     /**
+     * Attempt to retrieve listings from server and get an error
+     *
+     */
+    loadListingHook(): void {
+        let me = this;
+        let hookFilter = new Filter(null,'what','is','this','filter');
+
+        this.listingProvider.getListings(hookFilter, ['all'], 5).subscribe(data => {
+            me.listings = KasperService.fromData(data['listings']);
+        }, error => {
+            this.listingProvider.kasperService.handleError("getListings", error.json());
+        });
+    }
+
+    /**
      * Called when the user drags a listing
      *
      * @param event the drag event
