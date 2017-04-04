@@ -62,10 +62,22 @@ export class BrowsePage {
      * Attempt to retrieve listings from server and get a nolistings error
      *
      */
-    loadListingHook(): void {
-        let me = this;
-        let error = {"noListingsLeft": "There are no more listings left to view"};
-        this.listingProvider.kasperService.handleError("getListings", error);
+    loadListingsHook(): void {
+
+        let hook = {"noListingsLeft": "There are no more listings left to view"};
+
+        this.listingProvider.kasperService.handleError("getListings", hook);
+
+    }
+
+    /**
+     * Hook to fake no internet access 
+     */
+    wirelessHook(): void{
+
+        let hook = {"isTrusted": "no'"};
+
+        this.listingProvider.kasperService.handleError("getListings", hook);
     }
 
     /**
