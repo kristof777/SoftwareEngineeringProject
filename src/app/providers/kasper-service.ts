@@ -504,6 +504,7 @@ export class KasperService {
         result['createListing']['missingImage'] = "At least one image is required to publish a listing";
         result['createListing']['missingAddress'] = "An address is required to publish a listing";
         result['createListing']['missingCity'] = "A city is required to publish a listing";
+        result['createListing']['missingDescription'] = "A description is required to publish a listing";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
