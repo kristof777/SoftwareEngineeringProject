@@ -265,6 +265,20 @@ export class KasperService {
     }
 
     /**
+     * Delete a listing from the database
+     *
+     * @param listingId The listing to delete
+     */
+    deleteListing(listingId: number): any{
+        let body: FormData = new FormData();
+        this.appendAuthentication(body);
+        body.append('listingId', listingId);
+
+        return this.http.post(KasperConfig.API_URL + "/deleteListing", body, ResponseContentType.Json)
+            .map(response => response.json());
+    }
+
+    /**
      * Send a request to update a listing
      *
      * @param listingId     the listingId to edit
@@ -432,6 +446,11 @@ export class KasperService {
         result['createUser']['missingPhoneNumber'] = "Please enter your phone number";
         result['createUser']['missingCity'] = "Please enter your city";
 
+        result['deleteListing'] = [];
+        result['deleteListing']['invalidListingId'] = "Could not find the listing specified.";
+        result['deleteListing']['missingListingId'] = "An error occurred while deleting the listing. (1)";
+        result['deleteListing']['invalidUserId'] = "An error occurred while deleting the listing. (2)";
+
         result['editUser'] = [];
         result['editUser']['emailAlreadyExists'] = "Looks like this email is already in use, please pick a different one";
         result['editUser']['nothingRequestedToChange'] = "If you want to make changes, enter some fields and click save ";
@@ -480,8 +499,12 @@ export class KasperService {
         result['createListing']['invalidCity'] = "Looks like the city you entered was not recognized";
         result['createListing']['invalidProvince'] = "Looks like the province you entered was not recognized";
         result['createListing']['invalidAddress'] = "Looks like the email address you entered was not recognized";
+        result['createListing']['invalidPostalCode'] = "The postal code you entered was invalid";
         result['createListing']['missingPostalCode'] = "A postal code is required";
         result['createListing']['missingImage'] = "At least one image is required to publish a listing";
+        result['createListing']['missingAddress'] = "An address is required to publish a listing";
+        result['createListing']['missingCity'] = "A city is required to publish a listing";
+        result['createListing']['missingDescription'] = "A description is required to publish a listing";
 
         result['editListing'] = [];
         result['editListing']['nothingRequestedToChange'] = "Make changes, and then click the save button to save them.";
