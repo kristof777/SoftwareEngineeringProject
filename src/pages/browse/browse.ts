@@ -59,18 +59,13 @@ export class BrowsePage {
     }
 
     /**
-     * Attempt to retrieve listings from server and get an error
+     * Attempt to retrieve listings from server and get a nolistings error
      *
      */
     loadListingHook(): void {
         let me = this;
-        let hookFilter = new Filter(null,'what','is','this','filter');
-
-        this.listingProvider.getListings(hookFilter, ['all'], 5).subscribe(data => {
-            me.listings = KasperService.fromData(data['listings']);
-        }, error => {
-            this.listingProvider.kasperService.handleError("getListings", error.json());
-        });
+        let error = {"noListingsLeft": "There are no more listings left to view"};
+        this.listingProvider.kasperService.handleError("getListings", error);
     }
 
     /**
