@@ -135,6 +135,34 @@ export class AddListingPage {
     }
 
     /**
+     * The Hook Listing. This Listing will returns errors
+     *
+     * @returns {Listing}   the hook listing
+     */
+    getHookListing(): Listing{
+        return new Listing(
+            this.listingId,
+            this.listerId,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        );
+    }
+
+
+    /**
      * Update/Save the listing to the server.
      *
      * @post-cond   if the user is in edit mode, update a listing
@@ -158,6 +186,27 @@ export class AddListingPage {
         loading.present();
 
         let result = this.listingProvider.addListing(this.getCurListing());
+
+        result.subscribe(data => {
+            this.navCtrl.pop();
+            loading.dismiss();
+        }, error => {
+            loading.dismiss();
+            this.listingProvider.kasperService.handleError("createListing", error.json());
+        });
+
+    }
+
+    /**
+     * Try to add a new listing to the server, the hook listing will give an error.
+     */
+    addHookListing(){
+        let loading:Loading = this.loadingCtrl.create({
+            content: "Adding Listing..."
+        });
+        loading.present();
+
+        let result = this.listingProvider.addListing(this.getHookListing());
 
         result.subscribe(data => {
             this.navCtrl.pop();
