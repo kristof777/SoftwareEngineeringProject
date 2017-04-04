@@ -43,7 +43,8 @@ class SignIn(BaseHandler):
         try:
             # sign in and return user information.
             user = self.auth.get_user_by_password(
-                (values['email']).lower(), values['password'], remember=True, save_session=True)
+                (values['email']).lower(), values['password'], remember=True,
+                save_session=True)
 
             user_dict = {'authToken': user['token'],
                          'userId': user['user_id'],

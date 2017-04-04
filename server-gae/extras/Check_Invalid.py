@@ -50,7 +50,7 @@ def is_valid_float(input_string):
     """
     assert input_string is not None
     try:
-        input_string = float(input_string)
+        float(input_string)
         return True
     except ValueError:
         return False
@@ -101,7 +101,7 @@ def is_valid_json(json_str):
     try:
         json.loads(json_str)
         return True
-    except ValueError:
+    except (ValueError, TypeError):
         return False
 
 
@@ -127,6 +127,7 @@ def is_valid_password(password):
     :return: true if password is valid, otherwise false
     """
     assert password is not None
+    password = str(password)
     return len(password) >= 8 and any(s.islower() for s in password) \
            and any(s.isupper() for s in password) \
            and any(s.isdigit() for s in password)
