@@ -110,10 +110,6 @@ class TestCreateListing(unittest.TestCase):
 
     def test_missing_userId_and_token(self):
         missing_input = create_random_listing("", "")
-        # missing_input['squareFeet'] = ""
-        # missing_input['description'] = ""
-        # missing_input['city'] = ""
-        # missing_input['isPublished'] = 0
 
         response, response_status = get_listing_api_response(missing_input)
 
