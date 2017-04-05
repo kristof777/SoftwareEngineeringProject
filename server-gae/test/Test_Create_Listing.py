@@ -19,9 +19,16 @@ class TestCreateListing(unittest.TestCase):
         checking if all error codes are received, if empty code is sent
         test case 3
         checking if all error codes are received, if all user inputs are spaces
-        test case 4: there're some missing fields
-        test case 5# test case 6
+        test case 4: missing userId and token
+        test case 5: invalid userId
+        test case 6: invalid numeric fields
         test case 7: correct input
+        test case 8: invalid bathroom
+        test case 9: empty images
+        test case 10: success without optional fields for unpublished listings
+        test case 11: missing isPublished field
+        test case 12: success with optional fields for unpublished listings
+
     """
     def setUp(self):
         setup_testbed(self)
@@ -43,7 +50,7 @@ class TestCreateListing(unittest.TestCase):
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
     def test_empty_fields(self):
-        input = {"userId": "",
+        empty_fields_input = {"userId": "",
                  "authToken": "",
                  "bedrooms": "",
                  "squareFeet": "",
@@ -60,7 +67,7 @@ class TestCreateListing(unittest.TestCase):
                  "images": '',
                  "postalCode": ""
                  }
-        response, response_status = get_listing_api_response(input)
+        response, response_status = get_listing_api_response(empty_fields_input)
 
         self.assertEquals(response_status, missing_invalid_parameter)
 
@@ -101,12 +108,8 @@ class TestCreateListing(unittest.TestCase):
         error_keys = [str(x) for x in response]
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
-    def test_some_missing_fields(self):
+    def test_missing_userId_and_token(self):
         missing_input = create_random_listing("", "")
-        missing_input['squareFeet'] = ""
-        missing_input['description'] = ""
-        missing_input['city'] = ""
-        missing_input['images'] = ''
 
         response, response_status = get_listing_api_response(missing_input)
 
@@ -210,7 +213,6 @@ class TestCreateListing(unittest.TestCase):
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
 
-
     def test_correct_create_unpublished_listing(self):
         correct_input = create_random_listing(self.user['userId'], self.user['authToken'])
         correct_input['isPublished'] = "False"
@@ -248,6 +250,25 @@ class TestCreateListing(unittest.TestCase):
         error_keys = [str(x) for x in response]
 
         self.assertTrue(are_two_lists_same(error_keys, errors_expected))
+
+    def test_success_with_empty_optional_fields_when_isPublished_is_false(self):
+        correct_input = create_random_listing(self.user['userId'], self.user['authToken'])
+
+        correct_input["isPublished"] = "False"
+        response, response_status = get_listing_api_response(correct_input)
+
+        self.assertEquals(response_status, success)
+
+        output = response
+        self.assertTrue("listingId" in output)
+
+        listing_created = Listing.get_by_id(int(output["listingId"]))
+        self.assertEquals(correct_input["bedrooms"], str(listing_created.bedrooms))
+        self.assertEquals(float(correct_input["bathrooms"]), listing_created.bathrooms)
+        self.assertEquals(correct_input["description"], listing_created.description)
+        self.assertEquals(correct_input["address"], listing_created.address)
+        self.assertEquals(correct_input["squareFeet"], str(listing_created.squareFeet))
+        self.assertEquals(correct_input["price"], str(listing_created.price))
 
     def tearDown(self):
         self.testbed.deactivate()

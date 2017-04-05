@@ -84,7 +84,7 @@ class EditListing(webapp2.RequestHandler):
             write_error_to_response(self.response, error, unauthorized_access)
             return
 
-        user_id = int(values['userId'])
+        user_id = user.get_id()
 
         # make sure that the userId is the owner id of the listing
         listing_owner_id = listing.userId
@@ -126,14 +126,11 @@ class EditListing(webapp2.RequestHandler):
 
 
 def fields_missing(listing):
-    # TODO: Update the following specs, please. The current params don't exist
-    # TODO: And the listing param is not explained.
     """
-    Checks if there are any fields that are None or empty.
+    Checks if there are any fields that are None or empty in the listing.
 
-    @param required_keys: List of keys
-    @param post: Post request
-    @return: errors and post values converted to string
+    @param listing: the listing being checked
+    @return: error messages if there's any empty fields. Otherwise, return empty dictionary
     """
     errors = {}
     listing_keys_clone = copy.deepcopy(listing_keys)

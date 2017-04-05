@@ -169,6 +169,18 @@ export class AddListingPage {
 
     }
 
+    /**
+     * Try to add a new listing to the server, the hook listing will give an invalid params error.
+     */
+    addHookListing(){
+        let error = {"invalidPrice": "Price was invalid", "invalidSqft" : "Invalid Square feet"};
+
+
+        this.listingProvider.kasperService.handleError("createListing", error);
+
+
+    }
+
     updateListing(){}
 
     /**
