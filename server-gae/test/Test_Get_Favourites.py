@@ -63,7 +63,6 @@ class TestGetFavouriteListing(unittest.TestCase):
         # the first five listings has been liked, so we create a list of those listings for future use
         self.likedListings = listings[0:5]
 
-
     def test_success(self):
 
         get_favs = {
@@ -89,7 +88,6 @@ class TestGetFavouriteListing(unittest.TestCase):
         errors_expected = [Error_Code.invalid_user_id['error']]
         # checking if there is a difference between error_keys and what we got
         self.assertTrue(are_two_lists_same(errors_expected, response.keys()))
-
 
     def tearDown(self):
         self.testbed.deactivate()
