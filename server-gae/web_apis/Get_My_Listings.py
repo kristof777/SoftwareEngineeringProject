@@ -30,6 +30,7 @@ class GetMyListing(webapp2.RequestHandler):
         if not valid:
             return
 
+        assert values['userId'] is not None
         owner_id = int(values['userId'])
 
         my_listings = Listing.query(Listing.userId == owner_id).fetch()
