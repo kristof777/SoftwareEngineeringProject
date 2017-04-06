@@ -13,7 +13,7 @@ class VerificationHandler(BaseHandler):
         @return: None
     """
     def get(self, *args, **kwargs):
-        user = None     #TODO: Why is this here?
+        #user = None     #TODO: Why is this here?
         user_id = kwargs['user_id']
         signup_token = kwargs['signup_token']
         verification_type = kwargs['type']
@@ -28,7 +28,7 @@ class VerificationHandler(BaseHandler):
         # store user data in the session
         self.auth.set_session(self.auth.store.user_to_dict(user), remember=True)
 
-        # v is _______________
+        # v is _______________ #Todo fix this comment please :)
         if verification_type == 'v':
             # remove signup token, we don't want users
             # to come back with an old link
@@ -40,7 +40,7 @@ class VerificationHandler(BaseHandler):
             user.put()
             assert user.verified
             return
-        # p is __________
+        # p is __________   #Todo also this one
         elif verification_type == 'p':
             # supply user to the page
             params = {
