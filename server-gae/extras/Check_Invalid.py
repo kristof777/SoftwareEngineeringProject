@@ -212,7 +212,7 @@ def is_valid_xor(dictionary, key1, key2):
     :return: true if a valid xor
     """
     if key1 in dictionary and key2 in dictionary:
-        return is_empty(dictionary[key1]) or is_empty(dictionary[key2])
+        return False
     else:
         return True
 

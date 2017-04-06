@@ -94,16 +94,6 @@ class ChangePassword(BaseHandler):
 
         User.set_password(user, values['newPassword'])
 
-        try:
-            # This will throw an exception if the password is wrong, which will
-            # only happen if set_password failed.
-            user_dict = self.auth.get_user_by_password(
-                user.email, values['newPassword'], remember=True,
-                save_session=True)
-        except (InvalidAuthIdError, InvalidPasswordError) as e:
-            # set_password failed. This should never happen
-            assert False
-        # self.auth.store.delete_auth_token(user['userId'], user['token'])
         user_dict = {'authToken': token}
 
         write_success_to_response(self.response,user_dict)

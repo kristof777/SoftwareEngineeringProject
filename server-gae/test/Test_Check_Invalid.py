@@ -77,6 +77,7 @@ class TestInvalidCheck(unittest.TestCase):
         self.assertFalse(is_valid_bathroom(2.3))
         self.assertFalse(is_valid_bathroom(2.90))
         self.assertFalse(is_valid_bathroom(2.45))
+        self.assertFalse(is_valid_bathroom(-1.0))
 
     def test_is_valid_bool(self):
         """

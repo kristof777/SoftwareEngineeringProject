@@ -211,22 +211,18 @@ def is_valid_filter(filter_json):
                 break
             if key == "bathrooms":
                 if "lower" in filter_object[key]:
-                    if not is_valid_float(filter_object[key]["lower"]):
+                    if not is_valid_bathroom(filter_object[key]["lower"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom lower bound invalid"
-                        break
                 if "upper" in filter_object[key]:
-                    if not is_valid_float(filter_object[key]["upper"]):
+                    if not is_valid_bathroom(filter_object[key]["upper"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom upper bound invalid"
-                        break
             else:
                 if "lower" in filter_object[key]:
                     if not is_valid_positive_integer(filter_object[key]["lower"]):
                         invalid[invalid_filter_bound['error']] = key + " lower bound invalid"
-                        break
                 if "upper" in filter_object[key]:
                     if not is_valid_positive_integer(filter_object[key]["upper"]):
                         invalid[invalid_filter_bound['error']] = key + " upper bound invalid"
-                        break
 
     return invalid
 

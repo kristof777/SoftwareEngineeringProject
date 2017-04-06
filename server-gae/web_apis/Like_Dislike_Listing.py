@@ -78,9 +78,6 @@ class LikeDislikeListing(webapp2.RequestHandler):
                                             processing_failed)
                     return
 
-                # if everything is correct, change the liked field to be true
-                favorite.liked = True
-
             else:
                 # user want to unlike the list
                 if not favorite_liked:
