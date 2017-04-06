@@ -38,7 +38,7 @@ class TestContactSeller(unittest.TestCase):
             "email": self.user_buyer['email'],
             "receiverId": self.user_seller['userId']
         }
-
+        
         response, response_status = \
             get_contact_seller_api_response(correct_input)
         self.assertEquals(response_status, success)
