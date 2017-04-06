@@ -16,7 +16,7 @@ class ChangePassword(BaseHandler):
 
         @post-cond: On success, a user's password is changed in the database.
 
-        @:return:   A new token if success with code 200, otherwise,
+        @:return:   A new token and code 200 on success, otherwise,
                     an appropriate error message and code.
 
     """
