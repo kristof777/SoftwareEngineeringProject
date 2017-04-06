@@ -10,6 +10,9 @@ import {Listing} from "../models/listing";
 import {LoginService} from "./login-service";
 import {FormControl} from "@angular/forms";
 
+/**
+ * Provides an interface with the API
+ */
 @Injectable()
 export class KasperService {
     public static errorMessages: string[][];
@@ -63,14 +66,6 @@ export class KasperService {
         this.appendAuthentication(body);
 
         return this.http.post(KasperConfig.API_URL + "/signInToken", body, ResponseContentType.Json)
-            .map(response => response.json());
-    }
-
-    confirmEmail(): any{
-        let body: FormData = new FormData();
-        this.appendAuthentication(body);
-
-        return this.http.post(KasperConfig.API_URL + "/confirmEmail", body, ResponseContentType.Json)
             .map(response => response.json());
     }
 
@@ -325,6 +320,8 @@ export class KasperService {
 
     /**
      * Appends the userId and authToken to the call if the user is logged in.
+     *
+     * @param body  the FormData to append to
      */
     appendAuthentication(body: FormData): void{
         if(!this.loginService.isLoggedIn()) return;

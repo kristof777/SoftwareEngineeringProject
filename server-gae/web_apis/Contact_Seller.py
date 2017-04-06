@@ -32,7 +32,7 @@ class ContactSeller(BaseHandler):
 
         if not valid:
             return
-
+        assert values['senderId'] is not None
         # find the correct sender with senderId
         sender = User.get_by_id(int(values['senderId']))
 

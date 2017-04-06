@@ -6,6 +6,9 @@ from webapp2_extras.appengine.auth.models import User as Webapp2User
 
 
 class User(Webapp2User):
+    '''This User class contains the functions
+    and fields associated with a User.'''
+
     email = ndb.StringProperty(required=True)
     first_name = ndb.StringProperty(required=True)
     last_name = ndb.StringProperty(required=False)

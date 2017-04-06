@@ -147,3 +147,45 @@ class TestInvalidCheck(unittest.TestCase):
         self.assertFalse(is_valid_password("abcdefghijk"))
         self.assertFalse(is_valid_password("abcdeABCDE"))
         self.assertTrue(is_valid_password("abcdeABCDE1"))
+
+    def test_is_valid_province(self):
+        """
+        Test case 1: Valid province ("sk")
+        Test case 2: Valid province ("SK")
+        Test case 3: Valid province ("Saskatchewan")
+        Test case 4: Invalid province ("Saskatchewn")
+        Test case 5: Invalid province ("12")
+        :return:
+        """
+        self.assertTrue(is_valid_province("sk"))
+        self.assertTrue(is_valid_province("SK"))
+        self.assertTrue(is_valid_province("Saskatchewan"))
+        self.assertFalse(is_valid_province("Saskatchewn"))
+        self.assertFalse(is_valid_province("12"))
+        self.assertFalse(is_valid_province("1"))
+
+    def test_is_valid_email(self):
+        """
+        Test case 1: Valid email
+        Test case 2: Valid email
+        Test case 3: Valid email
+        Test case 4: inValid email
+        :return:
+        """
+        self.assertTrue(is_valid_email("abc123@mail.usask.ca"))
+        self.assertTrue(is_valid_email("abc123@mail.usask"))
+        self.assertTrue(is_valid_email("abc123@mail.usask"))
+        self.assertFalse(is_valid_email("abc123"))
+
+    def test_is_valid_postal_code(self):
+        """
+        Test case 1: Valid province with space
+        Test case 2: Valid province without space
+        Test case 3: Invalid province
+        Test case 4: Invalid province
+        :return:
+        """
+        self.assertTrue(is_valid_postal_code("S7N 1J7"))
+        self.assertTrue(is_valid_postal_code("S7N1J7"))
+        self.assertFalse(is_valid_postal_code("S7N1JP"))
+        self.assertFalse(is_valid_postal_code("27N1JP"))

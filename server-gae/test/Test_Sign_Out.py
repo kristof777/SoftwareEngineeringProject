@@ -30,6 +30,13 @@ class TestSignOut(unittest.TestCase):
         response, response_status = get_sign_out_response(sign_in_user_input)
         self.assertEqual(response_status, unauthorized_access)
 
+    def test_sign_out_incorrect_user_id(self):
+        sign_in_user_input = get_post_dictionary( 111333311,
+            self.users[0]["authToken"])
+
+        response, response_status = get_sign_out_response(sign_in_user_input)
+        self.assertEqual(response_status, unauthorized_access)
+
     def test_sign_out_correct_input(self):
         sign_in_user_input = get_post_dictionary(self.users[0]["userId"],
                                                  self.users[0]["authToken"])

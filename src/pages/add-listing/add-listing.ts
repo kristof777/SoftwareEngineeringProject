@@ -6,6 +6,7 @@ import {Camera} from 'ionic-native';
 import {Listing} from "../../app/models/listing";
 import {ListingProvider} from "../../app/providers/listing-provider";
 import {Province} from "../../app/models/province";
+import {KasperConfig} from "../../app/kasper-config";
 
 @Component({
     selector: 'page-add-listing',
@@ -95,8 +96,8 @@ export class AddListingPage {
             // Pick image from library
             sourceType: 0,//Camera.PictureSourceType.PHOTOLIBRARY,
             // Dimensions to scale the image to
-            targetWidth: 1280, //make it const in kasper config
-            targetHeight: 720 //make it const in kasper config
+            targetWidth: KasperConfig.DESIRED_IMAGE_WIDTH, //make it const in kasper config
+            targetHeight: KasperConfig.DESIRED_IMAGE_HEIGHT //make it const in kasper config
         };
 
         Camera.getPicture(options).then((data) => {

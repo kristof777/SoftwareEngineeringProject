@@ -120,6 +120,7 @@ export class SignUpPage {
      *
      * @pre-cond    the current step passed validation
      * @pre-cond    there is a next step
+     * @post-cond   step is incremented or we register if we are on the last step
      */
     nextStep(): void{
         if(this.confirmStep()){
@@ -142,6 +143,7 @@ export class SignUpPage {
      * Move back to the previous step.
      *
      * @pre-cond    there is a previous step
+     * @post-cond   step is decremented
      */
     previousStep(): void{
         if(this.step != 1) {
@@ -170,10 +172,7 @@ export class SignUpPage {
         }
     }
 
-    /////////////////////////////
-    // Form Validation Helpers
     // The following functions update variables that toggle the display of error messages
-
     attemptAll(){
         if(this.step == 1) {
             this.attemptEmail();

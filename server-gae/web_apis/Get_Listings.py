@@ -65,7 +65,6 @@ class GetListing(webapp2.RequestHandler):
             return
 
         # This part should never be called
-        # TODO this part is called by the 4th test case. Is this expected? Why should it not be called?
         if is_existing_and_non_empty("listingIdList", values):
             listing_info_list = get_listings_from_listing_ids(values)
             output_dict = {}
