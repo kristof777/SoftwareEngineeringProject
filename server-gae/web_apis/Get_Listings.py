@@ -213,11 +213,20 @@ def is_valid_filter(filter_json):
                 if "lower" in filter_object[key]:
                     if not is_valid_float(filter_object[key]["lower"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom lower bound invalid"
+                        break
                 if "upper" in filter_object[key]:
                     if not is_valid_float(filter_object[key]["upper"]):
                         invalid[invalid_filter_bound['error']] = "Bathroom upper bound invalid"
-
-            invalid.update(key_validation(filter_object[key]))
+                        break
+            else:
+                if "lower" in filter_object[key]:
+                    if not is_valid_positive_integer(filter_object[key]["lower"]):
+                        invalid[invalid_filter_bound['error']] = key + " lower bound invalid"
+                        break
+                if "upper" in filter_object[key]:
+                    if not is_valid_positive_integer(filter_object[key]["upper"]):
+                        invalid[invalid_filter_bound['error']] = key + " upper bound invalid"
+                        break
 
     return invalid
 
@@ -296,8 +305,6 @@ def get_listingIds_with_numeric_bounds():
     bedrooms_keys_len = len(bedrooms_keys)
     logging.info("bedrooms_keys_len is " + str(bedrooms_keys_len))
 
-    # query all the listings in db that satisfies the sqft bound condition,
-    # only fetch their key(listingId) for efficiency
     sqft_query = Listing.query().filter(
         Listing.squareFeet >= Listing.numeric_filter_bounds['sqft_min'],
         Listing.squareFeet <= Listing.numeric_filter_bounds['sqft_max'],
@@ -306,16 +313,12 @@ def get_listingIds_with_numeric_bounds():
     sqft_keys_len = len(sqft_keys)
     logging.info("sqft_keys_len is " + str(sqft_keys_len))
 
-    # query all the listings in db that satisfies the price bound condition
-    # only fetch their key(listingId) for efficiency
     price_query = Listing.query().filter(Listing.price >= Listing.numeric_filter_bounds['price_min'],
                                          Listing.price <= Listing.numeric_filter_bounds['price_max'],
                                          Listing.isPublished == True)
     price_keys = price_query.fetch(keys_only=True)
     price_keys_len = len(price_keys)
 
-    # query all the listings in db that satisfies the price bound condition
-    # only fetch their key(listingId) for efficiency
     bathrooms_query = Listing.query().filter(Listing.bathrooms >= Listing.numeric_filter_bounds['bathrooms_min'],
                                              Listing.bathrooms <= Listing.numeric_filter_bounds['bathrooms_max'],
                                              Listing.isPublished == True)
@@ -327,7 +330,6 @@ def get_listingIds_with_numeric_bounds():
     assert len(valid_bd_sqft_keys) <= min(bedrooms_keys_len, sqft_keys_len)
     bd_sqft_keys_len = len(valid_bd_sqft_keys)
 
-    # Get the common set of the next two key(listingId) sets
     valid_bt_pr_keys = list(set(price_keys) & set(bathrooms_keys))
     assert len(valid_bt_pr_keys) <= min(price_keys_len, bathrooms_keys_len)
     bt_pr_keys_len = len(valid_bt_pr_keys)

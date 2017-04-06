@@ -41,6 +41,24 @@ def is_valid_integer(input_string):
         return False
 
 
+def is_valid_positive_integer(input_string):
+    """
+    Checks if input_string is a positive integer
+    :precond input_string is not null
+    :param input_string: A number or a string.
+    :return: True if integer, otherwise false
+    """
+
+    assert input_string is not None
+    try:
+        input_string = int(input_string)
+        if int(input_string) <= 0:
+            raise ValueError
+        return True
+    except ValueError:
+        return False
+
+
 def is_valid_float(input_string):
     """
     Checks if input_string is a floating point number
@@ -66,6 +84,8 @@ def is_valid_bathroom(input_string):
     assert input_string is not None
     try:
         br = float(input_string)
+        if br < 0:
+            raise ValueError
         if round(br) - br == 0 or round(br) - br == 0.5:
             return True
         else:
@@ -265,10 +285,10 @@ valid_check = {
     "province": is_valid_province,
     "userId": is_valid_integer,
     "listingId": is_valid_integer,
-    "price": is_valid_integer,
+    "price": is_valid_positive_integer,
     "bathrooms": is_valid_bathroom,
-    "bedrooms": is_valid_integer,
-    "squareFeet": is_valid_integer,
+    "bedrooms": is_valid_positive_integer,
+    "squareFeet": is_valid_positive_integer,
     "isPublished": is_valid_bool,
     "thumbnailImageIndex": is_valid_integer,
     "liked": is_valid_bool,
