@@ -21,6 +21,7 @@ class TestGetListings(unittest.TestCase):
         test case 6: get get listings with listingIdList
         test case 7: get listings with filter and userid
         test case 8: invalid key in valuesRequired
+        test case 9: negative filter value input
 
     """
 
@@ -221,6 +222,37 @@ class TestGetListings(unittest.TestCase):
         error_expected = invalid_values_required['error']
 
         self.assertTrue(error_expected in res_value)
+
+    def test_negative_numeric_fields_in_filter(self):
+        get_filter_listings = {
+            "valuesRequired": json.dumps(["bedrooms", "bathrooms", "address", "price"]),
+            "maxLimit": 8,
+            "userId": self.userId,
+            "authToken": self.token,
+            "filter": json.dumps({
+                "price": {
+                    "lower": -100,
+                    "upper": -8000000
+                },
+                "bedrooms": {
+                    "lower": -1,
+                    "upper": -1000
+                },
+                "bathrooms": {
+                    "lower": -1.0,
+                    "upper": -200
+                },
+                "province": "Saskatchewan"
+            })
+        }
+        res_value, status = get_listing_response(get_filter_listings)
+        self.assertEqual(status, missing_invalid_parameter)
+        error_expected = invalid_filter_bound['error']
+
+        self.assertTrue(error_expected in res_value)
+
+
+
 
 
 def get_like_post_dictionary(user_id, listing_id, token, liked):

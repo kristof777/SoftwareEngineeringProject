@@ -1,18 +1,14 @@
 from __future__ import absolute_import
-import json
+from API_NAME import create_user_api
+from extras.Random_Models import *
 import os
 import sys
-sys.path.append("../")
 import unittest
-from extras.Error_Code import *
 import Main
-import webapp2
-from models.User import User
 from extras.Utils import *
+sys.path.append("../")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from API_NAME import create_user_api
-from extras.Check_Invalid import *
-from extras.Random_Models import *
+
 
 class TestConfirmEmail(unittest.TestCase):
     """

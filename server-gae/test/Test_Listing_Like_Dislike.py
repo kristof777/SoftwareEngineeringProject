@@ -116,44 +116,6 @@ class TestLikeListingApi(unittest.TestCase):
         errors_expected = [duplicated_liked['error']]
         self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
-    def test_add_and_remove_from_favourites(self):
-        like_the_listing = {
-            "userId": self.liker_id,
-            "listingId": self.listing_id,
-            "authToken": self.liker_token,
-            "liked": "True"
-        }
-
-        response, response_status = \
-            get_like_listing_response(like_the_listing)
-        self.assertEquals(response_status, success)
-
-        get_favs = {
-            "userId": self.liker_id,
-            "authToken": self.liker_token
-        }
-        fav_response, fav_response_status = \
-            get_favorites_response(get_favs)
-        self.assertEquals(fav_response_status, success)
-        self.assertEquals(len(fav_response["listings"]), 1)
-
-        fav_dict = fav_response["listings"][0]
-        self.assertEquals(str(fav_dict['userId']), self.owner_id)
-        self.assertEquals(fav_dict['listingId'], self.listing_id)
-
-        dislike_the_listing = {
-            "userId": self.liker_id,
-            "listingId": self.listing_id,
-            "authToken": self.liker_token,
-            "liked": "False"
-        }
-
-        response, response_status = \
-            get_like_listing_response(dislike_the_listing)
-        self.assertEquals(response_status, success)
-        self.assertEquals(response, None)
-
-
     def test_missing_user_input(self):
         like_with_missing_input = {
             "userId": "",
