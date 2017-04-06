@@ -28,6 +28,7 @@ class TestSignOut(unittest.TestCase):
                                                  "invalidToken")
 
         response, response_status = get_sign_out_response(sign_in_user_input)
+
         self.assertEqual(response_status, unauthorized_access)
 
     def test_sign_out_incorrect_user_id(self):

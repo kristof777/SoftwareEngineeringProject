@@ -43,6 +43,7 @@ class EditUser(BaseHandler):
 
         change_values = json.loads(values['changeValues'])
 
+
         # If asked to change with nothing new to change
         if len(change_values) == 0:
             error = {nothing_requested_to_change['error']: "Nothing " +
@@ -70,6 +71,13 @@ class EditUser(BaseHandler):
                 unrecognized_key['status'])
             return
 
+        invalid = key_validation(change_values)
+        if len(invalid) > 0:
+            write_error_to_response(self.response, invalid,
+                                    missing_invalid_parameter)
+            return
+
+        assert len(invalid) == 0
         # assure done checking for all un-allowed cases,
         assert valid
         assert (len(change_values) > 0)

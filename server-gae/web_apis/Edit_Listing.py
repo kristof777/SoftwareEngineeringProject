@@ -133,6 +133,7 @@ def fields_missing(listing):
     @return: error messages if there's any empty fields. Otherwise, return empty dictionary
     """
     errors = {}
+    assert listing is not None
     listing_keys_clone = copy.deepcopy(listing_keys)
     listing_keys_clone.remove("authToken")
     diffs = set(listing_keys_clone) - set(listing.__dict__['_values'].keys())

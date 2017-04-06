@@ -27,11 +27,6 @@ class GetFavourites(webapp2.RequestHandler):
         setup_api_options(self)
 
     def post(self):
-        # TODO: Finish the specs here please.
-        """
-
-        :return:
-        """
         setup_post(self.response)
         valid, values = \
             check_required_valid(get_favourites_listing_api,

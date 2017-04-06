@@ -48,9 +48,9 @@ class CreateUser(BaseHandler):
             values["email"], unique_properties, email=values["email"],
             first_name=values["firstName"],
             password_raw=values["password"], phone1=values["phone1"],
-            phone2=values["phone2"],
+            phone2=values.get("phone2"),
             province=values["province"], city=values["city"],
-            last_name=values["lastName"],
+            last_name=values.get("lastName"),
             verified=False)
 
         assert(user_data is not None)

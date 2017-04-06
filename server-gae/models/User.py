@@ -58,7 +58,10 @@ class User(Webapp2User):
         self.phone2 = phone2
 
     def set_email(self, email):
+        if self.email in self.auth_ids:
+            self.auth_ids.remove(self.email)
         self.email = email
+        self.add_auth_id(self.email)
         self.verified = False
 
     def set_province(self, province):

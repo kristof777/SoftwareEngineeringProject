@@ -109,7 +109,6 @@ def create_dummy_users_for_testing(main, n):
         response = request.get_response(main.app)
         output = json.loads(response.body)
         del new_user["confirmedPassword"]
-        del new_user["password"]
         new_user["authToken"] = str(output["authToken"])
         new_user["userId"] = str(output["userId"])
         users.append(new_user)
