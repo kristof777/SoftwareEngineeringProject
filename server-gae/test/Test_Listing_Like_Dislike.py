@@ -152,6 +152,20 @@ class TestLikeListingApi(unittest.TestCase):
                            invalid_liked['error']]
         self.assertTrue(are_two_lists_same(response.keys(), errors_expected))
 
+    def test_invalid_listing_id(self):
+        like_the_listing = {
+            "userId": self.liker_id,
+            "listingId": 100,
+            "authToken": self.liker_token,
+            "liked": "True"
+        }
+        response, response_status = get_like_listing_response(like_the_listing)
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(are_two_lists_same(response.keys(),
+                                           [un_auth_listing["error"]]))
+
+
+
     def tearDown(self):
         self.testbed.deactivate()
 

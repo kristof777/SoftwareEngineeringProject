@@ -26,14 +26,6 @@ class LikeDislikeListing(webapp2.RequestHandler):
                     update the liked field if it exists.
         @return-api: nothing.
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-
-        self.render_template('../webpages/Like_dislike_listing.html')
-
     def post(self):
         setup_post(self.response)
 

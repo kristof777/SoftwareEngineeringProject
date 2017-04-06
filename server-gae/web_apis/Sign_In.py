@@ -24,13 +24,6 @@ class SignIn(BaseHandler):
         @return-api: A valid Token, with all the user details is returned in
                      response.
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
-    def get(self):
-        self._serve_page()
-
     def post(self):
         setup_post(self.response)
         valid, values = \

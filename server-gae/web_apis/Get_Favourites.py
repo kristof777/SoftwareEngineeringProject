@@ -22,10 +22,6 @@ class GetFavourites(webapp2.RequestHandler):
         @return-api: All the listings liked by the user with userId are
                      returned.
     """
-
-    def options(self, *args, **kwargs):
-        setup_api_options(self)
-
     def post(self):
         setup_post(self.response)
         valid, values = \

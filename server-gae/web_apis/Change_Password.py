@@ -33,6 +33,17 @@ class ChangePassword(BaseHandler):
             return
 
         user = User.get_by_id(int(values['userId']))
+        if user is None:
+            error = {
+                not_authorized['error']: 'Invalid credentials'
+            }
+            write_error_to_response(self.response, error,
+                                    not_authorized['status'])
+            logging.info(
+                'Sign-in-with-token failed for user %s because of %s',
+                int(values['userId']))
+            return
+
         try:
             # attempt to get the current user by the old password. Will throw an
             # exception if the password or e-mail are unrecognized.
@@ -49,16 +60,6 @@ class ChangePassword(BaseHandler):
                                     not_authorized['status'])
             return
 
-        if user is None:
-            error = {
-                not_authorized['error']: 'Invalid credentials'
-            }
-            write_error_to_response(self.response, error,
-                                    not_authorized['status'])
-            logging.info(
-                'Sign-in-with-token failed for user %s because of %s',
-                int(values['userId']))
-            return
 
         # Get a new token
         token = user_dict['token']

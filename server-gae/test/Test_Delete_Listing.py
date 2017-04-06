@@ -100,6 +100,14 @@ class TestDeleteListing(unittest.TestCase):
         error_expected = Error_Code.invalid_listing_id['error']
         self.assertTrue(error_expected in res_value)
 
+    def test_un_auth_listing_id(self):
+        res_value, status = get_delete_response(
+            get_delete_post_dictionary(
+                self.deleterId, self.listingId + 10, self.deleterToken))
+        self.assertEquals(status, unauthorized_access)
+        error_expected = [Error_Code.un_auth_listing["error"]]
+        self.assertTrue(are_two_lists_same(res_value.keys(), error_expected))
+
     def test_delete_listing_from_favourites(self):
         favourites = Favorite.Favorite.query(Favorite.Favorite.listingId == self.listingId).fetch()
         assert len(favourites) == 1

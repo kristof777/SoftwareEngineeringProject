@@ -243,6 +243,19 @@ class TestEditListing(unittest.TestCase):
         errors_expected = [Error_Code.missing_description['error']]
         self.assertEquals(are_two_lists_same(res_value, errors_expected), True)
 
+    def test_un_auth_listing(self):
+        change_values = {"bedrooms": "4",
+                         "squareFeet": "1500"
+                         }
+
+        res_value, status = get_response(
+            get_post_dictionary(self.ownerId, self.listingId + 10, self.token,
+                                change_values))
+        self.assertEquals(status, unauthorized_access)
+        error_expected = [Error_Code.un_auth_listing["error"]]
+        self.assertTrue(are_two_lists_same(res_value.keys(), error_expected))
+
+
     def tearDown(self):
         self.testbed.deactivate()
 

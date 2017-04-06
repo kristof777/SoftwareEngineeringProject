@@ -62,12 +62,6 @@ class CreateListing(webapp2.RequestHandler):
                                     missing_invalid_parameter)
             return
 
-        invalid = key_validation(values)
-        if len(invalid) != 0:
-            write_error_to_response(self.response, invalid,
-                                    missing_invalid_parameter)
-            return
-
         values['province'] = scale_province(str(values['province']))
 
         # all set

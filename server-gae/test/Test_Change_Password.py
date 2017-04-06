@@ -127,6 +127,18 @@ class TestChangePassword(unittest.TestCase):
         self.assertTrue(are_two_lists_same(
             [new_password_is_the_same_as_old['error']], response.keys()))
 
+    def test_invalid_user_id(self):
+        input5 = {'oldPassword': 'aaAA1234',
+                  'newPassword': 'aaAA12344',
+                  'confirmedPassword': 'aaAA12344',
+                  'userId': self.user_id + 123}
+
+        response, response_status = get_change_password_api_response(input5)
+        self.assertEquals(response_status, unauthorized_access)
+        self.assertTrue(are_two_lists_same(
+            [not_authorized['error']], response.keys()))
+
+
     def tearDown(self):
         self.testbed.deactivate()
 

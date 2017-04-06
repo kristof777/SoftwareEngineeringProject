@@ -33,6 +33,7 @@ class TestConfirmEmail(unittest.TestCase):
         user_saved = User.get_by_id(int(response_body["userId"]))
 
         messages = self.mail_stub.get_sent_messages(to=user_saved.email)
+
         self.assertEqual(1, len(messages))
         self.assertEqual(user_saved.email, messages[0].to)
 
