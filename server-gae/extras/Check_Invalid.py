@@ -141,6 +141,7 @@ def is_valid_string_listing(listing):
     :return: true if listing dictionary has all valid keys, otherwise false
     """
     assert listing is not None
+    listing = str(listing)
     if len(listing) == 0:
         return True
     list_object = json.loads(listing)
@@ -178,9 +179,8 @@ def is_valid_province(province):
     :return: true if valid province
     """
     assert province is not None
-    assert len(province) >= 2
-    assert province.isalpha()
-    return province.lower() in province_complete or province in province_abbr
+    return province.lower() in province_complete or \
+           province.upper() in province_abbr
 
 
 def is_valid_xor(dictionary, key1, key2):

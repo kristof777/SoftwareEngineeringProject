@@ -110,7 +110,6 @@ class BaseHandler(webapp2.RequestHandler):
         """
 
         self.session_store = sessions.get_store(request=self.request)
-
         try:
             # Dispatch the request
             webapp2.RequestHandler.dispatch(self)
