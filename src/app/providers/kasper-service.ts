@@ -455,6 +455,10 @@ export class KasperService {
         result['editUser']['invalidUserId'] = "Setting new information failed.";
         result['editUser']['missingUserId'] = "Setting new information failed. ";
         result['editUser']['passwordCantBeChanged'] = "Please use the change password button to change your password";
+        result['editUser']['invalidEmail'] = "The email you entered was invalid";
+        result['editUser']['invalidPhone1'] = "The primary phone you entered was invalid";
+        result['editUser']['invalidPhone2'] = "The secondary phone you entered was invalid";
+        result['editUser']['invalidProvince'] = "The province you entered was invalid";
 
         result['changePassword'] = [];
         result['changePassword']['missingOldPassword'] = "Please enter your current password";
