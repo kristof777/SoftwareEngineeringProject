@@ -12,9 +12,10 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/webob-1.2.3:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/yaml-3.10:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
+  PYTHONPATH=../:${PYTHONPATH}
   BUILD_TYPE=deployment
-  RELEASE_ID=ID4
-  TESTING_BRANCH=id4_ReadyForTesting
+  RELEASE_ID=ID5
+  TESTING_BRANCH=id5_ReadyForTesting
   
 
 
@@ -23,7 +24,7 @@ branches:
   - master
   - develop
   - build_dev
-  - id4
+  - id5
     
 language: node_js
 cache:
@@ -37,7 +38,10 @@ matrix:
   - os: android
   - os: osx
     osx_image: xcode7 
-
+  exclude:
+  - os: linux
+    dist: trusty
+  
 addons:
   firefox: "47.0.1"
   ssh_known_hosts: cmpt371g1.usask.ca
@@ -66,7 +70,6 @@ script:
   
 after_success:
   - "./scripts/system_info.sh"
-  - "./scripts/update_server.sh"
   - "./scripts/stage.sh"
   
 after_failure:

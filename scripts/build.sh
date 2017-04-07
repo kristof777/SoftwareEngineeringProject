@@ -11,8 +11,8 @@ set -ev
 # builds and emulates the app for testing.  A deployment build should not be done
 # on this platform.
 ios_build(){
-  ionic platform add ios
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
+    ionic platform add ios
     ionic build ios
     #ionic emulate ios
   fi
@@ -23,13 +23,12 @@ ios_build(){
 # on this platform.
 browser_build(){
   if [[ "${BUILD_TYPE}" != "deployment" ]]; then
-    sudo du / | grep 'jasmine-spec-reporter'
     ./scripts/smoke_test.sh
     # sudo du / | grep "geckodriver"
   fi
 }
 
-# Builds the android version of our app.  If it's a deployment build
+# Builds the android version of our app. If it's a deployment build 
 # does a release build and if not then builds and emulates the app for testing
 # TODO: GET THE APP SIGNED W/ A KEY 
 android_build(){
