@@ -13,7 +13,7 @@ env:
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/yaml-3.10:${PYTHONPATH}
   PYTHONPATH=/usr/lib/google-cloud-sdk/platform/google_appengine/lib/django-0.96:${PYTHONPATH}
   PYTHONPATH=../:${PYTHONPATH}
-  BUILD_TYPE=test
+  BUILD_TYPE=deployment
   RELEASE_ID=ID5
   TESTING_BRANCH=id5_ReadyForTesting
   
